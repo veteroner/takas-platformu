@@ -60,6 +60,81 @@ export const mockUsers = [
   }
 ]
 
+// LocalStorage key
+const UPLOADED_ITEMS_KEY = 'takas_uploaded_items'
+
+// Get uploaded items from localStorage
+export const getUploadedItems = (): Item[] => {
+  if (typeof window === 'undefined') return []
+  
+  try {
+    const stored = localStorage.getItem(UPLOADED_ITEMS_KEY)
+    return stored ? JSON.parse(stored) : []
+  } catch (error) {
+    console.error('Error loading uploaded items:', error)
+    return []
+  }
+}
+
+// Save uploaded item to localStorage
+export const saveUploadedItem = (item: Partial<Item>): Item => {
+  const uploadedItems = getUploadedItems()
+  
+  const newItem: Item = {
+    id: `uploaded-${Date.now()}`,
+    title: item.title || '',
+    description: item.description || '',
+    category: item.category as CategoryType,
+    condition: item.condition as ItemCondition,
+    images: item.images || [],
+    ownerId: 'current-user',
+    owner: {
+      id: 'current-user',
+      name: 'Ben',
+      email: 'user@takas.com',
+      avatar: '/icons/app-icon.svg',
+      location: {
+        city: 'İstanbul',
+        country: 'Türkiye',
+        coordinates: { lat: 41.0082, lng: 28.9784 }
+      },
+      rating: 5.0,
+      totalTrades: 0,
+      joinedAt: new Date(),
+      preferences: {
+        categories: [],
+        maxDistance: 50,
+        ageRange: { min: 18, max: 100 }
+      }
+    },
+    estimatedValue: item.estimatedValue || 0,
+    createdAt: new Date(),
+    isActive: true,
+    location: {
+      city: 'İstanbul',
+      country: 'Türkiye'
+    },
+    tags: [],
+    size: item.size,
+    brand: item.brand,
+    color: item.color
+  }
+  
+  uploadedItems.unshift(newItem) // En başa ekle
+  
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(UPLOADED_ITEMS_KEY, JSON.stringify(uploadedItems))
+  }
+  
+  return newItem
+}
+
+// Get all items (uploaded + mock)
+export const getAllItems = (): Item[] => {
+  const uploadedItems = getUploadedItems()
+  return [...uploadedItems, ...mockItems]
+}
+
 export const mockItems: Item[] = [
   {
     id: '1',
@@ -259,13 +334,14 @@ export const fetchItems = async (
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 500))
   
+  const allItems = getAllItems() // Uploaded + mock items
   const startIndex = (page - 1) * limit
   const endIndex = startIndex + limit
-  const items = mockItems.slice(startIndex, endIndex)
+  const items = allItems.slice(startIndex, endIndex)
   
   return {
     items,
-    hasMore: endIndex < mockItems.length
+    hasMore: endIndex < allItems.length
   }
 }
 
@@ -281,7 +357,7 @@ export const searchItems = async (
 ): Promise<Item[]> => {
   await new Promise(resolve => setTimeout(resolve, 300))
   
-  let filteredItems = mockItems
+  let filteredItems = getAllItems() // Use all items including uploaded
   
   // Text search
   if (query) {
