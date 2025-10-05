@@ -117,7 +117,7 @@ export const saveUploadedItem = (item: Partial<Item>): Item => {
     tags: [],
     size: item.size,
     brand: item.brand,
-    color: item.color
+    color: item.color || []
   }
   
   uploadedItems.unshift(newItem) // En başa ekle

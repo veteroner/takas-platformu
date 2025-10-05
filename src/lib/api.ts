@@ -6,10 +6,7 @@ export async function getFeedItems(userId: string, limit: number = 20): Promise<
   try {
     const { data, error } = await supabase
       .from('items')
-      .select(`
-        *,
-        owner:users(id, name, avatar_url, rating)
-      `)
+      .select('*')
       .eq('status', 'active')
       .neq('owner_id', userId)
       .order('created_at', { ascending: false })
