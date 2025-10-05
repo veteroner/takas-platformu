@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from "react";
 import { Send, ArrowLeft } from "lucide-react";
 import Link from "next/link";
