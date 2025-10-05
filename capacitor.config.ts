@@ -5,6 +5,8 @@ const config: CapacitorConfig = {
   appName: 'Takas Platform',
   webDir: 'out',
   server: {
+    url: 'https://takasyap.netlify.app',
+    cleartext: true,
     androidScheme: 'https'
   },
   plugins: {
