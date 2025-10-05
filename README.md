@@ -1,0 +1,155 @@
+# 🔄 Takas Platform
+
+Modern bir ürün takas platformu - Beğen, eşleş, takas yap!
+
+## 🌟 Özellikler
+
+- 📱 **Tinder Tarzı Swipe**: Ürünleri sağa/sola kaydırarak beğen
+- 💬 **Mesajlaşma**: Eşleşen kullanıcılarla sohbet et
+- 📤 **Ürün Yükleme**: Kendi ürünlerini kolayca yükle
+- 🎨 **Modern UI**: Gradient renkler ve glassmorphism efektleri
+- 📱 **Mobil Uyumlu**: PWA desteği ve native app ready
+- 🌙 **Dark Mode**: Otomatik tema değiştirme
+
+## 🚀 Canlı Demo
+
+[https://takas-platformu.netlify.app](https://takas-platformu.netlify.app)
+
+## 🚀 Hızlı Başlangıç
+
+### 📱 Tek Tıkla Başlatma
+```bash
+# macOS/Linux için:
+./start.sh
+
+# Windows için:
+start.bat
+
+# Gelişmiş seçenekler ile:
+./launch.sh
+```
+
+### 📝 Manuel Başlatma
+```bash
+# Dependencies yükle
+npm install
+
+# Development server başlat
+npm run dev
+
+# Tarayıcıda aç
+# http://localhost:3000
+```
+
+### 🎯 Başlatma Script'leri
+- `start.sh` - Basit başlatma (macOS/Linux)
+- `start.bat` - Basit başlatma (Windows)  
+- `launch.sh` - Gelişmiş başlatma seçenekleri
+
+## 🛠️ Teknoloji Yığını
+
+- **Framework**: Next.js 15.5.4 (App Router + Turbopack)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Animations**: Framer Motion + React Spring
+- **Gestures**: @use-gesture/react
+- **State**: Zustand
+- **Icons**: Lucide React
+- **Mobile**: Capacitor (iOS/Android)
+
+## 📱 Özellikler
+
+- ✅ Tinder-style swipe interface
+- ✅ Smooth animations (React Spring + Framer Motion)
+- ✅ Mesajlaşma sistemi
+- ✅ Ürün yükleme
+- ✅ Responsive design
+- ✅ Mobile-first approach
+- ✅ PWA desteği
+- ✅ Dark mode
+- 🔄 Kullanıcı sistemi (in progress)
+- 🔄 Backend entegrasyonu (in progress)
+
+## 🎯 Kullanım
+
+1. **Keşfet**: Ana sayfada ürünleri incele
+2. **Beğen/Geç**: Sağa kaydır ❤️ = beğen, sola kaydır ❌ = geç
+3. **Eşleş**: Karşılıklı beğeni = eşleşme 🎉
+4. **Mesajlaş**: Eşleşen kişilerle sohbet et 💬
+5. **Ürün Yükle**: Kendi ürünlerini ekle 📤
+
+## 📂 Proje Yapısı
+
+```
+src/
+├── app/              # Next.js sayfaları
+│   ├── page.tsx      # Ana sayfa (Keşfet)
+│   ├── upload/       # Ürün yükleme
+│   ├── messages/     # Mesaj listesi
+│   ├── chat/         # Sohbet
+│   ├── profile/      # Profil
+│   └── login/        # Giriş
+├── components/       # React bileşenleri
+│   ├── SwipeCard.tsx
+│   ├── SwipeStack.tsx
+│   ├── Chat.tsx
+│   └── ChatList.tsx
+├── lib/              # Yardımcı fonksiyonlar
+│   ├── mockData.ts
+│   └── utils.ts
+├── types/            # TypeScript tipleri
+└── store/            # State yönetimi
+```
+
+## 📦 Scripts
+
+```bash
+npm run dev          # Development server
+npm run build        # Production build
+npm run start        # Production server
+npm run lint         # ESLint
+npm run launch       # Gelişmiş başlatma
+npm run quick-start  # Hızlı başlatma
+```
+
+## 🌐 Deploy
+
+### Netlify
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/veteroner/takas-platformu)
+
+### Vercel
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/veteroner/takas-platformu)
+
+## 📱 Mobil Uygulama
+
+Capacitor ile iOS ve Android uygulamaları oluşturabilirsiniz:
+
+```bash
+# iOS için build
+npm run build
+npx cap sync ios
+npx cap open ios
+
+# Android için build
+npm run build
+npx cap sync android
+npx cap open android
+```
+
+Detaylı bilgi için [MOBILE-APP-GUIDE.md](MOBILE-APP-GUIDE.md) dosyasına bakın.
+
+## 🤝 Katkıda Bulunma
+
+1. Fork yapın
+2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
+3. Commit yapın (`git commit -m 'Add amazing feature'`)
+4. Push edin (`git push origin feature/amazing-feature`)
+5. Pull Request açın
+
+## 📄 Lisans
+
+MIT License
+
+---
+
+**Takas Platform** - Made with ❤️ using Next.js

@@ -1,0 +1,52 @@
+{
+  "name": "Takas Platform",
+  "short_name": "Takas",
+  "description": "Ürün takas platformu - Beğen, eşleş, takas yap!",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#EC4899",
+  "orientation": "portrait",
+  "categories": ["shopping", "social", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/logo.svg", 
+      "sizes": "64x64",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Keşfet",
+      "short_name": "Keşfet", 
+      "description": "Yeni ürünleri keşfet",
+      "url": "/",
+      "icons": [{ "src": "/icons/logo.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Mesajlar",
+      "short_name": "Mesajlar",
+      "description": "Mesajlarını kontrol et", 
+      "url": "/messages",
+      "icons": [{ "src": "/icons/logo.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Profil",
+      "short_name": "Profil",
+      "description": "Profilini görüntüle",
+      "url": "/profile", 
+      "icons": [{ "src": "/icons/logo.svg", "sizes": "96x96" }]
+    }
+  ]
+}

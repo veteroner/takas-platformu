@@ -1,0 +1,81 @@
+{
+  "name": "takas-platform",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "capacitor:add": "npx cap add",
+    "capacitor:build": "next build && npx cap copy && npx cap open",
+    "capacitor:sync": "next build && npx cap sync"
+  },
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    
+    "@react-spring/web": "^9.7.0",
+    "@use-gesture/react": "^10.3.0",
+    "framer-motion": "^10.16.0",
+    "lucide-react": "^0.292.0",
+    
+    "zustand": "^4.4.0",
+    "react-hook-form": "^7.47.0",
+    "@hookform/resolvers": "^3.3.0",
+    "zod": "^3.22.0",
+    
+    "next-auth": "^4.24.0",
+    "@next-auth/prisma-adapter": "^1.0.7",
+    "prisma": "^5.6.0",
+    "@prisma/client": "^5.6.0",
+    
+    "tailwindcss": "^3.3.0",
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/typography": "^0.5.10",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31",
+    
+    "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-dropdown-menu": "^2.0.6",
+    "@radix-ui/react-toast": "^1.1.5",
+    "@radix-ui/react-avatar": "^1.0.4",
+    "@radix-ui/react-slider": "^1.1.2",
+    
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^2.0.0",
+    "class-variance-authority": "^0.7.0",
+    
+    "socket.io-client": "^4.7.0",
+    "date-fns": "^2.30.0",
+    "react-hot-toast": "^2.4.1",
+    
+    "@capacitor/core": "^5.5.0",
+    "@capacitor/cli": "^5.5.0",
+    "@capacitor/ios": "^5.5.0",
+    "@capacitor/android": "^5.5.0",
+    "@capacitor/camera": "^5.0.0",
+    "@capacitor/geolocation": "^5.0.0",
+    "@capacitor/push-notifications": "^5.0.0",
+    "@capacitor/haptics": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.0.0",
+    "@types/jest": "^29.5.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/jest-dom": "^6.1.0",
+    "playwright": "^1.40.0",
+    "@playwright/test": "^1.40.0"
+  }
+}

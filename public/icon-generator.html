@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>App Icon Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        canvas { border: 1px solid #ccc; margin: 10px; }
+        .size-label { margin: 10px 0; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Takas App Icon Generator</h1>
+    <div id="icons"></div>
+    
+    <script>
+        const sizes = [16, 32, 48, 64, 128, 180, 192, 512];
+        const container = document.getElementById('icons');
+        
+        sizes.forEach(size => {
+            const label = document.createElement('div');
+            label.className = 'size-label';
+            label.textContent = `${size}x${size}px`;
+            container.appendChild(label);
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            container.appendChild(canvas);
+            
+            const ctx = canvas.getContext('2d');
+            
+            // Create gradient background
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#EC4899');
+            gradient.addColorStop(0.5, '#8B5CF6');
+            gradient.addColorStop(1, '#6366F1');
+            
+            // Draw background with rounded corners
+            const radius = size * 0.2;
+            ctx.beginPath();
+            ctx.roundRect(0, 0, size, size, radius);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            
+            // Draw exchange symbol
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const symbolSize = size * 0.4;
+            
+            ctx.fillStyle = 'white';
+            ctx.globalAlpha = 0.9;
+            
+            // Left arrow
+            ctx.beginPath();
+            ctx.arc(centerX - symbolSize/3, centerY, symbolSize/6, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Right arrow  
+            ctx.beginPath();
+            ctx.arc(centerX + symbolSize/3, centerY, symbolSize/6, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Center circle
+            ctx.globalAlpha = 1;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, symbolSize/8, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Add download link
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL();
+            link.download = `takas-icon-${size}.png`;
+            link.textContent = 'Download';
+            link.style.marginLeft = '10px';
+            container.appendChild(link);
+            container.appendChild(document.createElement('br'));
+        });
+    </script>
+</body>
+</html>
