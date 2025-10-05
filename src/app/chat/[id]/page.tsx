@@ -8,6 +8,9 @@ import { getCurrentUser } from '@/lib/auth'
 import { getMatchMessages, sendMessage } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
 
+// Dynamic route - no static generation
+export const dynamic = 'force-dynamic'
+
 export default function ChatPage() {
   const params = useParams()
   const router = useRouter()
