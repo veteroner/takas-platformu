@@ -110,9 +110,18 @@ export async function recordSwipe(
       .from('swipes')
       .insert([{ user_id: userId, item_id: itemId, direction }])
 
-    if (error) throw error
+    // Ignore duplicate entry errors (409 conflict) - user already swiped this item
+    if (error && error.code !== '23505') {
+      console.error('Error recording swipe:', error)
+      return false
+    }
+    
     return true
-  } catch (error) {
+  } catch (error: any) {
+    // Silently ignore duplicate swipes
+    if (error?.code === '23505' || error?.message?.includes('duplicate')) {
+      return true
+    }
     console.error('Error recording swipe:', error)
     return false
   }
