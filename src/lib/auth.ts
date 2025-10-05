@@ -107,7 +107,7 @@ export async function getUserItems(userId: string) {
   const { data, error } = await supabase
     .from('items')
     .select('*')
-    .eq('user_id', userId)
+  .eq('owner_id', userId)
     .order('created_at', { ascending: false })
 
   if (error) throw error

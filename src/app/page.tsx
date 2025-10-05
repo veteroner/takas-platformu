@@ -18,8 +18,11 @@ export default function HomePage() {
 
   useEffect(() => {
     loadUser()
-    loadInitialItems()
   }, [])
+
+  useEffect(() => {
+    loadInitialItems()
+  }, [user?.id])
 
   const loadUser = async () => {
     try {
@@ -33,9 +36,8 @@ export default function HomePage() {
   const loadInitialItems = async () => {
     try {
       setIsLoading(true)
-      // Load real items from database
-      const currentUserId = user?.id || 'guest'
-      const feedItems = await getFeedItems(currentUserId)
+      // Load real items from database (skip owner filter when no user)
+      const feedItems = await getFeedItems(user?.id)
       
             // Convert Supabase items to frontend Item type
       const convertedItems: Item[] = feedItems.map(item => ({
@@ -75,7 +77,7 @@ export default function HomePage() {
         tags: []
       }))
       
-      setItems(convertedItems)
+  setItems(convertedItems)
     } catch (error) {
       console.error('Error loading items:', error)
       setItems([]) // Empty array on error

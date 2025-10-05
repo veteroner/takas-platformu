@@ -2,15 +2,23 @@ import { supabase } from './supabase'
 import type { Item } from './supabase'
 
 // Get items for feed (excluding user's own items and already swiped items)
-export async function getFeedItems(userId: string, limit: number = 20): Promise<any[]> {
+export async function getFeedItems(userId?: string, limit: number = 20): Promise<any[]> {
   try {
-    const { data, error } = await supabase
+    // Validate UUID (to avoid passing non-uuid like 'guest' to neq filter)
+    const isValidUuid = (v?: string) => !!v && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(v)
+
+    let query = supabase
       .from('items')
       .select('*')
       .eq('status', 'active')
-      .neq('owner_id', userId)
       .order('created_at', { ascending: false })
       .limit(limit)
+
+    if (isValidUuid(userId)) {
+      query = query.neq('owner_id', userId as string)
+    }
+
+    const { data, error } = await query
 
     if (error) throw error
     return data || []
