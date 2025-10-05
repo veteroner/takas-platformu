@@ -11,7 +11,7 @@ export async function getFeedItems(userId: string, limit: number = 20): Promise<
         owner:users(id, name, avatar_url, rating)
       `)
       .eq('status', 'active')
-      .neq('user_id', userId)
+      .neq('owner_id', userId)
       .order('created_at', { ascending: false })
       .limit(limit)
 

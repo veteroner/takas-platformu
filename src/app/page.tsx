@@ -47,9 +47,9 @@ export default function HomePage() {
         condition: item.condition as any,
         estimatedValue: item.estimated_value || 0,
         color: ['#FF6B6B', '#FF8E53'],
-        ownerId: item.user_id,
+        ownerId: item.owner_id,
         owner: {
-          id: item.user_id,
+          id: item.owner_id,
           name: 'User',
           email: 'user@example.com',
           avatar: '/icons/icon-192.png',
