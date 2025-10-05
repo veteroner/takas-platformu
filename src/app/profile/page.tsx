@@ -1,15 +1,19 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useAuthStore } from '@/store/authStore'
 import { ArrowLeft, Edit3, MapPin, Phone, Calendar, Star, Package, Gift, Camera } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { getCurrentUser, updateUserProfile } from '@/lib/auth'
+import { getUserItems } from '@/lib/api'
+import type { Item } from '@/types'
 
 export default function ProfilePage() {
   const router = useRouter()
-  const { user, isAuthenticated, updateProfile } = useAuthStore()
+  const [user, setUser] = useState<any>(null)
+  const [userItems, setUserItems] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
   const [editData, setEditData] = useState({
     name: '',
@@ -19,22 +23,39 @@ export default function ProfilePage() {
   })
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login')
-      return
-    }
-    
-    if (user) {
-      setEditData({
-        name: user.name,
-        bio: user.bio || '',
-        location: user.location || '',
-        phone: user.phone || ''
-      })
-    }
-  }, [isAuthenticated, user, router])
+    loadUserData()
+  }, [])
 
-  if (!isAuthenticated || !user) {
+  const loadUserData = async () => {
+    try {
+      setIsLoading(true)
+      const currentUser = await getCurrentUser()
+      
+      if (!currentUser) {
+        router.push('/login')
+        return
+      }
+
+      setUser(currentUser)
+      setEditData({
+        name: currentUser.name || '',
+        bio: '',
+        location: '',
+        phone: ''
+      })
+
+      // Load user's items
+      const items = await getUserItems(currentUser.id)
+      setUserItems(items)
+    } catch (error) {
+      console.error('Error loading user data:', error)
+      router.push('/login')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  if (isLoading || !user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center">
         <div className="text-white text-center">
@@ -45,9 +66,15 @@ export default function ProfilePage() {
     )
   }
 
-  const handleSave = () => {
-    updateProfile(editData)
-    setIsEditing(false)
+  const handleSave = async () => {
+    try {
+      await updateUserProfile(user.id, editData)
+      setUser({ ...user, ...editData })
+      setIsEditing(false)
+    } catch (error) {
+      console.error('Error updating profile:', error)
+      alert('Profil güncellenirken hata oluştu')
+    }
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -182,7 +209,7 @@ export default function ProfilePage() {
 
               <div className="flex items-center gap-3">
                 <Calendar className="text-white/60" size={20} />
-                <span className="text-white/80">Katılım: {new Date(user.joinDate).toLocaleDateString('tr-TR')}</span>
+                <span className="text-white/80">Katılım: {new Date(user.created_at).toLocaleDateString('tr-TR')}</span>
               </div>
             </div>
 
@@ -203,7 +230,7 @@ export default function ProfilePage() {
               <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mx-auto mb-3">
                 <Package size={24} className="text-white" />
               </div>
-              <div className="text-2xl font-bold text-white">{user.itemsShared}</div>
+              <div className="text-2xl font-bold text-white">{userItems.length}</div>
               <div className="text-white/70 text-sm">Paylaşılan Eşya</div>
             </div>
 
@@ -211,7 +238,7 @@ export default function ProfilePage() {
               <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-green-500 to-teal-600 rounded-full mx-auto mb-3">
                 <Gift size={24} className="text-white" />
               </div>
-              <div className="text-2xl font-bold text-white">{user.itemsReceived}</div>
+              <div className="text-2xl font-bold text-white">0</div>
               <div className="text-white/70 text-sm">Alınan Eşya</div>
             </div>
 
@@ -219,10 +246,41 @@ export default function ProfilePage() {
               <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-full mx-auto mb-3">
                 <Star size={24} className="text-white" />
               </div>
-              <div className="text-2xl font-bold text-white">{user.rating.toFixed(1)}</div>
+              <div className="text-2xl font-bold text-white">5.0</div>
               <div className="text-white/70 text-sm">Değerlendirme</div>
             </div>
           </div>
+
+          {/* User's Items Grid */}
+          {userItems.length > 0 && (
+            <div className="mb-6">
+              <h2 className="text-white text-xl font-bold mb-4">Eşyalarım ({userItems.length})</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {userItems.map((item) => (
+                  <div key={item.id} className="bg-white/10 backdrop-blur-lg rounded-xl overflow-hidden border border-white/20">
+                    <div className="aspect-square bg-white/5 relative">
+                      {item.images?.[0] ? (
+                        <Image
+                          src={item.images[0]}
+                          alt={item.title}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-white/40">
+                          <Package size={40} />
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3">
+                      <h3 className="text-white font-medium text-sm line-clamp-1">{item.title}</h3>
+                      <p className="text-white/60 text-xs mt-1">{item.condition}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Action Buttons */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

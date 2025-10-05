@@ -14,10 +14,10 @@ export async function getFeedItems(userId?: string, limit: number = 20): Promise
       .order('created_at', { ascending: false })
       .limit(limit)
 
-    // TEMPORARILY DISABLED: Show all items including own items for testing
-    // if (isValidUuid(userId)) {
-    //   query = query.neq('owner_id', userId as string)
-    // }
+    // Filter out user's own items from feed
+    if (isValidUuid(userId)) {
+      query = query.neq('owner_id', userId as string)
+    }
 
     const { data, error } = await query
 
