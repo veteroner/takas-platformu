@@ -127,6 +127,42 @@ export async function recordSwipe(
   }
 }
 
+// Check if swipe created a match
+export async function checkForMatch(userId: string, itemId: string): Promise<any | null> {
+  try {
+    // Get the item owner
+    const { data: item } = await supabase
+      .from('items')
+      .select('owner_id')
+      .eq('id', itemId)
+      .single()
+
+    if (!item) return null
+
+    const ownerId = item.owner_id
+
+    // Check if owner swiped right on any of current user's items
+    const { data: matches } = await supabase
+      .from('matches')
+      .select(`
+        *,
+        user1:users!matches_user1_id_fkey(id, name, email),
+        user2:users!matches_user2_id_fkey(id, name, email),
+        item1:items!matches_item1_id_fkey(id, title, images),
+        item2:items!matches_item2_id_fkey(id, title, images)
+      `)
+      .or(`and(user1_id.eq.${userId},user2_id.eq.${ownerId}),and(user1_id.eq.${ownerId},user2_id.eq.${userId})`)
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false })
+      .limit(1)
+
+    return matches && matches.length > 0 ? matches[0] : null
+  } catch (error) {
+    console.error('Error checking for match:', error)
+    return null
+  }
+}
+
 // Get user matches
 export async function getUserMatches(userId: string) {
   try {

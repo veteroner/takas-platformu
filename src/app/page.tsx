@@ -6,7 +6,7 @@ import { Item } from '@/types'
 import { Heart, MessageCircle, User, Settings, LogIn, Plus } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getFeedItems, recordSwipe } from '@/lib/api'
+import { getFeedItems, recordSwipe, checkForMatch } from '@/lib/api'
 import { getCurrentUser } from '@/lib/auth'
 
 export default function HomePage() {
@@ -95,18 +95,23 @@ export default function HomePage() {
           item.id,
           direction
         )
-      }
 
-      if (direction === 'right') {
-        setLikedItems(prev => [...prev, item])
-        // Check for match (simplified - real match detection happens in DB trigger)
-        if (Math.random() > 0.7) {
-          setTimeout(() => {
-            alert(`🎉 ${item.owner.name} ile eşleştiniz! Mesajlaşmaya başlayabilirsiniz.`)
-          }, 500)
+        // Check for match if user swiped right
+        if (direction === 'right') {
+          setLikedItems(prev => [...prev, item])
+          
+          // Check if this created a match
+          const match = await checkForMatch(user.id, item.id)
+          
+          if (match) {
+            const otherUser = match.user1_id === user.id ? match.user2 : match.user1
+            setTimeout(() => {
+              alert(`🎉 ${otherUser.name} ile eşleştiniz! Mesajlaşmaya başlayabilirsiniz.`)
+            }, 500)
+          }
+        } else {
+          setPassedItems(prev => [...prev, item])
         }
-      } else {
-        setPassedItems(prev => [...prev, item])
       }
     } catch (error) {
       console.error('Error recording swipe:', error)
