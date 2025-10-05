@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'images.unsplash.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'rraatgwihvrxopjahpoh.supabase.co',
+      },
     ],
   },
   eslint: {
@@ -16,9 +20,6 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  output: 'export',
-  trailingSlash: true,
-  distDir: 'out',
 };
 
 export default nextConfig;
