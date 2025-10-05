@@ -2,19 +2,16 @@ import { supabase } from './supabase'
 import type { Item } from './supabase'
 
 // Get items for feed (excluding user's own items and already swiped items)
-export async function getFeedItems(userId: string, limit: number = 20): Promise<Item[]> {
+export async function getFeedItems(userId: string, limit: number = 20): Promise<any[]> {
   try {
     const { data, error } = await supabase
       .from('items')
       .select(`
         *,
-        owner:users(id, name, avatar, rating)
+        owner:users(id, name, avatar_url, rating)
       `)
       .eq('status', 'active')
-      .neq('owner_id', userId)
-      .not('id', 'in', `(
-        SELECT item_id FROM swipes WHERE user_id = '${userId}'
-      )`)
+      .neq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(limit)
 

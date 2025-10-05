@@ -1,10 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Camera, X, Upload, ArrowLeft, Check } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { createItem, uploadImage } from '@/lib/api'
+import { supabase } from '@/lib/supabase'
 
 const categories = [
   { id: 'clothing', name: '👕 Giyim', value: 'clothing' },
@@ -27,6 +29,8 @@ const conditions = [
 export default function UploadPage() {
   const router = useRouter()
   const [images, setImages] = useState<string[]>([])
+  const [imageFiles, setImageFiles] = useState<File[]>([])
+  const [userId, setUserId] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -36,18 +40,38 @@ export default function UploadPage() {
   })
   const [isUploading, setIsUploading] = useState(false)
   const [uploadSuccess, setUploadSuccess] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  // Check authentication
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        // For now, create a guest user ID
+        const guestId = `guest-${Date.now()}`
+        setUserId(guestId)
+      } else {
+        setUserId(user.id)
+      }
+    }
+    checkUser()
+  }, [])
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (files) {
       const newImages: string[] = []
+      const newFiles: File[] = []
+      
       Array.from(files).forEach(file => {
+        newFiles.push(file)
         const reader = new FileReader()
         reader.onload = (event) => {
           if (event.target?.result) {
             newImages.push(event.target.result as string)
             if (newImages.length === files.length) {
-              setImages([...images, ...newImages].slice(0, 5)) // Max 5 images
+              setImages([...images, ...newImages].slice(0, 5))
+              setImageFiles([...imageFiles, ...newFiles].slice(0, 5))
             }
           }
         }
@@ -58,15 +82,40 @@ export default function UploadPage() {
 
   const removeImage = (index: number) => {
     setImages(images.filter((_, i) => i !== index))
+    setImageFiles(imageFiles.filter((_, i) => i !== index))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsUploading(true)
+    setError(null)
 
-    // Simulate upload delay
-    setTimeout(() => {
-      console.log('Upload data:', { ...formData, images })
+    try {
+      if (!userId) {
+        throw new Error('Kullanıcı oturumu bulunamadı')
+      }
+
+      // 1. Upload images to Supabase Storage
+      const imageUrls: string[] = []
+      for (const file of imageFiles) {
+        const imageUrl = await uploadImage(file, userId)
+        if (imageUrl) {
+          imageUrls.push(imageUrl)
+        }
+      }
+
+      // 2. Create item in database
+      const item = await createItem({
+        title: formData.title,
+        description: formData.description,
+        category: formData.category as any,
+        condition: formData.condition as any,
+        estimated_value: formData.estimatedValue ? parseFloat(formData.estimatedValue) : undefined,
+        images: imageUrls,
+        owner_id: userId
+      })
+
+      console.log('✅ Ürün başarıyla oluşturuldu:', item)
       setIsUploading(false)
       setUploadSuccess(true)
       
@@ -74,7 +123,11 @@ export default function UploadPage() {
       setTimeout(() => {
         router.push('/')
       }, 2000)
-    }, 2000)
+    } catch (err: any) {
+      console.error('❌ Upload hatası:', err)
+      setError(err.message || 'Bir hata oluştu')
+      setIsUploading(false)
+    }
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -113,6 +166,13 @@ export default function UploadPage() {
       </header>
 
       <main className="max-w-md mx-auto p-4 pb-24">
+        {/* Error Message */}
+        {error && (
+          <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            <p className="text-sm">{error}</p>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Image Upload */}
           <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6">

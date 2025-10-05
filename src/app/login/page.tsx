@@ -2,17 +2,17 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuthStore } from '@/store/authStore'
 import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { signIn, signUp } from '@/lib/auth'
 
 export default function LoginPage() {
   const router = useRouter()
-  const { login, register, isLoading } = useAuthStore()
   const [isRegister, setIsRegister] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const [formData, setFormData] = useState({
     name: '',
@@ -24,30 +24,36 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setIsLoading(true)
 
-    if (isRegister) {
-      if (formData.password !== formData.confirmPassword) {
-        setError('Şifreler eşleşmiyor')
-        return
-      }
-      if (formData.password.length < 6) {
-        setError('Şifre en az 6 karakter olmalıdır')
-        return
-      }
-      
-      const success = await register(formData)
-      if (success) {
-        router.push('/')
+    try {
+      if (isRegister) {
+        if (formData.password !== formData.confirmPassword) {
+          setError('Şifreler eşleşmiyor')
+          return
+        }
+        if (formData.password.length < 6) {
+          setError('Şifre en az 6 karakter olmalıdır')
+          return
+        }
+        
+        await signUp(formData.email, formData.password, formData.name)
+        setError('Kayıt başarılı! Email adresinizi kontrol edin.')
+        
+        // Auto login after signup
+        setTimeout(async () => {
+          await signIn(formData.email, formData.password)
+          router.push('/')
+        }, 2000)
       } else {
-        setError('Kayıt işlemi başarısız')
-      }
-    } else {
-      const success = await login(formData.email, formData.password)
-      if (success) {
+        await signIn(formData.email, formData.password)
         router.push('/')
-      } else {
-        setError('Geçersiz email veya şifre')
       }
+    } catch (err: any) {
+      console.error('Auth error:', err)
+      setError(err.message || 'Bir hata oluştu')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -84,12 +90,11 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Demo Credentials */}
+          {/* Demo Credentials - Removed for real auth */}
           {!isRegister && (
             <div className="bg-white/10 rounded-xl p-4 mb-6 border border-white/20">
-              <h3 className="text-white font-medium mb-2">Demo Giriş:</h3>
-              <p className="text-white/80 text-sm">Email: ahmet@example.com</p>
-              <p className="text-white/80 text-sm">Şifre: 123456</p>
+              <h3 className="text-white font-medium mb-2">💡 Bilgi:</h3>
+              <p className="text-white/80 text-sm">Yeni hesap oluşturun veya mevcut hesabınızla giriş yapın</p>
             </div>
           )}
 

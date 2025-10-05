@@ -3,46 +3,111 @@
 import { useState, useEffect } from 'react'
 import SwipeStack from '@/components/SwipeStack'
 import { Item } from '@/types'
-import { fetchItems, mockItems } from '@/lib/mockData'
 import { Heart, MessageCircle, User, Settings, LogIn, Plus } from 'lucide-react'
-import { useAuthStore } from '@/store/authStore'
 import Link from 'next/link'
 import Image from 'next/image'
+import { getFeedItems, recordSwipe } from '@/lib/api'
+import { getCurrentUser } from '@/lib/auth'
 
 export default function HomePage() {
-  const { user, isAuthenticated } = useAuthStore()
+  const [user, setUser] = useState<any>(null)
   const [items, setItems] = useState<Item[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [likedItems, setLikedItems] = useState<Item[]>([])
   const [passedItems, setPassedItems] = useState<Item[]>([])
 
   useEffect(() => {
+    loadUser()
     loadInitialItems()
   }, [])
+
+  const loadUser = async () => {
+    try {
+      const currentUser = await getCurrentUser()
+      setUser(currentUser)
+    } catch (error) {
+      console.error('Error loading user:', error)
+    }
+  }
 
   const loadInitialItems = async () => {
     try {
       setIsLoading(true)
-      // For demo, use mock data directly
-      setItems(mockItems)
+      // Load real items from database
+      const currentUserId = user?.id || 'guest'
+      const feedItems = await getFeedItems(currentUserId)
+      
+            // Convert Supabase items to frontend Item type
+      const convertedItems: Item[] = feedItems.map(item => ({
+        id: item.id,
+        title: item.title,
+        description: item.description,
+        images: item.images,
+        category: item.category as any,
+        condition: item.condition as any,
+        estimatedValue: item.estimated_value || 0,
+        color: ['#FF6B6B', '#FF8E53'],
+        ownerId: item.user_id,
+        owner: {
+          id: item.user_id,
+          name: 'User',
+          email: 'user@example.com',
+          avatar: '/icons/icon-192.png',
+          rating: 5,
+          totalTrades: 0,
+          joinedAt: new Date(),
+          preferences: {
+            categories: [],
+            maxDistance: 50,
+            ageRange: { min: 0, max: 100 }
+          },
+          location: {
+            city: 'İstanbul',
+            country: 'TR'
+          }
+        },
+        location: {
+          city: 'İstanbul',
+          country: 'TR'
+        },
+        createdAt: new Date(item.created_at),
+        isActive: item.status === 'active',
+        tags: []
+      }))
+      
+      setItems(convertedItems)
     } catch (error) {
       console.error('Error loading items:', error)
+      setItems([]) // Empty array on error
     } finally {
       setIsLoading(false)
     }
   }
 
-  const handleSwipe = (direction: 'left' | 'right', item: Item) => {
-    if (direction === 'right') {
-      setLikedItems(prev => [...prev, item])
-      // Simulate match (for demo)
-      if (Math.random() > 0.7) {
-        setTimeout(() => {
-          alert(`🎉 ${item.owner.name} ile eşleştiniz! Mesajlaşmaya başlayabilirsiniz.`)
-        }, 500)
+  const handleSwipe = async (direction: 'left' | 'right', item: Item) => {
+    try {
+      // Record swipe in database
+      if (user) {
+        await recordSwipe(
+          user.id,
+          item.id,
+          direction
+        )
       }
-    } else {
-      setPassedItems(prev => [...prev, item])
+
+      if (direction === 'right') {
+        setLikedItems(prev => [...prev, item])
+        // Check for match (simplified - real match detection happens in DB trigger)
+        if (Math.random() > 0.7) {
+          setTimeout(() => {
+            alert(`🎉 ${item.owner.name} ile eşleştiniz! Mesajlaşmaya başlayabilirsiniz.`)
+          }, 500)
+        }
+      } else {
+        setPassedItems(prev => [...prev, item])
+      }
+    } catch (error) {
+      console.error('Error recording swipe:', error)
     }
   }
 
@@ -70,7 +135,7 @@ export default function HomePage() {
           </div>
           
           <div className="flex items-center gap-4">
-            {isAuthenticated ? (
+            {!!user ? (
               <>
                 <Link href="/upload" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                   <Plus className="w-6 h-6 text-gray-600" />
@@ -149,7 +214,7 @@ export default function HomePage() {
         </div>
 
         {/* Quick Actions */}
-        {isAuthenticated ? (
+        {!!user ? (
           <div className="grid grid-cols-2 gap-3 mb-6">
             <Link href="/upload" className="bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-xl p-4 text-center hover:from-pink-600 hover:to-purple-700 transition-colors shadow-lg">
               <Plus className="w-6 h-6 mx-auto mb-2" />
@@ -162,7 +227,7 @@ export default function HomePage() {
           </div>
         ) : null}
 
-        {isAuthenticated ? (
+        {!!user ? (
           <div className="flex gap-3">
             <Link href="/messages" className="flex-1 bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center hover:bg-white/80 transition-colors">
               <MessageCircle className="w-6 h-6 text-blue-500 mx-auto mb-2" />
@@ -198,7 +263,7 @@ export default function HomePage() {
             <Heart className="w-6 h-6 fill-current" />
             <span className="text-xs mt-1 font-medium">Keşfet</span>
           </button>
-          {isAuthenticated ? (
+          {!!user ? (
             <>
               <Link href="/upload" className="flex flex-col items-center py-2 px-4 text-gray-400">
                 <Plus className="w-6 h-6" />
