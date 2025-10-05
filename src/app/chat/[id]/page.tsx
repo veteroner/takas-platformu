@@ -26,21 +26,39 @@ export default function ChatPage() {
   useEffect(() => {
     loadData()
     
-    // Subscribe to new messages
+    // Subscribe to new messages with unique channel name
+    const channelName = `chat-${matchId}-${Date.now()}`
+    
     const channel = supabase
-      .channel(`match-${matchId}`)
-      .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'messages',
-        filter: `match_id=eq.${matchId}`
-      }, (payload) => {
-        setMessages(prev => [...prev, payload.new])
-        scrollToBottom()
+      .channel(channelName)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'messages',
+          filter: `match_id=eq.${matchId}`
+        },
+        (payload) => {
+          console.log('📨 Yeni mesaj geldi:', payload.new)
+          setMessages(prev => {
+            // Duplicate kontrolü - mesaj zaten varsa ekleme
+            const exists = prev.some(m => m.id === payload.new.id)
+            if (exists) return prev
+            return [...prev, payload.new]
+          })
+          scrollToBottom()
+        }
+      )
+      .subscribe((status) => {
+        console.log('🔔 Subscription durumu:', status)
+        if (status === 'SUBSCRIBED') {
+          console.log('✅ Real-time mesajlaşma aktif!')
+        }
       })
-      .subscribe()
 
     return () => {
+      console.log('🔌 Subscription kapatılıyor...')
       supabase.removeChannel(channel)
     }
   }, [matchId])
@@ -94,14 +112,37 @@ export default function ChatPage() {
   const handleSend = async () => {
     if (!newMessage.trim() || !user || !otherUser) return
 
+    const messageText = newMessage.trim()
+    setNewMessage('') // Input'u hemen temizle
+    
+    // Optimistic update - mesajı hemen göster
+    const tempMessage = {
+      id: `temp-${Date.now()}`,
+      match_id: matchId,
+      sender_id: user.id,
+      receiver_id: otherUser.id,
+      content: messageText,
+      created_at: new Date().toISOString(),
+      read: false
+    }
+    
+    setMessages(prev => [...prev, tempMessage])
+    scrollToBottom()
+
     try {
-      const sent = await sendMessage(matchId, user.id, otherUser.id, newMessage.trim())
+      const sent = await sendMessage(matchId, user.id, otherUser.id, messageText)
       
-      if (sent) {
-        setNewMessage('')
+      if (!sent) {
+        // Hata olursa temp mesajı kaldır
+        setMessages(prev => prev.filter(m => m.id !== tempMessage.id))
+        setNewMessage(messageText) // Mesajı geri koy
+        alert('Mesaj gönderilemedi, tekrar deneyin')
       }
     } catch (error) {
       console.error('Error sending message:', error)
+      setMessages(prev => prev.filter(m => m.id !== tempMessage.id))
+      setNewMessage(messageText)
+      alert('Mesaj gönderilemedi')
     }
   }
 
