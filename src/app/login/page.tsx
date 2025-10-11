@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { signIn, signUp } from '@/lib/auth'
+import { policyRoutes } from '@/lib/legal'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -37,7 +38,31 @@ export default function LoginPage() {
           return
         }
         
-        await signUp(formData.email, formData.password, formData.name)
+        const auth = await signUp(formData.email, formData.password, formData.name)
+        const userId = auth.user?.id
+        if (userId) {
+          const marketing = (document.querySelector('input[name="consent_marketing"]') as HTMLInputElement | null)?.checked
+          const emailConsent = (document.querySelector('input[name="consent_email"]') as HTMLInputElement | null)?.checked
+          await fetch('/api/consents', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId,
+              consents: [
+                { policyKey: 'terms', version: 'v1' },
+                { policyKey: 'kvkk', version: 'v1' },
+                { policyKey: 'privacy', version: 'v1' },
+                { policyKey: 'cookies', version: 'v1' },
+                ...(marketing ? [{ policyKey: 'marketing', version: 'v1' }] : []),
+                ...(emailConsent ? [{ policyKey: 'email', version: 'v1' }] : []),
+              ]
+            })
+          })
+          ;['terms','kvkk','privacy','cookies']
+            .concat(marketing ? ['marketing'] : [])
+            .concat(emailConsent ? ['email'] : [])
+            .forEach(k => localStorage.setItem(`accepted_${k}`, 'v1'))
+        }
         setError('Kayıt başarılı! Email adresinizi kontrol edin.')
         
         // Auto login after signup
@@ -172,6 +197,32 @@ export default function LoginPage() {
                 </button>
               </div>
             )}
+
+          {/* Consents (Register only) */}
+          {isRegister && (
+            <div className="space-y-3 text-white/90">
+              <label className="flex items-start gap-3">
+                <input required type="checkbox" className="mt-1" />
+                <span>
+                  <Link className="underline" href={policyRoutes.terms}>Üyelik Sözleşmesi</Link>,{' '}
+                  <Link className="underline" href={policyRoutes.kvkk}>KVKK Aydınlatma Metni</Link> ve{' '}
+                  <Link className="underline" href={policyRoutes.privacy}>Gizlilik & Çerez Politikası</Link>'nı okudum, kabul ediyorum.
+                </span>
+              </label>
+              <label className="flex items-start gap-3">
+                <input name="consent_marketing" type="checkbox" className="mt-1" />
+                <span>
+                  Pazarlama/kişiselleştirme amaçlı işlenmesine <Link className="underline" href={policyRoutes.consent}>açık rıza</Link> veriyorum (opsiyonel).
+                </span>
+              </label>
+              <label className="flex items-start gap-3">
+                <input name="consent_email" type="checkbox" className="mt-1" />
+                <span>
+                  Ticari elektronik ileti almayı kabul ediyorum (opsiyonel).
+                </span>
+              </label>
+            </div>
+          )}
 
             {/* Error Message */}
             {error && (

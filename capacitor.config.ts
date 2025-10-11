@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.takas.platform',
+  appId: 'com.teknova.takasapp',
   appName: 'Takas Platform',
   webDir: 'out',
   server: {

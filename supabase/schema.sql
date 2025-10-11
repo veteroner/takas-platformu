@@ -227,3 +227,48 @@ CREATE TRIGGER update_items_updated_at BEFORE UPDATE ON public.items
 
 CREATE TRIGGER update_matches_updated_at BEFORE UPDATE ON public.matches
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at();
+
+-- Consents table to log policy acceptances
+CREATE TABLE IF NOT EXISTS public.consents (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  policy_key TEXT NOT NULL,
+  version TEXT NOT NULL,
+  accepted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  ip INET,
+  user_agent TEXT
+);
+
+ALTER TABLE public.consents ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can see own consents" ON public.consents
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own consents" ON public.consents
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- Simple key/value settings for required policy versions
+CREATE TABLE IF NOT EXISTS public.app_settings (
+  key text primary key,
+  value text not null
+);
+
+-- Notification preferences
+CREATE TABLE IF NOT EXISTS public.notification_prefs (
+  user_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+  enabled BOOLEAN NOT NULL DEFAULT true,
+  frequency TEXT NOT NULL DEFAULT 'daily' CHECK (frequency IN ('hourly','daily')),
+  categories TEXT[] DEFAULT NULL, -- null => tüm kategoriler
+  last_digest_at TIMESTAMPTZ
+);
+
+ALTER TABLE public.notification_prefs ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can read own notif prefs" ON public.notification_prefs
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can upsert own notif prefs" ON public.notification_prefs
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own notif prefs" ON public.notification_prefs
+  FOR UPDATE USING (auth.uid() = user_id);

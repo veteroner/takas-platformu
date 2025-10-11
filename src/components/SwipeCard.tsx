@@ -24,14 +24,27 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
     config: { friction: 50, tension: 500 }
   }))
 
-  // Drag gesture handler
+  // Drag gesture handler with better vertical scroll protection
   const bind = useDrag(({ 
     active, 
     movement: [mx, my], 
     direction: [xDir], 
-    velocity: [vx], 
+    velocity: [vx, vy], 
     cancel 
   }: any) => {
+    // Stronger vertical scroll protection:
+    // 1. If vertical movement is significantly larger than horizontal
+    // 2. Or if vertical velocity is higher than horizontal velocity
+    // 3. Cancel the gesture to allow native vertical scrolling
+    const isVerticalDominant = Math.abs(my) > Math.abs(mx) * 1.5
+    const isVerticalVelocityHigh = Math.abs(vy) > Math.abs(vx) * 1.2
+    const hasVerticalMovement = Math.abs(my) > 10
+    
+    if ((isVerticalDominant || isVerticalVelocityHigh) && hasVerticalMovement) {
+      cancel?.()
+      return
+    }
+    
     const trigger = vx > 0.2 // Hız eşiği
     const dir = xDir < 0 ? -1 : 1
     
@@ -60,6 +73,13 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
         immediate: active
       })
     }
+  }, {
+    // Gesture configuration to be more restrictive
+    axis: undefined, // Allow both axes but we'll filter in the handler
+    filterTaps: true, // Prevent taps from triggering drag
+    threshold: 10, // Minimum movement to start gesture
+    rubberband: 0.1, // Reduce rubber band effect
+    pointer: { touch: true } // Enable touch events
   })
 
   // Programmatik swipe fonksiyonları
@@ -88,7 +108,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
   if (isGone) return null
 
   return (
-    <div className="relative w-full h-full touch-pan-y">
+    <div className="relative w-full h-full">
       {/* Swipe Indicators */}
       <animated.div
         className="absolute inset-0 z-10 pointer-events-none"
@@ -124,7 +144,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
       {/* Main Card */}
       <animated.div
         ref={cardRef}
-  className="absolute inset-0 bg-white rounded-2xl shadow-2xl cursor-grab active:cursor-grabbing overflow-hidden touch-pan-y"
+  className="absolute inset-0 bg-white rounded-2xl shadow-2xl cursor-grab active:cursor-grabbing overflow-hidden"
         {...bind()}
         style={{
           x,

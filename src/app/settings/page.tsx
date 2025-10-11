@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useAuthStore } from '@/store/authStore'
 import { ArrowLeft, Bell, Shield, Globe, Moon, Sun, Monitor, LogOut, Trash2, Save } from 'lucide-react'
+import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -41,6 +42,14 @@ export default function SettingsPage() {
 
   const handleSave = () => {
     updatePreferences(settings)
+    // Persist notif prefs to Supabase
+    if (user) {
+      supabase.from('notification_prefs').upsert({
+        user_id: user.id,
+        enabled: settings.notifications,
+        frequency: 'daily'
+      })
+    }
     // Show success message or toast
     alert('Ayarlar kaydedildi!')
   }

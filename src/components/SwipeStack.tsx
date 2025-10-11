@@ -105,7 +105,7 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
       )}
 
       {/* Card Stack */}
-  <div className="relative w-full h-full touch-pan-y">
+  <div className="relative w-full h-full">
         <AnimatePresence>
           {stack.map((item, index) => (
             <motion.div
