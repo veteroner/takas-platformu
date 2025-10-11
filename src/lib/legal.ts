@@ -8,11 +8,11 @@ export const policyVersions = {
 } as const
 
 export const policyRoutes = {
-  terms: '/legal/uyelik-sozlesmesi',
-  kvkk: '/legal/kvkk-aydinlatma',
-  privacy: '/legal/gizlilik-politikasi',
-  cookies: '/legal/cerez-politikasi',
-  consent: '/legal/acik-riza',
+  terms: '/uyelik-sozlesmesi',
+  kvkk: '/kvkk-aydinlatma',
+  privacy: '/gizlilik-politikasi',
+  cookies: '/cerez-politikasi',
+  consent: '/acik-riza',
 } as const
 
 export type ConsentSelections = {

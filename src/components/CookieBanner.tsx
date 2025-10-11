@@ -18,7 +18,7 @@ export default function CookieBanner() {
       <div className="flex flex-col sm:flex-row items-center gap-4">
         <p className="text-sm flex-1">
           Deneyiminizi iyileştirmek için çerezleri kullanıyoruz. Ayrıntılar için{' '}
-          <Link className="underline" href="/legal/cerez-politikasi">Çerez Politikası</Link>.
+          <Link className="underline" href="/cerez-politikasi">Çerez Politikası</Link>.
         </p>
         <div className="flex gap-2">
           <button
