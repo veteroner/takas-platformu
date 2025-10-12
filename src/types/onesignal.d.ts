@@ -1,6 +1,4 @@
-import { Component } from '@capacitor/core';
-
-export interface OneSignalPlugin extends Component {
+export interface OneSignalPlugin {
   setAppId(options: { appId: string }): Promise<void>;
   getDeviceState(): Promise<any>;
   promptForPushNotificationsWithUserResponse(): Promise<{ accepted: boolean }>;

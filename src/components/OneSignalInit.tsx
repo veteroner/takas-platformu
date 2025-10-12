@@ -1,13 +1,11 @@
 'use client'
 
 import { useEffect } from 'react'
+import type { OneSignalPlugin } from '../types/onesignal'
 
 declare global {
   interface Window { 
     OneSignal: any
-    plugins: {
-      OneSignal: any
-    }
   }
 }
 
