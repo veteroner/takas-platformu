@@ -11,6 +11,8 @@ import { getCurrentUser } from '@/lib/auth'
 import BannerAd from '@/components/BannerAd'
 import { useInterstitialAd } from '@/hooks/useInterstitialAd'
 import { SwipeCounter } from '@/lib/admob'
+import { loadSeekingPreferencesAsync } from '@/lib/preferences'
+import { filterAndRank } from '@/lib/matching'
 
 export default function HomePage() {
   const [user, setUser] = useState<any>(null)
@@ -90,7 +92,14 @@ export default function HomePage() {
         tags: []
       }))
       
-  setItems(convertedItems)
+      // Try to apply seeking preferences (local)
+      const prefs = await loadSeekingPreferencesAsync()
+      if (prefs && prefs.categories && prefs.categories.length > 0) {
+        const ranked = filterAndRank(convertedItems, prefs, 50)
+        setItems(ranked.map(r => r.item))
+      } else {
+        setItems(convertedItems)
+      }
     } catch (error) {
       console.error('Error loading items:', error)
       setItems([]) // Empty array on error

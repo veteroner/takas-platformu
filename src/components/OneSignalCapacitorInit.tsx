@@ -7,11 +7,18 @@ export default function OneSignalCapacitorInit() {
     // Dynamically import to avoid SSR issues
     (async () => {
       try {
-        const { OneSignal } = await import('@onesignal/capacitor-plugin')
         const appId = process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID
         if (!appId) return
-        await OneSignal.initialize(appId)
-        await OneSignal.Notifications.requestPermission()
+        // Try Capacitor plugin first
+        try {
+          const mod: any = await import('@onesignal/capacitor-plugin')
+          if (mod?.OneSignal) {
+            await mod.OneSignal.initialize(appId)
+            await mod.OneSignal.Notifications.requestPermission()
+            return
+          }
+        } catch {}
+        // Fallback silently on web: optionally load web SDK later
       } catch (e) {
         // no-op on web or if plugin not available
       }

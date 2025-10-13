@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { createItem, uploadImage } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
+import { saveSeekingPreferencesAsync } from '@/lib/preferences'
 
 const categories = [
   { id: 'clothing', name: '👕 Giyim', value: 'clothing' },
@@ -38,6 +39,13 @@ export default function UploadPage() {
     condition: '',
     estimatedValue: ''
   })
+  // Seeking preferences local state (simple v1)
+  const [seekCategories, setSeekCategories] = useState<Array<'clothing'|'toys'|'electronics'|'books'|'sports'|'home'|'other'>>([])
+  const [seekValueMin, setSeekValueMin] = useState<string>('')
+  const [seekValueMax, setSeekValueMax] = useState<string>('')
+  const [seekCity, setSeekCity] = useState<string>('')
+  const [seekClothingSize, setSeekClothingSize] = useState<'XS'|'S'|'M'|'L'|'XL'|'XXL'|''>('')
+  const [seekClothingColor, setSeekClothingColor] = useState<string>('')
   const [isUploading, setIsUploading] = useState(false)
   const [uploadSuccess, setUploadSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -95,6 +103,26 @@ export default function UploadPage() {
         throw new Error('Kullanıcı oturumu bulunamadı')
       }
 
+      // Persist seeking preferences (non-blocking)
+      try {
+        const filters: any = {}
+        if (seekClothingSize || seekClothingColor) {
+          filters.clothing = {
+            sizeText: seekClothingSize || undefined,
+            color: seekClothingColor
+              ? seekClothingColor.split(',').map(s => s.trim()).filter(Boolean)
+              : undefined,
+          }
+        }
+        await saveSeekingPreferencesAsync({
+          categories: seekCategories,
+          valueMin: seekValueMin ? Number(seekValueMin) : undefined,
+          valueMax: seekValueMax ? Number(seekValueMax) : undefined,
+          locationCity: seekCity || undefined,
+          filters,
+        } as any)
+      } catch {}
+
       // 1. Upload images to Supabase Storage
       const imageUrls: string[] = []
       for (const file of imageFiles) {
@@ -135,6 +163,10 @@ export default function UploadPage() {
       ...formData,
       [e.target.name]: e.target.value
     })
+  }
+
+  const toggleSeekCategory = (ct: 'clothing'|'toys'|'electronics'|'books'|'sports'|'home'|'other') => {
+    setSeekCategories(prev => prev.includes(ct) ? prev.filter(c => c !== ct) : [...prev, ct])
   }
 
   if (uploadSuccess) {
@@ -306,6 +338,99 @@ export default function UploadPage() {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
             <p className="text-xs text-gray-500 mt-2">Opsiyonel: Ürünün yaklaşık değeri</p>
+          </div>
+
+          {/* Seeking Preferences */}
+          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6">
+            <h3 className="font-semibold text-gray-800 mb-3">🎯 Ne Arıyorsun?</h3>
+
+            <div className="mb-4">
+              <div className="text-sm font-medium text-gray-700 mb-2">Kategoriler (çoklu seçim)</div>
+              <div className="grid grid-cols-2 gap-2">
+                {(['clothing','toys','electronics','books','sports','home','other'] as const).map(ct => (
+                  <button
+                    key={ct}
+                    type="button"
+                    onClick={() => toggleSeekCategory(ct)}
+                    className={`py-2 px-3 rounded-lg border-2 text-xs transition-all ${
+                      seekCategories.includes(ct)
+                        ? 'border-purple-500 bg-purple-50 text-purple-700'
+                        : 'border-gray-200 hover:border-purple-300'
+                    }`}
+                  >
+                    {ct}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Min Değer (₺)</label>
+                <input
+                  type="number"
+                  value={seekValueMin}
+                  onChange={(e) => setSeekValueMin(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="Örn: 300"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Max Değer (₺)</label>
+                <input
+                  type="number"
+                  value={seekValueMax}
+                  onChange={(e) => setSeekValueMax(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="Örn: 1500"
+                />
+              </div>
+            </div>
+
+            <div className="mt-3">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Şehir</label>
+              <input
+                type="text"
+                value={seekCity}
+                onChange={(e) => setSeekCity(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                placeholder="Örn: İstanbul"
+              />
+            </div>
+
+            {/* Clothing filters (simple) */}
+            <div className="mt-4 rounded-lg border p-4">
+              <div className="text-sm font-medium text-gray-700 mb-2">Giyim Tercihleri (opsiyonel)</div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs text-gray-600 mb-1">Beden (Text)</label>
+                  <select
+                    value={seekClothingSize}
+                    onChange={(e) => setSeekClothingSize(e.target.value as any)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  >
+                    <option value="">—</option>
+                    <option value="XS">XS</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                    <option value="XXL">XXL</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-600 mb-1">Renk(ler) virgülle</label>
+                  <input
+                    type="text"
+                    value={seekClothingColor}
+                    onChange={(e) => setSeekClothingColor(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    placeholder="Kırmızı, Siyah"
+                  />
+                </div>
+              </div>
+              <p className="text-[11px] text-gray-500 mt-2">Abiye için uygun beden/renkleri girersen eşleşmeler öne çıkar.</p>
+            </div>
           </div>
 
           {/* Submit Button */}

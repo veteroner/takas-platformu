@@ -1,5 +1,6 @@
 import { supabase } from './supabase'
 import type { Item } from './supabase'
+import type { SeekingPreferences } from '@/types'
 
 // Get items for feed (excluding user's own items and already swiped items)
 export async function getFeedItems(userId?: string, limit: number = 20): Promise<any[]> {
@@ -96,6 +97,53 @@ export async function getUserItems(userId: string): Promise<Item[]> {
   } catch (error) {
     console.error('Error fetching user items:', error)
     return []
+  }
+}
+
+// Get seeking preferences (from DB)
+export async function getSeekingPreferences(userId: string): Promise<SeekingPreferences | null> {
+  try {
+    const { data, error } = await supabase
+      .from('seeking_preferences')
+      .select('*')
+      .eq('user_id', userId)
+      .single()
+
+    if (error && error.code !== 'PGRST116') throw error // not found code varies
+    if (!data) return null
+    return {
+      categories: (data.categories || []).map((c: string) => c as any),
+      valueMin: data.value_min ?? undefined,
+      valueMax: data.value_max ?? undefined,
+      locationCity: data.location_city ?? undefined,
+      filters: data.filters ?? undefined,
+    } as any
+  } catch (error) {
+    console.error('Error fetching seeking preferences:', error)
+    return null
+  }
+}
+
+// Upsert seeking preferences (to DB)
+export async function upsertSeekingPreferences(userId: string, prefs: SeekingPreferences): Promise<boolean> {
+  try {
+    const payload = {
+      user_id: userId,
+      categories: prefs.categories || [],
+      value_min: prefs.valueMin ?? null,
+      value_max: prefs.valueMax ?? null,
+      location_city: prefs.locationCity ?? null,
+      filters: prefs.filters ?? null,
+      updated_at: new Date().toISOString()
+    }
+    const { error } = await supabase
+      .from('seeking_preferences')
+      .upsert(payload, { onConflict: 'user_id' })
+    if (error) throw error
+    return true
+  } catch (error) {
+    console.error('Error upserting seeking preferences:', error)
+    return false
   }
 }
 

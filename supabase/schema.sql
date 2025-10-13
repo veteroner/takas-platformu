@@ -120,6 +120,30 @@ CREATE POLICY "Users can insert own messages" ON public.messages FOR INSERT
 CREATE POLICY "Users can update own messages" ON public.messages FOR UPDATE 
   USING (auth.uid() = receiver_id);
 
+-- Seeking Preferences (store user's matching preferences)
+CREATE TABLE IF NOT EXISTS public.seeking_preferences (
+  user_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+  categories TEXT[] NOT NULL DEFAULT '{}',
+  value_min INTEGER,
+  value_max INTEGER,
+  location_city TEXT,
+  filters JSONB,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.seeking_preferences ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can read own seeking prefs" ON public.seeking_preferences
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can upsert own seeking prefs" ON public.seeking_preferences
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own seeking prefs" ON public.seeking_preferences
+  FOR UPDATE USING (auth.uid() = user_id);
+
+CREATE INDEX IF NOT EXISTS idx_seeking_prefs_user ON public.seeking_preferences(user_id);
+
 -- Functions
 
 -- Function to create user profile on signup

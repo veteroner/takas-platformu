@@ -88,7 +88,7 @@ export default function AdminMessagesPage() {
           <tbody>
             {filtered.map(m => (
               <tr key={m.id} className="border-t border-white/10">
-                <Td className="max-w-xl truncate" title={m.content}>{m.content}</Td>
+                <Td className="max-w-xl truncate"><div title={m.content}>{m.content}</div></Td>
                 <Td className="font-mono">{m.sender_id}</Td>
                 <Td className="font-mono">{m.receiver_id}</Td>
                 <Td>{new Date(m.created_at).toLocaleString('tr-TR')}</Td>

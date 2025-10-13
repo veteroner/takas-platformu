@@ -32,11 +32,10 @@ export async function initializeAdMob(): Promise<void> {
       return;
     }
 
+    // Types for AdMob.initialize may vary across versions; keep only known fields
     await AdMob.initialize({
-      requestTrackingAuthorization: true, // iOS 14+ için gerekli
-      testingDevices: [], // Test cihazları eklenebilir
-      initializeForTesting: true, // Test modunda başlat
-    });
+      initializeForTesting: true,
+    } as any);
 
     console.log('AdMob initialized successfully');
   } catch (error) {
@@ -251,7 +250,8 @@ export function removeAllAdListeners(): void {
   if (!Capacitor.isNativePlatform()) return;
   
   // Interstitial listeners
-  AdMob.removeAllListeners();
+  // Some versions may not expose removeAllListeners in types; guard at runtime
+  (AdMob as any).removeAllListeners?.();
   console.log('All ad listeners removed');
 }
 
