@@ -1,10 +1,17 @@
 PODS:
   - Capacitor (7.4.3):
     - CapacitorCordova
+  - CapacitorCommunityAdmob (7.0.3):
+    - Capacitor
+    - Google-Mobile-Ads-SDK (= 11.3.0)
+    - GoogleUserMessagingPlatform (< 3.0.0, >= 2.7.0)
   - CapacitorCordova (7.4.3)
   - CordovaPluginsStatic (7.4.3):
     - CapacitorCordova
     - OneSignalXCFramework (= 5.2.14)
+  - Google-Mobile-Ads-SDK (11.3.0):
+    - GoogleUserMessagingPlatform (>= 1.1)
+  - GoogleUserMessagingPlatform (2.7.0)
   - OneSignalXCFramework (5.2.14):
     - OneSignalXCFramework/OneSignalComplete (= 5.2.14)
   - OneSignalXCFramework/OneSignal (5.2.14):
@@ -54,16 +61,21 @@ PODS:
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorCommunityAdmob (from `../../node_modules/@capacitor-community/admob`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - CordovaPluginsStatic (from `../capacitor-cordova-ios-plugins`)
 
 SPEC REPOS:
   trunk:
+    - Google-Mobile-Ads-SDK
+    - GoogleUserMessagingPlatform
     - OneSignalXCFramework
 
 EXTERNAL SOURCES:
   Capacitor:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorCommunityAdmob:
+    :path: "../../node_modules/@capacitor-community/admob"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
   CordovaPluginsStatic:
@@ -71,10 +83,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Capacitor: b4741ca7affb32c1b70debd03df92cbf522d8a80
+  CapacitorCommunityAdmob: 9267ae3b473314fa65765ce4bead9a9175902ab2
   CapacitorCordova: 435121e81a2df4d0034f0fb11fcefab5104cfdb5
   CordovaPluginsStatic: f522a8ad00f2c511cb933e08f8cc399667bef222
+  Google-Mobile-Ads-SDK: 301a16c461c331ba34ff4dab40a22ab7c147af61
+  GoogleUserMessagingPlatform: a8b56893477f67212fbc8411c139e61d463349f5
   OneSignalXCFramework: 7112f3e89563e41ebc23fe807788f11985ac541c
 
-PODFILE CHECKSUM: 85c737bece4f0d0dfecdb71e6628c588a48425ee
+PODFILE CHECKSUM: 5f090085004110cbf428bff90b5f08092af0ef3c
 
 COCOAPODS: 1.16.2

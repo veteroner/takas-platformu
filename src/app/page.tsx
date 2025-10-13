@@ -8,6 +8,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getFeedItems, recordSwipe, checkForMatch } from '@/lib/api'
 import { getCurrentUser } from '@/lib/auth'
+import BannerAd from '@/components/BannerAd'
+import { useInterstitialAd } from '@/hooks/useInterstitialAd'
+import { SwipeCounter } from '@/lib/admob'
 
 export default function HomePage() {
   const [user, setUser] = useState<any>(null)
@@ -15,6 +18,16 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true)
   const [likedItems, setLikedItems] = useState<Item[]>([])
   const [passedItems, setPassedItems] = useState<Item[]>([])
+  
+  // Interstitial reklam hook'u
+  const interstitialAd = useInterstitialAd()
+  
+  // Swipe sayacı - Her 5 swipe'da bir reklam göster
+  const [swipeCounter] = useState(() => new SwipeCounter(5, () => {
+    if (interstitialAd.isReady) {
+      interstitialAd.show()
+    }
+  }))
 
   useEffect(() => {
     loadUser()
@@ -88,6 +101,9 @@ export default function HomePage() {
 
   const handleSwipe = async (direction: 'left' | 'right', item: Item) => {
     try {
+      // Swipe sayacını artır - her 5 swipe'da reklam gösterir
+      swipeCounter.increment()
+      
       // Record swipe in database
       if (user) {
         await recordSwipe(
@@ -207,6 +223,9 @@ export default function HomePage() {
             className="w-full h-full"
           />
         </div>
+
+        {/* Banner Reklam */}
+        <BannerAd />
 
         {/* Stats */}
         <div className="grid grid-cols-2 gap-4 mb-6">

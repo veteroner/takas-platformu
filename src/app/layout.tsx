@@ -6,6 +6,7 @@ import ConsentGuard from "@/components/ConsentGuard";
 import AnalyticsLoader from "@/components/AnalyticsLoader";
 import OneSignalInit from "@/components/OneSignalInit";
 import OneSignalCapacitorInit from "@/components/OneSignalCapacitorInit";
+import AdMobInit from "@/components/AdMobInit";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -101,6 +102,7 @@ export default function RootLayout({
         <AnalyticsLoader />
         <OneSignalInit />
         <OneSignalCapacitorInit />
+        <AdMobInit />
       </body>
     </html>
   );
