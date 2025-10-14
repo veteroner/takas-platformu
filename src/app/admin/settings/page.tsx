@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { supabase } from '@/lib/supabase'
 
 type KV = { key: string; value: string }
 
@@ -11,19 +12,16 @@ export default function AdminSettingsPage() {
   const [editing, setEditing] = useState<KV | null>(null)
   const [value, setValue] = useState('')
 
-  const headers: Record<string, string> = {}
+  const getAuthHeaders = async (): Promise<Record<string, string>> => {
+    const { data: { session } } = await supabase.auth.getSession()
+    const token = session?.access_token
+    return token ? { Authorization: `Bearer ${token}` } : {}
+  }
 
   useEffect(() => {
     const run = async () => {
       try {
-        const auth = await import('@supabase/supabase-js')
-        const { createClient } = auth
-        const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
-        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        const supabase = createClient(url, key)
-        const { data: { session } } = await supabase.auth.getSession()
-        const token = session?.access_token
-        if (token) headers['Authorization'] = `Bearer ${token}`
+        const headers = await getAuthHeaders()
         const res = await fetch('/api/admin/settings', { headers })
         if (!res.ok) {
           const j = await res.json().catch(()=>({}))
@@ -48,9 +46,10 @@ export default function AdminSettingsPage() {
 
   const save = async () => {
     if (!editing) return
+    const authHeaders = await getAuthHeaders()
     const res = await fetch('/api/admin/settings', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...headers },
+      headers: { 'Content-Type': 'application/json', ...authHeaders },
       body: JSON.stringify({ key: editing.key, value })
     })
     if (!res.ok) {

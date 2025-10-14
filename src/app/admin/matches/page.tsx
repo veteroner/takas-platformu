@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { supabase } from '@/lib/supabase'
 
 type Match = {
   id: string
@@ -18,19 +19,16 @@ export default function AdminMatchesPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const headers: Record<string, string> = {}
+  const getAuthHeaders = async (): Promise<Record<string, string>> => {
+    const { data: { session } } = await supabase.auth.getSession()
+    const token = session?.access_token
+    return token ? { Authorization: `Bearer ${token}` } : {}
+  }
 
   useEffect(() => {
     const run = async () => {
       try {
-        const auth = await import('@supabase/supabase-js')
-        const { createClient } = auth
-        const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
-        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        const supabase = createClient(url, key)
-        const { data: { session } } = await supabase.auth.getSession()
-        const token = session?.access_token
-        if (token) headers['Authorization'] = `Bearer ${token}`
+        const headers = await getAuthHeaders()
         const res = await fetch('/api/admin/matches', { headers })
         if (!res.ok) {
           const j = await res.json().catch(()=>({}))
@@ -55,9 +53,10 @@ export default function AdminMatchesPage() {
   }, [rows, query])
 
   const updateStatus = async (m: Match, status: Match['status']) => {
+    const authHeaders = await getAuthHeaders()
     const res = await fetch('/api/admin/matches', {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json', ...headers },
+      headers: { 'Content-Type': 'application/json', ...authHeaders },
       body: JSON.stringify({ id: m.id, updates: { status } })
     })
     if (!res.ok) {

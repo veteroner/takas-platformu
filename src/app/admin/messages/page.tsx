@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { supabase } from '@/lib/supabase'
 
 type Message = {
   id: string
@@ -18,19 +19,16 @@ export default function AdminMessagesPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const headers: Record<string, string> = {}
+  const getAuthHeaders = async (): Promise<Record<string, string>> => {
+    const { data: { session } } = await supabase.auth.getSession()
+    const token = session?.access_token
+    return token ? { Authorization: `Bearer ${token}` } : {}
+  }
 
   useEffect(() => {
     const run = async () => {
       try {
-        const auth = await import('@supabase/supabase-js')
-        const { createClient } = auth
-        const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
-        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        const supabase = createClient(url, key)
-        const { data: { session } } = await supabase.auth.getSession()
-        const token = session?.access_token
-        if (token) headers['Authorization'] = `Bearer ${token}`
+        const headers = await getAuthHeaders()
         const res = await fetch('/api/admin/messages', { headers })
         if (!res.ok) {
           const j = await res.json().catch(()=>({}))
@@ -56,7 +54,8 @@ export default function AdminMessagesPage() {
 
   const remove = async (id: string) => {
     if (!confirm('Mesajı silmek istediğinize emin misiniz?')) return
-    const res = await fetch(`/api/admin/messages?id=${id}`, { method: 'DELETE', headers })
+    const authHeaders = await getAuthHeaders()
+    const res = await fetch(`/api/admin/messages?id=${id}`, { method: 'DELETE', headers: authHeaders })
     if (!res.ok) {
       const j = await res.json().catch(()=>({}))
       alert(j?.error || 'Silme hatası')

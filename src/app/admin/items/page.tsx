@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { supabase } from '@/lib/supabase'
 
 type Item = {
   id: string
@@ -26,19 +27,17 @@ export default function AdminItemsPage() {
   const [edit, setEdit] = useState<Item | null>(null)
   const [editData, setEditData] = useState<Partial<Item>>({})
 
-  const headers: Record<string, string> = {}
+  // Always attach a fresh Supabase access token to admin requests
+  const getAuthHeaders = async (): Promise<Record<string, string>> => {
+    const { data: { session } } = await supabase.auth.getSession()
+    const token = session?.access_token
+    return token ? { Authorization: `Bearer ${token}` } : {}
+  }
 
   useEffect(() => {
     const run = async () => {
       try {
-        const auth = await import('@supabase/supabase-js')
-        const { createClient } = auth
-        const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
-        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        const supabase = createClient(url, key)
-        const { data: { session } } = await supabase.auth.getSession()
-        const token = session?.access_token
-        if (token) headers['Authorization'] = `Bearer ${token}`
+        const headers = await getAuthHeaders()
         const res = await fetch('/api/admin/items', { headers })
         if (!res.ok) {
           const j = await res.json().catch(()=>({}))
@@ -63,9 +62,10 @@ export default function AdminItemsPage() {
   }, [items, query])
 
   const updateStatus = async (item: Item, status: Item['status']) => {
+    const authHeaders = await getAuthHeaders()
     const res = await fetch('/api/admin/items', {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json', ...headers },
+      headers: { 'Content-Type': 'application/json', ...authHeaders },
       body: JSON.stringify({ id: item.id, updates: { status } })
     })
     if (!res.ok) {
@@ -83,9 +83,10 @@ export default function AdminItemsPage() {
   }
   const save = async () => {
     if (!edit) return
+    const authHeaders = await getAuthHeaders()
     const res = await fetch('/api/admin/items', {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json', ...headers },
+      headers: { 'Content-Type': 'application/json', ...authHeaders },
       body: JSON.stringify({ id: edit.id, updates: editData })
     })
     if (!res.ok) {
@@ -100,7 +101,8 @@ export default function AdminItemsPage() {
 
   const remove = async (id: string) => {
     if (!confirm('Eşyayı silmek istediğinize emin misiniz?')) return
-    const res = await fetch(`/api/admin/items?id=${id}`, { method: 'DELETE', headers })
+    const authHeaders = await getAuthHeaders()
+    const res = await fetch(`/api/admin/items?id=${id}`, { method: 'DELETE', headers: authHeaders })
     if (!res.ok) {
       const j = await res.json().catch(()=>({}))
       alert(j?.error || 'Silme hatası')
