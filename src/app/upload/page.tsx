@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation'
 import { createItem, uploadImage } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
 import { saveSeekingPreferencesAsync } from '@/lib/preferences'
+import { useProductFilter } from '@/hooks/useProductFilter'
+import { ProductFilterWarning, InlineProductWarning } from '@/components/ProductFilterWarning'
 
 const categories = [
   { id: 'clothing', name: '👕 Giyim', value: 'clothing' },
@@ -49,6 +51,9 @@ export default function UploadPage() {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadSuccess, setUploadSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  
+  // Product filter hook
+  const { checkProduct, lastResult, clearResult } = useProductFilter()
 
   // Check authentication
   useEffect(() => {
@@ -101,6 +106,16 @@ export default function UploadPage() {
     try {
       if (!userId) {
         throw new Error('Kullanıcı oturumu bulunamadı')
+      }
+
+      // 1. Yasadışı içerik kontrolü
+      const filterResult = checkProduct(formData.title, formData.description)
+      
+      if (filterResult.shouldBlock) {
+        setError(filterResult.message || 'Ürün yasadışı içerik nedeniyle yüklenemedi')
+        setIsUploading(false)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        return
       }
 
       // Persist seeking preferences (non-blocking)
@@ -163,6 +178,12 @@ export default function UploadPage() {
       ...formData,
       [e.target.name]: e.target.value
     })
+    
+    // Clear previous filter result when user edits
+    if (lastResult && !lastResult.isClean) {
+      clearResult()
+      setError(null)
+    }
   }
 
   const toggleSeekCategory = (ct: 'clothing'|'toys'|'electronics'|'books'|'sports'|'home'|'other') => {
@@ -198,8 +219,13 @@ export default function UploadPage() {
       </header>
 
       <main className="max-w-md mx-auto p-4 pb-24">
+        {/* Illegal Content Warning */}
+        {lastResult && !lastResult.isClean && (
+          <ProductFilterWarning result={lastResult} className="mb-4" />
+        )}
+
         {/* Error Message */}
-        {error && (
+        {error && !lastResult && (
           <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
             <p className="text-sm">{error}</p>
           </div>
@@ -258,8 +284,13 @@ export default function UploadPage() {
               onChange={handleInputChange}
               required
               placeholder="Örn: Vintage Jean Ceket"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
+                lastResult && !lastResult.isClean ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              }`}
             />
+            {lastResult && !lastResult.isClean && (
+              <InlineProductWarning result={lastResult} />
+            )}
           </div>
 
           {/* Description */}
@@ -274,8 +305,13 @@ export default function UploadPage() {
               required
               rows={4}
               placeholder="Ürünün detaylarını yazın..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none ${
+                lastResult && !lastResult.isClean ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              }`}
             />
+            <p className="text-xs text-gray-500 mt-2">
+              ⚠️ Yasadışı içerik (uyuşturucu, silah, vs.) tespit edilirse ürün reddedilir
+            </p>
           </div>
 
           {/* Category */}
@@ -436,7 +472,7 @@ export default function UploadPage() {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={isUploading || images.length === 0}
+            disabled={isUploading || images.length === 0 || (lastResult !== null && !lastResult.isClean)}
             className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-4 rounded-xl font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {isUploading ? (
@@ -451,6 +487,18 @@ export default function UploadPage() {
               </>
             )}
           </button>
+          
+          {images.length === 0 && (
+            <p className="text-center text-sm text-gray-500 -mt-2">
+              Ürün yüklemek için en az 1 fotoğraf eklemelisiniz
+            </p>
+          )}
+          
+          {lastResult && !lastResult.isClean && (
+            <p className="text-center text-sm text-red-600 -mt-2">
+              ⚠️ Yasadışı içerik nedeniyle yükleme engellendi
+            </p>
+          )}
         </form>
       </main>
     </div>

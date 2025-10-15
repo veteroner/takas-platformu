@@ -472,3 +472,132 @@ BEGIN
   PERFORM public.cleanup_expired_filtered_messages();
 END;
 $$ LANGUAGE plpgsql;
+
+-- =============================================================================
+-- YASADIŞI ÜRÜN FİLTRELEME SİSTEMİ
+-- =============================================================================
+-- Bu bölüm ürün yükleme sırasında yasadışı içerik girişimlerini loglar
+-- Yasal uyum ve güvenlik amacıyla 1 yıl saklanır
+
+-- Yasadışı ürün girişim logları
+CREATE TABLE IF NOT EXISTS public.illegal_product_attempts (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id TEXT NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT,
+  detected_words JSONB NOT NULL DEFAULT '[]',
+  categories TEXT[] NOT NULL DEFAULT '{}',
+  risk_level TEXT NOT NULL CHECK (risk_level IN ('low', 'medium', 'high', 'critical')),
+  ip_address INET,
+  user_agent TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  expires_at TIMESTAMPTZ NOT NULL DEFAULT (NOW() + INTERVAL '1 year')
+);
+
+-- İndeksler
+CREATE INDEX IF NOT EXISTS idx_illegal_attempts_user_id ON public.illegal_product_attempts(user_id);
+CREATE INDEX IF NOT EXISTS idx_illegal_attempts_created_at ON public.illegal_product_attempts(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_illegal_attempts_risk_level ON public.illegal_product_attempts(risk_level);
+CREATE INDEX IF NOT EXISTS idx_illegal_attempts_categories ON public.illegal_product_attempts USING GIN(categories);
+CREATE INDEX IF NOT EXISTS idx_illegal_attempts_expires_at ON public.illegal_product_attempts(expires_at);
+
+-- RLS (Row Level Security)
+ALTER TABLE public.illegal_product_attempts ENABLE ROW LEVEL SECURITY;
+
+-- Sadece admin görebilir
+CREATE POLICY "Admin can view illegal attempts"
+  ON public.illegal_product_attempts
+  FOR SELECT
+  USING (auth.jwt() ->> 'role' = 'admin');
+
+-- Sistem tarafından insert edilebilir
+CREATE POLICY "System can insert illegal attempts"
+  ON public.illegal_product_attempts
+  FOR INSERT
+  WITH CHECK (true);
+
+-- Function: Süresi dolan logları temizle (KVKK uyumlu)
+CREATE OR REPLACE FUNCTION public.cleanup_expired_illegal_attempts()
+RETURNS INTEGER AS $$
+DECLARE
+  deleted_count INTEGER;
+BEGIN
+  DELETE FROM public.illegal_product_attempts
+  WHERE expires_at < NOW();
+  
+  GET DIAGNOSTICS deleted_count = ROW_COUNT;
+  
+  -- Log cleanup action
+  RAISE NOTICE 'Deleted % expired illegal product attempt records', deleted_count;
+  
+  RETURN deleted_count;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function: İstatistikler (Admin dashboard için)
+CREATE OR REPLACE FUNCTION public.get_illegal_product_stats(
+  p_days INTEGER DEFAULT 30
+)
+RETURNS TABLE (
+  total_attempts BIGINT,
+  critical_attempts BIGINT,
+  high_risk_attempts BIGINT,
+  unique_users BIGINT,
+  top_categories TEXT[],
+  attempts_by_day JSONB
+) AS $$
+BEGIN
+  RETURN QUERY
+  WITH stats AS (
+    SELECT
+      COUNT(*) as total,
+      COUNT(*) FILTER (WHERE risk_level = 'critical') as critical,
+      COUNT(*) FILTER (WHERE risk_level = 'high') as high_risk,
+      COUNT(DISTINCT user_id) as unique_users
+    FROM public.illegal_product_attempts
+    WHERE created_at > NOW() - (p_days || ' days')::INTERVAL
+  ),
+  category_stats AS (
+    SELECT ARRAY_AGG(DISTINCT cat ORDER BY COUNT(*) DESC) as cats
+    FROM public.illegal_product_attempts,
+    LATERAL UNNEST(categories) as cat
+    WHERE created_at > NOW() - (p_days || ' days')::INTERVAL
+    GROUP BY cat
+    LIMIT 5
+  ),
+  daily_stats AS (
+    SELECT jsonb_object_agg(
+      date::TEXT,
+      count
+    ) as by_day
+    FROM (
+      SELECT
+        DATE(created_at) as date,
+        COUNT(*) as count
+      FROM public.illegal_product_attempts
+      WHERE created_at > NOW() - (p_days || ' days')::INTERVAL
+      GROUP BY DATE(created_at)
+      ORDER BY date DESC
+    ) daily
+  )
+  SELECT
+    s.total,
+    s.critical,
+    s.high_risk,
+    s.unique_users,
+    c.cats,
+    d.by_day
+  FROM stats s, category_stats c, daily_stats d;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Scheduled cleanup job çağrısı (günlük)
+CREATE OR REPLACE FUNCTION public.schedule_cleanup_illegal_attempts()
+RETURNS void AS $$
+BEGIN
+  PERFORM public.cleanup_expired_illegal_attempts();
+END;
+$$ LANGUAGE plpgsql;
+
+-- Yorum: Otomatik temizleme için Supabase Edge Function kullanılabilir
+-- Örnek: Her gece 03:00'te çalışacak şekilde yapılandırılabilir
