@@ -296,3 +296,179 @@ CREATE POLICY "Users can upsert own notif prefs" ON public.notification_prefs
 
 CREATE POLICY "Users can update own notif prefs" ON public.notification_prefs
   FOR UPDATE USING (auth.uid() = user_id);
+
+-- ============================================
+-- PROFANITY FILTER & MODERATION SYSTEM
+-- ============================================
+
+-- User violations table (tracks profanity/harassment violations)
+CREATE TABLE IF NOT EXISTS public.user_violations (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  violation_type TEXT NOT NULL CHECK (violation_type IN ('severe', 'moderate', 'hate')),
+  severity TEXT NOT NULL CHECK (severity IN ('low', 'medium', 'high', 'critical')),
+  content TEXT NOT NULL, -- Original message content (encrypted)
+  detected_words TEXT[], -- Words that triggered the filter
+  action_taken TEXT NOT NULL CHECK (action_taken IN ('warning', 'ban', 'permanent_ban')),
+  ban_until TIMESTAMPTZ, -- When the ban expires (NULL for warnings)
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  ip_address INET,
+  user_agent TEXT,
+  context JSONB -- Additional context (match_id, etc.)
+);
+
+-- Filtered messages log (KVKK compliance - 6 months retention)
+CREATE TABLE IF NOT EXISTS public.filtered_messages (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  match_id UUID REFERENCES public.matches(id) ON DELETE SET NULL,
+  original_content TEXT NOT NULL, -- Encrypted
+  filtered_content TEXT, -- Sanitized version if applicable
+  detected_words TEXT[],
+  severity TEXT NOT NULL,
+  blocked BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  expires_at TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '6 months') -- Auto-delete after 6 months
+);
+
+-- User chat ban status (quick lookup for active bans)
+CREATE TABLE IF NOT EXISTS public.user_chat_bans (
+  user_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+  banned_until TIMESTAMPTZ NOT NULL,
+  ban_count INTEGER DEFAULT 1,
+  last_violation_at TIMESTAMPTZ DEFAULT NOW(),
+  total_violations INTEGER DEFAULT 1,
+  reason TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Indexes for performance
+CREATE INDEX IF NOT EXISTS idx_violations_user_id ON public.user_violations(user_id);
+CREATE INDEX IF NOT EXISTS idx_violations_created_at ON public.user_violations(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_filtered_messages_user_id ON public.filtered_messages(user_id);
+CREATE INDEX IF NOT EXISTS idx_filtered_messages_expires_at ON public.filtered_messages(expires_at);
+CREATE INDEX IF NOT EXISTS idx_chat_bans_user_id ON public.user_chat_bans(user_id);
+CREATE INDEX IF NOT EXISTS idx_chat_bans_banned_until ON public.user_chat_bans(banned_until);
+
+-- RLS Policies
+ALTER TABLE public.user_violations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.filtered_messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_chat_bans ENABLE ROW LEVEL SECURITY;
+
+-- Only admins can view violations (add admin role check later)
+CREATE POLICY "Service role can manage violations" ON public.user_violations
+  FOR ALL USING (auth.jwt()->>'role' = 'service_role');
+
+-- Users can check their own ban status
+CREATE POLICY "Users can view own ban status" ON public.user_chat_bans
+  FOR SELECT USING (auth.uid() = user_id);
+
+-- Service role can manage bans
+CREATE POLICY "Service role can manage bans" ON public.user_chat_bans
+  FOR ALL USING (auth.jwt()->>'role' = 'service_role');
+
+-- Service role can manage filtered messages
+CREATE POLICY "Service role can manage filtered messages" ON public.filtered_messages
+  FOR ALL USING (auth.jwt()->>'role' = 'service_role');
+
+-- Function to check if user is banned from chatting
+CREATE OR REPLACE FUNCTION public.is_user_chat_banned(check_user_id UUID)
+RETURNS BOOLEAN AS $$
+DECLARE
+  ban_record RECORD;
+BEGIN
+  SELECT * INTO ban_record
+  FROM public.user_chat_bans
+  WHERE user_id = check_user_id
+    AND banned_until > NOW();
+  
+  RETURN FOUND;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function to get user's violation count
+CREATE OR REPLACE FUNCTION public.get_user_violation_count(check_user_id UUID)
+RETURNS INTEGER AS $$
+DECLARE
+  violation_count INTEGER;
+BEGIN
+  SELECT COUNT(*) INTO violation_count
+  FROM public.user_violations
+  WHERE user_id = check_user_id
+    AND created_at > NOW() - INTERVAL '30 days'; -- Last 30 days
+  
+  RETURN COALESCE(violation_count, 0);
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function to record a violation and apply ban if needed
+CREATE OR REPLACE FUNCTION public.record_violation(
+  p_user_id UUID,
+  p_violation_type TEXT,
+  p_severity TEXT,
+  p_content TEXT,
+  p_detected_words TEXT[],
+  p_action_taken TEXT,
+  p_ban_until TIMESTAMPTZ,
+  p_context JSONB
+)
+RETURNS UUID AS $$
+DECLARE
+  violation_id UUID;
+BEGIN
+  -- Insert violation record
+  INSERT INTO public.user_violations (
+    user_id, violation_type, severity, content, 
+    detected_words, action_taken, ban_until, context
+  )
+  VALUES (
+    p_user_id, p_violation_type, p_severity, p_content,
+    p_detected_words, p_action_taken, p_ban_until, p_context
+  )
+  RETURNING id INTO violation_id;
+  
+  -- Update or create ban record if applicable
+  IF p_ban_until IS NOT NULL THEN
+    INSERT INTO public.user_chat_bans (
+      user_id, banned_until, reason, total_violations
+    )
+    VALUES (
+      p_user_id, p_ban_until, p_action_taken, 1
+    )
+    ON CONFLICT (user_id) DO UPDATE SET
+      banned_until = GREATEST(public.user_chat_bans.banned_until, p_ban_until),
+      ban_count = public.user_chat_bans.ban_count + 1,
+      total_violations = public.user_chat_bans.total_violations + 1,
+      last_violation_at = NOW(),
+      reason = p_action_taken,
+      updated_at = NOW();
+  END IF;
+  
+  RETURN violation_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function to auto-delete expired filtered messages (KVKK compliance)
+CREATE OR REPLACE FUNCTION public.cleanup_expired_filtered_messages()
+RETURNS INTEGER AS $$
+DECLARE
+  deleted_count INTEGER;
+BEGIN
+  DELETE FROM public.filtered_messages
+  WHERE expires_at < NOW();
+  
+  GET DIAGNOSTICS deleted_count = ROW_COUNT;
+  RETURN deleted_count;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Scheduled job to cleanup expired messages (run daily)
+-- Note: This requires pg_cron extension in Supabase
+-- Alternatively, can be triggered by Edge Function
+CREATE OR REPLACE FUNCTION public.schedule_cleanup_filtered_messages()
+RETURNS void AS $$
+BEGIN
+  PERFORM public.cleanup_expired_filtered_messages();
+END;
+$$ LANGUAGE plpgsql;

@@ -1,4 +1,4 @@
-package com.degistir.app;
+package com.teknova.takasapp;
 
 import com.getcapacitor.BridgeActivity;
 

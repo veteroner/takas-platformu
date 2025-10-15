@@ -7,6 +7,8 @@ import Link from 'next/link'
 import { getCurrentUser } from '@/lib/auth'
 import { getMatchMessages, sendMessage } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
+import { useMessageFilter } from '@/hooks/useMessageFilter'
+import { MessageFilterWarning, BanStatusBanner } from '@/components/MessageFilterWarning'
 
 // Dynamic route - no static generation
 export const dynamic = 'force-dynamic'
@@ -22,9 +24,17 @@ export default function ChatPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [otherUser, setOtherUser] = useState<any>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  
+  // Profanity filter states
+  const { isMessageClean, getWarningMessage } = useMessageFilter()
+  const [filterWarning, setFilterWarning] = useState<string | null>(null)
+  const [isBanned, setIsBanned] = useState(false)
+  const [banDetails, setBanDetails] = useState<any>(null)
+  const [isSending, setIsSending] = useState(false)
 
   useEffect(() => {
     loadData()
+    checkBanStatus()
     
     // Subscribe to new messages with unique channel name
     const channelName = `chat-${matchId}-${Date.now()}`
@@ -71,6 +81,29 @@ export default function ChatPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
+  const checkBanStatus = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session?.access_token) return
+
+      const response = await fetch('/api/messages/filter', {
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`
+        }
+      })
+
+      if (response.ok) {
+        const status = await response.json()
+        setIsBanned(status.banned)
+        if (status.banned) {
+          setBanDetails(status)
+        }
+      }
+    } catch (error) {
+      console.error('Ban status check error:', error)
+    }
+  }
+
   const loadData = async () => {
     try {
       setIsLoading(true)
@@ -110,39 +143,90 @@ export default function ChatPage() {
   }
 
   const handleSend = async () => {
-    if (!newMessage.trim() || !user || !otherUser) return
+    if (!newMessage.trim() || !user || !otherUser || isSending) return
+
+    // Ban kontrolü
+    if (isBanned) {
+      setFilterWarning('Mesaj gönderme yetkiniz askıya alındı.')
+      return
+    }
 
     const messageText = newMessage.trim()
-    setNewMessage('') // Input'u hemen temizle
     
-    // Optimistic update - mesajı hemen göster
-    const tempMessage = {
-      id: `temp-${Date.now()}`,
-      match_id: matchId,
-      sender_id: user.id,
-      receiver_id: otherUser.id,
-      content: messageText,
-      created_at: new Date().toISOString(),
-      read: false
+    // 🛡️ FRONTEND KONTROLÜ (hızlı feedback)
+    if (!isMessageClean(messageText)) {
+      const warningMsg = getWarningMessage(messageText, 0)
+      setFilterWarning(warningMsg)
+      return
     }
-    
-    setMessages(prev => [...prev, tempMessage])
-    scrollToBottom()
+
+    setIsSending(true)
+    setFilterWarning(null)
+    setNewMessage('') // Input'u hemen temizle
 
     try {
+      // 🛡️ BACKEND KONTROLÜ (API filtreleme)
+      const { data: { session } } = await supabase.auth.getSession()
+      
+      const filterResponse = await fetch('/api/messages/filter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.access_token}`
+        },
+        body: JSON.stringify({
+          message: messageText,
+          matchId,
+          receiverId: otherUser.id
+        })
+      })
+
+      const filterResult = await filterResponse.json()
+
+      // Mesaj engellendi
+      if (!filterResult.allowed) {
+        setFilterWarning(filterResult.reason || filterResult.message)
+        setNewMessage(messageText) // Mesajı geri koy
+        
+        // Ban durumunu güncelle
+        if (filterResult.bannedUntil) {
+          setIsBanned(true)
+          setBanDetails(filterResult)
+        }
+        
+        setIsSending(false)
+        return
+      }
+
+      // ✅ Mesaj temiz - gönder
+      // Optimistic update
+      const tempMessage = {
+        id: `temp-${Date.now()}`,
+        match_id: matchId,
+        sender_id: user.id,
+        receiver_id: otherUser.id,
+        content: messageText,
+        created_at: new Date().toISOString(),
+        read: false
+      }
+      
+      setMessages(prev => [...prev, tempMessage])
+      scrollToBottom()
+
       const sent = await sendMessage(matchId, user.id, otherUser.id, messageText)
       
       if (!sent) {
         // Hata olursa temp mesajı kaldır
         setMessages(prev => prev.filter(m => m.id !== tempMessage.id))
-        setNewMessage(messageText) // Mesajı geri koy
-        alert('Mesaj gönderilemedi, tekrar deneyin')
+        setNewMessage(messageText)
+        setFilterWarning('Mesaj gönderilemedi, tekrar deneyin')
       }
     } catch (error) {
       console.error('Error sending message:', error)
-      setMessages(prev => prev.filter(m => m.id !== tempMessage.id))
       setNewMessage(messageText)
-      alert('Mesaj gönderilemedi')
+      setFilterWarning('Mesaj gönderilemedi')
+    } finally {
+      setIsSending(false)
     }
   }
 
@@ -159,6 +243,15 @@ export default function ChatPage() {
 
   return (
     <div className="h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex flex-col">
+      {/* Ban Banner */}
+      {isBanned && banDetails && (
+        <BanStatusBanner
+          bannedUntil={banDetails.bannedUntil}
+          reason={banDetails.reason}
+          totalViolations={banDetails.totalViolations}
+        />
+      )}
+      
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
         <div className="px-4 py-4 pt-12 md:pt-4 flex items-center gap-3">
@@ -197,21 +290,41 @@ export default function ChatPage() {
 
       {/* Input */}
       <div className="bg-white/80 backdrop-blur-md border-t border-white/20 p-4 pb-safe">
+        {/* Filter Warning */}
+        {filterWarning && (
+          <div className="mb-3">
+            <MessageFilterWarning
+              reason={filterWarning}
+              severity="high"
+              onClose={() => setFilterWarning(null)}
+            />
+          </div>
+        )}
+        
         <div className="flex items-center gap-2">
           <input
             type="text"
             value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Mesajınızı yazın..."
-            className="flex-1 bg-white/70 backdrop-blur-sm border border-white/20 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            onChange={(e) => {
+              setNewMessage(e.target.value)
+              // Yazarken warning'i temizle
+              if (filterWarning) setFilterWarning(null)
+            }}
+            onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
+            placeholder={isBanned ? "Mesaj gönderemezsiniz" : "Mesajınızı yazın..."}
+            disabled={isBanned || isSending}
+            className="flex-1 bg-white/70 backdrop-blur-sm border border-white/20 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
           />
           <button
             onClick={handleSend}
-            disabled={!newMessage.trim()}
+            disabled={!newMessage.trim() || isBanned || isSending}
             className="bg-gradient-to-r from-pink-500 to-purple-600 text-white p-3 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Send className="w-5 h-5" />
+            {isSending ? (
+              <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+            ) : (
+              <Send className="w-5 h-5" />
+            )}
           </button>
         </div>
       </div>

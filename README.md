@@ -6,10 +6,12 @@ Modern bir ürün takas platformu - Beğen, eşleş, takas yap!
 
 - 📱 **Tinder Tarzı Swipe**: Ürünleri sağa/sola kaydırarak beğen
 - 💬 **Mesajlaşma**: Eşleşen kullanıcılarla sohbet et
-- 📤 **Ürün Yükleme**: Kendi ürünlerini kolayca yükle
+- �️ **Küfür Filtreleme**: Otomatik küfür ve hakaret engelleme sistemi
+- �📤 **Ürün Yükleme**: Kendi ürünlerini kolayca yükle
 - 🎨 **Modern UI**: Gradient renkler ve glassmorphism efektleri
 - 📱 **Mobil Uyumlu**: PWA desteği ve native app ready
 - 🌙 **Dark Mode**: Otomatik tema değiştirme
+- ⚖️ **KVKK Uyumlu**: Veri koruma ve kullanıcı hakları
 
 ## 🚀 Canlı Demo
 
@@ -62,11 +64,13 @@ npm run dev
 - ✅ Tinder-style swipe interface
 - ✅ Smooth animations (React Spring + Framer Motion)
 - ✅ Mesajlaşma sistemi
+- ✅ **Küfür filtreleme sistemi** (200+ Türkçe küfür, otomatik ban)
 - ✅ Ürün yükleme
 - ✅ Responsive design
 - ✅ Mobile-first approach
 - ✅ PWA desteği
 - ✅ Dark mode
+- ✅ KVKK uyumlu veri koruma
 - 🔄 Kullanıcı sistemi (in progress)
 - 🔄 Backend entegrasyonu (in progress)
 
@@ -120,7 +124,22 @@ npm run quick-start  # Hızlı başlatma
 ### Vercel
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/veteroner/takas-platformu)
 
-## 📱 Mobil Uygulama
+## �️ Küfür Filtreleme Sistemi
+
+Platform, kullanıcılar arası mesajlaşmada otomatik küfür ve hakaret engelleme sistemi içerir:
+
+- ✅ 200+ Türkçe küfür ve varyasyonları
+- ✅ Gizlenmiş küfür tespiti (a*k, a m k, etc.)
+- ✅ Kademeli ceza sistemi (uyarı → ban)
+- ✅ KVKK uyumlu loglama (6 ay)
+- ✅ False positive önleme
+
+**Dokümantasyon:**
+- 📖 [PROFANITY-FILTER-SYSTEM.md](PROFANITY-FILTER-SYSTEM.md) - Detaylı dokümantasyon
+- 🚀 [PROFANITY-FILTER-INTEGRATION.md](PROFANITY-FILTER-INTEGRATION.md) - Entegrasyon rehberi
+- 🧪 [TEST-GUIDE.md](TEST-GUIDE.md) - Test rehberi
+
+## �📱 Mobil Uygulama
 
 Capacitor ile iOS ve Android uygulamaları oluşturabilirsiniz:
 
