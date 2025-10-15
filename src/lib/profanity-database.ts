@@ -9,36 +9,72 @@ export const profanityDatabase = {
   // Seviye 1: Açık küfür ve hakaret (Otomatik engelleme)
   severe: [
     // Temel küfürler
-    'amk', 'amq', 'a.m.k', 'amına', 'aminakoyim', 'aq', 'a.q',
-    'orospu', 'o.rospu', 'orospucocugu', 'oç', 'o.ç', 'piç',
-    'yarrak', 'y.arrak', 'yarak', 'sik', 's.ik', 'sikik', 'sikerim', 'sikim',
-    'göt', 'g.öt', 'gotü', 'götü', 'gotveren',
-    'pezevenk', 'p.ezevenk', 'puşt', 'ibne', 'i.bne',
-    'kahpe', 'k.ahpe', 'sürtük', 's.ürtük', 'fahişe', 'f.ahişe',
-    'amcık', 'a.mcık', 'amcik', 'a.mcik',
-    'dalyarak', 'd.alyarak', 'dallyarak', 'dalyarrak',
-    'siktir', 's.iktir', 'siktir git', 'sg', 's.g', 'siktir et',
-    'bok', 'b.ok', 'boğ', 'çöp', 'çöplük',
-    'gerizekalı', 'g.erizekalı', 'salak', 's.alak', 'aptal', 'a.ptal',
-    'mal', 'm.al', 'dangalak', 'd.angalak', 'ahmak', 'a.hmak',
-    'soysuz', 's.oysuz', 'soygun', 'piçkurusu',
+    'amk', 'amq', 'a.m.k', 'amına', 'aminakoyim', 'aminakoyayim', 'amina', 'aq', 'a.q',
+    'orospu', 'o.rospu', 'orospucocugu', 'orosbucocugu', 'orospuçocuğu', 'oç', 'o.ç', 'piç',
+    'yarrak', 'y.arrak', 'yarak', 'yarrağım', 'yarragim', 'yarrrak', 'yaarrrak',
+    
+    // Sik kelimesi ve türevleri (en yaygın)
+    'sik', 's.ik', 'sikik', 'sikerim', 'sikeyim', 'sikim', 's.ikim',
+    'sikiş', 'sikis', 'sikişelim', 'sikiselim', 'sikişmek', 'sikismek',
+    'siktiğim', 'siktigim', 'sikti', 'sikti git', 'siktimin',
+    'siktir', 's.iktir', 'siktir git', 'sg', 's.g', 'siktir et', 'sktir',
+    'siksen', 'siksene', 'siksen de', 'siktim', 'sikecek',
+    'sikilesi', 's.ikilesi', 'sikişken', 'sikik', 's.ikik',
+    
+    // Göt kelimesi ve türevleri
+    'göt', 'g.öt', 'got', 'gotü', 'götü', 'gotveren', 'götveren',
+    'götüne', 'gotune', 'götünü', 'gotunu', 'götoğlanı', 'gotoglanı',
+    'göt lalesi', 'got lalesi', 'götlalesi', 'gotlalesi',
+    'göt deliği', 'got deligi', 'götdeliği', 'gotdeligi',
+    'götlek', 'gotlek', 'götçü', 'gotcu',
+    
+    // Amcık ve türevleri
+    'amcık', 'a.mcık', 'amcik', 'a.mcik', 'amcığım', 'amcigim',
+    'amcıklı', 'amcikli', 'amcığa', 'amciga',
+    
+    // Diğer küfürler
+    'pezevenk', 'p.ezevenk', 'pezeveng', 'pezewenk', 'pezo',
+    'puşt', 'pust', 'ibne', 'i.bne', 'ibine', 'ibneler',
+    'kahpe', 'k.ahpe', 'kahbe', 'kaşar', 'k.aşar', 'kasar',
+    'sürtük', 's.ürtük', 'surtuk', 'sürüngen', 'surungen',
+    'fahişe', 'f.ahişe', 'fahise', 'oşar', 'o.şar',
+    'dalyarak', 'd.alyarak', 'dallyarak', 'dalyarrak', 'dallama',
+    'soysuz', 's.oysuz', 'soygun', 'piçkurusu', 'pockurusu',
+    'bok', 'b.ok', 'boktan', 'b.oktan', 'bokum', 'boka',
+    'gerizekalı', 'g.erizekalı', 'gerzek', 'salak', 's.alak', 
+    'aptal', 'a.ptal', 'mal', 'm.al', 'dangalak', 'd.angalak', 
+    'ahmak', 'a.hmak', 'salakça', 'aptalca',
     
     // Varyasyonlar (boşluk ve özel karakter içeren)
     'a m k', 'a m q', 'o r o s p u', 'o ç', 'p i ç',
     'a*k', 'o*ospu', 'p*ç', 's*k', 'g*t',
     'amk*', 'orospu*', 'sik*', 'göt*',
+    's i k', 's i k e r i m', 's i k e y i m',
+    'g ö t', 'g ö t ü n e',
     
     // Cinsel içerik
     'seks', 's.eks', 'porno', 'p.orno', 'sex', 's.ex',
-    'sex yap', 'seks yap', 'cinsel', 'c.insel',
+    'sex yap', 'seks yap', 'seks yapalım', 'cinsel', 'c.insel',
+    'mastürbasyon', 'masturbasyon', '31', 'otuzBir', 'otuz bir',
   ],
 
   // Seviye 2: Orta düzey rahatsız edici kelimeler (Uyarı)
   moderate: [
     'salak', 'aptal', 'mal', 'gerizekalı', 'ahmak', 'budala',
-    'dangalak', 'embesil', 'geri zekalı', 'salağım',
-    'sus', 'kes', 'defol', 'yallah', 'git', 'uzaklaş',
-    'beyin yoksunu', 'kafasız', 'akılsız', 'mantıksız',
+    'dangalak', 'embesil', 'geri zekalı', 'salağım', 'malsın',
+    'sus', 'kes', 'kapa çeneni', 'defol', 'yallah', 'git', 'uzaklaş',
+    'siktir git', 'git burdan', 'defol git', 'çık git',
+    'beyin yoksunu', 'kafasız', 'akılsız', 'mantıksız', 'beyinsiz',
+    'deli', 'kaçık', 'manyak', 'psikopat', 'sapık', 'sapik',
+    'andaval', 'apış', 'avanak', 'ayı', 'ayyaş', 
+    'beş para etmez', 'bez yüzlü', 'bön', 'budala',
+    'cahil', 'çakal', 'çapsız', 'çürük', 'dallama',
+    'densiz', 'domuz', 'dümbeleğ', 'dürzü', 'eşek',
+    'eşşek', 'gavat', 'hayvan', 'hıyar', 'hödük',
+    'it', 'kancık', 'kansız', 'keriz', 'kıro',
+    'köpek', 'leş', 'mankafa', 'öküz', 'pislik',
+    'rezil', 'serseri', 'şerefsiz', 'terbiyesiz', 'yaramaz',
+    'zavallı', 'zebani', 'züppe', 'kaltak', 'kevaşe',
   ],
 
   // Seviye 3: Ayrımcılık ve nefret söylemi (Anında şiddetli ceza)
@@ -52,9 +88,14 @@ export const profanityDatabase = {
   // Whitelist: Yanlış pozitif önleme (Bu kelimeler içeren cümleler filtrelenmez)
   whitelist: [
     'sikiş', // (yer adı)
-    'malzeme', 'malmö', 'normal',
-    'sikke', 'sikkeli',
-    'masalcı',
+    'malzeme', 'malmö', 'normal', 'minimal', 'maksimal',
+    'sikke', 'sikkeli', 'sikkelik',
+    'masalcı', 'masal',
+    'anormal', 'paranormal',
+    'ithal', 'ithaf', 'itina', 'itibar',
+    'delice', 'delibal', 'delicatessen',
+    'gitme', 'gitmek', 'gitar', 'gitarla',
+    'susam', 'susuz', 'susuzluk',
   ],
 
   // Özel karakterler ve normalizasyon kuralları
