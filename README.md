@@ -6,8 +6,9 @@ Modern bir ürün takas platformu - Beğen, eşleş, takas yap!
 
 - 📱 **Tinder Tarzı Swipe**: Ürünleri sağa/sola kaydırarak beğen
 - 💬 **Mesajlaşma**: Eşleşen kullanıcılarla sohbet et
-- �️ **Küfür Filtreleme**: Otomatik küfür ve hakaret engelleme sistemi
-- �📤 **Ürün Yükleme**: Kendi ürünlerini kolayca yükle
+- 🛡️ **Küfür Filtreleme**: Otomatik küfür ve hakaret engelleme sistemi (300+ kelime)
+- � **Yasadışı Ürün Engelleme**: Uyuşturucu, silah, vb. otomatik filtreleme (500+ kelime)
+- �📤 **Güvenli Ürün Yükleme**: Kendi ürünlerini yasalara uygun şekilde yükle
 - 🎨 **Modern UI**: Gradient renkler ve glassmorphism efektleri
 - 📱 **Mobil Uyumlu**: PWA desteği ve native app ready
 - 🌙 **Dark Mode**: Otomatik tema değiştirme
@@ -64,8 +65,9 @@ npm run dev
 - ✅ Tinder-style swipe interface
 - ✅ Smooth animations (React Spring + Framer Motion)
 - ✅ Mesajlaşma sistemi
-- ✅ **Küfür filtreleme sistemi** (200+ Türkçe küfür, otomatik ban)
-- ✅ Ürün yükleme
+- ✅ **Küfür filtreleme sistemi** (300+ Türkçe küfür, otomatik ban)
+- ✅ **Yasadışı ürün filtreleme** (500+ kelime, 10 kategori)
+- ✅ Ürün yükleme güvenliği (uyuşturucu, silah, vb. engelleme)
 - ✅ Responsive design
 - ✅ Mobile-first approach
 - ✅ PWA desteği
