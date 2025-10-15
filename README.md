@@ -7,7 +7,10 @@ Modern bir ürün takas platformu - Beğen, eşleş, takas yap!
 - 📱 **Tinder Tarzı Swipe**: Ürünleri sağa/sola kaydırarak beğen
 - 💬 **Mesajlaşma**: Eşleşen kullanıcılarla sohbet et
 - 🛡️ **Küfür Filtreleme**: Otomatik küfür ve hakaret engelleme sistemi (300+ kelime)
-- � **Yasadışı Ürün Engelleme**: Uyuşturucu, silah, vb. otomatik filtreleme (500+ kelime)
+- 🚫 **Yasadışı Ürün Engelleme**: Uyuşturucu, silah, vb. otomatik filtreleme (500+ kelime)
+- � **Kullanıcı Engelleme**: Taciz eden kullanıcıları engelle
+- 📢 **Şikayet Sistemi**: Uygunsuz davranışları bildir (6 şikayet türü)
+- 🔔 **Mesaj Bildirimleri**: Okunmamış mesaj sayısı, real-time güncelleme
 - �📤 **Güvenli Ürün Yükleme**: Kendi ürünlerini yasalara uygun şekilde yükle
 - 🎨 **Modern UI**: Gradient renkler ve glassmorphism efektleri
 - 📱 **Mobil Uyumlu**: PWA desteği ve native app ready
@@ -67,6 +70,9 @@ npm run dev
 - ✅ Mesajlaşma sistemi
 - ✅ **Küfür filtreleme sistemi** (300+ Türkçe küfür, otomatik ban)
 - ✅ **Yasadışı ürün filtreleme** (500+ kelime, 10 kategori)
+- ✅ **Kullanıcı engelleme sistemi** (taciz/tehdit engellemesi)
+- ✅ **Şikayet sistemi** (6 farklı şikayet türü, admin dashboard)
+- ✅ **Mesaj bildirimleri** (okunmamış sayısı, real-time güncelleme)
 - ✅ Ürün yükleme güvenliği (uyuşturucu, silah, vb. engelleme)
 - ✅ Responsive design
 - ✅ Mobile-first approach
