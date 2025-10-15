@@ -4,6 +4,8 @@ export interface OneSignalPlugin {
   promptForPushNotificationsWithUserResponse(): Promise<{ accepted: boolean }>;
   setNotificationWillShowInForegroundHandler(handler: (notification: any) => void): void;
   setNotificationOpenedHandler(handler: (notification: any) => void): void;
+  setExternalUserId(externalId: string): Promise<void>;
+  removeExternalUserId(): Promise<void>;
 }
 
 declare global {
