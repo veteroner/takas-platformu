@@ -28,7 +28,9 @@ function normalizeText(text: string): string {
   
   // Türkçe karakter ve özel karakter normalizasyonu
   Object.entries(profanityDatabase.normalizations).forEach(([from, to]) => {
-    normalized = normalized.replace(new RegExp(from, 'g'), to)
+    // Özel regex karakterlerini escape et
+    const escapedFrom = from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    normalized = normalized.replace(new RegExp(escapedFrom, 'g'), to)
   })
   
   return normalized
