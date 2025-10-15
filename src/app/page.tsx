@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import SwipeStack from '@/components/SwipeStack'
 import { Item } from '@/types'
 import { Heart, MessageCircle, User, Settings, LogIn, Plus } from 'lucide-react'
+import { UnreadBadge } from '@/components/UnreadBadge'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getFeedItems, recordSwipe, checkForMatch } from '@/lib/api'
@@ -174,11 +175,8 @@ export default function HomePage() {
                 </Link>
                 <Link href="/messages" className="p-2 hover:bg-gray-100 rounded-full transition-colors relative">
                   <MessageCircle className="w-6 h-6 text-gray-600" />
-                  {likedItems.length > 0 && (
-                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                      {likedItems.length}
-                    </div>
-                  )}
+                  {/* Okunmamış mesaj badge'i */}
+                  <UnreadBadge userId={user?.id || null} />
                 </Link>
                 <Link href="/profile" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                   {user?.avatar ? (

@@ -7,6 +7,7 @@ import Image from "next/image";
 import { getCurrentUser } from "@/lib/auth";
 import { getUserMatches } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import { MatchUnreadBadge } from "@/components/UnreadBadge";
 
 export default function ChatList() {
   const router = useRouter();
@@ -87,12 +88,18 @@ export default function ChatList() {
                         <div className="w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold">
                           {otherUser?.name?.charAt(0).toUpperCase() || '?'}
                         </div>
+                        {/* Okunmamış mesaj badge'i */}
+                        <MatchUnreadBadge
+                          matchId={match.id}
+                          userId={user?.id || null}
+                          className="absolute -top-1 -right-1"
+                        />
                       </div>
                       
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between gap-2">
                           <h3 className="font-semibold text-gray-900 truncate">{otherUser?.name || 'Kullanıcı'}</h3>
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-gray-500 flex-shrink-0">
                             {new Date(match.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
                           </span>
                         </div>

@@ -601,3 +601,354 @@ $$ LANGUAGE plpgsql;
 
 -- Yorum: Otomatik temizleme için Supabase Edge Function kullanılabilir
 -- Örnek: Her gece 03:00'te çalışacak şekilde yapılandırılabilir
+
+-- =============================================================================
+-- KULLANICI ENGELLEME VE ŞİKAYET SİSTEMİ
+-- =============================================================================
+
+-- Kullanıcı engelleme tablosu
+CREATE TABLE IF NOT EXISTS public.user_blocks (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  blocker_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  blocked_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  reason TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(blocker_id, blocked_id),
+  CHECK (blocker_id != blocked_id) -- Kullanıcı kendini engelleyemez
+);
+
+-- Kullanıcı şikayetleri tablosu
+CREATE TABLE IF NOT EXISTS public.user_reports (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  reporter_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  reported_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  report_type TEXT NOT NULL CHECK (report_type IN (
+    'harassment', 'threat', 'spam', 'inappropriate', 'scam', 'other'
+  )),
+  description TEXT NOT NULL,
+  evidence JSONB, -- Screenshots, message IDs, etc.
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN (
+    'pending', 'investigating', 'resolved', 'dismissed'
+  )),
+  admin_notes TEXT,
+  resolved_by UUID REFERENCES public.users(id),
+  resolved_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Mesaj okuma durumu (message read receipts)
+-- Messages tablosuna 'read' kolonu zaten var, ek index ekleyelim
+CREATE INDEX IF NOT EXISTS idx_messages_read ON public.messages(receiver_id, read) WHERE read = false;
+
+-- İndeksler
+CREATE INDEX IF NOT EXISTS idx_user_blocks_blocker ON public.user_blocks(blocker_id);
+CREATE INDEX IF NOT EXISTS idx_user_blocks_blocked ON public.user_blocks(blocked_id);
+CREATE INDEX IF NOT EXISTS idx_user_reports_reporter ON public.user_reports(reporter_id);
+CREATE INDEX IF NOT EXISTS idx_user_reports_reported ON public.user_reports(reported_id);
+CREATE INDEX IF NOT EXISTS idx_user_reports_status ON public.user_reports(status);
+CREATE INDEX IF NOT EXISTS idx_user_reports_created_at ON public.user_reports(created_at DESC);
+
+-- RLS (Row Level Security)
+ALTER TABLE public.user_blocks ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_reports ENABLE ROW LEVEL SECURITY;
+
+-- Kullanıcı kendi engellemelerini görebilir
+CREATE POLICY "Users can view own blocks"
+  ON public.user_blocks
+  FOR SELECT
+  USING (auth.uid() = blocker_id);
+
+-- Kullanıcı engelleme yapabilir
+CREATE POLICY "Users can create blocks"
+  ON public.user_blocks
+  FOR INSERT
+  WITH CHECK (auth.uid() = blocker_id);
+
+-- Kullanıcı engelini kaldırabilir
+CREATE POLICY "Users can remove own blocks"
+  ON public.user_blocks
+  FOR DELETE
+  USING (auth.uid() = blocker_id);
+
+-- Kullanıcı kendi şikayetlerini görebilir
+CREATE POLICY "Users can view own reports"
+  ON public.user_reports
+  FOR SELECT
+  USING (auth.uid() = reporter_id);
+
+-- Kullanıcı şikayet oluşturabilir
+CREATE POLICY "Users can create reports"
+  ON public.user_reports
+  FOR INSERT
+  WITH CHECK (auth.uid() = reporter_id);
+
+-- Admin tüm şikayetleri görebilir ve güncelleyebilir
+CREATE POLICY "Admin can manage reports"
+  ON public.user_reports
+  FOR ALL
+  USING (auth.jwt() ->> 'role' = 'admin');
+
+-- =============================================================================
+-- ENGELLEME VE ŞİKAYET FONKSİYONLARI
+-- =============================================================================
+
+-- Function: Kullanıcı engellenmiş mi kontrol et
+CREATE OR REPLACE FUNCTION public.is_user_blocked(
+  p_user1_id UUID,
+  p_user2_id UUID
+)
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.user_blocks
+    WHERE (blocker_id = p_user1_id AND blocked_id = p_user2_id)
+       OR (blocker_id = p_user2_id AND blocked_id = p_user1_id)
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function: Kullanıcıyı engelle
+CREATE OR REPLACE FUNCTION public.block_user(
+  p_blocker_id UUID,
+  p_blocked_id UUID,
+  p_reason TEXT DEFAULT NULL
+)
+RETURNS UUID AS $$
+DECLARE
+  block_id UUID;
+BEGIN
+  -- Kendini engellemeyi önle
+  IF p_blocker_id = p_blocked_id THEN
+    RAISE EXCEPTION 'Cannot block yourself';
+  END IF;
+
+  -- Engelleme kaydı oluştur
+  INSERT INTO public.user_blocks (blocker_id, blocked_id, reason)
+  VALUES (p_blocker_id, p_blocked_id, p_reason)
+  ON CONFLICT (blocker_id, blocked_id) DO NOTHING
+  RETURNING id INTO block_id;
+
+  -- Aktif match'leri kapat
+  UPDATE public.matches
+  SET status = 'rejected',
+      updated_at = NOW()
+  WHERE (user1_id = p_blocker_id AND user2_id = p_blocked_id)
+     OR (user1_id = p_blocked_id AND user2_id = p_blocker_id)
+     AND status IN ('pending', 'accepted');
+
+  RETURN block_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function: Engellenmiş kullanıcıları listele
+CREATE OR REPLACE FUNCTION public.get_blocked_users(p_user_id UUID)
+RETURNS TABLE (
+  block_id UUID,
+  blocked_user_id UUID,
+  blocked_user_name TEXT,
+  blocked_user_avatar TEXT,
+  reason TEXT,
+  blocked_at TIMESTAMPTZ
+) AS $$
+BEGIN
+  RETURN QUERY
+  SELECT 
+    ub.id as block_id,
+    u.id as blocked_user_id,
+    u.name as blocked_user_name,
+    u.avatar as blocked_user_avatar,
+    ub.reason,
+    ub.created_at as blocked_at
+  FROM public.user_blocks ub
+  INNER JOIN public.users u ON u.id = ub.blocked_id
+  WHERE ub.blocker_id = p_user_id
+  ORDER BY ub.created_at DESC;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function: Okunmamış mesaj sayısını getir
+CREATE OR REPLACE FUNCTION public.get_unread_message_count(p_user_id UUID)
+RETURNS INTEGER AS $$
+DECLARE
+  unread_count INTEGER;
+BEGIN
+  SELECT COUNT(*) INTO unread_count
+  FROM public.messages
+  WHERE receiver_id = p_user_id
+    AND read = false;
+  
+  RETURN COALESCE(unread_count, 0);
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function: Match başına okunmamış mesaj sayısı
+CREATE OR REPLACE FUNCTION public.get_unread_by_match(p_user_id UUID)
+RETURNS TABLE (
+  match_id UUID,
+  unread_count BIGINT,
+  last_message_at TIMESTAMPTZ
+) AS $$
+BEGIN
+  RETURN QUERY
+  SELECT 
+    m.match_id,
+    COUNT(*) as unread_count,
+    MAX(m.created_at) as last_message_at
+  FROM public.messages m
+  WHERE m.receiver_id = p_user_id
+    AND m.read = false
+  GROUP BY m.match_id
+  ORDER BY MAX(m.created_at) DESC;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function: Şikayet oluştur
+CREATE OR REPLACE FUNCTION public.create_user_report(
+  p_reporter_id UUID,
+  p_reported_id UUID,
+  p_report_type TEXT,
+  p_description TEXT,
+  p_evidence JSONB DEFAULT NULL
+)
+RETURNS UUID AS $$
+DECLARE
+  report_id UUID;
+BEGIN
+  -- Kendini şikayet etmeyi önle
+  IF p_reporter_id = p_reported_id THEN
+    RAISE EXCEPTION 'Cannot report yourself';
+  END IF;
+
+  -- Şikayet kaydı oluştur
+  INSERT INTO public.user_reports (
+    reporter_id, reported_id, report_type, description, evidence
+  )
+  VALUES (
+    p_reporter_id, p_reported_id, p_report_type, p_description, p_evidence
+  )
+  RETURNING id INTO report_id;
+
+  RETURN report_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function: Admin istatistikleri
+CREATE OR REPLACE FUNCTION public.get_report_statistics(p_days INTEGER DEFAULT 30)
+RETURNS TABLE (
+  total_reports BIGINT,
+  pending_reports BIGINT,
+  resolved_reports BIGINT,
+  top_reported_users JSONB,
+  reports_by_type JSONB
+) AS $$
+BEGIN
+  RETURN QUERY
+  WITH stats AS (
+    SELECT
+      COUNT(*) as total,
+      COUNT(*) FILTER (WHERE status = 'pending') as pending,
+      COUNT(*) FILTER (WHERE status = 'resolved') as resolved
+    FROM public.user_reports
+    WHERE created_at > NOW() - (p_days || ' days')::INTERVAL
+  ),
+  top_users AS (
+    SELECT jsonb_agg(
+      jsonb_build_object(
+        'user_id', reported_id,
+        'report_count', cnt
+      ) ORDER BY cnt DESC
+    ) as users
+    FROM (
+      SELECT reported_id, COUNT(*) as cnt
+      FROM public.user_reports
+      WHERE created_at > NOW() - (p_days || ' days')::INTERVAL
+      GROUP BY reported_id
+      ORDER BY COUNT(*) DESC
+      LIMIT 10
+    ) t
+  ),
+  by_type AS (
+    SELECT jsonb_object_agg(report_type, cnt) as types
+    FROM (
+      SELECT report_type, COUNT(*) as cnt
+      FROM public.user_reports
+      WHERE created_at > NOW() - (p_days || ' days')::INTERVAL
+      GROUP BY report_type
+    ) t
+  )
+  SELECT
+    s.total,
+    s.pending,
+    s.resolved,
+    u.users,
+    t.types
+  FROM stats s, top_users u, by_type t;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- =============================================================================
+-- MESAJLAŞMA POLİCY GÜNCELLEMELERİ
+-- =============================================================================
+
+-- Mevcut message policy'leri kaldır ve yenilerini ekle (engelleme kontrolü ile)
+DROP POLICY IF EXISTS "Users can view own messages" ON public.messages;
+DROP POLICY IF EXISTS "Users can insert own messages" ON public.messages;
+
+-- Engellenmemiş kullanıcıların mesajlarını görebilme
+CREATE POLICY "Users can view unblocked messages"
+  ON public.messages
+  FOR SELECT
+  USING (
+    (auth.uid() = sender_id OR auth.uid() = receiver_id)
+    AND NOT public.is_user_blocked(sender_id, receiver_id)
+  );
+
+-- Engellenmemiş kullanıcılara mesaj gönderebilme
+CREATE POLICY "Users can send to unblocked users"
+  ON public.messages
+  FOR INSERT
+  WITH CHECK (
+    auth.uid() = sender_id
+    AND NOT public.is_user_blocked(sender_id, receiver_id)
+  );
+
+-- Kullanıcı kendi mesajlarını okundu olarak işaretleyebilir
+CREATE POLICY "Users can mark own messages as read"
+  ON public.messages
+  FOR UPDATE
+  USING (auth.uid() = receiver_id)
+  WITH CHECK (auth.uid() = receiver_id);
+
+-- =============================================================================
+-- MATCH POLİCY GÜNCELLEMELERİ
+-- =============================================================================
+
+-- Engellenen kullanıcılarla match gösterme
+DROP POLICY IF EXISTS "Users can view own matches" ON public.matches;
+
+CREATE POLICY "Users can view unblocked matches"
+  ON public.matches
+  FOR SELECT
+  USING (
+    (auth.uid() = user1_id OR auth.uid() = user2_id)
+    AND NOT public.is_user_blocked(user1_id, user2_id)
+  );
+
+-- Trigger: Mesaj okunduğunda updated_at güncelle
+CREATE OR REPLACE FUNCTION public.update_message_read_time()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF OLD.read = false AND NEW.read = true THEN
+    NEW.created_at = NOW(); -- You might want a separate 'read_at' column
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER on_message_read
+  BEFORE UPDATE ON public.messages
+  FOR EACH ROW
+  WHEN (OLD.read = false AND NEW.read = true)
+  EXECUTE FUNCTION public.update_message_read_time();
+

@@ -2,13 +2,16 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { ArrowLeft, Send } from 'lucide-react'
+import { ArrowLeft, Send, MoreVertical } from 'lucide-react'
 import Link from 'next/link'
 import { getCurrentUser } from '@/lib/auth'
 import { getMatchMessages, sendMessage } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
 import { useMessageFilter } from '@/hooks/useMessageFilter'
 import { MessageFilterWarning, BanStatusBanner } from '@/components/MessageFilterWarning'
+import { BlockReportModal, BlockedUserNotice } from '@/components/BlockReportModal'
+import { useBlockUser } from '@/hooks/useBlockAndReport'
+import { useMarkAsRead } from '@/hooks/useUnreadMessages'
 
 // Dynamic route - no static generation
 export const dynamic = 'force-dynamic'
@@ -31,6 +34,12 @@ export default function ChatPage() {
   const [isBanned, setIsBanned] = useState(false)
   const [banDetails, setBanDetails] = useState<any>(null)
   const [isSending, setIsSending] = useState(false)
+  
+  // Block & Report states
+  const [showBlockReportModal, setShowBlockReportModal] = useState(false)
+  const [isBlocked, setIsBlocked] = useState(false)
+  const { isUserBlocked } = useBlockUser()
+  const { markMatchAsRead } = useMarkAsRead()
 
   useEffect(() => {
     loadData()
@@ -130,6 +139,15 @@ export default function ChatPage() {
       if (matchData) {
         const other = matchData.user1_id === currentUser.id ? matchData.user2 : matchData.user1
         setOtherUser(other)
+        
+        // Engelleme kontrolü
+        const blocked = await isUserBlocked(currentUser.id, other.id)
+        setIsBlocked(blocked)
+        
+        // Eğer engellenmemişse mesajları okundu olarak işaretle
+        if (!blocked) {
+          await markMatchAsRead(matchId, currentUser.id)
+        }
       }
 
       // Load messages
@@ -262,8 +280,39 @@ export default function ChatPage() {
             <h1 className="text-lg font-bold text-gray-900">{otherUser?.name || 'Kullanıcı'}</h1>
             <p className="text-xs text-gray-500">{otherUser?.email}</p>
           </div>
+          {!isBlocked && (
+            <button
+              onClick={() => setShowBlockReportModal(true)}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              aria-label="Seçenekler"
+            >
+              <MoreVertical className="w-6 h-6 text-gray-600" />
+            </button>
+          )}
         </div>
       </header>
+
+      {/* Blocked User Notice */}
+      {isBlocked && (
+        <div className="p-4">
+          <BlockedUserNotice userName={otherUser?.name || 'Kullanıcı'} />
+        </div>
+      )}
+
+      {/* Block/Report Modal */}
+      {showBlockReportModal && otherUser && user && (
+        <BlockReportModal
+          isOpen={showBlockReportModal}
+          onClose={() => setShowBlockReportModal(false)}
+          targetUserId={otherUser.id}
+          targetUserName={otherUser.name}
+          currentUserId={user.id}
+          onSuccess={() => {
+            setIsBlocked(true)
+            loadData() // Reload to update UI
+          }}
+        />
+      )}
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -311,13 +360,13 @@ export default function ChatPage() {
               if (filterWarning) setFilterWarning(null)
             }}
             onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-            placeholder={isBanned ? "Mesaj gönderemezsiniz" : "Mesajınızı yazın..."}
-            disabled={isBanned || isSending}
+            placeholder={isBlocked ? "Kullanıcı engellenmiş" : isBanned ? "Mesaj gönderemezsiniz" : "Mesajınızı yazın..."}
+            disabled={isBanned || isSending || isBlocked}
             className="flex-1 bg-white/70 backdrop-blur-sm border border-white/20 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
           />
           <button
             onClick={handleSend}
-            disabled={!newMessage.trim() || isBanned || isSending}
+            disabled={!newMessage.trim() || isBanned || isSending || isBlocked}
             className="bg-gradient-to-r from-pink-500 to-purple-600 text-white p-3 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSending ? (
