@@ -24,12 +24,15 @@ Bu sistem, kullanıcıların birbirini engellemesi, şikayet etmesi ve mesaj bil
 ### 2. 📢 Şikayet Sistemi
 
 **Şikayet Türleri:**
-1. **Taciz (harassment)** - Rahatsız edici davranışlar
-2. **Tehdit (threat)** - Tehdit içeren mesajlar
-3. **Spam** - Gereksiz ve tekrarlayan mesajlar
-4. **Uygunsuz İçerik (inappropriate)** - Müstehcen içerik
-5. **Dolandırıcılık (scam)** - Sahte ürün veya dolandırıcılık
-6. **Diğer (other)** - Diğer sorunlar
+
+Şikayet türleri `/src/constants/reportTypes.ts` dosyasında merkezi olarak yönetilir:
+
+1. **Taciz (harassment)** - Rahatsız edici veya istenmeyen davranışlar
+2. **Tehdit (threat)** - Fiziksel veya psikolojik tehdit içeriği
+3. **Spam** - İstenmeyen reklam veya spam içerik
+4. **Uygunsuz İçerik (inappropriate)** - Müstehcen, şiddet içeren veya uygunsuz içerik
+5. **Dolandırıcılık (scam)** - Dolandırıcılık girişimi veya sahte profil
+6. **Diğer (other)** - Yukarıdakilerden farklı bir sebep
 
 **Şikayet Süreci:**
 1. Kullanıcı şikayet eder
@@ -160,8 +163,12 @@ const { blockedUsers, isLoading, error, refetch } = useBlockedUsers(userId)
 
 **3. useReportUser()**
 ```typescript
+import { REPORT_TYPE_OPTIONS } from '@/constants/reportTypes'
+
 const { reportUser, isReporting, error } = useReportUser()
 
+// Şikayet türleri constants'tan alınır
+// 'harassment' | 'threat' | 'spam' | 'inappropriate' | 'scam' | 'other'
 await reportUser(
   reporterId,
   reportedId,
@@ -169,6 +176,11 @@ await reportUser(
   'Açıklama',
   { evidence: 'data' } // optional
 )
+
+// Şikayet türü seçenekleri
+REPORT_TYPE_OPTIONS.forEach(option => {
+  console.log(option.value, option.label, option.description)
+})
 ```
 
 **4. useUnreadMessages(userId)**

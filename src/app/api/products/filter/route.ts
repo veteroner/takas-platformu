@@ -27,16 +27,17 @@ export async function POST(req: NextRequest) {
     const result = detectIllegalProduct(title, description)
 
     // Eğer yasadışı içerik tespit edildiyse loga kaydet
-    if (!result.isClean && result.shouldBlock && userId) {
+    if (!result.isClean && result.shouldBlock) {
       try {
-        // Supabase'e log kaydet
+        // Supabase'e log kaydet (opsiyonel - tablo oluşturmanız gerekir)
         await supabase.from('illegal_product_attempts').insert({
-          user_id: userId, // UUID olmalı
+          user_id: userId || 'anonymous',
           title: title.substring(0, 200),
           description: description?.substring(0, 500),
           detected_words: result.detectedWords,
           categories: result.categories,
-          risk_level: result.riskLevel
+          risk_level: result.riskLevel,
+          created_at: new Date().toISOString()
         })
       } catch (logError) {
         // Log hatasını sessizce görmezden gel

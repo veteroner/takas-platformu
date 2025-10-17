@@ -4,7 +4,8 @@
 
 import { useState } from 'react'
 import { AlertTriangle, Ban, Flag, X, Shield, MessageSquareOff } from 'lucide-react'
-import { useBlockUser, useReportUser, type ReportType } from '@/hooks/useBlockAndReport'
+import { useBlockUser, useReportUser } from '@/hooks/useBlockAndReport'
+import { REPORT_TYPE_OPTIONS, type ReportType } from '@/constants/reportTypes'
 
 interface BlockReportModalProps {
   isOpen: boolean
@@ -191,13 +192,17 @@ export function BlockReportModal({
                   onChange={(e) => setReportType(e.target.value as ReportType)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 >
-                  <option value="harassment">Taciz</option>
-                  <option value="threat">Tehdit</option>
-                  <option value="spam">Spam</option>
-                  <option value="inappropriate">Uygunsuz İçerik</option>
-                  <option value="scam">Dolandırıcılık</option>
-                  <option value="other">Diğer</option>
+                  {REPORT_TYPE_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
+                {reportType && (
+                  <p className="mt-1 text-xs text-gray-500">
+                    {REPORT_TYPE_OPTIONS.find(opt => opt.value === reportType)?.description}
+                  </p>
+                )}
               </div>
 
               <div>

@@ -4,8 +4,7 @@
 
 import { useState, useCallback, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
-
-export type ReportType = 'harassment' | 'threat' | 'spam' | 'inappropriate' | 'scam' | 'other'
+import { type ReportType } from '@/constants/reportTypes'
 
 interface BlockedUser {
   blockId: string
