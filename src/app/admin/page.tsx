@@ -7,6 +7,8 @@ type Metrics = {
   items: number
   matches: number
   messages: number
+  reports?: number
+  blocks?: number
 }
 
 export default function AdminDashboardPage() {
@@ -23,6 +25,8 @@ export default function AdminDashboardPage() {
         const supabase = createClient(url, key)
         const { data: { session } } = await supabase.auth.getSession()
         const token = session?.access_token
+
+        // Get basic metrics from API
         const res = await fetch('/api/admin/metrics', {
           headers: token ? { Authorization: `Bearer ${token}` } : undefined
         })
@@ -31,7 +35,19 @@ export default function AdminDashboardPage() {
           throw new Error(j?.error || 'Beklenmeyen hata')
         }
         const j = await res.json()
-        setMetrics(j.data)
+        const baseMetrics = j.data
+
+        // Get additional metrics from Supabase
+        const [reportsRes, blocksRes] = await Promise.all([
+          supabase.from('user_reports').select('id', { count: 'exact', head: true }),
+          supabase.from('user_blocks').select('id', { count: 'exact', head: true })
+        ])
+
+        setMetrics({
+          ...baseMetrics,
+          reports: reportsRes.count || 0,
+          blocks: blocksRes.count || 0
+        })
       } catch (e: any) {
         setError(e?.message || 'Hata')
       }
@@ -59,11 +75,17 @@ export default function AdminDashboardPage() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Genel Bakış</h1>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <Card title="Kullanıcılar" value={metrics!.users} />
         <Card title="Eşyalar" value={metrics!.items} />
         <Card title="Eşleşmeler" value={metrics!.matches} />
         <Card title="Mesajlar" value={metrics!.messages} />
+        {metrics!.reports !== undefined && (
+          <Card title="Şikayetler" value={metrics!.reports} />
+        )}
+        {metrics!.blocks !== undefined && (
+          <Card title="Engellemeler" value={metrics!.blocks} />
+        )}
       </div>
     </div>
   )

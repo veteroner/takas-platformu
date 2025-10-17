@@ -67,6 +67,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link className="hover:underline" href="/admin/items">Eşyalar</Link>
           <Link className="hover:underline" href="/admin/matches">Eşleşmeler</Link>
           <Link className="hover:underline" href="/admin/messages">Mesajlar</Link>
+          <Link className="hover:underline" href="/admin/reports">Şikayetler</Link>
+          <Link className="hover:underline" href="/admin/blocks">Engellemeler</Link>
           <Link className="hover:underline" href="/admin/settings">Ayarlar</Link>
           <Link className="hover:underline" href="/admin/policies">Politikalar</Link>
         </nav>
