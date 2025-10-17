@@ -203,6 +203,14 @@ export default function SettingsPage() {
             <h2 className="text-xl font-semibold text-white mb-4">Hesap İşlemleri</h2>
             
             <div className="space-y-3">
+              <Link
+                href="/data-privacy"
+                className="w-full flex items-center justify-center gap-3 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-100 px-6 py-3 rounded-xl transition-colors"
+              >
+                <Shield size={20} />
+                Veri Gizliliği ve Güvenlik
+              </Link>
+
               <button
                 onClick={handleLogout}
                 className="w-full flex items-center justify-center gap-3 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/50 text-orange-100 px-6 py-3 rounded-xl transition-colors"

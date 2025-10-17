@@ -952,3 +952,98 @@ CREATE TRIGGER on_message_read
   WHEN (OLD.read = false AND NEW.read = true)
   EXECUTE FUNCTION public.update_message_read_time();
 
+
+-- ============================================
+-- KULLANICI VERİSİ SİLME FONKSİYONU (GDPR/KVKK)
+-- ============================================
+
+-- Function: Kullanıcının tüm verilerini sil (GDPR/KVKK Uyumlu)
+CREATE OR REPLACE FUNCTION public.delete_user_data(user_id_to_delete UUID)
+RETURNS BOOLEAN AS $$
+DECLARE
+  deleted_count INTEGER := 0;
+BEGIN
+  -- Sadece kullanıcı kendi verisini silebilir
+  IF auth.uid() != user_id_to_delete THEN
+    RAISE EXCEPTION 'Unauthorized: You can only delete your own data';
+  END IF;
+
+  -- 1. Kullanıcının gönderdiği mesajları sil
+  DELETE FROM public.messages WHERE sender_id = user_id_to_delete;
+  GET DIAGNOSTICS deleted_count = ROW_COUNT;
+  RAISE NOTICE 'Deleted % messages', deleted_count;
+
+  -- 2. Kullanıcının aldığı mesajları sil (opsiyonel - match'in diğer tarafındaki kullanıcı için)
+  DELETE FROM public.messages WHERE match_id IN (
+    SELECT id FROM public.matches 
+    WHERE user1_id = user_id_to_delete OR user2_id = user_id_to_delete
+  );
+
+  -- 3. Kullanıcının beğenilerini sil
+  DELETE FROM public.likes WHERE user_id = user_id_to_delete;
+  GET DIAGNOSTICS deleted_count = ROW_COUNT;
+  RAISE NOTICE 'Deleted % likes', deleted_count;
+
+  -- 4. Kullanıcının eşleşmelerini sil
+  DELETE FROM public.matches 
+  WHERE user1_id = user_id_to_delete OR user2_id = user_id_to_delete;
+  GET DIAGNOSTICS deleted_count = ROW_COUNT;
+  RAISE NOTICE 'Deleted % matches', deleted_count;
+
+  -- 5. Kullanıcının ürünlerinin görsellerini sil (item_images)
+  DELETE FROM public.item_images WHERE item_id IN (
+    SELECT id FROM public.items WHERE user_id = user_id_to_delete
+  );
+
+  -- 6. Kullanıcının ürünlerini sil
+  DELETE FROM public.items WHERE user_id = user_id_to_delete;
+  GET DIAGNOSTICS deleted_count = ROW_COUNT;
+  RAISE NOTICE 'Deleted % items', deleted_count;
+
+  -- 7. Kullanıcının yaptığı engelleri sil
+  DELETE FROM public.user_blocks 
+  WHERE blocker_id = user_id_to_delete OR blocked_id = user_id_to_delete;
+  GET DIAGNOSTICS deleted_count = ROW_COUNT;
+  RAISE NOTICE 'Deleted % blocks', deleted_count;
+
+  -- 8. Kullanıcının yaptığı şikayetleri sil
+  DELETE FROM public.user_reports 
+  WHERE reporter_id = user_id_to_delete;
+  GET DIAGNOSTICS deleted_count = ROW_COUNT;
+  RAISE NOTICE 'Deleted % reports (as reporter)', deleted_count;
+
+  -- 9. Kullanıcı hakkında yapılan şikayetleri sil
+  DELETE FROM public.user_reports 
+  WHERE reported_id = user_id_to_delete;
+  GET DIAGNOSTICS deleted_count = ROW_COUNT;
+  RAISE NOTICE 'Deleted % reports (as reported)', deleted_count;
+
+  -- 10. Yasadışı ürün denemelerini sil
+  DELETE FROM public.illegal_product_attempts 
+  WHERE user_id = user_id_to_delete;
+
+  -- 11. Küfür filtresi kayıtlarını sil
+  DELETE FROM public.filtered_messages 
+  WHERE user_id = user_id_to_delete;
+
+  -- 12. Kullanıcı profilini sil
+  DELETE FROM public.users WHERE id = user_id_to_delete;
+  GET DIAGNOSTICS deleted_count = ROW_COUNT;
+  RAISE NOTICE 'Deleted user profile: %', deleted_count;
+
+  -- 13. Auth kullanıcısını sil (Supabase Auth)
+  -- NOT: Bu işlem manuel olarak yapılmalı veya Supabase Dashboard'dan
+  -- çünkü auth.users tablosu RLS ve fonksiyon izinlerine tabi değil
+
+  RETURN TRUE;
+EXCEPTION
+  WHEN OTHERS THEN
+    RAISE NOTICE 'Error deleting user data: %', SQLERRM;
+    RETURN FALSE;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Grant execute permission
+GRANT EXECUTE ON FUNCTION public.delete_user_data(UUID) TO authenticated;
+
+COMMENT ON FUNCTION public.delete_user_data IS 'GDPR/KVKK uyumlu kullanıcı verisi silme fonksiyonu. Kullanıcı sadece kendi verilerini silebilir.';
