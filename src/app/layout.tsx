@@ -100,8 +100,9 @@ export default function RootLayout({
         {children}
         <CookieBanner />
         <AnalyticsLoader />
-        <OneSignalInit />
-        <OneSignalCapacitorInit />
+        {/* OneSignal devre dışı - Web platform etkinleştirilmeli */}
+        {/* <OneSignalInit /> */}
+        {/* <OneSignalCapacitorInit /> */}
         <AdMobInit />
       </body>
     </html>
