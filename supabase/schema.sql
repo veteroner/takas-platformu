@@ -356,21 +356,29 @@ ALTER TABLE public.user_violations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.filtered_messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.user_chat_bans ENABLE ROW LEVEL SECURITY;
 
--- Only admins can view violations (add admin role check later)
-CREATE POLICY "Service role can manage violations" ON public.user_violations
-  FOR ALL USING (auth.jwt()->>'role' = 'service_role');
+-- Kullanıcılar kendi ihlallerini görebilir
+CREATE POLICY "Users can view own violations" ON public.user_violations
+  FOR SELECT USING (auth.uid() = user_id);
+
+-- Sistem violation kaydı oluşturabilir (backend'den)
+CREATE POLICY "System can insert violations" ON public.user_violations
+  FOR INSERT WITH CHECK (true);
 
 -- Users can check their own ban status
 CREATE POLICY "Users can view own ban status" ON public.user_chat_bans
   FOR SELECT USING (auth.uid() = user_id);
 
--- Service role can manage bans
-CREATE POLICY "Service role can manage bans" ON public.user_chat_bans
-  FOR ALL USING (auth.jwt()->>'role' = 'service_role');
+-- Sistem ban kaydı oluşturabilir
+CREATE POLICY "System can manage bans" ON public.user_chat_bans
+  FOR ALL WITH CHECK (true);
 
--- Service role can manage filtered messages
-CREATE POLICY "Service role can manage filtered messages" ON public.filtered_messages
-  FOR ALL USING (auth.jwt()->>'role' = 'service_role');
+-- Kullanıcılar kendi filtre loglarını görebilir
+CREATE POLICY "Users can view own filtered messages" ON public.filtered_messages
+  FOR SELECT USING (auth.uid() = user_id);
+
+-- Sistem filtered message oluşturabilir
+CREATE POLICY "System can insert filtered messages" ON public.filtered_messages
+  FOR INSERT WITH CHECK (true);
 
 -- Function to check if user is banned from chatting
 CREATE OR REPLACE FUNCTION public.is_user_chat_banned(check_user_id UUID)
@@ -482,7 +490,7 @@ $$ LANGUAGE plpgsql;
 -- Yasadışı ürün girişim logları
 CREATE TABLE IF NOT EXISTS public.illegal_product_attempts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id TEXT NOT NULL,
+  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   title TEXT NOT NULL,
   description TEXT,
   detected_words JSONB NOT NULL DEFAULT '[]',
@@ -504,17 +512,17 @@ CREATE INDEX IF NOT EXISTS idx_illegal_attempts_expires_at ON public.illegal_pro
 -- RLS (Row Level Security)
 ALTER TABLE public.illegal_product_attempts ENABLE ROW LEVEL SECURITY;
 
--- Sadece admin görebilir
-CREATE POLICY "Admin can view illegal attempts"
+-- Kullanıcılar kendi girişimlerini görebilir
+CREATE POLICY "Users can view own illegal attempts"
   ON public.illegal_product_attempts
   FOR SELECT
-  USING (auth.jwt() ->> 'role' = 'admin');
+  USING (auth.uid() = user_id);
 
 -- Sistem tarafından insert edilebilir
 CREATE POLICY "System can insert illegal attempts"
   ON public.illegal_product_attempts
   FOR INSERT
-  WITH CHECK (true);
+  WITH CHECK (auth.uid() = user_id);
 
 -- Function: Süresi dolan logları temizle (KVKK uyumlu)
 CREATE OR REPLACE FUNCTION public.cleanup_expired_illegal_attempts()
@@ -683,11 +691,8 @@ CREATE POLICY "Users can create reports"
   FOR INSERT
   WITH CHECK (auth.uid() = reporter_id);
 
--- Admin tüm şikayetleri görebilir ve güncelleyebilir
-CREATE POLICY "Admin can manage reports"
-  ON public.user_reports
-  FOR ALL
-  USING (auth.jwt() ->> 'role' = 'admin');
+-- NOT: Admin dashboard için ayrı servis kullanılacak
+-- Şimdilik kullanıcılar sadece kendi şikayetlerini görebilir
 
 -- =============================================================================
 -- ENGELLEME VE ŞİKAYET FONKSİYONLARI
