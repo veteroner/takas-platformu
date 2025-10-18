@@ -29,6 +29,20 @@ const conditions = [
   { id: 'poor', name: 'Kötü', value: 'poor' }
 ]
 
+// Türkiye'nin en popüler 81 ili
+const cities = [
+  'Adana', 'Adıyaman', 'Afyonkarahisar', 'Ağrı', 'Aksaray', 'Amasya', 'Ankara', 'Antalya',
+  'Ardahan', 'Artvin', 'Aydın', 'Balıkesir', 'Bartın', 'Batman', 'Bayburt', 'Bilecik',
+  'Bingöl', 'Bitlis', 'Bolu', 'Burdur', 'Bursa', 'Çanakkale', 'Çankırı', 'Çorum',
+  'Denizli', 'Diyarbakır', 'Düzce', 'Edirne', 'Elazığ', 'Erzincan', 'Erzurum', 'Eskişehir',
+  'Gaziantep', 'Giresun', 'Gümüşhane', 'Hakkari', 'Hatay', 'Iğdır', 'Isparta', 'İstanbul',
+  'İzmir', 'Kahramanmaraş', 'Karabük', 'Karaman', 'Kars', 'Kastamonu', 'Kayseri', 'Kilis',
+  'Kırıkkale', 'Kırklareli', 'Kırşehir', 'Kocaeli', 'Konya', 'Kütahya', 'Malatya', 'Manisa',
+  'Mardin', 'Mersin', 'Muğla', 'Muş', 'Nevşehir', 'Niğde', 'Ordu', 'Osmaniye',
+  'Rize', 'Sakarya', 'Samsun', 'Şanlıurfa', 'Siirt', 'Sinop', 'Şırnak', 'Sivas',
+  'Tekirdağ', 'Tokat', 'Trabzon', 'Tunceli', 'Uşak', 'Van', 'Yalova', 'Yozgat', 'Zonguldak'
+]
+
 export default function UploadPage() {
   const router = useRouter()
   const [images, setImages] = useState<string[]>([])
@@ -383,18 +397,18 @@ export default function UploadPage() {
             <div className="mb-4">
               <div className="text-sm font-medium text-gray-700 mb-2">Kategoriler (çoklu seçim)</div>
               <div className="grid grid-cols-2 gap-2">
-                {(['clothing','toys','electronics','books','sports','home','other'] as const).map(ct => (
+                {categories.map(category => (
                   <button
-                    key={ct}
+                    key={category.value}
                     type="button"
-                    onClick={() => toggleSeekCategory(ct)}
-                    className={`py-2 px-3 rounded-lg border-2 text-xs transition-all ${
-                      seekCategories.includes(ct)
+                    onClick={() => toggleSeekCategory(category.value as any)}
+                    className={`py-2 px-3 rounded-lg border-2 text-sm transition-all ${
+                      seekCategories.includes(category.value as any)
                         ? 'border-purple-500 bg-purple-50 text-purple-700'
                         : 'border-gray-200 hover:border-purple-300'
                     }`}
                   >
-                    {ct}
+                    {category.name}
                   </button>
                 ))}
               </div>
@@ -425,13 +439,16 @@ export default function UploadPage() {
 
             <div className="mt-3">
               <label className="block text-sm font-medium text-gray-700 mb-1">Şehir</label>
-              <input
-                type="text"
+              <select
                 value={seekCity}
                 onChange={(e) => setSeekCity(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                placeholder="Örn: İstanbul"
-              />
+              >
+                <option value="">Şehir seçin</option>
+                {cities.map(city => (
+                  <option key={city} value={city}>{city}</option>
+                ))}
+              </select>
             </div>
 
             {/* Clothing filters (simple) */}
