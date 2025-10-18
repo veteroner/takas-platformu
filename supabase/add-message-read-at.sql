@@ -9,7 +9,7 @@ ADD COLUMN IF NOT EXISTS read_at TIMESTAMPTZ;
 
 -- 2️⃣ Mevcut okunmuş mesajlar için read_at'ı güncelle
 UPDATE public.messages 
-SET read_at = updated_at 
+SET read_at = created_at 
 WHERE read = true AND read_at IS NULL;
 
 -- 3️⃣ Trigger: read = true olduğunda otomatik read_at ekle

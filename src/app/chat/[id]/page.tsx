@@ -44,9 +44,14 @@ export default function ChatPage() {
   useEffect(() => {
     loadData()
     checkBanStatus()
+  }, [matchId])
+
+  // Real-time subscription'ı ayrı useEffect'te yap
+  useEffect(() => {
+    if (!matchId) return
     
-    // Subscribe to new messages with unique channel name
-    const channelName = `chat-${matchId}-${Date.now()}`
+    // Sadece matchId ile channel name oluştur (unique olmak için Date.now() kullanma!)
+    const channelName = `chat-${matchId}`
     
     const channel = supabase
       .channel(channelName)
@@ -63,10 +68,28 @@ export default function ChatPage() {
           setMessages(prev => {
             // Duplicate kontrolü - mesaj zaten varsa ekleme
             const exists = prev.some(m => m.id === payload.new.id)
-            if (exists) return prev
+            if (exists) {
+              console.log('⚠️ Duplicate mesaj engellendi:', payload.new.id)
+              return prev
+            }
             return [...prev, payload.new]
           })
           scrollToBottom()
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'messages',
+          filter: `match_id=eq.${matchId}`
+        },
+        (payload) => {
+          console.log('✏️ Mesaj güncellendi:', payload.new)
+          setMessages(prev => 
+            prev.map(m => m.id === payload.new.id ? payload.new : m)
+          )
         }
       )
       .subscribe((status) => {
