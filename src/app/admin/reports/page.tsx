@@ -181,17 +181,17 @@ export default function AdminReportsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Şikayetler</h1>
+        <h1 className="text-3xl font-bold text-white">Şikayetler</h1>
         <button
           onClick={loadData}
-          className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600"
+          className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:shadow-lg hover:shadow-pink-500/50 font-medium transition-all"
         >
           Yenile
         </button>
       </div>
 
       {error && (
-        <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-lg">
+        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg">
           {error}
         </div>
       )}
@@ -235,42 +235,42 @@ export default function AdminReportsPage() {
       {/* Filters */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-2">Durum Filtresi</label>
+          <label className="block text-sm font-medium mb-2 text-gray-300">Durum Filtresi</label>
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg"
+            className="w-full px-4 py-3 bg-white/10 text-white border border-white/20 rounded-lg focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20"
           >
-            <option value="all">Tümü</option>
-            <option value="pending">Bekleyen</option>
-            <option value="investigating">İnceleniyor</option>
-            <option value="resolved">Çözüldü</option>
-            <option value="dismissed">Reddedildi</option>
+            <option value="all" className="bg-gray-800">Tümü</option>
+            <option value="pending" className="bg-gray-800">Bekleyen</option>
+            <option value="investigating" className="bg-gray-800">İnceleniyor</option>
+            <option value="resolved" className="bg-gray-800">Çözüldü</option>
+            <option value="dismissed" className="bg-gray-800">Reddedildi</option>
           </select>
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Tür Filtresi</label>
+          <label className="block text-sm font-medium mb-2 text-gray-300">Tür Filtresi</label>
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg"
+            className="w-full px-4 py-3 bg-white/10 text-white border border-white/20 rounded-lg focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20"
           >
-            <option value="all">Tümü</option>
+            <option value="all" className="bg-gray-800">Tümü</option>
             {REPORT_TYPE_OPTIONS.map(opt => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
+              <option key={opt.value} value={opt.value} className="bg-gray-800">{opt.label}</option>
             ))}
           </select>
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Arama</label>
+          <label className="block text-sm font-medium mb-2 text-gray-300">Arama</label>
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="İsim veya açıklama ara..."
-            className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg"
+            className="w-full px-4 py-3 bg-white/10 text-white border border-white/20 rounded-lg focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-500"
           />
         </div>
       </div>
@@ -278,7 +278,7 @@ export default function AdminReportsPage() {
       {/* Reports List */}
       <div className="space-y-4">
         {filteredReports.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-gray-400 bg-white/5 rounded-2xl border border-white/10">
             Şikayet bulunamadı
           </div>
         ) : (
@@ -342,47 +342,47 @@ function ReportCard({ report, onUpdateStatus }: {
   }
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-lg p-4">
+    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all">
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
-            <span className={`px-2 py-1 text-xs rounded ${statusColors[report.status]}`}>
+            <span className={`px-3 py-1 text-xs font-medium rounded-lg ${statusColors[report.status]}`}>
               {statusLabels[report.status]}
             </span>
-            <span className="px-2 py-1 text-xs bg-white/5 rounded">
+            <span className="px-3 py-1 text-xs font-medium bg-white/10 text-white rounded-lg">
               {getReportTypeLabel(report.report_type)}
             </span>
           </div>
-          <p className="text-sm opacity-80">
-            <strong>{report.reporter_name}</strong> kullanıcısı{' '}
-            <strong>{report.reported_name}</strong> kullanıcısını şikayet etti
+          <p className="text-sm text-gray-300">
+            <strong className="text-white">{report.reporter_name}</strong> kullanıcısı{' '}
+            <strong className="text-white">{report.reported_name}</strong> kullanıcısını şikayet etti
           </p>
-          <p className="text-xs opacity-60 mt-1">
+          <p className="text-xs text-gray-500 mt-1">
             {new Date(report.created_at).toLocaleString('tr-TR')}
           </p>
         </div>
 
         <button
           onClick={() => setShowDetails(!showDetails)}
-          className="px-3 py-1 text-sm bg-white/5 hover:bg-white/10 rounded"
+          className="px-4 py-2 text-sm bg-white/10 hover:bg-white/20 text-white font-medium rounded-lg transition-colors"
         >
           {showDetails ? 'Gizle' : 'Detaylar'}
         </button>
       </div>
 
       {showDetails && (
-        <div className="space-y-4 pt-4 border-t border-white/10">
+        <div className="space-y-4 pt-4 border-t border-white/20">
           <div>
-            <h4 className="text-sm font-medium mb-2">Açıklama:</h4>
-            <p className="text-sm opacity-80 bg-white/5 p-3 rounded">
+            <h4 className="text-sm font-semibold mb-2 text-white">Açıklama:</h4>
+            <p className="text-sm text-gray-300 bg-white/5 p-4 rounded-lg border border-white/10">
               {report.description}
             </p>
           </div>
 
           {report.evidence && (
             <div>
-              <h4 className="text-sm font-medium mb-2">Kanıtlar:</h4>
-              <pre className="text-xs opacity-80 bg-white/5 p-3 rounded overflow-auto">
+              <h4 className="text-sm font-semibold mb-2 text-white">Kanıtlar:</h4>
+              <pre className="text-xs text-gray-300 bg-white/5 p-4 rounded-lg border border-white/10 overflow-auto">
                 {JSON.stringify(report.evidence, null, 2)}
               </pre>
             </div>
@@ -390,8 +390,8 @@ function ReportCard({ report, onUpdateStatus }: {
 
           {report.admin_notes && (
             <div>
-              <h4 className="text-sm font-medium mb-2">Admin Notları:</h4>
-              <p className="text-sm opacity-80 bg-white/5 p-3 rounded">
+              <h4 className="text-sm font-semibold mb-2 text-white">Admin Notları:</h4>
+              <p className="text-sm text-gray-300 bg-white/5 p-4 rounded-lg border border-white/10">
                 {report.admin_notes}
               </p>
             </div>
@@ -400,32 +400,32 @@ function ReportCard({ report, onUpdateStatus }: {
           {report.status === 'pending' && (
             <div className="space-y-3">
               <div>
-                <label className="block text-sm font-medium mb-2">Admin Notu (opsiyonel):</label>
+                <label className="block text-sm font-semibold mb-2 text-white">Admin Notu (opsiyonel):</label>
                 <textarea
                   value={adminNotes}
                   onChange={(e) => setAdminNotes(e.target.value)}
-                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg"
+                  className="w-full px-4 py-3 bg-white/10 text-white border border-white/20 rounded-lg focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-500"
                   rows={3}
                   placeholder="Notlarınızı buraya yazın..."
                 />
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 <button
                   onClick={() => onUpdateStatus(report.id, 'investigating', adminNotes)}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                  className="px-6 py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition-colors"
                 >
                   İncelemeye Al
                 </button>
                 <button
                   onClick={() => onUpdateStatus(report.id, 'resolved', adminNotes)}
-                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                  className="px-6 py-3 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition-colors"
                 >
                   Çözüldü
                 </button>
                 <button
                   onClick={() => onUpdateStatus(report.id, 'dismissed', adminNotes)}
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                  className="px-6 py-3 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition-colors"
                 >
                   Reddet
                 </button>
@@ -436,25 +436,25 @@ function ReportCard({ report, onUpdateStatus }: {
           {report.status === 'investigating' && (
             <div className="space-y-3">
               <div>
-                <label className="block text-sm font-medium mb-2">Admin Notu:</label>
+                <label className="block text-sm font-semibold mb-2 text-white">Admin Notu:</label>
                 <textarea
                   value={adminNotes}
                   onChange={(e) => setAdminNotes(e.target.value)}
-                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg"
+                  className="w-full px-4 py-3 bg-white/10 text-white border border-white/20 rounded-lg focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-500"
                   rows={3}
                 />
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 <button
                   onClick={() => onUpdateStatus(report.id, 'resolved', adminNotes)}
-                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                  className="px-6 py-3 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition-colors"
                 >
                   Çözüldü
                 </button>
                 <button
                   onClick={() => onUpdateStatus(report.id, 'dismissed', adminNotes)}
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                  className="px-6 py-3 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition-colors"
                 >
                   Reddet
                 </button>

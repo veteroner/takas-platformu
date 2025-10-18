@@ -89,58 +89,94 @@ export default function AdminPoliciesPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Politika Sürümü Yönetimi</h1>
-      <div className="space-y-4 bg-white/5 p-4 rounded-xl border border-white/10 mb-6">
+    <div className="max-w-2xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6 text-white">Politika Sürümü Yönetimi</h1>
+      
+      <div className="space-y-4 bg-white/5 backdrop-blur-xl p-6 rounded-xl border border-white/10 mb-6">
         <div>
-          <label className="block mb-1">Politika</label>
-          <select value={key} onChange={e=>setKey(e.target.value)} className="w-full bg-white/10 p-2 rounded">
+          <label className="block mb-2 text-sm font-medium text-gray-300">Politika</label>
+          <select 
+            value={key} 
+            onChange={e=>setKey(e.target.value)} 
+            className="w-full bg-white/10 text-white p-3 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20"
+          >
             {POLICY_KEYS.map(p=> (
-              <option key={p.key} value={p.key}>{p.label}</option>
+              <option key={p.key} value={p.key} className="bg-gray-800 text-white">{p.label}</option>
             ))}
           </select>
         </div>
         <div>
-          <label className="block mb-1">Zorunlu sürüm</label>
-          <input value={version} onChange={e=>setVersion(e.target.value)} className="w-full bg-white/10 p-2 rounded" />
-          <p className="text-sm mt-1 opacity-80">Mevcut: {required[key] || '-'}</p>
+          <label className="block mb-2 text-sm font-medium text-gray-300">Zorunlu sürüm</label>
+          <input 
+            value={version} 
+            onChange={e=>setVersion(e.target.value)} 
+            className="w-full bg-white/10 text-white p-3 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-500" 
+            placeholder="Örn: v1"
+          />
+          <p className="text-sm mt-2 text-gray-400">Mevcut: <span className="text-white font-medium">{required[key] || '-'}</span></p>
         </div>
-        <button onClick={submit} disabled={loading} className="px-4 py-2 rounded bg-pink-500 hover:bg-pink-600 text-white">
+        <button 
+          onClick={submit} 
+          disabled={loading} 
+          className="px-6 py-3 rounded-lg bg-gradient-to-r from-pink-500 to-purple-600 hover:shadow-lg hover:shadow-pink-500/50 text-white font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           {loading ? 'Güncelleniyor...' : 'Güncelle'}
         </button>
-        {msg && <p className="text-sm mt-2">{msg}</p>}
+        {msg && <p className="text-sm mt-2 text-green-400 bg-green-500/10 border border-green-500/20 rounded-lg p-3">{msg}</p>}
       </div>
 
-      <div className="space-y-3 bg-white/5 p-4 rounded-xl border border-white/10">
-        <div className="flex items-end gap-2">
+      <div className="space-y-4 bg-white/5 backdrop-blur-xl p-6 rounded-xl border border-white/10">
+        <div className="flex items-end gap-3">
           <div className="flex-1">
-            <label className="block mb-1">Toplu sürüm ata</label>
-            <input value={bulkVersion} onChange={e=>setBulkVersion(e.target.value)} className="w-full bg-white/10 p-2 rounded" placeholder="örn. v2" />
+            <label className="block mb-2 text-sm font-medium text-gray-300">Toplu sürüm ata</label>
+            <input 
+              value={bulkVersion} 
+              onChange={e=>setBulkVersion(e.target.value)} 
+              className="w-full bg-white/10 text-white p-3 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-500" 
+              placeholder="örn. v2" 
+            />
           </div>
-          <button onClick={submitBulk} disabled={loading || !bulkVersion} className="px-4 py-2 rounded bg-pink-500 hover:bg-pink-600 text-white whitespace-nowrap">Hepsine Uygula</button>
+          <button 
+            onClick={submitBulk} 
+            disabled={loading || !bulkVersion} 
+            className="px-6 py-3 rounded-lg bg-gradient-to-r from-pink-500 to-purple-600 hover:shadow-lg hover:shadow-pink-500/50 text-white font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+          >
+            Hepsine Uygula
+          </button>
         </div>
 
         <div className="overflow-hidden rounded-lg border border-white/10">
           <table className="min-w-full text-sm">
-            <thead className="bg-white/5">
+            <thead className="bg-white/10">
               <tr>
-                <th className="text-left px-3 py-2">Politika</th>
-                <th className="text-left px-3 py-2">Mevcut Zorunlu</th>
-                <th className="text-left px-3 py-2">Yeni Sürüm</th>
-                <th className="text-left px-3 py-2">Eylem</th>
+                <th className="text-left px-4 py-3 text-gray-300 font-semibold">Politika</th>
+                <th className="text-left px-4 py-3 text-gray-300 font-semibold">Mevcut Zorunlu</th>
+                <th className="text-left px-4 py-3 text-gray-300 font-semibold">Yeni Sürüm</th>
+                <th className="text-left px-4 py-3 text-gray-300 font-semibold">Eylem</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-white/10">
               {POLICY_KEYS.map(p => {
                 const current = required[p.key] || '-'
                 const [tmp, setTmp] = useState(current)
                 return (
-                  <tr key={p.key} className="border-t border-white/10">
-                    <td className="px-3 py-2">{p.label}</td>
-                    <td className="px-3 py-2">{current}</td>
-                    <td className="px-3 py-2"><input className="bg-white/10 px-2 py-1 rounded" value={tmp} onChange={e=>setTmp(e.target.value)} /></td>
-                    <td className="px-3 py-2">
-                      <button onClick={()=>submitInline(p.key, tmp)} className="px-3 py-1 rounded bg-white/10 hover:bg-white/20">Kaydet</button>
+                  <tr key={p.key} className="hover:bg-white/5 transition-colors">
+                    <td className="px-4 py-3 text-white font-medium">{p.label}</td>
+                    <td className="px-4 py-3 text-gray-300">{current}</td>
+                    <td className="px-4 py-3">
+                      <input 
+                        className="bg-white/10 text-white px-3 py-2 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none w-24" 
+                        value={tmp} 
+                        onChange={e=>setTmp(e.target.value)} 
+                      />
+                    </td>
+                    <td className="px-4 py-3">
+                      <button 
+                        onClick={()=>submitInline(p.key, tmp)} 
+                        className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium transition-colors"
+                      >
+                        Kaydet
+                      </button>
                     </td>
                   </tr>
                 )
