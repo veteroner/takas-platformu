@@ -66,4 +66,27 @@ ORDER BY ordinal_position;
 -- SELECT * FROM get_unread_message_count('YOUR-USER-ID');
 -- SELECT * FROM get_unread_by_match('YOUR-USER-ID');
 
-SELECT '✅ Okunmamış mesaj fonksiyonları başarıyla güncellendi!' as status;
+
+-- 5️⃣ Trigger düzeltmeleri (eğer read_at trigger'ı varsa kaldır)
+-- Eski trigger'ı temizle
+DROP TRIGGER IF EXISTS set_message_read_time ON public.messages;
+DROP FUNCTION IF EXISTS public.update_message_read_time();
+
+-- Yeni trigger: read boolean değiştiğinde updated_at'ı güncelle
+CREATE OR REPLACE FUNCTION public.update_message_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.read != OLD.read THEN
+    NEW.updated_at = NOW();
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_message_read_timestamp
+  BEFORE UPDATE ON public.messages
+  FOR EACH ROW
+  EXECUTE FUNCTION public.update_message_timestamp();
+
+
+SELECT '✅ Okunmamış mesaj fonksiyonları ve trigger başarıyla güncellendi!' as status;

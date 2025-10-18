@@ -319,6 +319,19 @@ export default function ChatPage() {
         {messages.map((msg) => {
           const isMine = msg.sender_id === user?.id
           
+          // Mesaj durumu: Gönderildi / Görüldü
+          const getMessageStatus = () => {
+            if (!isMine) return null // Karşı tarafın mesajlarında gösterme
+            
+            if (msg.read_at) {
+              return <span className="ml-1" title="Görüldü">✓✓</span> // Görüldü (mavi tick)
+            } else if (msg.read) {
+              return <span className="ml-1" title="İletildi">✓✓</span> // İletildi (gri tick)
+            } else {
+              return <span className="ml-1" title="Gönderildi">✓</span> // Gönderildi (tek tick)
+            }
+          }
+          
           return (
             <div key={msg.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-[70%] rounded-2xl px-4 py-2 ${
@@ -327,9 +340,10 @@ export default function ChatPage() {
                   : 'bg-white/70 backdrop-blur-sm border border-white/20 text-gray-900'
               }`}>
                 <p className="text-sm">{msg.content}</p>
-                <p className={`text-xs mt-1 ${isMine ? 'text-white/70' : 'text-gray-500'}`}>
-                  {new Date(msg.created_at).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}
-                </p>
+                <div className={`flex items-center justify-end gap-1 text-xs mt-1 ${isMine ? 'text-white/70' : 'text-gray-500'}`}>
+                  <span>{new Date(msg.created_at).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</span>
+                  {getMessageStatus()}
+                </div>
               </div>
             </div>
           )
