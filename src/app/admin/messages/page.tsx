@@ -64,18 +64,32 @@ export default function AdminMessagesPage() {
     setRows(prev => prev.filter(x => x.id !== id))
   }
 
-  if (loading) return <div className="p-6">Yükleniyor...</div>
-  if (error) return <div className="p-6 text-red-400">{error}</div>
+  if (loading) return (
+    <div className="flex items-center justify-center py-12">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500"></div>
+    </div>
+  )
+  if (error) return (
+    <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-6 text-red-400">
+      <h3 className="font-semibold mb-2">Hata</h3>
+      <p>{error}</p>
+    </div>
+  )
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Mesajlar</h1>
-        <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Ara..." className="bg-white/10 px-3 py-2 rounded" />
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-white">Mesajlar</h1>
+        <input 
+          value={query} 
+          onChange={e=>setQuery(e.target.value)} 
+          placeholder="Ara..." 
+          className="bg-white/10 text-white px-4 py-3 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-400" 
+        />
       </div>
-      <div className="overflow-auto rounded-xl border border-white/10">
+      <div className="overflow-auto rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl">
         <table className="min-w-full text-sm">
-          <thead className="bg-white/5">
+          <thead className="bg-white/10">
             <tr>
               <Th>İçerik</Th>
               <Th>Gönderen</Th>
@@ -84,15 +98,20 @@ export default function AdminMessagesPage() {
               <Th>Eylem</Th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-white/10">
             {filtered.map(m => (
-              <tr key={m.id} className="border-t border-white/10">
+              <tr key={m.id} className="hover:bg-white/5 transition-colors">
                 <Td className="max-w-xl truncate"><div title={m.content}>{m.content}</div></Td>
                 <Td className="font-mono">{m.sender_id}</Td>
                 <Td className="font-mono">{m.receiver_id}</Td>
                 <Td>{new Date(m.created_at).toLocaleString('tr-TR')}</Td>
                 <Td>
-                  <button onClick={()=>remove(m.id)} className="px-2 py-1 rounded bg-red-600/80 hover:bg-red-600 text-white">Sil</button>
+                  <button 
+                    onClick={()=>remove(m.id)} 
+                    className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-medium transition-colors"
+                  >
+                    Sil
+                  </button>
                 </Td>
               </tr>
             ))}
@@ -103,7 +122,7 @@ export default function AdminMessagesPage() {
   )
 }
 
-function Th({ children }: { children: React.ReactNode }) { return <th className="text-left font-medium px-3 py-2">{children}</th> }
-function Td({ children, className }: { children: React.ReactNode; className?: string }) { return <td className={`px-3 py-2 align-top ${className||''}`}>{children}</td> }
+function Th({ children }: { children: React.ReactNode }) { return <th className="text-left font-semibold px-4 py-3 text-white">{children}</th> }
+function Td({ children, className }: { children: React.ReactNode; className?: string }) { return <td className={`px-4 py-3 align-top text-white ${className||''}`}>{children}</td> }
 
 

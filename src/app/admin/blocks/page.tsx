@@ -137,17 +137,17 @@ export default function AdminBlocksPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Engellemeler</h1>
+        <h1 className="text-3xl font-bold text-white">Engellemeler</h1>
         <button
           onClick={loadData}
-          className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600"
+          className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:shadow-lg hover:shadow-pink-500/50 font-medium transition-all"
         >
           Yenile
         </button>
       </div>
 
       {error && (
-        <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-lg">
+        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg">
           {error}
         </div>
       )}
@@ -180,15 +180,15 @@ export default function AdminBlocksPage() {
 
       {/* Search */}
       <div>
-        <label className="block text-sm font-medium mb-2">Arama</label>
+        <label className="block text-sm font-medium mb-2 text-white">Arama</label>
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 opacity-50" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="İsim veya sebep ara..."
-            className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-lg"
+            className="w-full pl-10 pr-4 py-3 bg-white/10 text-white border border-white/20 rounded-lg focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-400"
           />
         </div>
       </div>
@@ -196,7 +196,7 @@ export default function AdminBlocksPage() {
       {/* Blocks List */}
       <div className="space-y-3">
         {filteredBlocks.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-white bg-white/5 rounded-2xl border border-white/10">
             Engelleme bulunamadı
           </div>
         ) : (
@@ -219,12 +219,12 @@ function StatCard({ label, value, icon }: {
   icon: React.ReactNode
 }) {
   return (
-    <div className="p-4 rounded-lg border bg-white/5 border-white/10">
-      <div className="flex items-center gap-2 mb-2 opacity-80">
+    <div className="p-4 rounded-lg border bg-white/5 backdrop-blur-xl border-white/10">
+      <div className="flex items-center gap-2 mb-2 text-white">
         {icon}
         <span className="text-sm">{label}</span>
       </div>
-      <div className="text-2xl font-bold">{value}</div>
+      <div className="text-2xl font-bold text-white">{value}</div>
     </div>
   )
 }
@@ -236,16 +236,16 @@ function BlockCard({ block, onUnblock }: {
   const [showDetails, setShowDetails] = useState(false)
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-lg p-4">
+    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
             <Ban className="w-4 h-4 text-red-400" />
-            <span className="font-medium">{block.blocker_name}</span>
-            <span className="opacity-60">→</span>
-            <span className="font-medium">{block.blocked_name}</span>
+            <span className="font-medium text-white">{block.blocker_name}</span>
+            <span className="text-white/60">→</span>
+            <span className="font-medium text-white">{block.blocked_name}</span>
           </div>
-          <p className="text-xs opacity-60">
+          <p className="text-xs text-white/60">
             {new Date(block.created_at).toLocaleString('tr-TR')}
           </p>
         </div>
@@ -253,13 +253,13 @@ function BlockCard({ block, onUnblock }: {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowDetails(!showDetails)}
-            className="px-3 py-1 text-sm bg-white/5 hover:bg-white/10 rounded"
+            className="px-4 py-2 text-sm bg-white/10 hover:bg-white/20 text-white font-medium rounded-lg transition-colors"
           >
             {showDetails ? 'Gizle' : 'Detay'}
           </button>
           <button
             onClick={() => onUnblock(block.id)}
-            className="p-2 text-red-400 hover:bg-red-500/10 rounded"
+            className="p-2 text-red-400 hover:bg-red-500/10 rounded-lg"
             title="Engeli Kaldır"
           >
             <Trash2 className="w-4 h-4" />
@@ -268,9 +268,9 @@ function BlockCard({ block, onUnblock }: {
       </div>
 
       {showDetails && block.reason && (
-        <div className="mt-4 pt-4 border-t border-white/10">
-          <h4 className="text-sm font-medium mb-2">Engelleme Sebebi:</h4>
-          <p className="text-sm opacity-80 bg-white/5 p-3 rounded">
+        <div className="mt-4 pt-4 border-t border-white/20">
+          <h4 className="text-sm font-semibold mb-2 text-white">Engelleme Sebebi:</h4>
+          <p className="text-sm text-white bg-white/5 p-4 rounded-lg border border-white/10">
             {block.reason}
           </p>
         </div>
