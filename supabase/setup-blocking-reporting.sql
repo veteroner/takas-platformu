@@ -240,19 +240,34 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
   RETURN QUERY
+  WITH report_counts AS (
+    SELECT 
+      COUNT(*)::BIGINT as total,
+      COUNT(*) FILTER (WHERE status = 'pending')::BIGINT as pending,
+      COUNT(*) FILTER (WHERE status = 'investigating')::BIGINT as investigating,
+      COUNT(*) FILTER (WHERE status = 'resolved')::BIGINT as resolved,
+      COUNT(*) FILTER (WHERE status = 'dismissed')::BIGINT as dismissed
+    FROM public.user_reports
+    WHERE created_at >= NOW() - (p_days || ' days')::INTERVAL
+  ),
+  type_counts AS (
+    SELECT jsonb_object_agg(report_type, type_count) as types
+    FROM (
+      SELECT report_type, COUNT(*)::BIGINT as type_count
+      FROM public.user_reports
+      WHERE created_at >= NOW() - (p_days || ' days')::INTERVAL
+      GROUP BY report_type
+    ) t
+  )
   SELECT 
-    COUNT(*)::BIGINT as total_reports,
-    COUNT(*) FILTER (WHERE status = 'pending')::BIGINT as pending_reports,
-    COUNT(*) FILTER (WHERE status = 'investigating')::BIGINT as investigating_reports,
-    COUNT(*) FILTER (WHERE status = 'resolved')::BIGINT as resolved_reports,
-    COUNT(*) FILTER (WHERE status = 'dismissed')::BIGINT as dismissed_reports,
-    jsonb_object_agg(
-      report_type, 
-      COUNT(*)
-    ) FILTER (WHERE report_type IS NOT NULL) as by_type
-  FROM public.user_reports
-  WHERE created_at >= NOW() - (p_days || ' days')::INTERVAL
-  GROUP BY TRUE;
+    COALESCE(rc.total, 0),
+    COALESCE(rc.pending, 0),
+    COALESCE(rc.investigating, 0),
+    COALESCE(rc.resolved, 0),
+    COALESCE(rc.dismissed, 0),
+    COALESCE(tc.types, '{}'::jsonb)
+  FROM report_counts rc
+  CROSS JOIN type_counts tc;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 

@@ -26,7 +26,7 @@ interface Stats {
   investigating: number
   resolved: number
   dismissed: number
-  by_type: Record<ReportType, number>
+  by_type: Partial<Record<ReportType, number>>
 }
 
 export default function AdminReportsPage() {
@@ -58,10 +58,34 @@ export default function AdminReportsPage() {
 
       // Get statistics
       const { data: statsData, error: statsError } = await supabase
-        .rpc('get_report_statistics')
+        .rpc('get_report_statistics', { p_days: 30 })
 
-      if (statsError) throw statsError
-      setStats(statsData)
+      if (statsError) {
+        console.error('Stats error:', statsError)
+        throw statsError
+      }
+      
+      // Function returns single row, not array
+      if (statsData && statsData.length > 0) {
+        const row = statsData[0]
+        setStats({
+          total: Number(row.total_reports || 0),
+          pending: Number(row.pending_reports || 0),
+          investigating: Number(row.investigating_reports || 0),
+          resolved: Number(row.resolved_reports || 0),
+          dismissed: Number(row.dismissed_reports || 0),
+          by_type: row.by_type || {}
+        })
+      } else {
+        setStats({
+          total: 0,
+          pending: 0,
+          investigating: 0,
+          resolved: 0,
+          dismissed: 0,
+          by_type: {}
+        })
+      }
 
       // Get reports with user details
       const { data: reportsData, error: reportsError } = await supabase
