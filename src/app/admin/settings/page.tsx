@@ -7,6 +7,28 @@ import { Bell, Settings, Shield, Database, Mail, Smartphone, Globe, Zap } from '
 type KV = { key: string; value: string }
 type TabType = 'general' | 'notifications' | 'security' | 'system' | 'advanced'
 
+interface SystemStats {
+  totalUsers: number
+  activeUsers7d: number
+  totalItems: number
+  activeItems: number
+  totalMatches: number
+  totalMessages: number
+  totalNotifications: number
+  fcmTokensCount: number
+  storageUsedMB: number
+  storageQuotaMB: number
+}
+
+interface AppSettings {
+  appName: string
+  supportEmail: string
+  minIosVersion: string
+  minAndroidVersion: string
+  pushEnabled: boolean
+  maintenanceMode: boolean
+}
+
 export default function AdminSettingsPage() {
   const [activeTab, setActiveTab] = useState<TabType>('general')
   const [rows, setRows] = useState<KV[]>([])
@@ -21,6 +43,17 @@ export default function AdminSettingsPage() {
   const [notificationType, setNotificationType] = useState<'all' | 'active' | 'specific'>('all')
   const [targetUserId, setTargetUserId] = useState('')
   const [sendingNotification, setSendingNotification] = useState(false)
+  
+  // System stats
+  const [systemStats, setSystemStats] = useState<SystemStats | null>(null)
+  const [appSettings, setAppSettings] = useState<AppSettings | null>(null)
+  const [statsLoading, setStatsLoading] = useState(false)
+  const [securityStats, setSecurityStats] = useState({
+    blockedUsers: 0,
+    activeReports: 0,
+    bannedUsers: 0,
+    illegalAttempts: 0
+  })
 
   const getAuthHeaders = async (): Promise<Record<string, string>> => {
     const { data: { session } } = await supabase.auth.getSession()
@@ -47,6 +80,105 @@ export default function AdminSettingsPage() {
     }
     run()
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Load system stats
+  useEffect(() => {
+    const loadStats = async () => {
+      setStatsLoading(true)
+      try {
+        // Platform stats
+        const { data: stats } = await supabase.rpc('get_platform_stats')
+        
+        // FCM tokens count
+        const { count: fcmCount } = await supabase
+          .from('fcm_tokens')
+          .select('*', { count: 'exact', head: true })
+          .eq('is_active', true)
+        
+        // Notifications count
+        const { count: notifCount } = await supabase
+          .from('notifications')
+          .select('*', { count: 'exact', head: true })
+        
+        // Storage usage (approximate - you'll need real implementation)
+        const { data: storageData } = await supabase.storage.getBucket('item-images')
+        
+        setSystemStats({
+          totalUsers: stats?.total_users || 0,
+          activeUsers7d: stats?.active_users_7d || 0,
+          totalItems: stats?.total_items || 0,
+          activeItems: stats?.active_items || 0,
+          totalMatches: stats?.total_matches || 0,
+          totalMessages: stats?.total_messages || 0,
+          totalNotifications: notifCount || 0,
+          fcmTokensCount: fcmCount || 0,
+          storageUsedMB: 2400, // Placeholder - implement real storage check
+          storageQuotaMB: 102400, // 100 GB
+        })
+        
+        // Load app settings from app_settings table
+        const { data: settingsData } = await supabase
+          .from('app_settings')
+          .select('key, value')
+          .in('key', [
+            'app_name',
+            'support_email',
+            'min_ios_version',
+            'min_android_version',
+            'push_enabled',
+            'maintenance_mode'
+          ])
+        
+        const settingsMap = settingsData?.reduce((acc, { key, value }) => {
+          acc[key] = value
+          return acc
+        }, {} as Record<string, string>) || {}
+        
+        setAppSettings({
+          appName: settingsMap.app_name || 'TakasYap',
+          supportEmail: settingsMap.support_email || 'support@takasyap.com',
+          minIosVersion: settingsMap.min_ios_version || '1.0.0',
+          minAndroidVersion: settingsMap.min_android_version || '1.0.0',
+          pushEnabled: settingsMap.push_enabled === 'true',
+          maintenanceMode: settingsMap.maintenance_mode === 'true',
+        })
+        
+        // Load security stats
+        const { count: blocksCount } = await supabase
+          .from('user_blocks')
+          .select('*', { count: 'exact', head: true })
+        
+        const { count: reportsCount } = await supabase
+          .from('user_reports')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'pending')
+        
+        const { count: bannedCount } = await supabase
+          .from('user_chat_bans')
+          .select('*', { count: 'exact', head: true })
+          .gt('banned_until', new Date().toISOString())
+        
+        const { count: illegalCount } = await supabase
+          .from('illegal_product_attempts')
+          .select('*', { count: 'exact', head: true })
+          .gte('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
+        
+        setSecurityStats({
+          blockedUsers: blocksCount || 0,
+          activeReports: reportsCount || 0,
+          bannedUsers: bannedCount || 0,
+          illegalAttempts: illegalCount || 0
+        })
+        
+      } catch (e: any) {
+        console.error('Stats loading error:', e)
+      } finally {
+        setStatsLoading(false)
+      }
+    }
+    
+    loadStats()
   }, [])
 
   const startEdit = (kv: KV) => {
@@ -192,7 +324,13 @@ export default function AdminSettingsPage() {
 
       {/* Content */}
       <div className="space-y-6">
-        {activeTab === 'general' && <GeneralSettings />}
+        {activeTab === 'general' && (
+          <GeneralSettings 
+            settings={appSettings}
+            stats={systemStats}
+            loading={statsLoading}
+          />
+        )}
         {activeTab === 'notifications' && (
           <NotificationPanel
             title={notificationTitle}
@@ -207,8 +345,18 @@ export default function AdminSettingsPage() {
             onSend={sendNotification}
           />
         )}
-        {activeTab === 'security' && <SecuritySettings />}
-        {activeTab === 'system' && <SystemSettings />}
+        {activeTab === 'security' && (
+          <SecuritySettings 
+            stats={securityStats}
+            loading={statsLoading}
+          />
+        )}
+        {activeTab === 'system' && (
+          <SystemSettings 
+            stats={systemStats}
+            loading={statsLoading}
+          />
+        )}
         {activeTab === 'advanced' && (
           <AdvancedSettings 
             rows={rows} 
@@ -279,34 +427,64 @@ function TabButton({
 }
 
 // General Settings Component
-function GeneralSettings() {
+function GeneralSettings({ 
+  settings, 
+  stats, 
+  loading 
+}: { 
+  settings: AppSettings | null
+  stats: SystemStats | null
+  loading: boolean
+}) {
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500"></div>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-4">
       <SettingCard 
         icon={<Globe className="w-5 h-5" />}
         title="Uygulama Adı"
-        description="TakasYap"
+        description={settings?.appName || 'TakasYap'}
         action={<EditButton />}
       />
       <SettingCard 
         icon={<Mail className="w-5 h-5" />}
         title="Destek Email"
-        description="support@takasyap.com"
+        description={settings?.supportEmail || 'support@takasyap.com'}
         action={<EditButton />}
       />
       <SettingCard 
         icon={<Smartphone className="w-5 h-5" />}
         title="Minimum App Versiyonu"
-        description="iOS: 1.0.0 / Android: 1.0.0"
+        description={`iOS: ${settings?.minIosVersion || '1.0.0'} / Android: ${settings?.minAndroidVersion || '1.0.0'}`}
         action={<EditButton />}
       />
       <SettingCard 
         icon={<Bell className="w-5 h-5" />}
         title="Push Bildirimleri"
-        description="Aktif - 2,458 cihaz kayıtlı"
+        description={`${settings?.pushEnabled ? 'Aktif' : 'Pasif'} - ${stats?.fcmTokensCount?.toLocaleString('tr-TR') || 0} cihaz kayıtlı`}
         action={
-          <span className="px-3 py-1 rounded-lg bg-green-500/20 text-green-400 text-sm font-medium">
-            Aktif
+          <span className={`px-3 py-1 rounded-lg text-sm font-medium ${
+            settings?.pushEnabled 
+              ? 'bg-green-500/20 text-green-400' 
+              : 'bg-red-500/20 text-red-400'
+          }`}>
+            {settings?.pushEnabled ? '🟢 Aktif' : '🔴 Pasif'}
+          </span>
+        }
+      />
+      <SettingCard 
+        icon={<Database className="w-5 h-5" />}
+        title="Toplam Kullanıcı"
+        description={`${stats?.totalUsers?.toLocaleString('tr-TR') || 0} kayıtlı kullanıcı (${stats?.activeUsers7d?.toLocaleString('tr-TR') || 0} aktif son 7 gün)`}
+        action={
+          <span className="px-3 py-1 rounded-lg bg-blue-500/20 text-blue-400 text-sm font-medium">
+            {stats?.totalUsers || 0}
           </span>
         }
       />
@@ -454,46 +632,89 @@ function NotificationPanel({
 }
 
 // Security Settings Component
-function SecuritySettings() {
+function SecuritySettings({ 
+  stats, 
+  loading 
+}: { 
+  stats: {
+    blockedUsers: number
+    activeReports: number
+    bannedUsers: number
+    illegalAttempts: number
+  }
+  loading: boolean
+}) {
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500"></div>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-4">
       <SettingCard 
         icon={<Shield className="w-5 h-5" />}
         title="Küfür Filtresi"
-        description="Otomatik küfür ve argo kelime engelleme"
+        description="Otomatik küfür ve argo kelime engelleme sistemi"
         action={
           <span className="px-3 py-1 rounded-lg bg-green-500/20 text-green-400 text-sm font-medium">
-            Aktif
+            ✅ Aktif
           </span>
         }
       />
       <SettingCard 
         icon={<Shield className="w-5 h-5" />}
         title="Yasadışı İçerik Filtresi"
-        description="Uyuşturucu, silah, sahte ürün kontrolü"
+        description={`Uyuşturucu, silah, sahte ürün kontrolü (Son 30 gün: ${stats.illegalAttempts} engelleme)`}
         action={
           <span className="px-3 py-1 rounded-lg bg-green-500/20 text-green-400 text-sm font-medium">
-            Aktif
+            ✅ Aktif
           </span>
         }
       />
       <SettingCard 
         icon={<Shield className="w-5 h-5" />}
-        title="Otomatik Engelleme"
-        description="5+ şikayet alan kullanıcılar otomatik engellenir"
+        title="Kullanıcı Engelleme Sistemi"
+        description={`Toplam ${stats.blockedUsers.toLocaleString('tr-TR')} engelleme kaydı`}
         action={
-          <span className="px-3 py-1 rounded-lg bg-yellow-500/20 text-yellow-400 text-sm font-medium">
-            Yapılandırılmamış
+          <span className="px-3 py-1 rounded-lg bg-blue-500/20 text-blue-400 text-sm font-medium">
+            📊 {stats.blockedUsers}
+          </span>
+        }
+      />
+      <SettingCard 
+        icon={<Shield className="w-5 h-5" />}
+        title="Aktif Şikayetler"
+        description={`${stats.activeReports.toLocaleString('tr-TR')} bekleyen şikayet`}
+        action={
+          <span className={`px-3 py-1 rounded-lg text-sm font-medium ${
+            stats.activeReports > 0 
+              ? 'bg-yellow-500/20 text-yellow-400' 
+              : 'bg-green-500/20 text-green-400'
+          }`}>
+            {stats.activeReports > 0 ? '⚠️ ' : '✅ '}{stats.activeReports}
+          </span>
+        }
+      />
+      <SettingCard 
+        icon={<Shield className="w-5 h-5" />}
+        title="Yasaklı Kullanıcılar"
+        description={`${stats.bannedUsers.toLocaleString('tr-TR')} kullanıcı geçici olarak yasaklı`}
+        action={
+          <span className="px-3 py-1 rounded-lg bg-red-500/20 text-red-400 text-sm font-medium">
+            🚫 {stats.bannedUsers}
           </span>
         }
       />
       <SettingCard 
         icon={<Shield className="w-5 h-5" />}
         title="RLS (Row Level Security)"
-        description="Veritabanı satır seviyesi güvenlik"
+        description="Veritabanı satır seviyesi güvenlik - PostgreSQL Policy Based"
         action={
           <span className="px-3 py-1 rounded-lg bg-green-500/20 text-green-400 text-sm font-medium">
-            Aktif
+            🔒 Aktif
           </span>
         }
       />
@@ -502,7 +723,25 @@ function SecuritySettings() {
 }
 
 // System Settings Component
-function SystemSettings() {
+function SystemSettings({ 
+  stats, 
+  loading 
+}: { 
+  stats: SystemStats | null
+  loading: boolean
+}) {
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500"></div>
+      </div>
+    )
+  }
+
+  const storagePercent = stats 
+    ? ((stats.storageUsedMB / stats.storageQuotaMB) * 100).toFixed(1)
+    : '0.0'
+
   return (
     <div className="space-y-4">
       <SettingCard 
@@ -518,29 +757,50 @@ function SystemSettings() {
       <SettingCard 
         icon={<Database className="w-5 h-5" />}
         title="Storage"
-        description="Supabase Storage - 2.4 GB / 100 GB kullanılıyor"
+        description={`Supabase Storage - ${(stats?.storageUsedMB || 0) / 1024} GB / ${(stats?.storageQuotaMB || 0) / 1024} GB kullanılıyor`}
         action={
           <div className="text-right">
-            <div className="text-sm font-medium text-white">2.4%</div>
+            <div className="text-sm font-medium text-white">{storagePercent}%</div>
             <div className="w-32 h-2 bg-white/10 rounded-full overflow-hidden mt-1">
-              <div className="h-full bg-gradient-to-r from-green-500 to-emerald-500" style={{ width: '2.4%' }}></div>
+              <div 
+                className={`h-full bg-gradient-to-r ${
+                  Number(storagePercent) > 80 
+                    ? 'from-red-500 to-orange-500' 
+                    : 'from-green-500 to-emerald-500'
+                }`}
+                style={{ width: `${storagePercent}%` }}
+              ></div>
             </div>
           </div>
         }
       />
       <SettingCard 
         icon={<Zap className="w-5 h-5" />}
-        title="API Rate Limit"
-        description="100 istek/dakika per kullanıcı"
-        action={<EditButton />}
+        title="Platform İstatistikleri"
+        description={`${stats?.totalItems?.toLocaleString('tr-TR') || 0} eşya, ${stats?.totalMatches?.toLocaleString('tr-TR') || 0} eşleşme, ${stats?.totalMessages?.toLocaleString('tr-TR') || 0} mesaj`}
+        action={
+          <span className="px-3 py-1 rounded-lg bg-purple-500/20 text-purple-400 text-sm font-medium">
+            📊 Aktif
+          </span>
+        }
       />
       <SettingCard 
-        icon={<Globe className="w-5 h-5" />}
-        title="CDN"
-        description="Cloudflare - Global dağıtım"
+        icon={<Bell className="w-5 h-5" />}
+        title="Bildirim Sistemi"
+        description={`Toplam ${stats?.totalNotifications?.toLocaleString('tr-TR') || 0} bildirim gönderildi`}
         action={
           <span className="px-3 py-1 rounded-lg bg-green-500/20 text-green-400 text-sm font-medium">
             Aktif
+          </span>
+        }
+      />
+      <SettingCard 
+        icon={<Globe className="w-5 h-5" />}
+        title="CDN & Hosting"
+        description="Netlify + Cloudflare - Global dağıtım"
+        action={
+          <span className="px-3 py-1 rounded-lg bg-green-500/20 text-green-400 text-sm font-medium">
+            🌍 Online
           </span>
         }
       />
