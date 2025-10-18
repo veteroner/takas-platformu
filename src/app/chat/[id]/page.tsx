@@ -241,8 +241,9 @@ export default function ChatPage() {
 
       // ✅ Mesaj temiz - gönder
       // Optimistic update
+      const tempId = `temp-${Date.now()}`
       const tempMessage = {
-        id: `temp-${Date.now()}`,
+        id: tempId,
         match_id: matchId,
         sender_id: user.id,
         receiver_id: otherUser.id,
@@ -256,9 +257,14 @@ export default function ChatPage() {
 
       const sent = await sendMessage(matchId, user.id, otherUser.id, messageText)
       
-      if (!sent) {
-        // Hata olursa temp mesajı kaldır
-        setMessages(prev => prev.filter(m => m.id !== tempMessage.id))
+      if (sent) {
+        // ✅ Başarılı - temp mesajı kaldır (real-time subscription gerçek mesajı ekleyecek)
+        setTimeout(() => {
+          setMessages(prev => prev.filter(m => m.id !== tempId))
+        }, 500) // 500ms bekle ki real-time mesaj gelsin
+      } else {
+        // ❌ Hata - temp mesajı kaldır
+        setMessages(prev => prev.filter(m => m.id !== tempId))
         setNewMessage(messageText)
         setFilterWarning('Mesaj gönderilemedi, tekrar deneyin')
       }
