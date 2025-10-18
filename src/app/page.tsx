@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import SwipeStack from '@/components/SwipeStack'
-import { Item } from '@/types'
+import { Item, ItemCondition } from '@/types'
 import { Heart, MessageCircle, User, Settings, LogIn, Plus } from 'lucide-react'
 import { UnreadBadge } from '@/components/UnreadBadge'
 import Link from 'next/link'
@@ -21,6 +21,7 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true)
   const [likedItems, setLikedItems] = useState<Item[]>([])
   const [passedItems, setPassedItems] = useState<Item[]>([])
+  const [viewMode, setViewMode] = useState<'swipe' | 'grid'>('swipe') // Yeni: Görünüm modu
   
   // Interstitial reklam hook'u
   const interstitialAd = useInterstitialAd()
@@ -210,26 +211,168 @@ export default function HomePage() {
 
       {/* Main Content */}
       <main className="max-w-md mx-auto p-4 pt-6">
-        {/* Instructions */}
+        {/* Instructions & View Toggle */}
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">
             Takas yapmaya hazır mısın?
           </h2>
-          <p className="text-gray-600">
-            Beğendiğin ürünleri sağa, beğenmediklerini sola kaydır
+          <p className="text-gray-600 mb-4">
+            {viewMode === 'swipe' 
+              ? 'Beğendiğin ürünleri sağa, beğenmediklerini sola kaydır'
+              : 'Tüm ürünlere göz atın ve beğendiklerinizi seçin'
+            }
           </p>
+          
+          {/* View Mode Toggle */}
+          <div className="flex items-center justify-center gap-2 bg-white/70 backdrop-blur-sm rounded-full p-1 w-fit mx-auto border border-white/20">
+            <button
+              onClick={() => setViewMode('swipe')}
+              className={`px-6 py-2 rounded-full transition-all ${
+                viewMode === 'swipe'
+                  ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg'
+                  : 'text-gray-600 hover:text-gray-800'
+              }`}
+            >
+              Kaydır
+            </button>
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`px-6 py-2 rounded-full transition-all ${
+                viewMode === 'grid'
+                  ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg'
+                  : 'text-gray-600 hover:text-gray-800'
+              }`}
+            >
+              Izgara
+            </button>
+          </div>
         </div>
 
-        {/* Swipe Stack */}
-        <div className="h-[500px] md:h-[600px] mb-6">
-          <SwipeStack
-            items={items}
-            onSwipe={handleSwipe}
-            onItemClick={handleItemClick}
-            isLoading={isLoading}
-            className="w-full h-full"
-          />
-        </div>
+        {/* Swipe Stack View */}
+        {viewMode === 'swipe' && (
+          <div className="h-[500px] md:h-[600px] mb-6">
+            <SwipeStack
+              items={items}
+              onSwipe={handleSwipe}
+              onItemClick={handleItemClick}
+              isLoading={isLoading}
+              className="w-full h-full"
+            />
+          </div>
+        )}
+
+        {/* Grid View */}
+        {viewMode === 'grid' && (
+          <div className="mb-6">
+            {isLoading ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+                <p className="text-gray-600">Ürünler yükleniyor...</p>
+              </div>
+            ) : items.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-600 mb-4">Henüz ürün yok</p>
+                {user && (
+                  <Link
+                    href="/upload"
+                    className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg"
+                  >
+                    <Plus size={20} />
+                    İlk Ürünü Ekle
+                  </Link>
+                )}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-4">
+                {items.map((item) => (
+                  <div
+                    key={item.id}
+                    className="bg-white/70 backdrop-blur-sm rounded-xl overflow-hidden border border-white/20 hover:shadow-xl transition-all duration-300 cursor-pointer group"
+                    onClick={() => handleItemClick(item)}
+                  >
+                    {/* Image */}
+                    <div className="relative h-48 bg-gradient-to-br from-pink-100 to-purple-100">
+                      {item.images && item.images.length > 0 ? (
+                        <Image
+                          src={item.images[0]}
+                          alt={item.title}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Heart className="w-16 h-16 text-pink-300" />
+                        </div>
+                      )}
+                      {/* Category Badge */}
+                      <div className="absolute top-2 left-2">
+                        <span className="bg-white/90 backdrop-blur-sm text-xs font-medium px-3 py-1 rounded-full text-gray-700 border border-white/20">
+                          {item.category}
+                        </span>
+                      </div>
+                      {/* Condition Badge */}
+                      <div className="absolute top-2 right-2">
+                        <span className={`text-xs font-medium px-3 py-1 rounded-full border ${
+                          item.condition === ItemCondition.LIKE_NEW 
+                            ? 'bg-blue-500/90 text-white border-blue-400'
+                            : item.condition === ItemCondition.GOOD
+                            ? 'bg-green-500/90 text-white border-green-400'
+                            : 'bg-gray-500/90 text-white border-gray-400'
+                        }`}>
+                          {item.condition === ItemCondition.LIKE_NEW ? 'Sıfır Gibi' : 
+                           item.condition === ItemCondition.GOOD ? 'İyi' : 
+                           item.condition === ItemCondition.FAIR ? 'Normal' : 'Kullanılmış'}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Info */}
+                    <div className="p-3">
+                      <h3 className="font-semibold text-gray-800 mb-1 line-clamp-1">
+                        {item.title}
+                      </h3>
+                      <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+                        {item.description}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-500">
+                          📍 {item.location.city}
+                        </span>
+                        <span className="text-sm font-semibold text-green-600">
+                          ≈₺{item.estimatedValue}
+                        </span>
+                      </div>
+                      
+                      {/* Action Buttons */}
+                      {user && (
+                        <div className="flex gap-2 mt-3">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleSwipe('left', item)
+                            }}
+                            className="flex-1 py-2 rounded-lg bg-red-100 hover:bg-red-200 transition-colors"
+                          >
+                            <span className="text-2xl">✕</span>
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleSwipe('right', item)
+                            }}
+                            className="flex-1 py-2 rounded-lg bg-green-100 hover:bg-green-200 transition-colors"
+                          >
+                            <span className="text-2xl">♥</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Banner Reklam */}
         <BannerAd />
