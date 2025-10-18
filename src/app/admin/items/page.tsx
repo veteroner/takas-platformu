@@ -111,18 +111,32 @@ export default function AdminItemsPage() {
     setItems(prev => prev.filter(x => x.id !== id))
   }
 
-  if (loading) return <div className="p-6">Yükleniyor...</div>
-  if (error) return <div className="p-6 text-red-400">{error}</div>
+  if (loading) return (
+    <div className="flex items-center justify-center py-12">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500"></div>
+    </div>
+  )
+  if (error) return (
+    <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-6 text-red-400">
+      <h3 className="font-semibold mb-2">Hata</h3>
+      <p>{error}</p>
+    </div>
+  )
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Eşyalar</h1>
-        <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Ara..." className="bg-white/10 px-3 py-2 rounded" />
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-white">Eşyalar</h1>
+        <input 
+          value={query} 
+          onChange={e=>setQuery(e.target.value)} 
+          placeholder="Ara..." 
+          className="bg-white/10 text-white px-4 py-3 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-400" 
+        />
       </div>
-      <div className="overflow-auto rounded-xl border border-white/10">
+      <div className="overflow-auto rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl">
         <table className="min-w-full text-sm">
-          <thead className="bg-white/5">
+          <thead className="bg-white/10">
             <tr>
               <Th>Başlık</Th>
               <Th>Kategori</Th>
@@ -133,16 +147,20 @@ export default function AdminItemsPage() {
               <Th>Eylem</Th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-white/10">
             {filtered.map(i => (
-              <tr key={i.id} className="border-t border-white/10">
+              <tr key={i.id} className="hover:bg-white/5 transition-colors">
                 <Td>{i.title}</Td>
                 <Td>{i.category}</Td>
                 <Td>
-                  <select className="bg-white/10 px-2 py-1 rounded" value={i.status} onChange={e=>updateStatus(i, e.target.value as Item['status'])}>
-                    <option value="active">active</option>
-                    <option value="traded">traded</option>
-                    <option value="deleted">deleted</option>
+                  <select 
+                    className="bg-white/10 text-white px-3 py-2 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none" 
+                    value={i.status} 
+                    onChange={e=>updateStatus(i, e.target.value as Item['status'])}
+                  >
+                    <option value="active" className="bg-gray-800">active</option>
+                    <option value="traded" className="bg-gray-800">traded</option>
+                    <option value="deleted" className="bg-gray-800">deleted</option>
                   </select>
                 </Td>
                 <Td>{i.estimated_value ?? '-'}</Td>
@@ -150,8 +168,18 @@ export default function AdminItemsPage() {
                 <Td>{i.views}</Td>
                 <Td>
                   <div className="flex gap-2">
-                    <button onClick={()=>startEdit(i)} className="px-2 py-1 rounded bg-white/10 hover:bg-white/20">Düzenle</button>
-                    <button onClick={()=>remove(i.id)} className="px-2 py-1 rounded bg-red-600/80 hover:bg-red-600 text-white">Sil</button>
+                    <button 
+                      onClick={()=>startEdit(i)} 
+                      className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium transition-colors"
+                    >
+                      Düzenle
+                    </button>
+                    <button 
+                      onClick={()=>remove(i.id)} 
+                      className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-medium transition-colors"
+                    >
+                      Sil
+                    </button>
                   </div>
                 </Td>
               </tr>
@@ -161,34 +189,61 @@ export default function AdminItemsPage() {
       </div>
 
       {edit && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-6">
-          <div className="bg-neutral-900 rounded-xl border border-white/10 p-6 w-full max-w-lg">
-            <h2 className="text-xl font-semibold mb-4">Eşyayı Düzenle</h2>
-            <div className="grid gap-3">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-6 z-50">
+          <div className="bg-gray-900 rounded-2xl border border-white/10 p-6 w-full max-w-lg">
+            <h2 className="text-2xl font-bold mb-6 text-white">Eşyayı Düzenle</h2>
+            <div className="grid gap-4">
               <label className="text-sm">
-                <div className="mb-1">Başlık</div>
-                <input className="w-full bg-white/10 px-3 py-2 rounded" value={editData.title || ''} onChange={e=>setEditData(d=>({ ...d, title: e.target.value }))} />
+                <div className="mb-2 text-white font-medium">Başlık</div>
+                <input 
+                  className="w-full bg-white/10 text-white px-4 py-3 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20" 
+                  value={editData.title || ''} 
+                  onChange={e=>setEditData(d=>({ ...d, title: e.target.value }))} 
+                />
               </label>
               <label className="text-sm">
-                <div className="mb-1">Açıklama</div>
-                <textarea className="w-full bg-white/10 px-3 py-2 rounded" rows={4} value={editData.description || ''} onChange={e=>setEditData(d=>({ ...d, description: e.target.value }))} />
+                <div className="mb-2 text-white font-medium">Açıklama</div>
+                <textarea 
+                  className="w-full bg-white/10 text-white px-4 py-3 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20" 
+                  rows={4} 
+                  value={editData.description || ''} 
+                  onChange={e=>setEditData(d=>({ ...d, description: e.target.value }))} 
+                />
               </label>
               <label className="text-sm">
-                <div className="mb-1">Kategori</div>
-                <input className="w-full bg-white/10 px-3 py-2 rounded" value={editData.category || ''} onChange={e=>setEditData(d=>({ ...d, category: e.target.value }))} />
+                <div className="mb-2 text-white font-medium">Kategori</div>
+                <input 
+                  className="w-full bg-white/10 text-white px-4 py-3 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20" 
+                  value={editData.category || ''} 
+                  onChange={e=>setEditData(d=>({ ...d, category: e.target.value }))} 
+                />
               </label>
               <label className="text-sm">
-                <div className="mb-1">Durum</div>
-                <select className="w-full bg-white/10 px-3 py-2 rounded" value={editData.status || edit.status} onChange={e=>setEditData(d=>({ ...d, status: e.target.value as Item['status'] }))}>
-                  <option value="active">active</option>
-                  <option value="traded">traded</option>
-                  <option value="deleted">deleted</option>
+                <div className="mb-2 text-white font-medium">Durum</div>
+                <select 
+                  className="w-full bg-white/10 text-white px-4 py-3 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20" 
+                  value={editData.status || edit.status} 
+                  onChange={e=>setEditData(d=>({ ...d, status: e.target.value as Item['status'] }))}
+                >
+                  <option value="active" className="bg-gray-800">active</option>
+                  <option value="traded" className="bg-gray-800">traded</option>
+                  <option value="deleted" className="bg-gray-800">deleted</option>
                 </select>
               </label>
             </div>
-            <div className="flex gap-2 justify-end mt-4">
-              <button onClick={()=>setEdit(null)} className="px-3 py-2 rounded bg-white/10">İptal</button>
-              <button onClick={save} className="px-3 py-2 rounded bg-pink-500 text-white">Kaydet</button>
+            <div className="flex gap-3 justify-end mt-6">
+              <button 
+                onClick={()=>setEdit(null)} 
+                className="px-6 py-3 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium transition-colors"
+              >
+                İptal
+              </button>
+              <button 
+                onClick={save} 
+                className="px-6 py-3 rounded-lg bg-gradient-to-r from-pink-500 to-purple-600 hover:shadow-lg hover:shadow-pink-500/50 text-white font-medium transition-all"
+              >
+                Kaydet
+              </button>
             </div>
           </div>
         </div>
@@ -197,7 +252,7 @@ export default function AdminItemsPage() {
   )
 }
 
-function Th({ children }: { children: React.ReactNode }) { return <th className="text-left font-medium px-3 py-2">{children}</th> }
-function Td({ children }: { children: React.ReactNode }) { return <td className="px-3 py-2 align-top">{children}</td> }
+function Th({ children }: { children: React.ReactNode }) { return <th className="text-left font-semibold px-4 py-3 text-white">{children}</th> }
+function Td({ children }: { children: React.ReactNode }) { return <td className="px-4 py-3 align-top text-white">{children}</td> }
 
 

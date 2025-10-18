@@ -68,18 +68,32 @@ export default function AdminMatchesPage() {
     setRows(prev => prev.map(x => x.id === j.data.id ? j.data : x))
   }
 
-  if (loading) return <div className="p-6">Yükleniyor...</div>
-  if (error) return <div className="p-6 text-red-400">{error}</div>
+  if (loading) return (
+    <div className="flex items-center justify-center py-12">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500"></div>
+    </div>
+  )
+  if (error) return (
+    <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-6 text-red-400">
+      <h3 className="font-semibold mb-2">Hata</h3>
+      <p>{error}</p>
+    </div>
+  )
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Eşleşmeler</h1>
-        <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Ara..." className="bg-white/10 px-3 py-2 rounded" />
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-white">Eşleşmeler</h1>
+        <input 
+          value={query} 
+          onChange={e=>setQuery(e.target.value)} 
+          placeholder="Ara..." 
+          className="bg-white/10 text-white px-4 py-3 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-400" 
+        />
       </div>
-      <div className="overflow-auto rounded-xl border border-white/10">
+      <div className="overflow-auto rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl">
         <table className="min-w-full text-sm">
-          <thead className="bg-white/5">
+          <thead className="bg-white/10">
             <tr>
               <Th>ID</Th>
               <Th>Durum</Th>
@@ -87,16 +101,20 @@ export default function AdminMatchesPage() {
               <Th>Eylem</Th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-white/10">
             {filtered.map(m => (
-              <tr key={m.id} className="border-t border-white/10">
+              <tr key={m.id} className="hover:bg-white/5 transition-colors">
                 <Td className="font-mono">{m.id}</Td>
                 <Td>
-                  <select className="bg-white/10 px-2 py-1 rounded" value={m.status} onChange={e=>updateStatus(m, e.target.value as Match['status'])}>
-                    <option value="pending">pending</option>
-                    <option value="accepted">accepted</option>
-                    <option value="rejected">rejected</option>
-                    <option value="completed">completed</option>
+                  <select 
+                    className="bg-white/10 text-white px-3 py-2 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none" 
+                    value={m.status} 
+                    onChange={e=>updateStatus(m, e.target.value as Match['status'])}
+                  >
+                    <option value="pending" className="bg-gray-800">pending</option>
+                    <option value="accepted" className="bg-gray-800">accepted</option>
+                    <option value="rejected" className="bg-gray-800">rejected</option>
+                    <option value="completed" className="bg-gray-800">completed</option>
                   </select>
                 </Td>
                 <Td>{new Date(m.created_at).toLocaleString('tr-TR')}</Td>
@@ -110,7 +128,7 @@ export default function AdminMatchesPage() {
   )
 }
 
-function Th({ children }: { children: React.ReactNode }) { return <th className="text-left font-medium px-3 py-2">{children}</th> }
-function Td({ children, className }: { children: React.ReactNode; className?: string }) { return <td className={`px-3 py-2 align-top ${className||''}`}>{children}</td> }
+function Th({ children }: { children: React.ReactNode }) { return <th className="text-left font-semibold px-4 py-3 text-white">{children}</th> }
+function Td({ children, className }: { children: React.ReactNode; className?: string }) { return <td className={`px-4 py-3 align-top text-white ${className||''}`}>{children}</td> }
 
 
