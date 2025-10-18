@@ -21,7 +21,8 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true)
   const [likedItems, setLikedItems] = useState<Item[]>([])
   const [passedItems, setPassedItems] = useState<Item[]>([])
-  const [viewMode, setViewMode] = useState<'swipe' | 'grid'>('swipe') // Yeni: Görünüm modu
+  const [viewMode, setViewMode] = useState<'swipe' | 'grid'>('grid') // Varsayılan: Grid
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null) // Seçilen kategori
   
   // Interstitial reklam hook'u
   const interstitialAd = useInterstitialAd()
@@ -94,14 +95,31 @@ export default function HomePage() {
         tags: []
       }))
       
-      // Try to apply seeking preferences (local)
-      const prefs = await loadSeekingPreferencesAsync()
-      if (prefs && prefs.categories && prefs.categories.length > 0) {
-        const ranked = filterAndRank(convertedItems, prefs, 50)
-        setItems(ranked.map(r => r.item))
-      } else {
-        setItems(convertedItems)
-      }
+      // 🎯 Her kategoriden en az 1 ürün göster (Grid için optimize)
+      const itemsByCategory = new Map<string, Item[]>()
+      convertedItems.forEach(item => {
+        const category = item.category
+        if (!itemsByCategory.has(category)) {
+          itemsByCategory.set(category, [])
+        }
+        itemsByCategory.get(category)!.push(item)
+      })
+      
+      // Her kategoriden 1'er ürün al, sonra geri kalanları ekle
+      const diverseItems: Item[] = []
+      const remainingItems: Item[] = []
+      
+      itemsByCategory.forEach((items, category) => {
+        if (items.length > 0) {
+          diverseItems.push(items[0]) // İlk ürünü al
+          remainingItems.push(...items.slice(1)) // Geri kalanlar
+        }
+      })
+      
+      // Önce her kategoriden 1'er, sonra geri kalanlar (en az 8 ürün garantisi)
+      const finalItems = [...diverseItems, ...remainingItems].slice(0, Math.max(8, diverseItems.length + remainingItems.length))
+      
+      setItems(finalItems)
     } catch (error) {
       console.error('Error loading items:', error)
       setItems([]) // Empty array on error
@@ -146,8 +164,24 @@ export default function HomePage() {
   }
 
   const handleItemClick = (item: Item) => {
-    // Open item detail modal (implement later)
+    // Kategoriye göre filtrele ve swipe moduna geç
     console.log('Item clicked:', item)
+    setSelectedCategory(item.category)
+    setViewMode('swipe')
+    
+    // İlk sırada tıklanan ürün, sonra aynı kategoriden diğerleri
+    const categoryItems = items.filter(i => i.category === item.category)
+    const clickedIndex = categoryItems.findIndex(i => i.id === item.id)
+    
+    if (clickedIndex !== -1) {
+      // Tıklanan ürünü başa al
+      const reordered = [
+        categoryItems[clickedIndex],
+        ...categoryItems.slice(0, clickedIndex),
+        ...categoryItems.slice(clickedIndex + 1)
+      ]
+      setItems(reordered)
+    }
   }
 
   return (
@@ -214,45 +248,37 @@ export default function HomePage() {
         {/* Instructions & View Toggle */}
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            Takas yapmaya hazır mısın?
+            {viewMode === 'grid' ? 'İlgilendiğin kategoriyi seç' : 'Takas yapmaya hazır mısın?'}
           </h2>
           <p className="text-gray-600 mb-4">
             {viewMode === 'swipe' 
-              ? 'Beğendiğin ürünleri sağa, beğenmediklerini sola kaydır'
-              : 'Tüm ürünlere göz atın ve beğendiklerinizi seçin'
+              ? selectedCategory 
+                ? `${selectedCategory} kategorisinde geziniyorsun - Beğen veya geç!`
+                : 'Beğendiğin ürünleri sağa, beğenmediklerini sola kaydır'
+              : 'İlgini çeken ürüne tıkla, benzer ürünleri keşfet!'
             }
           </p>
           
-          {/* View Mode Toggle */}
-          <div className="flex items-center justify-center gap-2 bg-white/70 backdrop-blur-sm rounded-full p-1 w-fit mx-auto border border-white/20">
+          {/* View Mode Toggle - Sadece swipe modundayken geri butonu göster */}
+          {viewMode === 'swipe' ? (
             <button
-              onClick={() => setViewMode('swipe')}
-              className={`px-6 py-2 rounded-full transition-all ${
-                viewMode === 'swipe'
-                  ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg'
-                  : 'text-gray-600 hover:text-gray-800'
-              }`}
+              onClick={() => {
+                setViewMode('grid')
+                setSelectedCategory(null)
+                loadInitialItems() // Tüm ürünleri tekrar yükle
+              }}
+              className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-full px-6 py-2 text-gray-700 hover:bg-white/90 transition-all"
             >
-              Kaydır
+              ← Tüm Kategorilere Dön
             </button>
-            <button
-              onClick={() => setViewMode('grid')}
-              className={`px-6 py-2 rounded-full transition-all ${
-                viewMode === 'grid'
-                  ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg'
-                  : 'text-gray-600 hover:text-gray-800'
-              }`}
-            >
-              Izgara
-            </button>
-          </div>
+          ) : null}
         </div>
 
         {/* Swipe Stack View */}
         {viewMode === 'swipe' && (
           <div className="h-[500px] md:h-[600px] mb-6">
             <SwipeStack
-              items={items}
+              items={selectedCategory ? items.filter(i => i.category === selectedCategory) : items}
               onSwipe={handleSwipe}
               onItemClick={handleItemClick}
               isLoading={isLoading}
