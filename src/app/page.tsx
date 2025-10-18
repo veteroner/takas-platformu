@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import SwipeStack from '@/components/SwipeStack'
 import { Item, ItemCondition } from '@/types'
-import { Heart, MessageCircle, User, Settings, LogIn, Plus } from 'lucide-react'
+import { Heart, MessageCircle, User, Settings, LogIn, Plus, Package } from 'lucide-react'
 import { UnreadBadge } from '@/components/UnreadBadge'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -430,12 +430,16 @@ export default function HomePage() {
         ) : null}
 
         {!!user ? (
-          <div className="flex gap-3">
-            <Link href="/messages" className="flex-1 bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center hover:bg-white/80 transition-colors">
+          <div className="grid grid-cols-3 gap-3">
+            <Link href="/my-items" className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center hover:bg-white/80 transition-colors">
+              <Package className="w-6 h-6 text-orange-500 mx-auto mb-2" />
+              <span className="text-sm font-medium text-gray-700">Ürünlerim</span>
+            </Link>
+            <Link href="/messages" className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center hover:bg-white/80 transition-colors">
               <MessageCircle className="w-6 h-6 text-blue-500 mx-auto mb-2" />
               <span className="text-sm font-medium text-gray-700">Mesajlar</span>
             </Link>
-            <Link href="/profile" className="flex-1 bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center hover:bg-white/80 transition-colors">
+            <Link href="/profile" className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center hover:bg-white/80 transition-colors">
               <User className="w-6 h-6 text-purple-500 mx-auto mb-2" />
               <span className="text-sm font-medium text-gray-700">Profil</span>
             </Link>
