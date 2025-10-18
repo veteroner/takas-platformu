@@ -54,6 +54,16 @@ export default function AdminSettingsPage() {
     bannedUsers: 0,
     illegalAttempts: 0
   })
+  
+  // Editable settings modal
+  const [editingSetting, setEditingSetting] = useState<{
+    key: string
+    title: string
+    value: string
+    type: 'text' | 'email' | 'version' | 'toggle'
+  } | null>(null)
+  const [editValue, setEditValue] = useState('')
+  const [savingSetting, setSavingSetting] = useState(false)
 
   const getAuthHeaders = async (): Promise<Record<string, string>> => {
     const { data: { session } } = await supabase.auth.getSession()
@@ -261,6 +271,49 @@ export default function AdminSettingsPage() {
     }
   }
 
+  const openSettingEdit = (key: string, title: string, currentValue: string, type: 'text' | 'email' | 'version' | 'toggle' = 'text') => {
+    setEditingSetting({ key, title, value: currentValue, type })
+    setEditValue(currentValue)
+  }
+
+  const saveSetting = async () => {
+    if (!editingSetting) return
+    
+    setSavingSetting(true)
+    try {
+      // Update app_settings table
+      const { error } = await supabase
+        .from('app_settings')
+        .upsert({
+          key: editingSetting.key,
+          value: editValue
+        }, {
+          onConflict: 'key'
+        })
+      
+      if (error) throw error
+      
+      // Update local state
+      setAppSettings(prev => {
+        if (!prev) return prev
+        return {
+          ...prev,
+          [editingSetting.key.replace('_', '')]: editValue
+        } as AppSettings
+      })
+      
+      alert('✅ Ayar başarıyla güncellendi!')
+      setEditingSetting(null)
+      
+      // Reload stats
+      window.location.reload()
+    } catch (e: any) {
+      alert('❌ Hata: ' + (e?.message || 'Bilinmeyen hata'))
+    } finally {
+      setSavingSetting(false)
+    }
+  }
+
   if (loading) return (
     <div className="flex justify-center items-center py-12">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500"></div>
@@ -329,6 +382,7 @@ export default function AdminSettingsPage() {
             settings={appSettings}
             stats={systemStats}
             loading={statsLoading}
+            onEdit={openSettingEdit}
           />
         )}
         {activeTab === 'notifications' && (
@@ -393,6 +447,87 @@ export default function AdminSettingsPage() {
           </div>
         </div>
       )}
+      
+      {/* Settings Edit Modal */}
+      {editingSetting && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-6 z-50">
+          <div className="bg-gray-900 rounded-2xl border border-white/10 p-6 w-full max-w-lg shadow-2xl">
+            <h2 className="text-xl font-semibold mb-4 text-white">{editingSetting.title} Düzenle</h2>
+            
+            {editingSetting.type === 'toggle' ? (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 rounded-lg bg-white/5 border border-white/10">
+                  <span className="text-white">Durum</span>
+                  <button
+                    onClick={() => setEditValue(editValue === 'true' ? 'false' : 'true')}
+                    className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
+                      editValue === 'true' ? 'bg-green-500' : 'bg-gray-600'
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
+                        editValue === 'true' ? 'translate-x-7' : 'translate-x-1'
+                      }`}
+                    />
+                  </button>
+                </div>
+                <div className="text-sm text-white/60">
+                  {editValue === 'true' ? '✅ Aktif - Push bildirimleri gönderilecek' : '❌ Pasif - Push bildirimleri gönderilmeyecek'}
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <label className="block text-sm font-medium text-white/80">
+                  {editingSetting.type === 'email' && '📧 '}
+                  {editingSetting.type === 'version' && '📱 '}
+                  {editingSetting.type === 'text' && '✏️ '}
+                  Yeni Değer
+                </label>
+                <input
+                  type={editingSetting.type === 'email' ? 'email' : 'text'}
+                  value={editValue}
+                  onChange={(e) => setEditValue(e.target.value)}
+                  placeholder={
+                    editingSetting.type === 'email' 
+                      ? 'ornek@email.com' 
+                      : editingSetting.type === 'version' 
+                        ? '1.0.0' 
+                        : 'Değer girin...'
+                  }
+                  className="w-full bg-white/10 border border-white/20 px-4 py-2.5 rounded-lg text-white placeholder-gray-400 focus:border-pink-500 focus:ring-2 focus:ring-pink-500/50 outline-none transition-all"
+                />
+                {editingSetting.type === 'version' && (
+                  <p className="text-xs text-white/50">Format: Major.Minor.Patch (örn: 1.0.0)</p>
+                )}
+              </div>
+            )}
+            
+            <div className="flex gap-2 justify-end mt-6">
+              <button
+                onClick={() => setEditingSetting(null)}
+                disabled={savingSetting}
+                className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white font-medium disabled:opacity-50"
+              >
+                İptal
+              </button>
+              <button
+                onClick={saveSetting}
+                disabled={savingSetting || !editValue}
+                className="px-4 py-2 rounded-lg bg-gradient-to-r from-pink-500 to-purple-600 hover:shadow-lg hover:scale-105 transition-all text-white font-medium disabled:opacity-50 disabled:hover:scale-100"
+              >
+                {savingSetting ? (
+                  <span className="flex items-center gap-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    Kaydediliyor...
+                  </span>
+                ) : (
+                  '💾 Kaydet'
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -430,11 +565,13 @@ function TabButton({
 function GeneralSettings({ 
   settings, 
   stats, 
-  loading 
+  loading,
+  onEdit
 }: { 
   settings: AppSettings | null
   stats: SystemStats | null
   loading: boolean
+  onEdit: (key: string, title: string, currentValue: string, type?: 'text' | 'email' | 'version' | 'toggle') => void
 }) {
   if (loading) {
     return (
@@ -450,32 +587,74 @@ function GeneralSettings({
         icon={<Globe className="w-5 h-5" />}
         title="Uygulama Adı"
         description={settings?.appName || 'TakasYap'}
-        action={<EditButton />}
+        action={
+          <button 
+            onClick={() => onEdit('app_name', 'Uygulama Adı', settings?.appName || 'TakasYap', 'text')}
+            className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white text-sm font-medium"
+          >
+            Düzenle
+          </button>
+        }
       />
       <SettingCard 
         icon={<Mail className="w-5 h-5" />}
         title="Destek Email"
         description={settings?.supportEmail || 'support@takasyap.com'}
-        action={<EditButton />}
+        action={
+          <button 
+            onClick={() => onEdit('support_email', 'Destek Email', settings?.supportEmail || 'support@takasyap.com', 'email')}
+            className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white text-sm font-medium"
+          >
+            Düzenle
+          </button>
+        }
       />
       <SettingCard 
         icon={<Smartphone className="w-5 h-5" />}
-        title="Minimum App Versiyonu"
-        description={`iOS: ${settings?.minIosVersion || '1.0.0'} / Android: ${settings?.minAndroidVersion || '1.0.0'}`}
-        action={<EditButton />}
+        title="iOS Minimum Versiyonu"
+        description={`iOS: ${settings?.minIosVersion || '1.0.0'}`}
+        action={
+          <button 
+            onClick={() => onEdit('min_ios_version', 'iOS Minimum Versiyon', settings?.minIosVersion || '1.0.0', 'version')}
+            className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white text-sm font-medium"
+          >
+            Düzenle
+          </button>
+        }
+      />
+      <SettingCard 
+        icon={<Smartphone className="w-5 h-5" />}
+        title="Android Minimum Versiyonu"
+        description={`Android: ${settings?.minAndroidVersion || '1.0.0'}`}
+        action={
+          <button 
+            onClick={() => onEdit('min_android_version', 'Android Minimum Versiyon', settings?.minAndroidVersion || '1.0.0', 'version')}
+            className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white text-sm font-medium"
+          >
+            Düzenle
+          </button>
+        }
       />
       <SettingCard 
         icon={<Bell className="w-5 h-5" />}
         title="Push Bildirimleri"
         description={`${settings?.pushEnabled ? 'Aktif' : 'Pasif'} - ${stats?.fcmTokensCount?.toLocaleString('tr-TR') || 0} cihaz kayıtlı`}
         action={
-          <span className={`px-3 py-1 rounded-lg text-sm font-medium ${
-            settings?.pushEnabled 
-              ? 'bg-green-500/20 text-green-400' 
-              : 'bg-red-500/20 text-red-400'
-          }`}>
-            {settings?.pushEnabled ? '🟢 Aktif' : '🔴 Pasif'}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className={`px-3 py-1 rounded-lg text-sm font-medium ${
+              settings?.pushEnabled 
+                ? 'bg-green-500/20 text-green-400' 
+                : 'bg-red-500/20 text-red-400'
+            }`}>
+              {settings?.pushEnabled ? '🟢 Aktif' : '🔴 Pasif'}
+            </span>
+            <button 
+              onClick={() => onEdit('push_enabled', 'Push Bildirimleri', settings?.pushEnabled ? 'true' : 'false', 'toggle')}
+              className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white text-sm font-medium"
+            >
+              Değiştir
+            </button>
+          </div>
         }
       />
       <SettingCard 
@@ -887,15 +1066,6 @@ function SettingCard({
         </div>
       </div>
     </div>
-  )
-}
-
-// Edit Button Component
-function EditButton() {
-  return (
-    <button className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white text-sm font-medium">
-      Düzenle
-    </button>
   )
 }
 
