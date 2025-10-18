@@ -149,7 +149,7 @@ export default function AdminDashboardPage() {
         <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
           Hoş Geldiniz 👋
         </h1>
-        <p className="text-gray-400">
+        <p className="text-white">
           TakasYap platformunun genel durumunu buradan takip edebilirsiniz.
         </p>
       </div>
@@ -243,7 +243,7 @@ export default function AdminDashboardPage() {
 function StatusItem({ label, status, positive }: { label: string; status: string; positive: boolean }) {
   return (
     <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-      <span className="text-sm text-gray-400">{label}</span>
+      <span className="text-sm text-white">{label}</span>
       <div className="flex items-center gap-2">
         <div className={`w-2 h-2 rounded-full ${positive ? 'bg-green-400' : 'bg-red-400'} animate-pulse`} />
         <span className={`text-sm font-medium ${positive ? 'text-green-400' : 'text-red-400'}`}>
@@ -260,7 +260,7 @@ function AlertItem({ label, count, href }: { label: string; count: number; href:
       href={href}
       className="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors group"
     >
-      <span className="text-sm text-gray-400 group-hover:text-white transition-colors">{label}</span>
+      <span className="text-sm text-white group-hover:text-white transition-colors">{label}</span>
       <span className="text-sm font-semibold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
         {count}
       </span>

@@ -94,7 +94,7 @@ export default function AdminPoliciesPage() {
       
       <div className="space-y-4 bg-white/5 backdrop-blur-xl p-6 rounded-xl border border-white/10 mb-6">
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-300">Politika</label>
+          <label className="block mb-2 text-sm font-medium text-white">Politika</label>
           <select 
             value={key} 
             onChange={e=>setKey(e.target.value)} 
@@ -106,14 +106,14 @@ export default function AdminPoliciesPage() {
           </select>
         </div>
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-300">Zorunlu sürüm</label>
+          <label className="block mb-2 text-sm font-medium text-white">Zorunlu sürüm</label>
           <input 
             value={version} 
             onChange={e=>setVersion(e.target.value)} 
-            className="w-full bg-white/10 text-white p-3 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-500" 
+            className="w-full bg-white/10 text-white p-3 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-400" 
             placeholder="Örn: v1"
           />
-          <p className="text-sm mt-2 text-gray-400">Mevcut: <span className="text-white font-medium">{required[key] || '-'}</span></p>
+          <p className="text-sm mt-2 text-white">Mevcut: <span className="text-white font-medium">{required[key] || '-'}</span></p>
         </div>
         <button 
           onClick={submit} 
@@ -128,11 +128,11 @@ export default function AdminPoliciesPage() {
       <div className="space-y-4 bg-white/5 backdrop-blur-xl p-6 rounded-xl border border-white/10">
         <div className="flex items-end gap-3">
           <div className="flex-1">
-            <label className="block mb-2 text-sm font-medium text-gray-300">Toplu sürüm ata</label>
+            <label className="block mb-2 text-sm font-medium text-white">Toplu sürüm ata</label>
             <input 
               value={bulkVersion} 
               onChange={e=>setBulkVersion(e.target.value)} 
-              className="w-full bg-white/10 text-white p-3 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-500" 
+              className="w-full bg-white/10 text-white p-3 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-400" 
               placeholder="örn. v2" 
             />
           </div>
@@ -149,10 +149,10 @@ export default function AdminPoliciesPage() {
           <table className="min-w-full text-sm">
             <thead className="bg-white/10">
               <tr>
-                <th className="text-left px-4 py-3 text-gray-300 font-semibold">Politika</th>
-                <th className="text-left px-4 py-3 text-gray-300 font-semibold">Mevcut Zorunlu</th>
-                <th className="text-left px-4 py-3 text-gray-300 font-semibold">Yeni Sürüm</th>
-                <th className="text-left px-4 py-3 text-gray-300 font-semibold">Eylem</th>
+                <th className="text-left px-4 py-3 text-white font-semibold">Politika</th>
+                <th className="text-left px-4 py-3 text-white font-semibold">Mevcut Zorunlu</th>
+                <th className="text-left px-4 py-3 text-white font-semibold">Yeni Sürüm</th>
+                <th className="text-left px-4 py-3 text-white font-semibold">Eylem</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
@@ -162,7 +162,7 @@ export default function AdminPoliciesPage() {
                 return (
                   <tr key={p.key} className="hover:bg-white/5 transition-colors">
                     <td className="px-4 py-3 text-white font-medium">{p.label}</td>
-                    <td className="px-4 py-3 text-gray-300">{current}</td>
+                    <td className="px-4 py-3 text-white">{current}</td>
                     <td className="px-4 py-3">
                       <input 
                         className="bg-white/10 text-white px-3 py-2 rounded-lg border border-white/20 focus:border-pink-500 focus:outline-none w-24" 

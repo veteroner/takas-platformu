@@ -235,7 +235,7 @@ export default function AdminReportsPage() {
       {/* Filters */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-2 text-gray-300">Durum Filtresi</label>
+          <label className="block text-sm font-medium mb-2 text-white">Durum Filtresi</label>
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
@@ -250,7 +250,7 @@ export default function AdminReportsPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-gray-300">Tür Filtresi</label>
+          <label className="block text-sm font-medium mb-2 text-white">Tür Filtresi</label>
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
@@ -264,13 +264,13 @@ export default function AdminReportsPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-gray-300">Arama</label>
+          <label className="block text-sm font-medium mb-2 text-white">Arama</label>
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="İsim veya açıklama ara..."
-            className="w-full px-4 py-3 bg-white/10 text-white border border-white/20 rounded-lg focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-500"
+            className="w-full px-4 py-3 bg-white/10 text-white border border-white/20 rounded-lg focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-400"
           />
         </div>
       </div>
@@ -278,7 +278,7 @@ export default function AdminReportsPage() {
       {/* Reports List */}
       <div className="space-y-4">
         {filteredReports.length === 0 ? (
-          <div className="text-center py-12 text-gray-400 bg-white/5 rounded-2xl border border-white/10">
+          <div className="text-center py-12 text-white bg-white/5 rounded-2xl border border-white/10">
             Şikayet bulunamadı
           </div>
         ) : (
@@ -353,11 +353,11 @@ function ReportCard({ report, onUpdateStatus }: {
               {getReportTypeLabel(report.report_type)}
             </span>
           </div>
-          <p className="text-sm text-gray-300">
+          <p className="text-sm text-white">
             <strong className="text-white">{report.reporter_name}</strong> kullanıcısı{' '}
             <strong className="text-white">{report.reported_name}</strong> kullanıcısını şikayet etti
           </p>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-white/60 mt-1">
             {new Date(report.created_at).toLocaleString('tr-TR')}
           </p>
         </div>
@@ -374,7 +374,7 @@ function ReportCard({ report, onUpdateStatus }: {
         <div className="space-y-4 pt-4 border-t border-white/20">
           <div>
             <h4 className="text-sm font-semibold mb-2 text-white">Açıklama:</h4>
-            <p className="text-sm text-gray-300 bg-white/5 p-4 rounded-lg border border-white/10">
+            <p className="text-sm text-white bg-white/5 p-4 rounded-lg border border-white/10">
               {report.description}
             </p>
           </div>
@@ -382,7 +382,7 @@ function ReportCard({ report, onUpdateStatus }: {
           {report.evidence && (
             <div>
               <h4 className="text-sm font-semibold mb-2 text-white">Kanıtlar:</h4>
-              <pre className="text-xs text-gray-300 bg-white/5 p-4 rounded-lg border border-white/10 overflow-auto">
+              <pre className="text-xs text-white bg-white/5 p-4 rounded-lg border border-white/10 overflow-auto">
                 {JSON.stringify(report.evidence, null, 2)}
               </pre>
             </div>
@@ -391,7 +391,7 @@ function ReportCard({ report, onUpdateStatus }: {
           {report.admin_notes && (
             <div>
               <h4 className="text-sm font-semibold mb-2 text-white">Admin Notları:</h4>
-              <p className="text-sm text-gray-300 bg-white/5 p-4 rounded-lg border border-white/10">
+              <p className="text-sm text-white bg-white/5 p-4 rounded-lg border border-white/10">
                 {report.admin_notes}
               </p>
             </div>
@@ -404,7 +404,7 @@ function ReportCard({ report, onUpdateStatus }: {
                 <textarea
                   value={adminNotes}
                   onChange={(e) => setAdminNotes(e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 text-white border border-white/20 rounded-lg focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-500"
+                  className="w-full px-4 py-3 bg-white/10 text-white border border-white/20 rounded-lg focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-400"
                   rows={3}
                   placeholder="Notlarınızı buraya yazın..."
                 />
@@ -440,7 +440,7 @@ function ReportCard({ report, onUpdateStatus }: {
                 <textarea
                   value={adminNotes}
                   onChange={(e) => setAdminNotes(e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 text-white border border-white/20 rounded-lg focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-500"
+                  className="w-full px-4 py-3 bg-white/10 text-white border border-white/20 rounded-lg focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500/20 placeholder-gray-400"
                   rows={3}
                 />
               </div>
