@@ -8,6 +8,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { getUserMatches } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { MatchUnreadBadge } from "@/components/UnreadBadge";
+import { supabase } from "@/lib/supabase";
 
 export default function ChatList() {
   const router = useRouter();
@@ -18,6 +19,51 @@ export default function ChatList() {
   useEffect(() => {
     loadData();
   }, []);
+
+  // 🔔 Real-time subscription for new messages
+  useEffect(() => {
+    if (!user?.id) return;
+
+    console.log('🔔 ChatList: Real-time mesaj dinleme başlatıldı');
+
+    const channel = supabase
+      .channel(`chat-list-${user.id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'messages',
+        },
+        (payload) => {
+          console.log('📨 ChatList: Yeni mesaj geldi, liste güncelleniyor...', payload);
+          // Yeni mesaj geldiğinde listeyi yeniden yükle
+          loadData();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'matches',
+          filter: `user1_id=eq.${user.id},user2_id=eq.${user.id}`
+        },
+        (payload) => {
+          console.log('🎉 ChatList: Yeni eşleşme, liste güncelleniyor...', payload);
+          // Yeni eşleşme geldiğinde listeyi yeniden yükle
+          loadData();
+        }
+      )
+      .subscribe((status) => {
+        console.log('🔔 ChatList subscription durumu:', status);
+      });
+
+    return () => {
+      console.log('🔌 ChatList subscription kapatılıyor...');
+      supabase.removeChannel(channel);
+    };
+  }, [user?.id]);
 
   const loadData = async () => {
     try {
@@ -33,7 +79,15 @@ export default function ChatList() {
 
       // Load user's matches
       const userMatches = await getUserMatches(currentUser.id);
-      setMatches(userMatches);
+      
+      // Son mesaj zamanına göre sırala (en yeni üstte)
+      const sortedMatches = userMatches.sort((a, b) => {
+        const dateA = a.messages?.[0]?.created_at || a.created_at;
+        const dateB = b.messages?.[0]?.created_at || b.created_at;
+        return new Date(dateB).getTime() - new Date(dateA).getTime();
+      });
+      
+      setMatches(sortedMatches);
     } catch (error) {
       console.error('Error loading matches:', error);
     } finally {
@@ -76,6 +130,12 @@ export default function ChatList() {
                 const otherUser = match.user1_id === user?.id ? match.user2 : match.user1;
                 const myItem = match.user1_id === user?.id ? match.item1 : match.item2;
                 const theirItem = match.user1_id === user?.id ? match.item2 : match.item1;
+                
+                // Son mesajı al
+                const lastMessage = match.messages?.[0];
+                const lastMessageText = lastMessage?.content || 'Henüz mesaj yok';
+                const lastMessageTime = lastMessage?.created_at || match.created_at;
+                const isMyMessage = lastMessage?.sender_id === user?.id;
 
                 return (
                   <Link
@@ -84,7 +144,7 @@ export default function ChatList() {
                     className="block bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 hover:bg-white/80 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="relative">
+                      <div className="relative flex-shrink-0">
                         <div className="w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold">
                           {otherUser?.name?.charAt(0).toUpperCase() || '?'}
                         </div>
@@ -97,13 +157,26 @@ export default function ChatList() {
                       </div>
                       
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center justify-between gap-2 mb-1">
                           <h3 className="font-semibold text-gray-900 truncate">{otherUser?.name || 'Kullanıcı'}</h3>
                           <span className="text-xs text-gray-500 flex-shrink-0">
-                            {new Date(match.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
+                            {new Date(lastMessageTime).toLocaleDateString('tr-TR', { 
+                              day: 'numeric', 
+                              month: 'short',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600 truncate mt-1">
+                        
+                        {/* Son mesaj preview */}
+                        <p className="text-sm text-gray-600 truncate">
+                          {isMyMessage && <span className="text-gray-500">Sen: </span>}
+                          {lastMessageText}
+                        </p>
+                        
+                        {/* Takas ürünleri */}
+                        <p className="text-xs text-gray-400 truncate mt-1">
                           {myItem?.title} ⇄ {theirItem?.title}
                         </p>
                       </div>

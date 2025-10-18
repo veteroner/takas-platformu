@@ -302,9 +302,11 @@ export default function HomePage() {
                 <Plus className="w-6 h-6" />
                 <span className="text-xs mt-1">Yükle</span>
               </Link>
-              <Link href="/messages" className="flex flex-col items-center py-2 px-4 text-gray-400">
+              <Link href="/messages" className="flex flex-col items-center py-2 px-4 text-gray-400 relative">
                 <MessageCircle className="w-6 h-6" />
                 <span className="text-xs mt-1">Mesajlar</span>
+                {/* Okunmamış mesaj badge'i */}
+                <UnreadBadge userId={user?.id || null} />
               </Link>
               <Link href="/profile" className="flex flex-col items-center py-2 px-4 text-gray-400">
                 <User className="w-6 h-6" />

@@ -221,13 +221,35 @@ export async function getUserMatches(userId: string) {
         user1:users!matches_user1_id_fkey(id, name, avatar),
         user2:users!matches_user2_id_fkey(id, name, avatar),
         item1:items!matches_item1_id_fkey(*),
-        item2:items!matches_item2_id_fkey(*)
+        item2:items!matches_item2_id_fkey(*),
+        messages(
+          id,
+          content,
+          sender_id,
+          receiver_id,
+          created_at,
+          read
+        )
       `)
       .or(`user1_id.eq.${userId},user2_id.eq.${userId}`)
       .order('created_at', { ascending: false })
 
     if (error) throw error
-    return data || []
+    
+    // Her match için en son mesajı al
+    const matchesWithLastMessage = (data || []).map(match => {
+      const messages = match.messages || []
+      // Mesajları tarihe göre sırala (en yeni en üstte)
+      const sortedMessages = messages.sort((a: any, b: any) => 
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      )
+      return {
+        ...match,
+        messages: sortedMessages
+      }
+    })
+    
+    return matchesWithLastMessage
   } catch (error) {
     console.error('Error fetching matches:', error)
     return []
