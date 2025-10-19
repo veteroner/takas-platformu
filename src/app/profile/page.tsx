@@ -71,9 +71,16 @@ export default function ProfilePage() {
 
   const handleSave = async () => {
     try {
-      await updateUserProfile(user.id, editData)
+      // Sadece users tablosunda olan kolonları güncelle (name, email, avatar)
+      const updates = {
+        name: editData.name
+        // bio, location, phone users tablosunda yok - ignore ediyoruz
+      }
+      
+      await updateUserProfile(user.id, updates)
       setUser({ ...user, ...editData })
       setIsEditing(false)
+      alert('Profil başarıyla güncellendi!')
     } catch (error) {
       console.error('Error updating profile:', error)
       alert('Profil güncellenirken hata oluştu')
