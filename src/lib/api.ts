@@ -195,12 +195,6 @@ export async function recordSwipe(
       }])
 
     if (error) {
-      // If table doesn't exist yet, log warning and succeed silently
-      if (error.code === '42P01' || error.message?.includes('does not exist')) {
-        console.warn('user_swipes table not found. Please run create-user-swipes.sql in Supabase.')
-        return true
-      }
-      
       // Ignore duplicate entry errors (23505 = unique violation)
       if (error.code === '23505') {
         return true
@@ -224,12 +218,13 @@ export async function recordSwipe(
 // Get user's liked items from database
 export async function getUserLikedItems(userId: string): Promise<any[]> {
   try {
+    // Get user's liked swipes with item details via JOIN
     const { data, error } = await supabase
       .from('user_swipes')
       .select(`
         item_id,
         created_at,
-        items (
+        items:item_id (
           id,
           title,
           description,
@@ -248,12 +243,8 @@ export async function getUserLikedItems(userId: string): Promise<any[]> {
       .order('created_at', { ascending: false })
 
     if (error) {
-      // If table doesn't exist yet, return empty array
-      if (error.code === '42P01' || error.message?.includes('does not exist')) {
-        console.warn('user_swipes table not found. Please run create-user-swipes.sql in Supabase.')
-        return []
-      }
-      throw error
+      console.error('Error fetching liked items:', error)
+      return []
     }
     
     // Filter out deleted/inactive items and flatten structure
@@ -279,12 +270,8 @@ export async function getUserPassedItems(userId: string): Promise<string[]> {
       .eq('action', 'pass')
 
     if (error) {
-      // If table doesn't exist yet, return empty array
-      if (error.code === '42P01' || error.message?.includes('does not exist')) {
-        console.warn('user_swipes table not found. Please run create-user-swipes.sql in Supabase.')
-        return []
-      }
-      throw error
+      console.error('Error fetching passed items:', error)
+      return []
     }
     
     return (data || []).map(swipe => swipe.item_id)
