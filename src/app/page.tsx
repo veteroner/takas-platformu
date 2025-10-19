@@ -415,14 +415,9 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Ürünlerim Linki - Sadece bu kaldı, diğerleri alt menüde */}
-        {!!user ? (
-          <Link href="/my-items" className="block bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center hover:bg-white/80 transition-colors mb-6">
-            <Package className="w-6 h-6 text-orange-500 mx-auto mb-2" />
-            <span className="text-sm font-medium text-gray-700">Ürünlerim</span>
-          </Link>
-        ) : (
-          <div className="text-center bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6">
+        {/* Login CTA (sadece giriş yapmamış kullanıcılar için) */}
+        {!user && (
+          <div className="text-center bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6 mt-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Hoş Geldin!</h3>
             <p className="text-gray-600 mb-4">Takas yapmaya başlamak için giriş yap veya hesap oluştur.</p>
             <Link 
