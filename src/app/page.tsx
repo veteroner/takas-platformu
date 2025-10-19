@@ -387,7 +387,7 @@ export default function HomePage() {
                 {items.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-white/70 backdrop-blur-sm rounded-xl overflow-hidden border border-white/20 hover:shadow-xl transition-all duration-300 cursor-pointer group"
+                    className="bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 cursor-pointer group"
                     onClick={() => handleItemClick(item)}
                   >
                     {/* Image */}
@@ -406,18 +406,18 @@ export default function HomePage() {
                       )}
                       {/* Category Badge */}
                       <div className="absolute top-2 left-2">
-                        <span className="bg-white/90 backdrop-blur-sm text-xs font-medium px-3 py-1 rounded-full text-gray-700 border border-white/20">
+                        <span className="bg-white text-xs font-semibold px-3 py-1 rounded-full text-gray-800 shadow-sm">
                           {item.category}
                         </span>
                       </div>
                       {/* Condition Badge */}
                       <div className="absolute top-2 right-2">
-                        <span className={`text-xs font-medium px-3 py-1 rounded-full border ${
+                        <span className={`text-xs font-semibold px-3 py-1 rounded-full shadow-sm ${
                           item.condition === ItemCondition.LIKE_NEW 
-                            ? 'bg-blue-500/90 text-white border-blue-400'
+                            ? 'bg-blue-500 text-white'
                             : item.condition === ItemCondition.GOOD
-                            ? 'bg-green-500/90 text-white border-green-400'
-                            : 'bg-gray-500/90 text-white border-gray-400'
+                            ? 'bg-green-500 text-white'
+                            : 'bg-gray-500 text-white'
                         }`}>
                           {item.condition === ItemCondition.LIKE_NEW ? 'Sıfır Gibi' : 
                            item.condition === ItemCondition.GOOD ? 'İyi' : 
@@ -428,41 +428,41 @@ export default function HomePage() {
                     
                     {/* Info */}
                     <div className="p-3">
-                      <h3 className="font-semibold text-gray-800 mb-1 line-clamp-1">
+                      <h3 className="font-bold text-gray-900 mb-1 line-clamp-1">
                         {item.title}
                       </h3>
                       <p className="text-sm text-gray-600 mb-2 line-clamp-2">
                         {item.description}
                       </p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-500">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-sm font-medium text-gray-700">
                           📍 {item.location.city}
                         </span>
-                        <span className="text-sm font-semibold text-green-600">
+                        <span className="text-sm font-bold text-green-600">
                           ≈₺{item.estimatedValue}
                         </span>
                       </div>
                       
                       {/* Action Buttons */}
                       {user && (
-                        <div className="flex gap-2 mt-3">
+                        <div className="flex gap-2">
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
                               handleSwipe('left', item)
                             }}
-                            className="flex-1 py-2 rounded-lg bg-red-100 hover:bg-red-200 transition-colors"
+                            className="flex-1 py-2.5 rounded-lg bg-red-500 hover:bg-red-600 transition-colors shadow-sm"
                           >
-                            <span className="text-2xl">✕</span>
+                            <span className="text-xl text-white font-bold">✕</span>
                           </button>
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
                               handleSwipe('right', item)
                             }}
-                            className="flex-1 py-2 rounded-lg bg-green-100 hover:bg-green-200 transition-colors"
+                            className="flex-1 py-2.5 rounded-lg bg-green-500 hover:bg-green-600 transition-colors shadow-sm"
                           >
-                            <span className="text-2xl">♥</span>
+                            <span className="text-xl text-white font-bold">♥</span>
                           </button>
                         </div>
                       )}
@@ -509,7 +509,7 @@ export default function HomePage() {
               {likedItems.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-white/70 backdrop-blur-sm rounded-xl overflow-hidden border border-white/20 hover:shadow-lg transition-all transform hover:scale-105"
+                  className="bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all transform hover:scale-105"
                 >
                   <div className="relative aspect-square">
                     <Image
@@ -518,7 +518,7 @@ export default function HomePage() {
                       fill
                       className="object-cover"
                     />
-                    <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 text-xs font-medium">
+                    <div className="absolute top-2 right-2 bg-white rounded-full px-2 py-1 text-xs font-semibold shadow-sm">
                       {(() => {
                         const cat = String(item.category).toLowerCase()
                         if (cat.includes('clothing')) return '👕'
@@ -532,8 +532,8 @@ export default function HomePage() {
                     </div>
                   </div>
                   <div className="p-3">
-                    <h3 className="font-semibold text-sm text-gray-800 truncate">{item.title}</h3>
-                    <p className="text-xs text-gray-600 mt-1">📍 {item.location?.city}</p>
+                    <h3 className="font-bold text-sm text-gray-900 truncate">{item.title}</h3>
+                    <p className="text-xs font-medium text-gray-700 mt-1">📍 {item.location?.city}</p>
                     <p className="text-sm font-bold text-green-600 mt-1">≈₺{item.estimatedValue}</p>
                   </div>
                 </div>
