@@ -35,8 +35,14 @@ export default function SettingsPage() {
 
       setUser(currentUser)
       
-      if (currentUser?.preferences) {
-        setSettings(currentUser.preferences)
+      // Load user preferences from localStorage or use defaults
+      const savedPrefs = localStorage.getItem('userPreferences')
+      if (savedPrefs) {
+        try {
+          setSettings(JSON.parse(savedPrefs))
+        } catch (e) {
+          // Use default settings
+        }
       }
     } catch (error) {
       console.error('Error loading user:', error)
@@ -59,6 +65,9 @@ export default function SettingsPage() {
 
   const handleSave = async () => {
     try {
+      // Save to localStorage
+      localStorage.setItem('userPreferences', JSON.stringify(settings))
+      
       // Persist notif prefs to Supabase
       if (user) {
         await supabase.from('notification_prefs').upsert({
