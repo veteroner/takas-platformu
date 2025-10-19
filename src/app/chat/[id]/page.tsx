@@ -394,7 +394,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex flex-col">
+    <div className="h-screen bg-gray-50 flex flex-col">
       {/* Ban Banner */}
       {isBanned && banDetails && (
         <BanStatusBanner
@@ -405,7 +405,7 @@ export default function ChatPage() {
       )}
       
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
+      <header className="bg-white shadow-sm border-b border-gray-200 pt-safe">
         <div className="px-4 py-4 pt-12 md:pt-4">
           <div className="flex items-center gap-3 mb-3">
             <Link href="/messages" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
@@ -511,13 +511,13 @@ export default function ChatPage() {
           
           return (
             <div key={msg.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[70%] rounded-2xl px-4 py-2 ${
+              <div className={`max-w-[70%] rounded-2xl px-4 py-2.5 shadow-sm ${
                 isMine 
                   ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white' 
-                  : 'bg-white/70 backdrop-blur-sm border border-white/20 text-gray-900'
+                  : 'bg-white border border-gray-200 text-gray-900'
               }`}>
-                <p className="text-sm">{msg.content}</p>
-                <div className={`flex items-center justify-end gap-1 text-xs mt-1 ${isMine ? 'text-white/70' : 'text-gray-500'}`}>
+                <p className="text-sm leading-relaxed">{msg.content}</p>
+                <div className={`flex items-center justify-end gap-1 text-xs mt-1 ${isMine ? 'text-white/80' : 'text-gray-500'}`}>
                   <span>{new Date(msg.created_at).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</span>
                   {getMessageStatus()}
                 </div>
@@ -529,7 +529,7 @@ export default function ChatPage() {
       </div>
 
       {/* Input */}
-      <div className="bg-white/80 backdrop-blur-md border-t border-white/20 p-4 pb-safe">
+      <div className="bg-white border-t border-gray-200 p-4 pb-safe">
         {/* Filter Warning */}
         {filterWarning && (
           <div className="mb-3">
@@ -553,7 +553,7 @@ export default function ChatPage() {
             onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
             placeholder={isBlocked ? "Kullanıcı engellenmiş" : isBanned ? "Mesaj gönderemezsiniz" : "Mesajınızı yazın..."}
             disabled={isBanned || isSending || isBlocked}
-            className="flex-1 bg-white/70 backdrop-blur-sm border border-white/20 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 bg-gray-100 border-2 border-gray-300 rounded-full px-4 py-3 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-purple-500 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
           />
           <button
             onClick={handleSend}
