@@ -289,8 +289,8 @@ export default function UploadPage() {
           </div>
 
           {/* Title */}
-          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <label className="block text-sm font-semibold text-gray-800 mb-2">
               Ürün Adı *
             </label>
             <input
@@ -300,8 +300,8 @@ export default function UploadPage() {
               onChange={handleInputChange}
               required
               placeholder="Örn: Vintage Jean Ceket"
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-                lastResult && !lastResult.isClean ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              className={`w-full px-4 py-3 border-2 rounded-lg text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 ${
+                lastResult && !lastResult.isClean ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'
               }`}
             />
             {lastResult && !lastResult.isClean && (
@@ -310,8 +310,8 @@ export default function UploadPage() {
           </div>
 
           {/* Description */}
-          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <label className="block text-sm font-semibold text-gray-800 mb-2">
               Açıklama *
             </label>
             <textarea
@@ -321,18 +321,18 @@ export default function UploadPage() {
               required
               rows={4}
               placeholder="Ürünün detaylarını yazın..."
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none ${
-                lastResult && !lastResult.isClean ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              className={`w-full px-4 py-3 border-2 rounded-lg text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none ${
+                lastResult && !lastResult.isClean ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'
               }`}
             />
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs text-gray-600 mt-2">
               ⚠️ Yasadışı içerik (uyuşturucu, silah, vs.) tespit edilirse ürün reddedilir
             </p>
           </div>
 
           {/* Category */}
-          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6">
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <label className="block text-sm font-semibold text-gray-800 mb-3">
               Kategori *
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -341,10 +341,10 @@ export default function UploadPage() {
                   key={category.id}
                   type="button"
                   onClick={() => setFormData({ ...formData, category: category.value })}
-                  className={`py-3 px-4 rounded-lg border-2 transition-all ${
+                  className={`py-3 px-4 rounded-lg border-2 transition-all font-medium ${
                     formData.category === category.value
-                      ? 'border-purple-500 bg-purple-50 text-purple-700'
-                      : 'border-gray-200 hover:border-purple-300'
+                      ? 'border-purple-500 bg-purple-500 text-white shadow-md'
+                      : 'border-gray-300 bg-white text-gray-700 hover:border-purple-400'
                   }`}
                 >
                   {category.name}
@@ -354,8 +354,8 @@ export default function UploadPage() {
           </div>
 
           {/* Condition */}
-          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6">
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <label className="block text-sm font-semibold text-gray-800 mb-3">
               Durumu *
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -364,10 +364,10 @@ export default function UploadPage() {
                   key={condition.id}
                   type="button"
                   onClick={() => setFormData({ ...formData, condition: condition.value })}
-                  className={`py-2 px-3 rounded-lg border-2 transition-all text-sm ${
+                  className={`py-2 px-3 rounded-lg border-2 transition-all text-sm font-medium ${
                     formData.condition === condition.value
-                      ? 'border-purple-500 bg-purple-50 text-purple-700'
-                      : 'border-gray-200 hover:border-purple-300'
+                      ? 'border-purple-500 bg-purple-500 text-white shadow-md'
+                      : 'border-gray-300 bg-white text-gray-700 hover:border-purple-400'
                   }`}
                 >
                   {condition.name}
@@ -377,8 +377,8 @@ export default function UploadPage() {
           </div>
 
           {/* Estimated Value */}
-          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <label className="block text-sm font-semibold text-gray-800 mb-2">
               Tahmini Değer (₺)
             </label>
             <input
@@ -387,14 +387,14 @@ export default function UploadPage() {
               value={formData.estimatedValue}
               onChange={handleInputChange}
               placeholder="Örn: 500"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-4 py-3 border-2 border-gray-300 bg-white rounded-lg text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             />
-            <p className="text-xs text-gray-500 mt-2">Opsiyonel: Ürünün yaklaşık değeri</p>
+            <p className="text-xs text-gray-600 mt-2">Opsiyonel: Ürünün yaklaşık değeri</p>
           </div>
 
           {/* Location/City */}
-          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <label className="block text-sm font-semibold text-gray-800 mb-2">
               📍 Ürünün Bulunduğu Şehir *
             </label>
             <select
@@ -402,32 +402,32 @@ export default function UploadPage() {
               value={formData.city}
               onChange={handleInputChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-4 py-3 border-2 border-gray-300 bg-white rounded-lg text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             >
               <option value="">Şehir seçin</option>
               {cities.map(city => (
                 <option key={city} value={city}>{city}</option>
               ))}
             </select>
-            <p className="text-xs text-gray-500 mt-2">Ürününüzün bulunduğu şehri seçin</p>
+            <p className="text-xs text-gray-600 mt-2">Ürününüzün bulunduğu şehri seçin</p>
           </div>
 
           {/* Seeking Preferences */}
-          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6">
-            <h3 className="font-semibold text-gray-800 mb-3">🎯 Ne Arıyorsun?</h3>
+          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <h3 className="font-bold text-gray-900 mb-3">🎯 Ne Arıyorsun?</h3>
 
             <div className="mb-4">
-              <div className="text-sm font-medium text-gray-700 mb-2">Kategoriler (çoklu seçim)</div>
+              <div className="text-sm font-semibold text-gray-800 mb-2">Kategoriler (çoklu seçim)</div>
               <div className="grid grid-cols-2 gap-2">
                 {categories.map(category => (
                   <button
                     key={category.value}
                     type="button"
                     onClick={() => toggleSeekCategory(category.value as any)}
-                    className={`py-2 px-3 rounded-lg border-2 text-sm transition-all ${
+                    className={`py-2 px-3 rounded-lg border-2 text-sm transition-all font-medium ${
                       seekCategories.includes(category.value as any)
-                        ? 'border-purple-500 bg-purple-50 text-purple-700'
-                        : 'border-gray-200 hover:border-purple-300'
+                        ? 'border-purple-500 bg-purple-500 text-white shadow-md'
+                        : 'border-gray-300 bg-white text-gray-700 hover:border-purple-400'
                     }`}
                   >
                     {category.name}
@@ -438,33 +438,33 @@ export default function UploadPage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Min Değer (₺)</label>
+                <label className="block text-sm font-semibold text-gray-800 mb-1">Min Değer (₺)</label>
                 <input
                   type="number"
                   value={seekValueMin}
                   onChange={(e) => setSeekValueMin(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border-2 border-gray-300 bg-white rounded-lg text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                   placeholder="Örn: 300"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Max Değer (₺)</label>
+                <label className="block text-sm font-semibold text-gray-800 mb-1">Max Değer (₺)</label>
                 <input
                   type="number"
                   value={seekValueMax}
                   onChange={(e) => setSeekValueMax(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border-2 border-gray-300 bg-white rounded-lg text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                   placeholder="Örn: 1500"
                 />
               </div>
             </div>
 
             <div className="mt-3">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Şehir</label>
+              <label className="block text-sm font-semibold text-gray-800 mb-1">Şehir</label>
               <select
                 value={seekCity}
                 onChange={(e) => setSeekCity(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-3 py-2 border-2 border-gray-300 bg-white rounded-lg text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               >
                 <option value="">Şehir seçin</option>
                 {cities.map(city => (
@@ -474,15 +474,15 @@ export default function UploadPage() {
             </div>
 
             {/* Clothing filters (simple) */}
-            <div className="mt-4 rounded-lg border p-4">
-              <div className="text-sm font-medium text-gray-700 mb-2">Giyim Tercihleri (opsiyonel)</div>
+            <div className="mt-4 rounded-lg border-2 border-gray-300 bg-gray-50 p-4">
+              <div className="text-sm font-semibold text-gray-800 mb-2">Giyim Tercihleri (opsiyonel)</div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs text-gray-600 mb-1">Beden (Text)</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">Beden (Text)</label>
                   <select
                     value={seekClothingSize}
                     onChange={(e) => setSeekClothingSize(e.target.value as any)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border-2 border-gray-300 bg-white rounded-lg text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                   >
                     <option value="">—</option>
                     <option value="XS">XS</option>
