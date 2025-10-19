@@ -7,7 +7,7 @@ import { Heart, MessageCircle, User, Settings, LogIn, Plus, Package } from 'luci
 import { UnreadBadge } from '@/components/UnreadBadge'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getFeedItems, recordSwipe, checkForMatch } from '@/lib/api'
+import { getFeedItems, recordSwipe, checkForMatch, getUserLikedItems, getUserPassedItems } from '@/lib/api'
 import { getCurrentUser } from '@/lib/auth'
 import BannerAd from '@/components/BannerAd'
 import { useInterstitialAd } from '@/hooks/useInterstitialAd'
@@ -41,6 +41,9 @@ export default function HomePage() {
 
   useEffect(() => {
     loadInitialItems()
+    if (user?.id) {
+      loadUserSwipes()
+    }
   }, [user?.id])
 
   const loadUser = async () => {
@@ -49,6 +52,59 @@ export default function HomePage() {
       setUser(currentUser)
     } catch (error) {
       console.error('Error loading user:', error)
+    }
+  }
+
+  const loadUserSwipes = async () => {
+    if (!user?.id) return
+    
+    try {
+      // Load liked items from database
+      const liked = await getUserLikedItems(user.id)
+      const likedConverted: Item[] = liked.map((item: any) => ({
+        id: item.id,
+        title: item.title,
+        description: item.description || '',
+        images: item.images || [],
+        category: item.category as any,
+        condition: item.condition as any,
+        estimatedValue: item.estimated_value || 0,
+        color: ['#FF6B6B', '#FF8E53'],
+        ownerId: item.owner_id || '',
+        owner: {
+          id: item.owner_id || '',
+          name: 'User',
+          email: 'user@example.com',
+          avatar: '/icons/icon-192.png',
+          rating: 5,
+          totalTrades: 0,
+          joinedAt: new Date(),
+          preferences: {
+            categories: [],
+            maxDistance: 50,
+            ageRange: { min: 0, max: 100 }
+          },
+          location: {
+            city: item.city || 'İstanbul',
+            country: 'TR'
+          }
+        },
+        location: {
+          city: item.city || 'İstanbul',
+          country: 'TR'
+        },
+        createdAt: new Date(item.created_at || Date.now()),
+        isActive: item.status === 'active',
+        tags: []
+      }))
+      setLikedItems(likedConverted)
+
+      // Load passed items (just IDs)
+      const passed = await getUserPassedItems(user.id)
+      // Convert to Item[] format for consistency (though we only need IDs)
+      setPassedItems(passed.map(id => ({ id } as any)))
+    } catch (error) {
+      console.error('Error loading user swipes:', error)
     }
   }
 

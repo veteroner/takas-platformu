@@ -23,6 +23,18 @@ export async function getFeedItems(userId?: string, limit: number = 20): Promise
     const { data, error } = await query
 
     if (error) throw error
+    
+    // If user is logged in, filter out already swiped items
+    if (isValidUuid(userId) && data) {
+      const { data: swipedItems } = await supabase
+        .from('user_swipes')
+        .select('item_id')
+        .eq('user_id', userId as string)
+      
+      const swipedIds = new Set((swipedItems || []).map(s => s.item_id))
+      return data.filter(item => !swipedIds.has(item.id))
+    }
+    
     return data || []
   } catch (error) {
     console.error('Error fetching feed items:', error)
@@ -147,18 +159,26 @@ export async function upsertSeekingPreferences(userId: string, prefs: SeekingPre
   }
 }
 
-// Record swipe
+// Record swipe (like, pass, super_like)
 export async function recordSwipe(
   userId: string,
   itemId: string,
-  direction: 'left' | 'right'
+  direction: 'left' | 'right' | 'up'
 ): Promise<boolean> {
   try {
+    // Map direction to action
+    const action = direction === 'right' ? 'like' : direction === 'up' ? 'super_like' : 'pass'
+    
+    // Save to user_swipes table
     const { error } = await supabase
-      .from('swipes')
-      .insert([{ user_id: userId, item_id: itemId, direction }])
+      .from('user_swipes')
+      .insert([{ 
+        user_id: userId, 
+        item_id: itemId, 
+        action 
+      }])
 
-    // Ignore duplicate entry errors (409 conflict) - user already swiped this item
+    // Ignore duplicate entry errors (23505 = unique violation) - user already swiped this item
     if (error && error.code !== '23505') {
       console.error('Error recording swipe:', error)
       return false
@@ -172,6 +192,61 @@ export async function recordSwipe(
     }
     console.error('Error recording swipe:', error)
     return false
+  }
+}
+
+// Get user's liked items from database
+export async function getUserLikedItems(userId: string): Promise<any[]> {
+  try {
+    const { data, error } = await supabase
+      .from('user_swipes')
+      .select(`
+        item_id,
+        created_at,
+        items (
+          id,
+          title,
+          description,
+          images,
+          category,
+          estimated_value,
+          city,
+          status
+        )
+      `)
+      .eq('user_id', userId)
+      .eq('action', 'like')
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    
+    // Filter out deleted/inactive items and flatten structure
+    return (data || [])
+      .filter(swipe => swipe.items && (swipe.items as any).status === 'active')
+      .map(swipe => ({
+        ...(swipe.items as any),
+        swipedAt: swipe.created_at
+      }))
+  } catch (error) {
+    console.error('Error fetching liked items:', error)
+    return []
+  }
+}
+
+// Get user's passed items from database
+export async function getUserPassedItems(userId: string): Promise<string[]> {
+  try {
+    const { data, error } = await supabase
+      .from('user_swipes')
+      .select('item_id')
+      .eq('user_id', userId)
+      .eq('action', 'pass')
+
+    if (error) throw error
+    return (data || []).map(swipe => swipe.item_id)
+  } catch (error) {
+    console.error('Error fetching passed items:', error)
+    return []
   }
 }
 
