@@ -415,35 +415,12 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Quick Actions */}
+        {/* Ürünlerim Linki - Sadece bu kaldı, diğerleri alt menüde */}
         {!!user ? (
-          <div className="grid grid-cols-2 gap-3 mb-6">
-            <Link href="/upload" className="bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-xl p-4 text-center hover:from-pink-600 hover:to-purple-700 transition-colors shadow-lg">
-              <Plus className="w-6 h-6 mx-auto mb-2" />
-              <span className="text-sm font-medium">Ürün Yükle</span>
-            </Link>
-            <button className="flex-1 bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center hover:bg-white/80 transition-colors">
-              <Heart className="w-6 h-6 text-pink-500 mx-auto mb-2" />
-              <span className="text-sm font-medium text-gray-700">Beğenilenler</span>
-            </button>
-          </div>
-        ) : null}
-
-        {!!user ? (
-          <div className="grid grid-cols-3 gap-3">
-            <Link href="/my-items" className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center hover:bg-white/80 transition-colors">
-              <Package className="w-6 h-6 text-orange-500 mx-auto mb-2" />
-              <span className="text-sm font-medium text-gray-700">Ürünlerim</span>
-            </Link>
-            <Link href="/messages" className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center hover:bg-white/80 transition-colors">
-              <MessageCircle className="w-6 h-6 text-blue-500 mx-auto mb-2" />
-              <span className="text-sm font-medium text-gray-700">Mesajlar</span>
-            </Link>
-            <Link href="/profile" className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center hover:bg-white/80 transition-colors">
-              <User className="w-6 h-6 text-purple-500 mx-auto mb-2" />
-              <span className="text-sm font-medium text-gray-700">Profil</span>
-            </Link>
-          </div>
+          <Link href="/my-items" className="block bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center hover:bg-white/80 transition-colors mb-6">
+            <Package className="w-6 h-6 text-orange-500 mx-auto mb-2" />
+            <span className="text-sm font-medium text-gray-700">Ürünlerim</span>
+          </Link>
         ) : (
           <div className="text-center bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Hoş Geldin!</h3>
@@ -462,34 +439,37 @@ export default function HomePage() {
         <div className="h-24 md:h-16"></div>
       </main>
 
-      {/* Bottom Navigation (Mobile) */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-white/20 px-4 py-2 pb-safe">
-        <div className="max-w-md mx-auto flex justify-around pb-4 md:pb-2">
-          <button className="flex flex-col items-center py-2 px-4 text-purple-600">
+      {/* Bottom Navigation (Mobile) - 5 Buton */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-white/20 px-2 py-2 pb-safe">
+        <div className="max-w-md mx-auto flex justify-around items-center pb-4 md:pb-2">
+          <button className="flex flex-col items-center py-1 px-2 text-purple-600 min-w-[60px]">
             <Heart className="w-6 h-6 fill-current" />
-            <span className="text-xs mt-1 font-medium">Keşfet</span>
+            <span className="text-[10px] mt-1 font-medium">Keşfet</span>
           </button>
           {!!user ? (
             <>
-              <Link href="/upload" className="flex flex-col items-center py-2 px-4 text-gray-400">
-                <Plus className="w-6 h-6" />
-                <span className="text-xs mt-1">Yükle</span>
+              <Link href="/my-items" className="flex flex-col items-center py-1 px-2 text-gray-400 min-w-[60px]">
+                <Package className="w-6 h-6" />
+                <span className="text-[10px] mt-1">Ürünlerim</span>
               </Link>
-              <Link href="/messages" className="flex flex-col items-center py-2 px-4 text-gray-400 relative">
+              <Link href="/upload" className="flex flex-col items-center py-1 px-2 text-gray-400 min-w-[60px]">
+                <Plus className="w-6 h-6" />
+                <span className="text-[10px] mt-1">Yükle</span>
+              </Link>
+              <Link href="/messages" className="flex flex-col items-center py-1 px-2 text-gray-400 relative min-w-[60px]">
                 <MessageCircle className="w-6 h-6" />
-                <span className="text-xs mt-1">Mesajlar</span>
-                {/* Okunmamış mesaj badge'i */}
+                <span className="text-[10px] mt-1">Mesajlar</span>
                 <UnreadBadge userId={user?.id || null} />
               </Link>
-              <Link href="/profile" className="flex flex-col items-center py-2 px-4 text-gray-400">
+              <Link href="/profile" className="flex flex-col items-center py-1 px-2 text-gray-400 min-w-[60px]">
                 <User className="w-6 h-6" />
-                <span className="text-xs mt-1">Profil</span>
+                <span className="text-[10px] mt-1">Profil</span>
               </Link>
             </>
           ) : (
-            <Link href="/login" className="flex flex-col items-center py-2 px-4 text-gray-400">
+            <Link href="/login" className="flex flex-col items-center py-1 px-2 text-gray-400 min-w-[60px]">
               <LogIn className="w-6 h-6" />
-              <span className="text-xs mt-1">Giriş</span>
+              <span className="text-[10px] mt-1">Giriş</span>
             </Link>
           )}
         </div>
