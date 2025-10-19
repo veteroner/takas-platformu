@@ -2,7 +2,8 @@ import { supabase } from './supabase'
 import type { Item } from './supabase'
 import type { SeekingPreferences } from '@/types'
 
-// Get items for feed (excluding user's own items and already swiped items)
+// Get items for feed (excluding user's own items)
+// NOT excluding swiped items - user can see them again
 export async function getFeedItems(userId?: string, limit: number = 20): Promise<any[]> {
   try {
     // Validate UUID (to avoid passing non-uuid like 'guest' to neq filter)
@@ -23,18 +24,6 @@ export async function getFeedItems(userId?: string, limit: number = 20): Promise
     const { data, error } = await query
 
     if (error) throw error
-    
-    // If user is logged in, filter out already swiped items
-    if (isValidUuid(userId) && data) {
-      const { data: swipedItems } = await supabase
-        .from('user_swipes')
-        .select('item_id')
-        .eq('user_id', userId as string)
-      
-      const swipedIds = new Set((swipedItems || []).map(s => s.item_id))
-      return data.filter(item => !swipedIds.has(item.id))
-    }
-    
     return data || []
   } catch (error) {
     console.error('Error fetching feed items:', error)
