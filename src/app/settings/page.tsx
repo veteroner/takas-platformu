@@ -1,15 +1,16 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useAuthStore } from '@/store/authStore'
 import { ArrowLeft, Bell, Shield, Globe, Moon, Sun, Monitor, LogOut, Trash2, Save } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { getCurrentUser } from '@/lib/auth'
 
 export default function SettingsPage() {
   const router = useRouter()
-  const { user, isAuthenticated, updatePreferences, logout } = useAuthStore()
+  const [user, setUser] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const [settings, setSettings] = useState({
     notifications: true,
     privacy: 'public' as 'public' | 'private',
@@ -19,17 +20,33 @@ export default function SettingsPage() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login')
-      return
-    }
-    
-    if (user?.preferences) {
-      setSettings(user.preferences)
-    }
-  }, [isAuthenticated, user, router])
+    loadUser()
+  }, [])
 
-  if (!isAuthenticated || !user) {
+  const loadUser = async () => {
+    try {
+      setIsLoading(true)
+      const currentUser = await getCurrentUser()
+      
+      if (!currentUser) {
+        router.push('/login')
+        return
+      }
+
+      setUser(currentUser)
+      
+      if (currentUser?.preferences) {
+        setSettings(currentUser.preferences)
+      }
+    } catch (error) {
+      console.error('Error loading user:', error)
+      router.push('/login')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  if (isLoading || !user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center">
         <div className="text-white text-center">
@@ -40,23 +57,31 @@ export default function SettingsPage() {
     )
   }
 
-  const handleSave = () => {
-    updatePreferences(settings)
-    // Persist notif prefs to Supabase
-    if (user) {
-      supabase.from('notification_prefs').upsert({
-        user_id: user.id,
-        enabled: settings.notifications,
-        frequency: 'daily'
-      })
+  const handleSave = async () => {
+    try {
+      // Persist notif prefs to Supabase
+      if (user) {
+        await supabase.from('notification_prefs').upsert({
+          user_id: user.id,
+          enabled: settings.notifications,
+          frequency: 'daily'
+        })
+      }
+      // Show success message or toast
+      alert('Ayarlar kaydedildi!')
+    } catch (error) {
+      console.error('Error saving settings:', error)
+      alert('Ayarlar kaydedilirken bir hata oluştu')
     }
-    // Show success message or toast
-    alert('Ayarlar kaydedildi!')
   }
 
-  const handleLogout = () => {
-    logout()
-    router.push('/')
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut()
+      router.push('/')
+    } catch (error) {
+      console.error('Error logging out:', error)
+    }
   }
 
   const handleDeleteAccount = () => {
