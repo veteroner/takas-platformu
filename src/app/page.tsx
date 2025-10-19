@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import SwipeStack from '@/components/SwipeStack'
+import MatchToast from '@/components/MatchToast'
 import { Item, ItemCondition } from '@/types'
 import { Heart, MessageCircle, User, Settings, LogIn, Plus, Package } from 'lucide-react'
 import { UnreadBadge } from '@/components/UnreadBadge'
@@ -16,6 +18,7 @@ import { loadSeekingPreferencesAsync } from '@/lib/preferences'
 import { filterAndRank } from '@/lib/matching'
 
 export default function HomePage() {
+  const router = useRouter()
   const [user, setUser] = useState<any>(null)
   const [items, setItems] = useState<Item[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -24,6 +27,10 @@ export default function HomePage() {
   const [viewMode, setViewMode] = useState<'swipe' | 'grid'>('grid') // Varsayılan: Grid
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null) // Seçilen kategori
   const [showLikedItems, setShowLikedItems] = useState(false) // Beğenilen ürünler görünümü
+  
+  // Match toast state
+  const [showMatchToast, setShowMatchToast] = useState(false)
+  const [matchedUser, setMatchedUser] = useState<{ name: string; avatar?: string; matchId: string } | null>(null)
   
   // Interstitial reklam hook'u
   const interstitialAd = useInterstitialAd()
@@ -207,9 +214,19 @@ export default function HomePage() {
           
           if (match) {
             const otherUser = match.user1_id === user.id ? match.user2 : match.user1
+            
+            // 🎉 MATCH! Show toast and redirect to chat
+            setMatchedUser({
+              name: otherUser.name,
+              avatar: otherUser.avatar_url,
+              matchId: match.id
+            })
+            setShowMatchToast(true)
+            
+            // Redirect after toast animation
             setTimeout(() => {
-              alert(`🎉 ${otherUser.name} ile eşleştiniz! Mesajlaşmaya başlayabilirsiniz.`)
-            }, 500)
+              router.push(`/chat?match_id=${match.id}`)
+            }, 3000) // 3 seconds to show toast
           }
         } else {
           setPassedItems(prev => [...prev, item])
@@ -594,6 +611,20 @@ export default function HomePage() {
           )}
         </div>
       </nav>
+
+      {/* Match Toast Notification */}
+      {matchedUser && (
+        <MatchToast
+          isVisible={showMatchToast}
+          otherUserName={matchedUser.name}
+          otherUserAvatar={matchedUser.avatar}
+          onClose={() => {
+            setShowMatchToast(false)
+            // Immediately redirect on close
+            router.push(`/chat?match_id=${matchedUser.matchId}`)
+          }}
+        />
+      )}
     </div>
   )
 }
