@@ -158,7 +158,34 @@ export async function recordSwipe(
     // Map direction to action
     const action = direction === 'right' ? 'like' : direction === 'up' ? 'super_like' : 'pass'
     
-    // Save to user_swipes table
+    // First, check if already swiped (to avoid duplicate errors)
+    const { data: existing } = await supabase
+      .from('user_swipes')
+      .select('id, action')
+      .eq('user_id', userId)
+      .eq('item_id', itemId)
+      .maybeSingle()
+    
+    // If already swiped with same action, silently succeed
+    if (existing && existing.action === action) {
+      return true
+    }
+    
+    // If swiped with different action, update it
+    if (existing) {
+      const { error } = await supabase
+        .from('user_swipes')
+        .update({ action })
+        .eq('id', existing.id)
+      
+      if (error) {
+        console.error('Error updating swipe:', error)
+        return false
+      }
+      return true
+    }
+    
+    // New swipe - insert
     const { error } = await supabase
       .from('user_swipes')
       .insert([{ 
@@ -167,8 +194,18 @@ export async function recordSwipe(
         action 
       }])
 
-    // Ignore duplicate entry errors (23505 = unique violation) - user already swiped this item
-    if (error && error.code !== '23505') {
+    if (error) {
+      // If table doesn't exist yet, log warning and succeed silently
+      if (error.code === '42P01' || error.message?.includes('does not exist')) {
+        console.warn('user_swipes table not found. Please run create-user-swipes.sql in Supabase.')
+        return true
+      }
+      
+      // Ignore duplicate entry errors (23505 = unique violation)
+      if (error.code === '23505') {
+        return true
+      }
+      
       console.error('Error recording swipe:', error)
       return false
     }
@@ -198,16 +235,26 @@ export async function getUserLikedItems(userId: string): Promise<any[]> {
           description,
           images,
           category,
+          condition,
           estimated_value,
           city,
-          status
+          status,
+          owner_id,
+          created_at
         )
       `)
       .eq('user_id', userId)
       .eq('action', 'like')
       .order('created_at', { ascending: false })
 
-    if (error) throw error
+    if (error) {
+      // If table doesn't exist yet, return empty array
+      if (error.code === '42P01' || error.message?.includes('does not exist')) {
+        console.warn('user_swipes table not found. Please run create-user-swipes.sql in Supabase.')
+        return []
+      }
+      throw error
+    }
     
     // Filter out deleted/inactive items and flatten structure
     return (data || [])
@@ -231,7 +278,15 @@ export async function getUserPassedItems(userId: string): Promise<string[]> {
       .eq('user_id', userId)
       .eq('action', 'pass')
 
-    if (error) throw error
+    if (error) {
+      // If table doesn't exist yet, return empty array
+      if (error.code === '42P01' || error.message?.includes('does not exist')) {
+        console.warn('user_swipes table not found. Please run create-user-swipes.sql in Supabase.')
+        return []
+      }
+      throw error
+    }
+    
     return (data || []).map(swipe => swipe.item_id)
   } catch (error) {
     console.error('Error fetching passed items:', error)
