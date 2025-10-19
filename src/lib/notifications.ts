@@ -130,7 +130,7 @@ export async function sendMessageNotification(
       match_id: matchId,
       timestamp: new Date().toISOString()
     },
-    url: `/chat?match_id=${matchId}`
+    url: `/chat/${matchId}`
   });
 }
 

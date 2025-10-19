@@ -225,7 +225,7 @@ export default function HomePage() {
             
             // Redirect directly to chat with matched user
             setTimeout(() => {
-              router.push(`/chat?match_id=${match.id}`)
+              router.push(`/chat/${match.id}`)
             }, 3000) // 3 seconds to show toast
           }
         } else {
@@ -621,7 +621,7 @@ export default function HomePage() {
           onClose={() => {
             setShowMatchToast(false)
             // Immediately redirect to direct chat with matched user
-            router.push(`/chat?match_id=${matchedUser.matchId}`)
+            router.push(`/chat/${matchedUser.matchId}`)
           }}
         />
       )}
