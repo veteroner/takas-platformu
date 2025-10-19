@@ -216,7 +216,7 @@ export default function MyItemsPage() {
             {items.map((item) => (
               <div
                 key={item.id}
-                className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 hover:shadow-lg transition-all"
+                className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-all"
               >
                 <div className="flex gap-4">
                   {/* Image */}
@@ -239,7 +239,7 @@ export default function MyItemsPage() {
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-2">
                       <div>
-                        <h3 className="font-semibold text-gray-800 mb-1">
+                        <h3 className="font-bold text-gray-900 mb-1">
                           {item.title}
                         </h3>
                         <p className="text-sm text-gray-600 line-clamp-2">
@@ -248,12 +248,12 @@ export default function MyItemsPage() {
                       </div>
                       
                       {/* Status Badge */}
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm ${
                         item.status === 'active' 
-                          ? 'bg-green-100 text-green-700'
+                          ? 'bg-green-500 text-white'
                           : item.status === 'traded'
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'bg-gray-100 text-gray-700'
+                          ? 'bg-blue-500 text-white'
+                          : 'bg-gray-500 text-white'
                       }`}>
                         {item.status === 'active' ? '✓ Aktif' : 
                          item.status === 'traded' ? '🤝 Takas Edildi' : 
@@ -261,12 +261,12 @@ export default function MyItemsPage() {
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
-                      <span>{getCategoryText(item.category)}</span>
+                    <div className="flex items-center gap-4 text-sm font-medium text-gray-700 mb-3">
+                      <span>👕 {getCategoryText(item.category)}</span>
                       <span>•</span>
-                      <span>{getConditionText(item.condition)}</span>
+                      <span>🔧 {getConditionText(item.condition)}</span>
                       <span>•</span>
-                      <span className="font-semibold text-green-600">
+                      <span className="font-bold text-green-600">
                         ≈₺{item.estimated_value || 0}
                       </span>
                     </div>
@@ -275,7 +275,7 @@ export default function MyItemsPage() {
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleToggleStatus(item)}
-                        className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors"
+                        className="flex items-center gap-1 px-3 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-sm font-medium transition-colors shadow-sm"
                         title={item.status === 'active' ? 'Pasif yap' : 'Aktif yap'}
                       >
                         {item.status === 'active' ? (
@@ -293,7 +293,7 @@ export default function MyItemsPage() {
                       
                       <button
                         onClick={() => handleEdit(item)}
-                        className="flex items-center gap-1 px-3 py-1.5 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg text-sm transition-colors"
+                        className="flex items-center gap-1 px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors shadow-sm"
                       >
                         <Edit2 className="w-4 h-4" />
                         Düzenle
@@ -301,7 +301,7 @@ export default function MyItemsPage() {
                       
                       <button
                         onClick={() => handleDelete(item.id)}
-                        className="flex items-center gap-1 px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg text-sm transition-colors"
+                        className="flex items-center gap-1 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition-colors shadow-sm"
                       >
                         <Trash2 className="w-4 h-4" />
                         Sil
@@ -327,39 +327,39 @@ export default function MyItemsPage() {
               <div className="space-y-4">
                 {/* Title */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">
                     Ürün Adı
                   </label>
                   <input
                     type="text"
                     value={editingItem.title}
                     onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border-2 border-gray-300 bg-white rounded-lg text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                   />
                 </div>
 
                 {/* Description */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">
                     Açıklama
                   </label>
                   <textarea
                     value={editingItem.description}
                     onChange={(e) => setEditingItem({ ...editingItem, description: e.target.value })}
                     rows={4}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                    className="w-full px-4 py-3 border-2 border-gray-300 bg-white rounded-lg text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none"
                   />
                 </div>
 
                 {/* Category */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">
                     Kategori
                   </label>
                   <select
                     value={editingItem.category}
                     onChange={(e) => setEditingItem({ ...editingItem, category: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border-2 border-gray-300 bg-white rounded-lg text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                   >
                     <option value="clothing">👕 Giyim</option>
                     <option value="toys">🧸 Oyuncak</option>
@@ -373,13 +373,13 @@ export default function MyItemsPage() {
 
                 {/* Condition */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">
                     Durumu
                   </label>
                   <select
                     value={editingItem.condition}
                     onChange={(e) => setEditingItem({ ...editingItem, condition: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border-2 border-gray-300 bg-white rounded-lg text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                   >
                     <option value="new">Sıfır</option>
                     <option value="like-new">Sıfır Gibi</option>
@@ -392,14 +392,14 @@ export default function MyItemsPage() {
 
                 {/* Estimated Value */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">
                     Tahmini Değer (₺)
                   </label>
                   <input
                     type="number"
                     value={editingItem.estimated_value}
                     onChange={(e) => setEditingItem({ ...editingItem, estimated_value: parseFloat(e.target.value) })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border-2 border-gray-300 bg-white rounded-lg text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                   />
                 </div>
               </div>
@@ -411,13 +411,13 @@ export default function MyItemsPage() {
                     setShowEditModal(false)
                     setEditingItem(null)
                   }}
-                  className="flex-1 px-4 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+                  className="flex-1 px-4 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors shadow-sm"
                 >
                   İptal
                 </button>
                 <button
                   onClick={handleSaveEdit}
-                  className="flex-1 px-4 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg font-medium hover:from-pink-600 hover:to-purple-700 transition-all"
+                  className="flex-1 px-4 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg font-semibold hover:from-pink-600 hover:to-purple-700 transition-all shadow-md"
                 >
                   Kaydet
                 </button>
