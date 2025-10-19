@@ -25,6 +25,11 @@ export default function ProfilePage() {
     phone: ''
   })
   const [extraSwipes, setExtraSwipes] = useState(0)
+  const [stats, setStats] = useState({
+    sharedItems: 0,
+    receivedItems: 0,
+    rating: 0
+  })
 
   useEffect(() => {
     loadUserData()
@@ -61,11 +66,45 @@ export default function ProfilePage() {
       // Load user's items
       const items = await getUserItems(currentUser.id)
       setUserItems(items)
+      
+      // Load stats from database
+      await loadUserStats(currentUser.id)
     } catch (error) {
       console.error('Error loading user data:', error)
       router.push('/login')
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const loadUserStats = async (userId: string) => {
+    try {
+      // 1. Count shared items (items table)
+      const { count: sharedCount } = await supabase
+        .from('items')
+        .select('*', { count: 'exact', head: true })
+        .eq('owner_id', userId)
+        .eq('status', 'active')
+      
+      // 2. Count received items (completed matches where user received)
+      const { count: receivedCount } = await supabase
+        .from('matches')
+        .select('*', { count: 'exact', head: true })
+        .or(`user1_id.eq.${userId},user2_id.eq.${userId}`)
+        .eq('status', 'completed')
+      
+      // 3. Calculate average rating
+      // For now, use default 5.0 (can be implemented with ratings table later)
+      const rating = 5.0
+      
+      setStats({
+        sharedItems: sharedCount || 0,
+        receivedItems: receivedCount || 0,
+        rating: rating
+      })
+    } catch (error) {
+      console.error('Error loading user stats:', error)
+      // Keep default values on error
     }
   }
 
@@ -263,13 +302,13 @@ export default function ProfilePage() {
             )}
           </div>
 
-          {/* Stats Cards */}
+          {/* Stats Cards - Database'den yükleniyor */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 text-center border border-white/20">
               <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mx-auto mb-3">
                 <Package size={24} className="text-white" />
               </div>
-              <div className="text-2xl font-bold text-white">{userItems.length}</div>
+              <div className="text-2xl font-bold text-white">{stats.sharedItems}</div>
               <div className="text-white/70 text-sm">Paylaşılan Eşya</div>
             </div>
 
@@ -277,15 +316,15 @@ export default function ProfilePage() {
               <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-green-500 to-teal-600 rounded-full mx-auto mb-3">
                 <Gift size={24} className="text-white" />
               </div>
-              <div className="text-2xl font-bold text-white">0</div>
-              <div className="text-white/70 text-sm">Alınan Eşya</div>
+              <div className="text-2xl font-bold text-white">{stats.receivedItems}</div>
+              <div className="text-white/70 text-sm">Tamamlanan Takas</div>
             </div>
 
             <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 text-center border border-white/20">
               <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-full mx-auto mb-3">
                 <Star size={24} className="text-white" />
               </div>
-              <div className="text-2xl font-bold text-white">5.0</div>
+              <div className="text-2xl font-bold text-white">{stats.rating.toFixed(1)}</div>
               <div className="text-white/70 text-sm">Değerlendirme</div>
             </div>
           </div>
