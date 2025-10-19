@@ -466,3 +466,158 @@ export async function updateUserProfile(
     return null
   }
 }
+
+// ==========================================
+// RATING SYSTEM - Karşılıklı Değerlendirme
+// ==========================================
+
+// Match'i tamamla (kullanıcı "Takası Tamamla" butonuna bastığında)
+export async function confirmMatchCompletion(matchId: string, userId: string): Promise<{
+  success: boolean
+  message: string
+  showRatingModal: boolean
+  bothConfirmed: boolean
+}> {
+  try {
+    const { data, error } = await supabase.rpc('complete_match', {
+      p_match_id: matchId,
+      p_user_id: userId
+    })
+
+    if (error) throw error
+
+    return {
+      success: data.success,
+      message: data.message,
+      showRatingModal: data.show_rating_modal || false,
+      bothConfirmed: data.both_confirmed || false
+    }
+  } catch (error) {
+    console.error('Error confirming match completion:', error)
+    return {
+      success: false,
+      message: 'Bir hata oluştu',
+      showRatingModal: false,
+      bothConfirmed: false
+    }
+  }
+}
+
+// Kullanıcıya puan ver
+export async function rateUser(params: {
+  raterId: string
+  ratedUserId: string
+  matchId: string
+  rating: number
+  comment?: string
+}): Promise<boolean> {
+  try {
+    const { error } = await supabase
+      .from('user_ratings')
+      .insert([{
+        rater_id: params.raterId,
+        rated_user_id: params.ratedUserId,
+        match_id: params.matchId,
+        rating: params.rating,
+        comment: params.comment || null
+      }])
+
+    if (error) throw error
+    return true
+  } catch (error) {
+    console.error('Error rating user:', error)
+    return false
+  }
+}
+
+// Kullanıcının ortalama puanını al
+export async function getUserAverageRating(userId: string): Promise<number> {
+  try {
+    const { data, error } = await supabase.rpc('get_user_average_rating', {
+      p_user_id: userId
+    })
+
+    if (error) throw error
+    return data || 5.0
+  } catch (error) {
+    console.error('Error getting user average rating:', error)
+    return 5.0
+  }
+}
+
+// Kullanıcının aldığı puan sayısını al
+export async function getUserRatingCount(userId: string): Promise<number> {
+  try {
+    const { data, error } = await supabase.rpc('get_user_rating_count', {
+      p_user_id: userId
+    })
+
+    if (error) throw error
+    return data || 0
+  } catch (error) {
+    console.error('Error getting user rating count:', error)
+    return 0
+  }
+}
+
+// Kullanıcı bu match'i puanladı mı?
+export async function hasUserRatedMatch(userId: string, matchId: string): Promise<boolean> {
+  try {
+    const { data, error } = await supabase.rpc('user_has_rated_match', {
+      p_user_id: userId,
+      p_match_id: matchId
+    })
+
+    if (error) throw error
+    return data || false
+  } catch (error) {
+    console.error('Error checking if user rated match:', error)
+    return false
+  }
+}
+
+// Match'te her iki taraf da puanladı mı?
+export async function hasMatchBeenFullyRated(matchId: string): Promise<boolean> {
+  try {
+    const { data, error } = await supabase.rpc('check_match_both_rated', {
+      p_match_id: matchId
+    })
+
+    if (error) throw error
+    return data || false
+  } catch (error) {
+    console.error('Error checking if match fully rated:', error)
+    return false
+  }
+}
+
+// Kullanıcıya verilen puanları al (yorumlarla birlikte)
+export async function getUserRatings(userId: string): Promise<any[]> {
+  try {
+    const { data, error } = await supabase
+      .from('user_ratings')
+      .select(`
+        id,
+        rating,
+        comment,
+        created_at,
+        rater:rater_id (
+          id,
+          name,
+          avatar_url
+        ),
+        match:match_id (
+          id,
+          created_at
+        )
+      `)
+      .eq('rated_user_id', userId)
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error getting user ratings:', error)
+    return []
+  }
+}

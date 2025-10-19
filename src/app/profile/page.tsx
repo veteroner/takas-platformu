@@ -93,18 +93,23 @@ export default function ProfilePage() {
         .or(`user1_id.eq.${userId},user2_id.eq.${userId}`)
         .eq('status', 'completed')
       
-      // 3. Calculate average rating
-      // For now, use default 5.0 (can be implemented with ratings table later)
-      const rating = 5.0
+      // 3. Get REAL average rating from database
+      const { data: avgRating } = await supabase
+        .rpc('get_user_average_rating', { p_user_id: userId })
       
       setStats({
         sharedItems: sharedCount || 0,
         receivedItems: receivedCount || 0,
-        rating: rating
+        rating: avgRating || 5.0
       })
     } catch (error) {
       console.error('Error loading user stats:', error)
       // Keep default values on error
+      setStats({
+        sharedItems: 0,
+        receivedItems: 0,
+        rating: 5.0
+      })
     }
   }
 
@@ -359,6 +364,64 @@ export default function ProfilePage() {
               </div>
             </div>
           )}
+
+          {/* User Ratings Section */}
+          <div className="mb-6">
+            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
+              <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
+                <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                Değerlendirmeler
+              </h3>
+              
+              {/* Rating Summary */}
+              <div className="flex items-center gap-6 mb-4 pb-4 border-b border-white/20">
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-white mb-1">
+                    {stats.rating.toFixed(1)}
+                  </div>
+                  <div className="flex gap-1 justify-center mb-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={`w-4 h-4 ${
+                          star <= Math.round(stats.rating)
+                            ? 'fill-yellow-400 text-yellow-400'
+                            : 'text-white/30'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <div className="text-white/60 text-xs">
+                    {stats.receivedItems} takas
+                  </div>
+                </div>
+                
+                <div className="flex-1 text-white/70 text-sm">
+                  {stats.receivedItems === 0 ? (
+                    <p>Henüz değerlendirme yok. İlk takasınızı tamamlayın! 🌟</p>
+                  ) : stats.rating >= 4.5 ? (
+                    <p>Mükemmel! Kullanıcılar sizinle takas yapmaktan çok memnun 🎉</p>
+                  ) : stats.rating >= 4.0 ? (
+                    <p>Harika! Güvenilir bir takas partnerisiniz 👍</p>
+                  ) : stats.rating >= 3.5 ? (
+                    <p>İyi! Takas deneyiminizi geliştirmeye devam edin 💪</p>
+                  ) : (
+                    <p>Takas deneyiminizi iyileştirmek için geri bildirimleri dikkate alın 📈</p>
+                  )}
+                </div>
+              </div>
+
+              {/* View All Ratings Button */}
+              {stats.receivedItems > 0 && (
+                <button
+                  onClick={() => router.push('/profile/ratings')}
+                  className="w-full py-3 px-4 bg-white/10 hover:bg-white/20 rounded-xl text-white text-sm font-medium transition-colors"
+                >
+                  Tüm Değerlendirmeleri Gör ({stats.receivedItems})
+                </button>
+              )}
+            </div>
+          </div>
 
           {/* Rewarded Ad Button */}
           <div className="mb-6">

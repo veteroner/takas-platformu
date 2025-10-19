@@ -1,33 +1,42 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from "react";
-import { Send, ArrowLeft } from "lucide-react";
+import { Send, ArrowLeft, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import type { Message } from "@/lib/supabase";
+import RatingModal from "./RatingModal";
+import { confirmMatchCompletion, rateUser, hasUserRatedMatch } from "@/lib/api";
 
 interface ChatProps {
   matchId?: string;
   userId?: string;
   otherUserId?: string;
   otherUserName?: string;
+  otherUserAvatar?: string;
 }
 
 export default function Chat({ 
   matchId = "demo-match-123", 
   userId = "current-user-123",
   otherUserId = "other-user-123",
-  otherUserName = "Ali Yılmaz"
+  otherUserName = "Ali Yılmaz",
+  otherUserAvatar
 }: ChatProps) {
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [matchStatus, setMatchStatus] = useState<'active' | 'pending_completion' | 'completed'>('active');
+  const [userHasRated, setUserHasRated] = useState(false);
+  const [isCompletingMatch, setIsCompletingMatch] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Mesajları yükle
+  // Mesajları ve match durumunu yükle
   useEffect(() => {
     loadMessages();
+    loadMatchStatus();
     
     // Realtime mesajları dinle
     const channel = supabase
@@ -57,10 +66,71 @@ export default function Chat({
       )
       .subscribe();
 
+    // Match durumu değişikliklerini dinle
+    const matchChannel = supabase
+      .channel(`match:${matchId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'matches',
+          filter: `id=eq.${matchId}`
+        },
+        (payload) => {
+          console.log('Match durumu güncellendi:', payload);
+          loadMatchStatus();
+        }
+      )
+      .subscribe();
+
     return () => {
       supabase.removeChannel(channel);
+      supabase.removeChannel(matchChannel);
     };
   }, [matchId, userId, otherUserName]);
+
+  // Match durumunu yükle
+  const loadMatchStatus = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('matches')
+        .select('status, user1_confirmed, user2_confirmed, user1_id, user2_id')
+        .eq('id', matchId)
+        .single();
+
+      if (error) throw error;
+
+      if (data.status === 'completed') {
+        setMatchStatus('completed');
+        // Kullanıcı puanlama yaptı mı kontrol et
+        const hasRated = await hasUserRatedMatch(userId, matchId);
+        setUserHasRated(hasRated);
+        if (!hasRated) {
+          setShowRatingModal(true); // Otomatik olarak rating modal'ı aç
+        }
+      } else {
+        // Kullanıcının onay durumunu kontrol et
+        const userConfirmed = data.user1_id === userId 
+          ? data.user1_confirmed 
+          : data.user2_confirmed;
+        
+        const otherConfirmed = data.user1_id === userId 
+          ? data.user2_confirmed 
+          : data.user1_confirmed;
+
+        if (userConfirmed && otherConfirmed) {
+          setMatchStatus('completed');
+        } else if (userConfirmed || otherConfirmed) {
+          setMatchStatus('pending_completion');
+        } else {
+          setMatchStatus('active');
+        }
+      }
+    } catch (error) {
+      console.error('Match durumu yüklenemedi:', error);
+    }
+  };
 
   // Mesajları scroll et
   useEffect(() => {
@@ -139,17 +209,111 @@ export default function Chat({
     }
   };
 
+  // Takası tamamla butonu
+  const handleCompleteMatch = async () => {
+    setIsCompletingMatch(true);
+    try {
+      const result = await confirmMatchCompletion(matchId, userId);
+      
+      if (result.success) {
+        if (result.showRatingModal) {
+          // Her iki taraf da onayladı - rating modal aç
+          setMatchStatus('completed');
+          setShowRatingModal(true);
+        } else {
+          // Sadece bu kullanıcı onayladı - diğerini bekle
+          setMatchStatus('pending_completion');
+          alert(result.message);
+        }
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      console.error('Takas tamamlama hatası:', error);
+      alert('Bir hata oluştu, lütfen tekrar deneyin');
+    } finally {
+      setIsCompletingMatch(false);
+    }
+  };
+
+  // Puanlama submit
+  const handleSubmitRating = async (rating: number, comment?: string) => {
+    try {
+      const success = await rateUser({
+        raterId: userId,
+        ratedUserId: otherUserId,
+        matchId: matchId,
+        rating: rating,
+        comment: comment
+      });
+
+      if (success) {
+        setUserHasRated(true);
+        setShowRatingModal(false);
+        alert('Teşekkürler! Puanınız kaydedildi. 🌟');
+      } else {
+        throw new Error('Rating failed');
+      }
+    } catch (error) {
+      console.error('Puanlama hatası:', error);
+      throw error; // RatingModal'a hata fırlatmak için
+    }
+  };
+
   return (
     <div className="flex flex-col h-full bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden">
       {/* Chat Header */}
-      <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white p-4 flex items-center gap-3">
-        <Link href="/" className="p-1 hover:bg-white/20 rounded-full transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-        </Link>
-        <div className="flex-1">
-          <h3 className="font-semibold">{otherUserName}</h3>
-          <p className="text-sm opacity-90">Aktif</p>
+      <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white p-4">
+        <div className="flex items-center gap-3 mb-3">
+          <Link href="/" className="p-1 hover:bg-white/20 rounded-full transition-colors">
+            <ArrowLeft className="w-5 h-5" />
+          </Link>
+          <div className="flex-1">
+            <h3 className="font-semibold">{otherUserName}</h3>
+            <p className="text-sm opacity-90">
+              {matchStatus === 'completed' ? 'Takas Tamamlandı ✅' : 'Aktif'}
+            </p>
+          </div>
         </div>
+
+        {/* Takası Tamamla Butonu */}
+        {matchStatus === 'active' && (
+          <button
+            onClick={handleCompleteMatch}
+            disabled={isCompletingMatch}
+            className="w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm py-2.5 px-4 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+          >
+            {isCompletingMatch ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                İşleniyor...
+              </>
+            ) : (
+              <>
+                <CheckCircle className="w-4 h-4" />
+                Takası Tamamla
+              </>
+            )}
+          </button>
+        )}
+
+        {matchStatus === 'pending_completion' && (
+          <div className="w-full bg-yellow-500/20 backdrop-blur-sm py-2.5 px-4 rounded-xl text-sm text-center">
+            ⏳ Diğer tarafın onayı bekleniyor...
+          </div>
+        )}
+
+        {matchStatus === 'completed' && !userHasRated && (
+          <div className="w-full bg-green-500/20 backdrop-blur-sm py-2.5 px-4 rounded-xl text-sm text-center">
+            ✅ Takas tamamlandı! Lütfen puanlayın.
+          </div>
+        )}
+
+        {matchStatus === 'completed' && userHasRated && (
+          <div className="w-full bg-green-500/20 backdrop-blur-sm py-2.5 px-4 rounded-xl text-sm text-center">
+            🌟 Takas tamamlandı ve puanlandı!
+          </div>
+        )}
       </div>
 
       {/* Messages Area */}
@@ -208,6 +372,15 @@ export default function Chat({
           </button>
         </div>
       </div>
+
+      {/* Rating Modal */}
+      <RatingModal
+        isOpen={showRatingModal}
+        onClose={() => setShowRatingModal(false)}
+        onSubmit={handleSubmitRating}
+        otherUserName={otherUserName}
+        otherUserAvatar={otherUserAvatar}
+      />
     </div>
   );
 }
