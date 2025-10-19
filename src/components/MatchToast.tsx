@@ -97,7 +97,7 @@ export default function MatchToast({
                 <div className="flex items-center justify-center gap-2 text-white">
                   <MessageCircle className="w-5 h-5" />
                   <p className="text-sm font-medium">
-                    Mesajlar sayfasına yönlendiriliyorsunuz...
+                    Hemen mesajlaşmaya başlayın!
                   </p>
                 </div>
               </div>
