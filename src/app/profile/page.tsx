@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { getCurrentUser, updateUserProfile } from '@/lib/auth'
 import { getUserItems } from '@/lib/api'
+import { supabase } from '@/lib/supabase'
 import type { Item } from '@/types'
 import RewardedAdButton from '@/components/RewardedAdButton'
 import { AdMobRewardItem } from '@capacitor-community/admob'
@@ -40,11 +41,21 @@ export default function ProfilePage() {
       }
 
       setUser(currentUser)
+      
+      // Load metadata from Supabase
+      const { data: userData } = await supabase
+        .from('users')
+        .select('metadata')
+        .eq('id', currentUser.id)
+        .single()
+      
+      const metadata = userData?.metadata || {}
+      
       setEditData({
         name: currentUser.name || '',
-        bio: '',
-        location: '',
-        phone: ''
+        bio: metadata.bio || '',
+        location: metadata.location || '',
+        phone: metadata.phone || ''
       })
 
       // Load user's items
@@ -71,14 +82,26 @@ export default function ProfilePage() {
 
   const handleSave = async () => {
     try {
-      // Sadece users tablosunda olan kolonları güncelle (name, email, avatar)
+      // 1. Name'i users tablosuna kaydet
       const updates = {
         name: editData.name
-        // bio, location, phone users tablosunda yok - ignore ediyoruz
+      }
+      await updateUserProfile(user.id, updates)
+      
+      // 2. Bio, location, phone'u metadata'ya kaydet
+      const metadata = {
+        bio: editData.bio,
+        location: editData.location,
+        phone: editData.phone
       }
       
-      await updateUserProfile(user.id, updates)
-      setUser({ ...user, ...editData })
+      await supabase
+        .from('users')
+        .update({ metadata })
+        .eq('id', user.id)
+      
+      // 3. Local state'i güncelle
+      setUser({ ...user, ...editData, metadata })
       setIsEditing(false)
       alert('Profil başarıyla güncellendi!')
     } catch (error) {
@@ -184,7 +207,7 @@ export default function ProfilePage() {
                 />
               ) : (
                 <p className="text-white/80 bg-white/5 rounded-xl p-4">
-                  {user.bio || 'Henüz bir bio eklenmemiş.'}
+                  {editData.bio || user.metadata?.bio || 'Henüz bir bio eklenmemiş.'}
                 </p>
               )}
             </div>
@@ -203,7 +226,7 @@ export default function ProfilePage() {
                     className="flex-1 bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
                   />
                 ) : (
-                  <span className="text-white/80">{user.location || 'Konum belirtilmemiş'}</span>
+                  <span className="text-white/80">{editData.location || user.metadata?.location || 'Konum belirtilmemiş'}</span>
                 )}
               </div>
 
@@ -219,7 +242,7 @@ export default function ProfilePage() {
                     className="flex-1 bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
                   />
                 ) : (
-                  <span className="text-white/80">{user.phone || 'Telefon belirtilmemiş'}</span>
+                  <span className="text-white/80">{editData.phone || user.metadata?.phone || 'Telefon belirtilmemiş'}</span>
                 )}
               </div>
 
