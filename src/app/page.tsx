@@ -215,7 +215,7 @@ export default function HomePage() {
           if (match) {
             const otherUser = match.user1_id === user.id ? match.user2 : match.user1
             
-            // 🎉 MATCH! Show toast and redirect to chat
+            // 🎉 MATCH! Show toast and redirect to messages
             setMatchedUser({
               name: otherUser.name,
               avatar: otherUser.avatar_url,
@@ -223,9 +223,9 @@ export default function HomePage() {
             })
             setShowMatchToast(true)
             
-            // Redirect after toast animation
+            // Redirect to messages list after toast animation
             setTimeout(() => {
-              router.push(`/chat?match_id=${match.id}`)
+              router.push('/messages')
             }, 3000) // 3 seconds to show toast
           }
         } else {
@@ -620,8 +620,8 @@ export default function HomePage() {
           otherUserAvatar={matchedUser.avatar}
           onClose={() => {
             setShowMatchToast(false)
-            // Immediately redirect on close
-            router.push(`/chat?match_id=${matchedUser.matchId}`)
+            // Immediately redirect to messages list on close
+            router.push('/messages')
           }}
         />
       )}
