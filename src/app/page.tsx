@@ -146,12 +146,12 @@ export default function HomePage() {
             ageRange: { min: 0, max: 100 }
           },
           location: {
-            city: 'İstanbul',
+            city: item.location || 'İstanbul', // Database'den gelen şehir
             country: 'TR'
           }
         },
         location: {
-          city: 'İstanbul',
+          city: item.location || 'İstanbul', // Database'den gelen şehir
           country: 'TR'
         },
         createdAt: new Date(item.created_at),

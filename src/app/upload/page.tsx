@@ -53,7 +53,8 @@ export default function UploadPage() {
     description: '',
     category: '',
     condition: '',
-    estimatedValue: ''
+    estimatedValue: '',
+    city: '' // Ürünün bulunduğu şehir
   })
   // Seeking preferences local state (simple v1)
   const [seekCategories, setSeekCategories] = useState<Array<'clothing'|'toys'|'electronics'|'books'|'sports'|'home'|'other'>>([])
@@ -169,7 +170,8 @@ export default function UploadPage() {
         condition: formData.condition as any,
         estimated_value: formData.estimatedValue ? parseFloat(formData.estimatedValue) : undefined,
         images: imageUrls,
-        owner_id: userId
+        owner_id: userId,
+        location: formData.city // Ürünün bulunduğu şehir
       })
 
       console.log('✅ Ürün başarıyla oluşturuldu:', item)
@@ -388,6 +390,26 @@ export default function UploadPage() {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
             <p className="text-xs text-gray-500 mt-2">Opsiyonel: Ürünün yaklaşık değeri</p>
+          </div>
+
+          {/* Location/City */}
+          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              📍 Ürünün Bulunduğu Şehir *
+            </label>
+            <select
+              name="city"
+              value={formData.city}
+              onChange={handleInputChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            >
+              <option value="">Şehir seçin</option>
+              {cities.map(city => (
+                <option key={city} value={city}>{city}</option>
+              ))}
+            </select>
+            <p className="text-xs text-gray-500 mt-2">Ürününüzün bulunduğu şehri seçin</p>
           </div>
 
           {/* Seeking Preferences */}
