@@ -23,6 +23,7 @@ export default function HomePage() {
   const [passedItems, setPassedItems] = useState<Item[]>([])
   const [viewMode, setViewMode] = useState<'swipe' | 'grid'>('grid') // Varsayılan: Grid
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null) // Seçilen kategori
+  const [showLikedItems, setShowLikedItems] = useState(false) // Beğenilen ürünler görünümü
   
   // Interstitial reklam hook'u
   const interstitialAd = useInterstitialAd()
@@ -403,17 +404,85 @@ export default function HomePage() {
         {/* Banner Reklam */}
         <BannerAd />
 
-        {/* Stats */}
+        {/* Stats - Tıklanabilir */}
         <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
+          <button 
+            onClick={() => setShowLikedItems(!showLikedItems)}
+            className="bg-white/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20 hover:bg-white/90 transition-all transform hover:scale-105 active:scale-95"
+          >
             <div className="text-2xl font-bold text-green-600">{likedItems.length}</div>
             <div className="text-sm text-gray-600">Beğenilen</div>
-          </div>
+            {showLikedItems && <div className="text-xs text-purple-600 mt-1">👇 Aşağıda gösteriliyor</div>}
+          </button>
           <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
             <div className="text-2xl font-bold text-red-600">{passedItems.length}</div>
             <div className="text-sm text-gray-600">Geçilen</div>
           </div>
         </div>
+
+        {/* Beğenilen Ürünler Grid */}
+        {showLikedItems && likedItems.length > 0 && (
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-gray-800">💚 Beğendiğin Ürünler</h2>
+              <button 
+                onClick={() => setShowLikedItems(false)}
+                className="text-sm text-gray-600 hover:text-gray-800"
+              >
+                Gizle ✕
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {likedItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="bg-white/70 backdrop-blur-sm rounded-xl overflow-hidden border border-white/20 hover:shadow-lg transition-all transform hover:scale-105"
+                >
+                  <div className="relative aspect-square">
+                    <Image
+                      src={item.images[0] || '/placeholder.png'}
+                      alt={item.title}
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 text-xs font-medium">
+                      {(() => {
+                        const cat = String(item.category).toLowerCase()
+                        if (cat.includes('clothing')) return '👕'
+                        if (cat.includes('toys')) return '🧸'
+                        if (cat.includes('electronics')) return '📱'
+                        if (cat.includes('books')) return '📚'
+                        if (cat.includes('accessories')) return '👜'
+                        if (cat.includes('shoes')) return '👟'
+                        return '📦'
+                      })()}
+                    </div>
+                  </div>
+                  <div className="p-3">
+                    <h3 className="font-semibold text-sm text-gray-800 truncate">{item.title}</h3>
+                    <p className="text-xs text-gray-600 mt-1">📍 {item.location?.city}</p>
+                    <p className="text-sm font-bold text-green-600 mt-1">≈₺{item.estimatedValue}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Beğenilen Ürün Yoksa */}
+        {showLikedItems && likedItems.length === 0 && (
+          <div className="mb-6 bg-white/70 backdrop-blur-sm rounded-xl p-8 text-center border border-white/20">
+            <Heart className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">Henüz beğeni yok</h3>
+            <p className="text-sm text-gray-600">Ürünleri kaydırıp beğenmeye başla! 💚</p>
+            <button 
+              onClick={() => setShowLikedItems(false)}
+              className="mt-4 text-sm text-purple-600 hover:text-purple-800 font-medium"
+            >
+              Kapat
+            </button>
+          </div>
+        )}
 
         {/* Login CTA (sadece giriş yapmamış kullanıcılar için) */}
         {!user && (
