@@ -232,7 +232,7 @@ export async function getUserLikedItems(userId: string): Promise<any[]> {
           category,
           condition,
           estimated_value,
-          city,
+          location,
           status,
           owner_id,
           created_at
