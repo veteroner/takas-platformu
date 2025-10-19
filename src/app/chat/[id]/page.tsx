@@ -2,16 +2,17 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { ArrowLeft, Send, MoreVertical } from 'lucide-react'
+import { ArrowLeft, Send, MoreVertical, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
 import { getCurrentUser } from '@/lib/auth'
-import { getMatchMessages, sendMessage } from '@/lib/api'
+import { getMatchMessages, sendMessage, confirmMatchCompletion, rateUser, hasUserRatedMatch } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
 import { useMessageFilter } from '@/hooks/useMessageFilter'
 import { MessageFilterWarning, BanStatusBanner } from '@/components/MessageFilterWarning'
 import { BlockReportModal, BlockedUserNotice } from '@/components/BlockReportModal'
 import { useBlockUser } from '@/hooks/useBlockAndReport'
 import { useMarkAsRead } from '@/hooks/useUnreadMessages'
+import RatingModal from '@/components/RatingModal'
 
 // Dynamic route - no static generation
 export const dynamic = 'force-dynamic'
@@ -40,10 +41,17 @@ export default function ChatPage() {
   const [isBlocked, setIsBlocked] = useState(false)
   const { isUserBlocked } = useBlockUser()
   const { markMatchAsRead } = useMarkAsRead()
+  
+  // Rating system states
+  const [showRatingModal, setShowRatingModal] = useState(false)
+  const [matchStatus, setMatchStatus] = useState<'active' | 'pending_completion' | 'completed'>('active')
+  const [userHasRated, setUserHasRated] = useState(false)
+  const [isCompletingMatch, setIsCompletingMatch] = useState(false)
 
   useEffect(() => {
     loadData()
     checkBanStatus()
+    loadMatchStatus()
   }, [matchId])
 
   // Real-time subscription'ı ayrı useEffect'te yap
@@ -111,6 +119,103 @@ export default function ChatPage() {
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  // Load match status for rating system
+  const loadMatchStatus = async () => {
+    if (!matchId || !user) return
+    
+    try {
+      const { data, error } = await supabase
+        .from('matches')
+        .select('status, user1_confirmed, user2_confirmed, user1_id, user2_id')
+        .eq('id', matchId)
+        .single()
+
+      if (error) throw error
+
+      if (data.status === 'completed') {
+        setMatchStatus('completed')
+        // Check if user has rated
+        const hasRated = await hasUserRatedMatch(user.id, matchId)
+        setUserHasRated(hasRated)
+        if (!hasRated) {
+          setShowRatingModal(true) // Auto-show rating modal
+        }
+      } else {
+        const userConfirmed = data.user1_id === user.id 
+          ? data.user1_confirmed 
+          : data.user2_confirmed
+        
+        const otherConfirmed = data.user1_id === user.id 
+          ? data.user2_confirmed 
+          : data.user1_confirmed
+
+        if (userConfirmed && otherConfirmed) {
+          setMatchStatus('completed')
+        } else if (userConfirmed || otherConfirmed) {
+          setMatchStatus('pending_completion')
+        } else {
+          setMatchStatus('active')
+        }
+      }
+    } catch (error) {
+      console.error('Error loading match status:', error)
+    }
+  }
+
+  // Handle "Takası Tamamla" button
+  const handleCompleteMatch = async () => {
+    if (!user) return
+    
+    setIsCompletingMatch(true)
+    try {
+      const result = await confirmMatchCompletion(matchId, user.id)
+      
+      if (result.success) {
+        if (result.showRatingModal) {
+          setMatchStatus('completed')
+          setShowRatingModal(true)
+        } else {
+          setMatchStatus('pending_completion')
+          alert(result.message)
+        }
+        loadMatchStatus() // Reload status
+      } else {
+        alert(result.message)
+      }
+    } catch (error) {
+      console.error('Error completing match:', error)
+      alert('Bir hata oluştu, lütfen tekrar deneyin')
+    } finally {
+      setIsCompletingMatch(false)
+    }
+  }
+
+  // Handle rating submission
+  const handleSubmitRating = async (rating: number, comment?: string) => {
+    if (!user || !otherUser) return
+    
+    try {
+      const success = await rateUser({
+        raterId: user.id,
+        ratedUserId: otherUser.id,
+        matchId: matchId,
+        rating: rating,
+        comment: comment
+      })
+
+      if (success) {
+        setUserHasRated(true)
+        setShowRatingModal(false)
+        alert('Teşekkürler! Puanınız kaydedildi. 🌟')
+      } else {
+        throw new Error('Rating failed')
+      }
+    } catch (error) {
+      console.error('Error rating user:', error)
+      throw error
+    }
   }
 
   const checkBanStatus = async () => {
@@ -301,22 +406,65 @@ export default function ChatPage() {
       
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
-        <div className="px-4 py-4 pt-12 md:pt-4 flex items-center gap-3">
-          <Link href="/messages" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-            <ArrowLeft className="w-6 h-6 text-gray-600" />
-          </Link>
-          <div className="flex-1">
-            <h1 className="text-lg font-bold text-gray-900">{otherUser?.name || 'Kullanıcı'}</h1>
-            <p className="text-xs text-gray-500">{otherUser?.email}</p>
+        <div className="px-4 py-4 pt-12 md:pt-4">
+          <div className="flex items-center gap-3 mb-3">
+            <Link href="/messages" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+              <ArrowLeft className="w-6 h-6 text-gray-600" />
+            </Link>
+            <div className="flex-1">
+              <h1 className="text-lg font-bold text-gray-900">{otherUser?.name || 'Kullanıcı'}</h1>
+              <p className="text-xs text-gray-500">
+                {matchStatus === 'completed' ? '✅ Takas Tamamlandı' : otherUser?.email}
+              </p>
+            </div>
+            {!isBlocked && (
+              <button
+                onClick={() => setShowBlockReportModal(true)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Seçenekler"
+              >
+                <MoreVertical className="w-6 h-6 text-gray-600" />
+              </button>
+            )}
           </div>
-          {!isBlocked && (
+
+          {/* Takası Tamamla Button */}
+          {!isBlocked && matchStatus === 'active' && (
             <button
-              onClick={() => setShowBlockReportModal(true)}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              aria-label="Seçenekler"
+              onClick={handleCompleteMatch}
+              disabled={isCompletingMatch}
+              className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-2.5 px-4 rounded-xl font-medium text-sm hover:from-pink-600 hover:to-purple-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
             >
-              <MoreVertical className="w-6 h-6 text-gray-600" />
+              {isCompletingMatch ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  İşleniyor...
+                </>
+              ) : (
+                <>
+                  <CheckCircle className="w-4 h-4" />
+                  Takası Tamamla
+                </>
+              )}
             </button>
+          )}
+
+          {matchStatus === 'pending_completion' && (
+            <div className="w-full bg-yellow-100 border border-yellow-300 rounded-xl py-2.5 px-4 text-sm text-center text-yellow-800">
+              ⏳ Diğer tarafın onayı bekleniyor...
+            </div>
+          )}
+
+          {matchStatus === 'completed' && !userHasRated && (
+            <div className="w-full bg-green-100 border border-green-300 rounded-xl py-2.5 px-4 text-sm text-center text-green-800">
+              ✅ Takas tamamlandı! Lütfen puanlayın.
+            </div>
+          )}
+
+          {matchStatus === 'completed' && userHasRated && (
+            <div className="w-full bg-green-100 border border-green-300 rounded-xl py-2.5 px-4 text-sm text-center text-green-800">
+              🌟 Takas tamamlandı ve puanlandı!
+            </div>
           )}
         </div>
       </header>
@@ -420,6 +568,17 @@ export default function ChatPage() {
           </button>
         </div>
       </div>
+
+      {/* Rating Modal */}
+      {otherUser && (
+        <RatingModal
+          isOpen={showRatingModal}
+          onClose={() => setShowRatingModal(false)}
+          onSubmit={handleSubmitRating}
+          otherUserName={otherUser.name}
+          otherUserAvatar={otherUser.avatar_url}
+        />
+      )}
     </div>
   )
 }
