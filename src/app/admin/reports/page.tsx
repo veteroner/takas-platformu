@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { REPORT_TYPE_OPTIONS, type ReportType, getReportTypeLabel } from '@/constants/reportTypes'
 import { AlertCircle, CheckCircle, XCircle, Clock, Search } from 'lucide-react'
+import { supabase } from '@/lib/supabase'
 
 interface Report {
   id: string
@@ -45,12 +46,7 @@ export default function AdminReportsPage() {
   const loadData = async () => {
     try {
       setLoading(true)
-      const auth = await import('@supabase/supabase-js')
-      const { createClient } = auth
-      const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
-      const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      const supabase = createClient(url, key)
-      
+
       const { data: { session } } = await supabase.auth.getSession()
       if (!session?.access_token) {
         throw new Error('Oturum bulunamadı')
@@ -120,12 +116,6 @@ export default function AdminReportsPage() {
     adminNotes?: string
   ) => {
     try {
-      const auth = await import('@supabase/supabase-js')
-      const { createClient } = auth
-      const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
-      const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      const supabase = createClient(url, key)
-
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Kullanıcı bulunamadı')
 
@@ -142,13 +132,22 @@ export default function AdminReportsPage() {
         updateData.resolved_by = user.id
         updateData.resolved_at = new Date().toISOString()
       }
+      // Call admin API (uses service role) to update report safely
+      const { data: { session } } = await supabase.auth.getSession()
+      const token = session?.access_token
+      const res = await fetch('/api/admin/reports', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({ id: reportId, update: updateData })
+      })
 
-      const { error } = await supabase
-        .from('user_reports')
-        .update(updateData)
-        .eq('id', reportId)
-
-      if (error) throw error
+      if (!res.ok) {
+        const j = await res.json().catch(()=>({}))
+        throw new Error(j?.error || 'Güncelleme başarısız')
+      }
 
       await loadData()
     } catch (e: any) {
