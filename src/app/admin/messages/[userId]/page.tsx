@@ -38,29 +38,22 @@ export default function UserMessagesPage() {
       try {
         setLoading(true)
 
-        // Get user info
-        const { data: { users }, error: userError } = await supabase.auth.admin.listUsers()
-        if (userError) throw userError
-
-        const user = users?.find(u => u.id === userId)
-        if (!user) throw new Error('Kullanıcı bulunamadı')
-
-        setUserInfo({
-          id: user.id,
-          email: user.email || 'Bilinmiyor',
-          created_at: user.created_at
+        // Get user info and messages from API
+        const { data: { session } } = await supabase.auth.getSession()
+        const token = session?.access_token
+        
+        const res = await fetch(`/api/admin/messages/users/${userId}`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
         })
-
-        // Get user messages (sent + received)
-        const { data: msgs, error: msgError } = await supabase
-          .from('messages')
-          .select('*')
-          .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
-          .order('created_at', { ascending: false })
-
-        if (msgError) throw msgError
-
-        setMessages(msgs || [])
+        
+        if (!res.ok) {
+          const j = await res.json().catch(() => ({}))
+          throw new Error(j?.error || 'Yükleme hatası')
+        }
+        
+        const j = await res.json()
+        setUserInfo(j.data.userInfo)
+        setMessages(j.data.messages || [])
       } catch (e: any) {
         setError(e?.message || 'Hata')
       } finally {

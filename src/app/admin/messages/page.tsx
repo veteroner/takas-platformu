@@ -26,59 +26,21 @@ export default function AdminMessagesPage() {
       try {
         setLoading(true)
         
-        const { data: messages, error: msgError } = await supabase
-          .from('messages')
-          .select('sender_id, receiver_id, created_at')
-          .order('created_at', { ascending: false })
-
-        if (msgError) throw msgError
-
-        const { data: { users: allUsers }, error: usersError } = await supabase.auth.admin.listUsers()
-        if (usersError) throw usersError
-
-        const userMap = new Map<string, UserMessageStats>()
-
-        messages?.forEach(msg => {
-          if (!userMap.has(msg.sender_id)) {
-            const user = allUsers?.find(u => u.id === msg.sender_id)
-            userMap.set(msg.sender_id, {
-              user_id: msg.sender_id,
-              user_email: user?.email || 'Bilinmiyor',
-              total_messages: 0,
-              sent_messages: 0,
-              received_messages: 0,
-              last_message_date: msg.created_at
-            })
-          }
-          const senderStats = userMap.get(msg.sender_id)!
-          senderStats.sent_messages++
-          senderStats.total_messages++
-          if (new Date(msg.created_at) > new Date(senderStats.last_message_date)) {
-            senderStats.last_message_date = msg.created_at
-          }
-
-          if (!userMap.has(msg.receiver_id)) {
-            const user = allUsers?.find(u => u.id === msg.receiver_id)
-            userMap.set(msg.receiver_id, {
-              user_id: msg.receiver_id,
-              user_email: user?.email || 'Bilinmiyor',
-              total_messages: 0,
-              sent_messages: 0,
-              received_messages: 0,
-              last_message_date: msg.created_at
-            })
-          }
-          const receiverStats = userMap.get(msg.receiver_id)!
-          receiverStats.received_messages++
-          receiverStats.total_messages++
-          if (new Date(msg.created_at) > new Date(receiverStats.last_message_date)) {
-            receiverStats.last_message_date = msg.created_at
-          }
+        // Get user message stats from API
+        const { data: { session } } = await supabase.auth.getSession()
+        const token = session?.access_token
+        
+        const res = await fetch('/api/admin/messages/users', {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
         })
-
-        setUsers(Array.from(userMap.values()).sort((a, b) => 
-          new Date(b.last_message_date).getTime() - new Date(a.last_message_date).getTime()
-        ))
+        
+        if (!res.ok) {
+          const j = await res.json().catch(() => ({}))
+          throw new Error(j?.error || 'Yükleme hatası')
+        }
+        
+        const j = await res.json()
+        setUsers(j.data || [])
       } catch (e: any) {
         setError(e?.message || 'Hata')
       } finally {
