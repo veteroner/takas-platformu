@@ -10,6 +10,7 @@ import { supabase } from '@/lib/supabase'
 import { saveSeekingPreferencesAsync } from '@/lib/preferences'
 import { useProductFilter } from '@/hooks/useProductFilter'
 import { ProductFilterWarning, InlineProductWarning } from '@/components/ProductFilterWarning'
+import { optimizeImage, validateImage, createPreviewURL, revokePreviewURL } from '@/lib/imageOptimizer'
 
 const categories = [
   { id: 'clothing', name: '👕 Giyim', value: 'clothing' },
@@ -66,6 +67,8 @@ export default function UploadPage() {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadSuccess, setUploadSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [isOptimizing, setIsOptimizing] = useState(false)
+  const [optimizationProgress, setOptimizationProgress] = useState<string>('')
   
   // Product filter hook
   const { checkProduct, lastResult, clearResult } = useProductFilter()
@@ -85,30 +88,56 @@ export default function UploadPage() {
     checkUser()
   }, [])
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
-    if (files) {
+    if (!files || files.length === 0) return
+
+    setIsOptimizing(true)
+    setError(null)
+
+    try {
       const newImages: string[] = []
       const newFiles: File[] = []
       
-      Array.from(files).forEach(file => {
-        newFiles.push(file)
-        const reader = new FileReader()
-        reader.onload = (event) => {
-          if (event.target?.result) {
-            newImages.push(event.target.result as string)
-            if (newImages.length === files.length) {
-              setImages([...images, ...newImages].slice(0, 5))
-              setImageFiles([...imageFiles, ...newFiles].slice(0, 5))
-            }
-          }
+      const filesToProcess = Array.from(files).slice(0, 5 - images.length)
+      
+      for (let i = 0; i < filesToProcess.length; i++) {
+        const file = filesToProcess[i]
+        
+        setOptimizationProgress(`Resim ${i + 1}/${filesToProcess.length} optimize ediliyor...`)
+        
+        // Validate image
+        const validation = validateImage(file)
+        if (!validation.valid) {
+          throw new Error(validation.error)
         }
-        reader.readAsDataURL(file)
-      })
+
+        // Optimize image (300 KB max, WebP format)
+        const optimizedFile = await optimizeImage(file)
+        
+        // Create preview URL
+        const previewUrl = createPreviewURL(optimizedFile)
+        
+        newFiles.push(optimizedFile)
+        newImages.push(previewUrl)
+      }
+
+      setImages([...images, ...newImages])
+      setImageFiles([...imageFiles, ...newFiles])
+      setOptimizationProgress('')
+      
+    } catch (err: any) {
+      console.error('Resim yükleme hatası:', err)
+      setError(err.message || 'Resim yüklenirken hata oluştu')
+    } finally {
+      setIsOptimizing(false)
     }
   }
 
   const removeImage = (index: number) => {
+    // Revoke preview URL to prevent memory leak
+    revokePreviewURL(images[index])
+    
     setImages(images.filter((_, i) => i !== index))
     setImageFiles(imageFiles.filter((_, i) => i !== index))
   }
@@ -250,11 +279,28 @@ export default function UploadPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Image Upload */}
           <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6">
-            <h3 className="font-semibold text-gray-800 mb-4">📸 Fotoğraflar (En fazla 5)</h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-gray-800">📸 Fotoğraflar (En fazla 5)</h3>
+              {imageFiles.length > 0 && (
+                <span className="text-xs text-green-600 font-medium">
+                  ✅ Optimize edildi
+                </span>
+              )}
+            </div>
+            
+            {/* Optimization Progress */}
+            {isOptimizing && (
+              <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                  <span className="text-sm text-blue-700 font-medium">{optimizationProgress}</span>
+                </div>
+              </div>
+            )}
             
             <div className="grid grid-cols-3 gap-3 mb-3">
               {images.map((image, index) => (
-                <div key={index} className="relative aspect-square rounded-lg overflow-hidden">
+                <div key={index} className="relative aspect-square rounded-lg overflow-hidden group">
                   <Image
                     src={image}
                     alt={`Upload ${index + 1}`}
@@ -264,15 +310,21 @@ export default function UploadPage() {
                   <button
                     type="button"
                     onClick={() => removeImage(index)}
-                    className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full"
+                    className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <X className="w-4 h-4" />
                   </button>
+                  {/* Optimized badge */}
+                  <div className="absolute bottom-1 left-1 bg-green-500/90 text-white text-[10px] px-1.5 py-0.5 rounded">
+                    WebP
+                  </div>
                 </div>
               ))}
               
               {images.length < 5 && (
-                <label className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-purple-500 transition-colors">
+                <label className={`aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-purple-500 transition-colors ${
+                  isOptimizing ? 'opacity-50 cursor-not-allowed' : ''
+                }`}>
                   <Camera className="w-8 h-8 text-gray-400 mb-1" />
                   <span className="text-xs text-gray-500">Ekle</span>
                   <input
@@ -280,12 +332,25 @@ export default function UploadPage() {
                     accept="image/*"
                     multiple
                     onChange={handleImageUpload}
+                    disabled={isOptimizing}
                     className="hidden"
                   />
                 </label>
               )}
             </div>
-            <p className="text-xs text-gray-500">İlk fotoğraf kapak resmi olacaktır</p>
+            <p className="text-xs text-gray-500">
+              İlk fotoğraf kapak resmi olacaktır
+            </p>
+            <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-[11px] text-green-700 font-medium">
+                🚀 Resimler otomatik optimize ediliyor:
+              </p>
+              <ul className="text-[10px] text-green-600 mt-1 ml-4 list-disc space-y-0.5">
+                <li>300 KB maksimum boyut</li>
+                <li>Modern WebP formatı</li>
+                <li>%90+ daha hızlı yükleme</li>
+              </ul>
+            </div>
           </div>
 
           {/* Title */}
