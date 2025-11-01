@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Splash Screen Generator - Takas Platform</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 1000px;
+      width: 100%;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 16px;
+    }
+
+    .preview-section {
+      margin-bottom: 30px;
+    }
+
+    .splash-preview {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    label {
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+
+    input[type="color"],
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 14px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input[type="color"] {
+      height: 60px;
+      cursor: pointer;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .button-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 16px 24px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    button:active {
+      transform: translateY(-1px);
+    }
+
+    .info {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border-left: 4px solid #0284c7;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    .info h3 {
+      color: #0284c7;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .info ul {
+      margin-left: 20px;
+      color: #333;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .premium-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 Premium Splash Screen Generator <span class="premium-badge">PRO</span></h1>
+    <p class="subtitle">Takas Platform için profesyonel splash screen görselleri oluşturun</p>
+
+    <div class="preview-section">
+      <h3 style="margin-bottom: 15px;">Canlı Önizleme:</h3>
+      <canvas id="preview" class="splash-preview" width="400" height="800"></canvas>
+    </div>
+
+    <div class="controls">
+      <div class="control-group">
+        <label for="bgColor1">Gradient Renk 1:</label>
+        <input type="color" id="bgColor1" value="#667eea">
+      </div>
+
+      <div class="control-group">
+        <label for="bgColor2">Gradient Renk 2:</label>
+        <input type="color" id="bgColor2" value="#764ba2">
+      </div>
+
+      <div class="control-group">
+        <label for="bgColor3">Gradient Renk 3:</label>
+        <input type="color" id="bgColor3" value="#f093fb">
+      </div>
+
+      <div class="control-group">
+        <label for="bgColor4">Gradient Renk 4:</label>
+        <input type="color" id="bgColor4" value="#f5576c">
+      </div>
+
+      <div class="control-group">
+        <label for="appName">Uygulama Adı:</label>
+        <input type="text" id="appName" value="TAKAS">
+      </div>
+
+      <div class="control-group">
+        <label for="tagline">Ana Slogan:</label>
+        <input type="text" id="tagline" value="Modern Takas Platformu">
+      </div>
+
+      <div class="control-group">
+        <label for="subtagline">Alt Slogan:</label>
+        <input type="text" id="subtagline" value="Beğen • Eşleş • Takas Yap">
+      </div>
+
+      <div class="control-group">
+        <label for="logoStyle">Logo Stili:</label>
+        <select id="logoStyle">
+          <option value="modern">Modern</option>
+          <option value="classic">Klasik</option>
+          <option value="minimal">Minimal</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button onclick="generateAllSizes()">📱 Tüm Boyutları İndir</button>
+      <button onclick="generateSingle(1242, 2688, 'splash-ios-premium.png')">🍎 iOS Premium</button>
+      <button onclick="generateSingle(1080, 1920, 'splash-android-premium.png')">🤖 Android Premium</button>
+      <button onclick="generateSingle(1920, 1080, 'splash-web-premium.png')">🌐 Web Premium</button>
+    </div>
+
+    <div class="info">
+      <h3>📋 Premium Kullanım Talimatları:</h3>
+      <ul>
+        <li>4 renkli gradient ile profesyonel görünüm</li>
+        <li>Farklı logo stilleri seçebilirsiniz</li>
+        <li>"Tüm Boyutları İndir" ile Android ve iOS için tüm görselleri oluşturun</li>
+        <li>İndirilen görselleri <code>resources/splash</code> klasörüne kopyalayın</li>
+        <li>Terminalde <code>npx capacitor-assets generate</code> komutunu çalıştırın</li>
+        <li>Web için de özel splash screen görselleri oluşturabilirsiniz</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('preview');
+    const ctx = canvas.getContext('2d');
+
+    // İnput değişikliklerini dinle
+    document.querySelectorAll('input, select').forEach(input => {
+      input.addEventListener('input', drawPreview);
+    });
+
+    // İlk önizlemeyi çiz
+    drawPreview();
+
+    function drawPreview() {
+      const bgColor1 = document.getElementById('bgColor1').value;
+      const bgColor2 = document.getElementById('bgColor2').value;
+      const bgColor3 = document.getElementById('bgColor3').value;
+      const bgColor4 = document.getElementById('bgColor4').value;
+      const appName = document.getElementById('appName').value;
+      const tagline = document.getElementById('tagline').value;
+      const subtagline = document.getElementById('subtagline').value;
+      const logoStyle = document.getElementById('logoStyle').value;
+
+      // Premium gradient arka plan
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      gradient.addColorStop(0, bgColor1);
+      gradient.addColorStop(0.33, bgColor2);
+      gradient.addColorStop(0.66, bgColor3);
+      gradient.addColorStop(1, bgColor4);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Dekoratif geometrik şekiller
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+      
+      // Sol üst çember
+      ctx.beginPath();
+      ctx.arc(80, 120, 60, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Sağ alt çember
+      ctx.beginPath();
+      ctx.arc(320, 680, 100, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Orta sol çember
+      ctx.beginPath();
+      ctx.arc(60, 400, 40, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Orta sağ çember
+      ctx.beginPath();
+      ctx.arc(340, 500, 70, 0, Math.PI * 2);
+      ctx.fill();
+
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2 - 80;
+
+      // Premium glow effect
+      const glowGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 150);
+      glowGradient.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+      glowGradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.2)');
+      glowGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      ctx.fillStyle = glowGradient;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 150, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Logo container
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.beginPath();
+      ctx.roundRect(centerX - 90, centerY - 90, 180, 180, 30);
+      ctx.fill();
+
+      // Logo border
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(centerX - 90, centerY - 90, 180, 180, 30);
+      ctx.stroke();
+
+      // Logo içeriği
+      drawLogo(centerX, centerY, logoStyle);
+
+      // Uygulama adı
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 52px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(appName, centerX, centerY + 140);
+
+      // Ana slogan
+      ctx.font = '24px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+      ctx.fillText(tagline, centerX, centerY + 175);
+
+      // Alt slogan
+      ctx.font = '18px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.fillText(subtagline, centerX, centerY + 200);
+
+      // Premium loading dots
+      const dotY = centerY + 250;
+      for (let i = 0; i < 4; i++) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.beginPath();
+        ctx.arc(centerX - 30 + (i * 20), dotY, 5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Alt yazı
+      ctx.font = '16px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+      ctx.fillText('⚡ Powered by Teknova', centerX, canvas.height - 40);
+    }
+
+    function drawLogo(centerX, centerY, style) {
+      ctx.strokeStyle = 'white';
+      ctx.lineWidth = 6;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      if (style === 'modern') {
+        // Modern orbiting logo
+        // Merkez daire
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 30, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Merkez takas ikonu
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(centerX - 15, centerY - 15);
+        ctx.lineTo(centerX - 15, centerY + 15);
+        ctx.moveTo(centerX - 15, centerY + 15);
+        ctx.lineTo(centerX - 25, centerY + 5);
+        ctx.moveTo(centerX - 15, centerY + 15);
+        ctx.lineTo(centerX - 5, centerY + 5);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(centerX + 15, centerY + 15);
+        ctx.lineTo(centerX + 15, centerY - 15);
+        ctx.moveTo(centerX + 15, centerY - 15);
+        ctx.lineTo(centerX + 5, centerY - 5);
+        ctx.moveTo(centerX + 15, centerY - 15);
+        ctx.lineTo(centerX + 25, centerY - 5);
+        ctx.stroke();
+
+        // Orbiting circles
+        const orbitingRadius = 50;
+        const angles = [0, Math.PI/2, Math.PI, 3*Math.PI/2];
+        
+        angles.forEach((angle, i) => {
+          const x = centerX + Math.cos(angle) * orbitingRadius;
+          const y = centerY + Math.sin(angle) * orbitingRadius;
+          
+          ctx.fillStyle = `rgba(255, 255, 255, ${0.6 + i * 0.1})`;
+          ctx.beginPath();
+          ctx.arc(x, y, 8, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+      } else if (style === 'classic') {
+        // Klasik takas ikonu
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 8;
+        
+        // Sol ok
+        ctx.beginPath();
+        ctx.moveTo(centerX - 40, centerY - 30);
+        ctx.lineTo(centerX - 40, centerY + 30);
+        ctx.moveTo(centerX - 40, centerY + 30);
+        ctx.lineTo(centerX - 55, centerY + 15);
+        ctx.moveTo(centerX - 40, centerY + 30);
+        ctx.lineTo(centerX - 25, centerY + 15);
+        ctx.stroke();
+
+        // Sağ ok
+        ctx.beginPath();
+        ctx.moveTo(centerX + 40, centerY + 30);
+        ctx.lineTo(centerX + 40, centerY - 30);
+        ctx.moveTo(centerX + 40, centerY - 30);
+        ctx.lineTo(centerX + 25, centerY - 15);
+        ctx.moveTo(centerX + 40, centerY - 30);
+        ctx.lineTo(centerX + 55, centerY - 15);
+        ctx.stroke();
+
+      } else if (style === 'minimal') {
+        // Minimal tasarım
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 6;
+        
+        // Basit çizgiler
+        ctx.beginPath();
+        ctx.moveTo(centerX - 30, centerY);
+        ctx.lineTo(centerX + 30, centerY);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY - 30);
+        ctx.lineTo(centerX, centerY + 30);
+        ctx.stroke();
+
+        // Köşe noktaları
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.arc(centerX - 30, centerY, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(centerX + 30, centerY, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(centerX, centerY - 30, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(centerX, centerY + 30, 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function generateSplashScreen(width, height) {
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = width;
+      tempCanvas.height = height;
+      const tempCtx = tempCanvas.getContext('2d');
+
+      const bgColor1 = document.getElementById('bgColor1').value;
+      const bgColor2 = document.getElementById('bgColor2').value;
+      const bgColor3 = document.getElementById('bgColor3').value;
+      const bgColor4 = document.getElementById('bgColor4').value;
+      const appName = document.getElementById('appName').value;
+      const tagline = document.getElementById('tagline').value;
+      const subtagline = document.getElementById('subtagline').value;
+      const logoStyle = document.getElementById('logoStyle').value;
+
+      // Scale factor
+      const scale = width / 400;
+
+      // Premium gradient arka plan
+      const gradient = tempCtx.createLinearGradient(0, 0, width, height);
+      gradient.addColorStop(0, bgColor1);
+      gradient.addColorStop(0.33, bgColor2);
+      gradient.addColorStop(0.66, bgColor3);
+      gradient.addColorStop(1, bgColor4);
+      tempCtx.fillStyle = gradient;
+      tempCtx.fillRect(0, 0, width, height);
+
+      // Dekoratif şekiller (ölçeklendirilmiş)
+      tempCtx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+      
+      tempCtx.beginPath();
+      tempCtx.arc(80 * scale, 120 * scale, 60 * scale, 0, Math.PI * 2);
+      tempCtx.fill();
+
+      tempCtx.beginPath();
+      tempCtx.arc(width - 80 * scale, height - 120 * scale, 100 * scale, 0, Math.PI * 2);
+      tempCtx.fill();
+
+      tempCtx.beginPath();
+      tempCtx.arc(60 * scale, height/2, 40 * scale, 0, Math.PI * 2);
+      tempCtx.fill();
+
+      tempCtx.beginPath();
+      tempCtx.arc(width - 60 * scale, height/2 + 50 * scale, 70 * scale, 0, Math.PI * 2);
+      tempCtx.fill();
+
+      const centerX = width / 2;
+      const centerY = height / 2;
+
+      // Premium glow effect
+      const glowGradient = tempCtx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 150 * scale);
+      glowGradient.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+      glowGradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.2)');
+      glowGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      tempCtx.fillStyle = glowGradient;
+      tempCtx.beginPath();
+      tempCtx.arc(centerX, centerY, 150 * scale, 0, Math.PI * 2);
+      tempCtx.fill();
+
+      // Logo container
+      tempCtx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+      tempCtx.beginPath();
+      tempCtx.roundRect(centerX - 90 * scale, centerY - 90 * scale, 180 * scale, 180 * scale, 30 * scale);
+      tempCtx.fill();
+
+      // Logo border
+      tempCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+      tempCtx.lineWidth = 2 * scale;
+      tempCtx.beginPath();
+      tempCtx.roundRect(centerX - 90 * scale, centerY - 90 * scale, 180 * scale, 180 * scale, 30 * scale);
+      tempCtx.stroke();
+
+      // Logo içeriği
+      drawLogoScaled(tempCtx, centerX, centerY, logoStyle, scale);
+
+      // Uygulama adı
+      tempCtx.fillStyle = 'white';
+      tempCtx.font = `bold ${52 * scale}px -apple-system, sans-serif`;
+      tempCtx.textAlign = 'center';
+      tempCtx.fillText(appName, centerX, centerY + 140 * scale);
+
+      // Ana slogan
+      tempCtx.font = `${24 * scale}px -apple-system, sans-serif`;
+      tempCtx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+      tempCtx.fillText(tagline, centerX, centerY + 175 * scale);
+
+      // Alt slogan
+      tempCtx.font = `${18 * scale}px -apple-system, sans-serif`;
+      tempCtx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      tempCtx.fillText(subtagline, centerX, centerY + 200 * scale);
+
+      // Alt yazı
+      tempCtx.font = `${16 * scale}px -apple-system, sans-serif`;
+      tempCtx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+      tempCtx.fillText('⚡ Powered by Teknova', centerX, height - 40 * scale);
+
+      return tempCanvas;
+    }
+
+    function drawLogoScaled(ctx, centerX, centerY, style, scale) {
+      ctx.strokeStyle = 'white';
+      ctx.lineWidth = 6 * scale;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      if (style === 'modern') {
+        // Modern orbiting logo
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 30 * scale, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 4 * scale;
+        ctx.beginPath();
+        ctx.moveTo(centerX - 15 * scale, centerY - 15 * scale);
+        ctx.lineTo(centerX - 15 * scale, centerY + 15 * scale);
+        ctx.moveTo(centerX - 15 * scale, centerY + 15 * scale);
+        ctx.lineTo(centerX - 25 * scale, centerY + 5 * scale);
+        ctx.moveTo(centerX - 15 * scale, centerY + 15 * scale);
+        ctx.lineTo(centerX - 5 * scale, centerY + 5 * scale);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(centerX + 15 * scale, centerY + 15 * scale);
+        ctx.lineTo(centerX + 15 * scale, centerY - 15 * scale);
+        ctx.moveTo(centerX + 15 * scale, centerY - 15 * scale);
+        ctx.lineTo(centerX + 5 * scale, centerY - 5 * scale);
+        ctx.moveTo(centerX + 15 * scale, centerY - 15 * scale);
+        ctx.lineTo(centerX + 25 * scale, centerY - 5 * scale);
+        ctx.stroke();
+
+        const orbitingRadius = 50 * scale;
+        const angles = [0, Math.PI/2, Math.PI, 3*Math.PI/2];
+        
+        angles.forEach((angle, i) => {
+          const x = centerX + Math.cos(angle) * orbitingRadius;
+          const y = centerY + Math.sin(angle) * orbitingRadius;
+          
+          ctx.fillStyle = `rgba(255, 255, 255, ${0.6 + i * 0.1})`;
+          ctx.beginPath();
+          ctx.arc(x, y, 8 * scale, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+      } else if (style === 'classic') {
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 8 * scale;
+        
+        ctx.beginPath();
+        ctx.moveTo(centerX - 40 * scale, centerY - 30 * scale);
+        ctx.lineTo(centerX - 40 * scale, centerY + 30 * scale);
+        ctx.moveTo(centerX - 40 * scale, centerY + 30 * scale);
+        ctx.lineTo(centerX - 55 * scale, centerY + 15 * scale);
+        ctx.moveTo(centerX - 40 * scale, centerY + 30 * scale);
+        ctx.lineTo(centerX - 25 * scale, centerY + 15 * scale);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(centerX + 40 * scale, centerY + 30 * scale);
+        ctx.lineTo(centerX + 40 * scale, centerY - 30 * scale);
+        ctx.moveTo(centerX + 40 * scale, centerY - 30 * scale);
+        ctx.lineTo(centerX + 25 * scale, centerY - 15 * scale);
+        ctx.moveTo(centerX + 40 * scale, centerY - 30 * scale);
+        ctx.lineTo(centerX + 55 * scale, centerY - 15 * scale);
+        ctx.stroke();
+
+      } else if (style === 'minimal') {
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 6 * scale;
+        
+        ctx.beginPath();
+        ctx.moveTo(centerX - 30 * scale, centerY);
+        ctx.lineTo(centerX + 30 * scale, centerY);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY - 30 * scale);
+        ctx.lineTo(centerX, centerY + 30 * scale);
+        ctx.stroke();
+
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.arc(centerX - 30 * scale, centerY, 4 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(centerX + 30 * scale, centerY, 4 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(centerX, centerY - 30 * scale, 4 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(centerX, centerY + 30 * scale, 4 * scale, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function downloadImage(canvas, filename) {
+      canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      }, 'image/png');
+    }
+
+    function generateSingle(width, height, filename) {
+      const canvas = generateSplashScreen(width, height);
+      downloadImage(canvas, filename);
+    }
+
+    async function generateAllSizes() {
+      const sizes = [
+        // iOS
+        { width: 1242, height: 2688, name: 'splash-ios-premium-1242x2688.png' },
+        { width: 1125, height: 2436, name: 'splash-ios-premium-1125x2436.png' },
+        { width: 828, height: 1792, name: 'splash-ios-premium-828x1792.png' },
+        { width: 750, height: 1334, name: 'splash-ios-premium-750x1334.png' },
+        { width: 1242, height: 2208, name: 'splash-ios-premium-1242x2208.png' },
+        { width: 640, height: 1136, name: 'splash-ios-premium-640x1136.png' },
+        { width: 2048, height: 2732, name: 'splash-ios-premium-2048x2732.png' },
+        { width: 1668, height: 2388, name: 'splash-ios-premium-1668x2388.png' },
+        { width: 1536, height: 2048, name: 'splash-ios-premium-1536x2048.png' },
+        // Android
+        { width: 480, height: 800, name: 'splash-android-premium-480x800.png' },
+        { width: 720, height: 1280, name: 'splash-android-premium-720x1280.png' },
+        { width: 1080, height: 1920, name: 'splash-android-premium-1080x1920.png' },
+        { width: 1440, height: 2560, name: 'splash-android-premium-1440x2560.png' },
+        { width: 2560, height: 1440, name: 'splash-android-premium-2560x1440.png' },
+        { width: 1920, height: 1080, name: 'splash-android-premium-1920x1080.png' },
+        { width: 1280, height: 720, name: 'splash-android-premium-1280x720.png' },
+        { width: 800, height: 480, name: 'splash-android-premium-800x480.png' },
+      ];
+
+      for (const size of sizes) {
+        const canvas = generateSplashScreen(size.width, size.height);
+        await new Promise(resolve => {
+          canvas.toBlob(blob => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = size.name;
+            a.click();
+            URL.revokeObjectURL(url);
+            resolve();
+          }, 'image/png');
+        });
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+
+      alert('✅ Premium splash screen görselleri başarıyla indirildi!\n\nİndirilen görselleri resources/splash/ klasörüne kopyalayın ve "npx capacitor-assets generate" komutunu çalıştırın.');
+    }
+  </script>
+</body>
+</html>

@@ -6,7 +6,9 @@ import ConsentGuard from "@/components/ConsentGuard";
 import AnalyticsLoader from "@/components/AnalyticsLoader";
 import OneSignalInit from "@/components/OneSignalInit";
 import OneSignalCapacitorInit from "@/components/OneSignalCapacitorInit";
-import AdMobInit from "@/components/AdMobInit";
+import AdsInit from "@/components/AdsInit";
+import NativeConsentInit from "@/components/NativeConsentInit";
+import AppSplashScreen from "@/components/SplashScreen";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -96,6 +98,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <AppSplashScreen />
         <ConsentGuard />
         {children}
         <CookieBanner />
@@ -103,7 +106,8 @@ export default function RootLayout({
         {/* OneSignal devre dışı - Web platform etkinleştirilmeli */}
         {/* <OneSignalInit /> */}
         {/* <OneSignalCapacitorInit /> */}
-        <AdMobInit />
+        <NativeConsentInit />
+        <AdsInit />
       </body>
     </html>
   );

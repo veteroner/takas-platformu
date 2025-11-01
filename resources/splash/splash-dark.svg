@@ -1,0 +1,71 @@
+<svg width="2732" height="2732" viewBox="0 0 2732 2732" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Gradient Background -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#EC4899;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#A855F7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6366F1;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="10" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="2732" height="2732" fill="url(#bgGradient)"/>
+  
+  <!-- Decorative Circles -->
+  <circle cx="683" cy="683" r="400" fill="white" opacity="0.1" filter="url(#glow)"/>
+  <circle cx="2049" cy="2049" r="500" fill="white" opacity="0.1" filter="url(#glow)"/>
+  
+  <!-- Main Icon Background -->
+  <rect x="1166" y="1166" width="400" height="400" rx="100" fill="white" opacity="0.2" filter="url(#glow)"/>
+  
+  <!-- Exchange Icon -->
+  <g transform="translate(1366, 1366)">
+    <!-- Top Arrow (pointing right) -->
+    <path d="M -100 -40 L 60 -40 M 60 -40 L 30 -70 M 60 -40 L 30 -10" 
+          stroke="white" 
+          stroke-width="20" 
+          stroke-linecap="round" 
+          stroke-linejoin="round" 
+          fill="none"
+          opacity="0.95"/>
+    
+    <!-- Bottom Arrow (pointing left) -->
+    <path d="M 100 40 L -60 40 M -60 40 L -30 10 M -60 40 L -30 70" 
+          stroke="white" 
+          stroke-width="20" 
+          stroke-linecap="round" 
+          stroke-linejoin="round" 
+          fill="none"
+          opacity="0.95"/>
+  </g>
+  
+  <!-- App Name -->
+  <text x="1366" y="1900" 
+        font-family="Arial, sans-serif" 
+        font-size="140" 
+        font-weight="900" 
+        fill="white" 
+        text-anchor="middle"
+        letter-spacing="4">
+    TAKAS
+  </text>
+  
+  <!-- Tagline -->
+  <text x="1366" y="2000" 
+        font-family="Arial, sans-serif" 
+        font-size="50" 
+        font-weight="500" 
+        fill="white" 
+        opacity="0.9" 
+        text-anchor="middle"
+        letter-spacing="2">
+    Takas yap, mutlu ol
+  </text>
+</svg>

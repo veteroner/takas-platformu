@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splash_gradient">
+
+    <!-- Animated Background Circles -->
+    <View
+        android:id="@+id/bgCircle1"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="160dp"
+        android:background="@drawable/blur_circle"
+        android:alpha="0.3"
+        tools:ignore="UnknownId" />
+
+    <View
+        android:id="@+id/bgCircle2"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="180dp"
+        android:background="@drawable/blur_circle"
+        android:alpha="0.2"
+        tools:ignore="UnknownId" />
+
+    <!-- Main Content Container -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <!-- Exchange Icon with Animation -->
+        <FrameLayout
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginBottom="32dp">
+            
+            <!-- Icon Background with Glow -->
+            <View
+                android:id="@+id/iconGlow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/icon_glow" />
+            
+            <!-- Main Icon -->
+            <ImageView
+                android:id="@+id/splashIcon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/splash_icon"
+                android:contentDescription="@string/app_name"
+                android:scaleX="0"
+                android:scaleY="0"
+                android:rotation="-180" />
+        </FrameLayout>
+
+        <!-- App Name with Fade -->
+        <TextView
+            android:id="@+id/appName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TAKAS"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:letterSpacing="0.05"
+            android:layout_marginBottom="12dp"
+            android:alpha="0" />
+
+        <!-- Tagline with Fade -->
+        <TextView
+            android:id="@+id/tagline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Takas yap, mutlu ol"
+            android:textSize="18sp"
+            android:textColor="@color/textLight"
+            android:alpha="0" />
+
+        <!-- Loading Dots Container -->
+        <LinearLayout
+            android:id="@+id/loadingDots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:orientation="horizontal"
+            android:alpha="0">
+            
+            <View
+                android:id="@+id/dot1"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/dot_shape" />
+            
+            <View
+                android:id="@+id/dot2"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/dot_shape" />
+            
+            <View
+                android:id="@+id/dot3"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="@drawable/dot_shape" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

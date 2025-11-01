@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="160dp"
+            android:height="160dp"
+            android:viewportWidth="160"
+            android:viewportHeight="160">
+            
+            <!-- Background Circle -->
+            <group android:name="background">
+                <path
+                    android:name="bgCircle"
+                    android:pathData="M80,20 A60,60 0 1,1 80,140 A60,60 0 1,1 80,20"
+                    android:fillColor="#33FFFFFF"
+                    android:fillAlpha="0.2" />
+            </group>
+            
+            <!-- Top Arrow (Right) -->
+            <group android:name="topArrow">
+                <path
+                    android:name="topLine"
+                    android:pathData="M40,70 L100,70"
+                    android:strokeColor="#FFFFFF"
+                    android:strokeWidth="5"
+                    android:strokeLineCap="round" />
+                <path
+                    android:name="topHead"
+                    android:pathData="M95,65 L100,70 L95,75"
+                    android:strokeColor="#FFFFFF"
+                    android:strokeWidth="5"
+                    android:strokeLineCap="round"
+                    android:strokeLineJoin="round"
+                    android:fillType="nonZero" />
+            </group>
+            
+            <!-- Bottom Arrow (Left) -->
+            <group android:name="bottomArrow">
+                <path
+                    android:name="bottomLine"
+                    android:pathData="M120,90 L60,90"
+                    android:strokeColor="#FFFFFF"
+                    android:strokeWidth="5"
+                    android:strokeLineCap="round" />
+                <path
+                    android:name="bottomHead"
+                    android:pathData="M65,85 L60,90 L65,95"
+                    android:strokeColor="#FFFFFF"
+                    android:strokeWidth="5"
+                    android:strokeLineCap="round"
+                    android:strokeLineJoin="round"
+                    android:fillType="nonZero" />
+            </group>
+        </vector>
+    </aapt:attr>
+    
+    <!-- Background Scale Animation -->
+    <target android:name="background">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="scaleX"
+                    android:duration="800"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:interpolator="@android:anim/bounce_interpolator" />
+                <objectAnimator
+                    android:propertyName="scaleY"
+                    android:duration="800"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:interpolator="@android:anim/bounce_interpolator" />
+                <objectAnimator
+                    android:propertyName="rotation"
+                    android:duration="800"
+                    android:valueFrom="-180"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:interpolator="@android:anim/overshoot_interpolator" />
+            </set>
+        </aapt:attr>
+    </target>
+    
+    <!-- Top Arrow Animation -->
+    <target android:name="topArrow">
+        <aapt:attr name="android:animation">
+            <set android:ordering="sequentially">
+                <objectAnimator
+                    android:propertyName="alpha"
+                    android:duration="300"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:startOffset="300"
+                    android:valueType="floatType" />
+                <objectAnimator
+                    android:propertyName="scaleX"
+                    android:duration="300"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:startOffset="300"
+                    android:valueType="floatType"
+                    android:interpolator="@android:anim/decelerate_interpolator" />
+            </set>
+        </aapt:attr>
+    </target>
+    
+    <!-- Bottom Arrow Animation -->
+    <target android:name="bottomArrow">
+        <aapt:attr name="android:animation">
+            <set android:ordering="sequentially">
+                <objectAnimator
+                    android:propertyName="alpha"
+                    android:duration="300"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:startOffset="500"
+                    android:valueType="floatType" />
+                <objectAnimator
+                    android:propertyName="scaleX"
+                    android:duration="300"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:startOffset="500"
+                    android:valueType="floatType"
+                    android:interpolator="@android:anim/decelerate_interpolator" />
+            </set>
+        </aapt:attr>
+    </target>
+    
+</animated-vector>

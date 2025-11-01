@@ -10,7 +10,7 @@ import {
 
 interface UseInterstitialAdReturn {
   isReady: boolean;
-  show: () => Promise<boolean>;
+  show: () => Promise<void>;
   prepare: () => Promise<void>;
 }
 
@@ -22,33 +22,11 @@ export function useInterstitialAd(): UseInterstitialAdReturn {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
+    // Event listener'ları ekle
+    addInterstitialAdListeners();
+    
     // İlk yüklemede reklamı hazırla
     prepareInterstitialAd();
-
-    // Event listener'ları ekle
-    addInterstitialAdListeners(
-      // onLoaded
-      () => {
-        setIsReady(true);
-      },
-      // onFailedToLoad
-      () => {
-        setIsReady(false);
-      },
-      // onShowed
-      () => {
-        setIsReady(false);
-      },
-      // onFailedToShow
-      () => {
-        setIsReady(false);
-      },
-      // onDismissed
-      () => {
-        // Reklam kapatıldıktan sonra yeni bir reklam hazırla
-        prepareInterstitialAd();
-      }
-    );
 
     // Cleanup
     return () => {
@@ -56,12 +34,12 @@ export function useInterstitialAd(): UseInterstitialAdReturn {
     };
   }, []);
 
-  const show = useCallback(async (): Promise<boolean> => {
+  const show = useCallback(async (): Promise<void> => {
     if (!isReady) {
       console.warn('Interstitial ad is not ready yet');
-      return false;
+      return;
     }
-    return await showInterstitialAd();
+    await showInterstitialAd();
   }, [isReady]);
 
   const prepare = useCallback(async (): Promise<void> => {

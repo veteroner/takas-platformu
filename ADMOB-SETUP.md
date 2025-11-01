@@ -1,26 +1,18 @@
 # AdMob Entegrasyonu Kılavuzu
 
+> GÜNCEL POLİTİKA: Uygulamada yalnızca interstitial (geçiş) reklamlar kullanılmaktadır. Banner ve Rewarded reklamlar kaldırıldı ve ilgili bileşenler/hook'lar no-op (boş) hale getirildi.
+
 ## 🎯 Reklam Stratejisi
 
-Takas Platform uygulamasında 3 tip reklam kullanıyoruz:
+Takas Platform uygulamasında aktif olarak yalnızca aşağıdaki reklam tipi kullanılmaktadır:
 
-### 1. **Banner Reklamlar** 📱
-- **Konum**: Ana sayfa swipe kartları altında
-- **Görünüm**: Sürekli
-- **Gelir**: Orta, ama sürekli
-- **Kullanıcı Deneyimi**: Az rahatsız edici
+### • Interstitial Reklamlar 🎬
+- Konum: Her 5 swipe'da bir otomatik gösterilir
+- Görünüm: Tam ekran
+- Gelir: Yüksek
+- Kullanıcı Deneyimi: Orta rahatsız edici (ama stratejik zamanlarda)
 
-### 2. **Interstitial Reklamlar** 🎬
-- **Konum**: Her 5 swipe'da bir otomatik gösterilir
-- **Görünüm**: Tam ekran
-- **Gelir**: Yüksek
-- **Kullanıcı Deneyimi**: Orta rahatsız edici (ama stratejik zamanlarda)
-
-### 3. **Rewarded Reklamlar** 🎁
-- **Konum**: Profil sayfasında "Ekstra Swipe Kazan" butonu
-- **Görünüm**: Kullanıcı isteğiyle
-- **Gelir**: En yüksek (eCPM)
-- **Kullanıcı Deneyimi**: Kullanıcı dostu (karşılığında ödül)
+Not: Banner ve Rewarded reklamlar proje politikası gereği devre dışı bırakılmıştır.
 
 ## 📦 Kurulum
 
@@ -34,15 +26,11 @@ npm install @capacitor-community/admob
 ### Test ID'leri (Şu anda aktif)
 
 **iOS:**
-- Banner: `ca-app-pub-3940256099942544/2934735716`
 - Interstitial: `ca-app-pub-3940256099942544/4411468910`
-- Rewarded: `ca-app-pub-3940256099942544/1712485313`
 - App ID: `ca-app-pub-3940256099942544~1458002511`
 
 **Android:**
-- Banner: `ca-app-pub-3940256099942544/6300978111`
 - Interstitial: `ca-app-pub-3940256099942544/1033173712`
-- Rewarded: `ca-app-pub-3940256099942544/5224354917`
 - App ID: `ca-app-pub-3940256099942544~3347511713`
 
 ### Gerçek ID'lere Geçiş
@@ -52,10 +40,7 @@ npm install @capacitor-community/admob
    - Hesap oluştur ve uygulamayı ekle
 
 2. **Reklam Birimleri Oluştur**
-   - iOS ve Android için ayrı ayrı:
-     - Banner Ad
-     - Interstitial Ad
-     - Rewarded Ad
+   - iOS ve Android için ayrı ayrı yalnızca Interstitial Ad oluşturun
 
 3. **ID'leri Güncelle**
    - `src/lib/admob.ts` dosyasındaki `AD_IDS` objesini güncelle
@@ -64,18 +49,9 @@ npm install @capacitor-community/admob
    - `android/app/src/main/AndroidManifest.xml` dosyasındaki `APPLICATION_ID` değerini güncelle
 
 4. **Test Modunu Kapat**
-   - `src/lib/admob.ts` dosyasında:
-     - `initializeForTesting: false` yap
-     - Her reklam fonksiyonunda `isTesting: false` yap
+   - `src/lib/admob.ts` dosyasında `initializeForTesting: false` yapın
 
 ## 🚀 Kullanım
-
-### Banner Reklam
-```tsx
-import BannerAd from '@/components/BannerAd'
-
-<BannerAd /> // Alt merkezde banner gösterir
-```
 
 ### Interstitial Reklam
 ```tsx
@@ -89,20 +65,7 @@ if (isReady) {
 }
 ```
 
-### Rewarded Reklam
-```tsx
-import { useRewardedAd } from '@/hooks/useRewardedAd'
-
-const { isReady, show } = useRewardedAd((reward) => {
-  console.log('Kullanıcı ödül kazandı:', reward)
-  // Ödül ver
-})
-
-// Reklam göster
-if (isReady) {
-  await show()
-}
-```
+// Rewarded reklamlar devre dışı bırakılmıştır.
 
 ## 📱 Native Yapılandırma
 
@@ -147,14 +110,10 @@ if (isReady) {
 ## 📊 Gelir Optimizasyonu
 
 ### eCPM Tahminleri (Türkiye)
-- **Banner**: $0.50 - $2.00
-- **Interstitial**: $3.00 - $8.00
-- **Rewarded**: $8.00 - $15.00
+- Interstitial: $3.00 - $8.00
 
 ### Stratejiler
-1. **Banner'ları Ana Sayfalarda Kullan** - Sürekli görünüm
-2. **Interstitial'ları Doğru Zamanlarda Göster** - Kullanıcı deneyimini bozmadan
-3. **Rewarded'ları İyi Ödüllerle Sun** - Kullanıcı kendi isteğiyle izler
+1. Interstitial'ları doğru zamanlarda gösterin - Kullanıcı deneyimini bozmadan
 
 ### Swipe Sayacı Ayarları
 Ana sayfa'da her 5 swipe'da bir interstitial gösteriliyor. Bunu değiştirmek için:
@@ -204,24 +163,20 @@ const [swipeCounter] = useState(() => new SwipeCounter(5, () => { // 5'i değiş
 ```
 src/
 ├── lib/
-│   └── admob.ts              # AdMob servis fonksiyonları
+│   └── admob.ts              # AdMob servis fonksiyonları (yalnızca interstitial)
 ├── hooks/
-│   ├── useInterstitialAd.ts  # Interstitial reklam hook'u
-│   └── useRewardedAd.ts      # Rewarded reklam hook'u
+│   └── useInterstitialAd.ts  # Interstitial reklam hook'u
 └── components/
-    ├── AdMobInit.tsx         # AdMob başlatıcı
-    ├── BannerAd.tsx          # Banner reklam komponenti
-    └── RewardedAdButton.tsx  # Rewarded reklam butonu
+   └── AdMobInit.tsx         # AdMob başlatıcı
 ```
 
 ## 🎉 Entegre Edilen Sayfalar
 
 ✅ Ana Sayfa (`src/app/page.tsx`)
-- Banner reklam (alt)
 - Interstitial reklam (her 5 swipe)
 
 ✅ Profil Sayfası (`src/app/profile/page.tsx`)
-- Rewarded reklam butonu (+10 ekstra swipe)
+- Rewarded reklamlar kaldırıldı
 
 ✅ Layout (`src/app/layout.tsx`)
 - AdMob başlatıcı

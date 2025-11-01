@@ -2,11 +2,19 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { Capacitor } from '@capacitor/core'
 
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
+    // Çerez banner'ı sadece web platformunda göster
+    // Native mobil uygulamalarda ATT (iOS) ve Android izinleri kullanılır
+    if (Capacitor.isNativePlatform()) {
+      setVisible(false)
+      return
+    }
+    
     const v = localStorage.getItem('cookie-consent')
     setVisible(!v)
   }, [])

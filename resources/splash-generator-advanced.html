@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 Takas Platform - Gelişmiş Splash Screen Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .hero-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: stretch;
+            margin-bottom: 40px;
+        }
+
+        .hero-content {
+            flex: 1 1 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .hero-content h2 {
+            font-size: 2em;
+            color: #1f2937;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            color: #4b5563;
+            font-size: 1.05em;
+            line-height: 1.6;
+        }
+
+        .hero-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(236, 72, 153, 0.12);
+            color: #db2777;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .hero-splash-frame {
+            flex: 1 1 320px;
+            background: radial-gradient(circle at 30% 20%, rgba(236, 72, 153, 0.25), transparent 55%),
+                        radial-gradient(circle at 70% 80%, rgba(99, 102, 241, 0.25), transparent 55%),
+                        linear-gradient(145deg, rgba(37, 99, 235, 0.25) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border-radius: 32px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 35px 80px -20px rgba(8, 47, 73, 0.35);
+        }
+
+        .hero-splash-frame::before {
+            content: "";
+            position: absolute;
+            inset: 18px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            pointer-events: none;
+        }
+
+        .hero-splash-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 320px;
+            aspect-ratio: 9 / 19.5;
+            border-radius: 26px;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(15, 23, 42, 0.35);
+            background: radial-gradient(circle at top, rgba(255, 255, 255, 0.2), transparent 65%), #000;
+        }
+
+        .hero-splash-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-splash-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 600;
+            backdrop-filter: blur(18px);
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .hero-actions a,
+        .hero-actions button {
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-actions .primary {
+            background: linear-gradient(135deg, #EC4899, #8B5CF6);
+            color: white;
+            box-shadow: 0 15px 30px rgba(139, 92, 246, 0.35);
+        }
+
+        .hero-actions .secondary {
+            background: rgba(255, 255, 255, 0.12);
+            color: #1f2937;
+            border: 2px solid rgba(236, 72, 153, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .hero-splash-frame {
+                padding: 20px;
+            }
+
+            .hero-section {
+                gap: 24px;
+            }
+
+            .hero-content h2 {
+                font-size: 1.8em;
+            }
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        label {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+        
+        input[type="color"],
+        input[type="text"],
+        input[type="number"],
+        select {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        input[type="color"] {
+            height: 50px;
+            cursor: pointer;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #EC4899;
+        }
+        
+        .preview-section {
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .preview-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        #preview {
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        button {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #EC4899, #8B5CF6);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+            color: white;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .sizes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .size-card {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        
+        .size-card:hover {
+            border-color: #EC4899;
+            transform: translateY(-2px);
+        }
+        
+        .size-card h4 {
+            color: #EC4899;
+            margin-bottom: 8px;
+        }
+        
+        .size-card p {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        #status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .status-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Takas Platform</h1>
+        <p class="subtitle">Gelişmiş Native Splash Screen Generator</p>
+
+        <div class="hero-section">
+            <div class="hero-content">
+                <h2>Hazır Tasarlanmış Splash Screen</h2>
+                <p>
+                    Aşağıdaki görsel, uygulamada kullandığımız profesyonel splash screen tasarımının birebir çıktısıdır.
+                    Eğer farklı varyasyonlar üretmek istersen kontrolleri kullanarak aynı tasarımın renklerini, metinlerini ve
+                    boyutlarını özelleştirebilirsin.
+                </p>
+                <div class="hero-badges">
+                    <span class="hero-badge">✨ Gradient Arkaplan</span>
+                    <span class="hero-badge">🔄 Animasyonlu İkonlar</span>
+                    <span class="hero-badge">⚡ Teknova Branding</span>
+                </div>
+                <div class="hero-actions">
+                    <button class="primary" onclick="downloadHeroSplash()">💾 Hazır Splash'i İndir</button>
+                    <button class="secondary" onclick="document.getElementById('preview').scrollIntoView({ behavior: 'smooth' })">🎯 Özelleştirmeye Başla</button>
+                </div>
+            </div>
+            <div class="hero-splash-frame">
+                <div class="hero-splash-wrapper" id="heroSplashWrapper">
+                    <img id="heroSplashImage" src="splash/splash-android-xxhdpi-port-1080x1920.png" alt="Takas Platform Splash Screen Önizleme" />
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label>🎨 Gradient Başlangıç Rengi</label>
+                <input type="color" id="color1" value="#EC4899">
+            </div>
+            
+            <div class="control-group">
+                <label>🎨 Gradient Orta Renk</label>
+                <input type="color" id="color2" value="#8B5CF6">
+            </div>
+            
+            <div class="control-group">
+                <label>🎨 Gradient Bitiş Rengi</label>
+                <input type="color" id="color3" value="#6366F1">
+            </div>
+            
+            <div class="control-group">
+                <label>📝 Uygulama Adı</label>
+                <input type="text" id="appName" value="TAKAS">
+            </div>
+            
+            <div class="control-group">
+                <label>📱 Alt Metin</label>
+                <input type="text" id="subtitle" value="🔄 Eşyalarını Takas Et">
+            </div>
+            
+            <div class="control-group">
+                <label>🔧 Logo Boyutu (px)</label>
+                <input type="number" id="logoSize" value="280" min="100" max="500">
+            </div>
+            
+            <div class="control-group">
+                <label>📏 Önizleme Boyutu</label>
+                <select id="previewSize">
+                    <option value="1242x2688">iPhone 14 Pro Max (1242x2688)</option>
+                    <option value="1125x2436">iPhone 14 Pro (1125x2436)</option>
+                    <option value="828x1792" selected>iPhone 14 (828x1792)</option>
+                    <option value="1080x1920">Android (1080x1920)</option>
+                    <option value="2048x2732">iPad Pro (2048x2732)</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label>✨ Animasyon Efekti</label>
+                <select id="animation">
+                    <option value="pulse">Pulse (Nabız)</option>
+                    <option value="rotate" selected>Rotate (Döndürme)</option>
+                    <option value="scale">Scale (Büyüme)</option>
+                    <option value="none">Yok</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="preview-section">
+            <h3 class="preview-title">📱 Canlı Önizleme</h3>
+            <canvas id="preview" width="828" height="1792"></canvas>
+        </div>
+        
+        <div class="button-group">
+            <button class="btn-primary" onclick="updatePreview()">🔄 Önizlemeyi Güncelle</button>
+            <button class="btn-secondary" onclick="downloadCurrent()">💾 Bu Boyutu İndir</button>
+            <button class="btn-success" onclick="generateAll()">📦 Tüm Boyutları Oluştur</button>
+        </div>
+        
+        <div id="status"></div>
+        
+        <div style="margin-top: 40px;">
+            <h3 style="margin-bottom: 20px; color: #333;">📱 Oluşturulacak Boyutlar</h3>
+            <div class="sizes-grid">
+                <div class="size-card">
+                    <h4>iOS - iPhone</h4>
+                    <p>1242x2688 (Pro Max)</p>
+                    <p>1125x2436 (Pro)</p>
+                    <p>828x1792 (Standard)</p>
+                    <p>750x1334 (SE)</p>
+                </div>
+                <div class="size-card">
+                    <h4>iOS - iPad</h4>
+                    <p>2048x2732 (12.9")</p>
+                    <p>1668x2388 (11")</p>
+                    <p>1536x2048 (10.2")</p>
+                </div>
+                <div class="size-card">
+                    <h4>Android - Portrait</h4>
+                    <p>1440x2560 (xxxhdpi)</p>
+                    <p>1080x1920 (xxhdpi)</p>
+                    <p>720x1280 (xhdpi)</p>
+                    <p>480x800 (hdpi)</p>
+                </div>
+                <div class="size-card">
+                    <h4>Android - Landscape</h4>
+                    <p>2560x1440 (xxxhdpi)</p>
+                    <p>1920x1080 (xxhdpi)</p>
+                    <p>1280x720 (xhdpi)</p>
+                    <p>800x480 (hdpi)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('preview');
+        const ctx = canvas.getContext('2d');
+        let animationFrame = 0;
+
+        function drawRoundedRect(context, x, y, width, height, radius) {
+            if (context.roundRect) {
+                context.beginPath();
+                context.roundRect(x, y, width, height, radius);
+                context.fill();
+            } else {
+                const r = Math.min(radius, width / 2, height / 2);
+                context.beginPath();
+                context.moveTo(x + r, y);
+                context.lineTo(x + width - r, y);
+                context.quadraticCurveTo(x + width, y, x + width, y + r);
+                context.lineTo(x + width, y + height - r);
+                context.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+                context.lineTo(x + r, y + height);
+                context.quadraticCurveTo(x, y + height, x, y + height - r);
+                context.lineTo(x, y + r);
+                context.quadraticCurveTo(x, y, x + r, y);
+                context.closePath();
+                context.fill();
+            }
+        }
+
+        function renderSplash(targetCtx, width, height, frame) {
+            const color1 = document.getElementById('color1').value;
+            const color2 = document.getElementById('color2').value;
+            const color3 = document.getElementById('color3').value;
+            const appName = document.getElementById('appName').value;
+            const subtitle = document.getElementById('subtitle').value;
+            const logoSize = parseInt(document.getElementById('logoSize').value, 10);
+            const animation = document.getElementById('animation').value;
+
+            targetCtx.clearRect(0, 0, width, height);
+
+            const gradient = targetCtx.createLinearGradient(0, 0, width, height);
+            gradient.addColorStop(0, color1);
+            gradient.addColorStop(0.5, color2);
+            gradient.addColorStop(1, color3);
+            targetCtx.fillStyle = gradient;
+            targetCtx.fillRect(0, 0, width, height);
+
+            targetCtx.save();
+            targetCtx.globalAlpha = 0.2;
+            targetCtx.fillStyle = 'white';
+            targetCtx.beginPath();
+            targetCtx.arc(width * 0.25, height * 0.3, width * 0.32, 0, Math.PI * 2);
+            targetCtx.fill();
+            targetCtx.beginPath();
+            targetCtx.arc(width * 0.78, height * 0.72, width * 0.42, 0, Math.PI * 2);
+            targetCtx.fill();
+            targetCtx.restore();
+
+            const centerX = width / 2;
+            const centerY = height / 2 - height * 0.05;
+
+            targetCtx.save();
+            targetCtx.shadowColor = 'rgba(255, 255, 255, 0.55)';
+            targetCtx.shadowBlur = logoSize * 0.75;
+            targetCtx.globalAlpha = 0.25;
+            targetCtx.fillStyle = 'white';
+            targetCtx.beginPath();
+            targetCtx.arc(centerX, centerY, logoSize * 0.72, 0, Math.PI * 2);
+            targetCtx.fill();
+            targetCtx.restore();
+
+            targetCtx.save();
+            targetCtx.globalAlpha = 0.28;
+            targetCtx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+            targetCtx.shadowBlur = logoSize * 0.45;
+            targetCtx.shadowOffsetY = logoSize * 0.12;
+            targetCtx.fillStyle = 'rgba(255, 255, 255, 0.22)';
+            drawRoundedRect(targetCtx, centerX - logoSize * 0.38, centerY - logoSize * 0.38, logoSize * 0.76, logoSize * 0.76, logoSize * 0.18);
+            targetCtx.restore();
+
+            const leftCenterX = centerX - logoSize * 0.35;
+            const rightCenterX = centerX + logoSize * 0.35;
+            const iconRadius = logoSize * 0.16;
+
+            const scaleFactor = (animation === 'scale' || animation === 'pulse') ? 1 + 0.08 * Math.sin(frame * Math.PI / 90) : 1;
+
+            // Left icon
+            targetCtx.save();
+            targetCtx.translate(leftCenterX, centerY);
+            if (animation === 'rotate') {
+                targetCtx.rotate(frame * Math.PI / 90);
+            }
+            targetCtx.scale(scaleFactor, scaleFactor);
+            targetCtx.translate(-leftCenterX, -centerY);
+
+            const leftGradient = targetCtx.createLinearGradient(
+                leftCenterX - iconRadius * 1.2,
+                centerY - iconRadius,
+                leftCenterX + iconRadius * 1.2,
+                centerY + iconRadius
+            );
+            leftGradient.addColorStop(0, '#60A5FA');
+            leftGradient.addColorStop(0.5, '#6366F1');
+            leftGradient.addColorStop(1, '#8B5CF6');
+            targetCtx.fillStyle = leftGradient;
+            targetCtx.beginPath();
+            targetCtx.arc(leftCenterX, centerY, iconRadius, 0, Math.PI * 2);
+            targetCtx.fill();
+
+            targetCtx.strokeStyle = 'white';
+            targetCtx.lineWidth = logoSize * 0.02;
+            targetCtx.lineCap = 'round';
+            targetCtx.lineJoin = 'round';
+            targetCtx.beginPath();
+            targetCtx.moveTo(leftCenterX, centerY + iconRadius * 0.55);
+            targetCtx.lineTo(leftCenterX, centerY - iconRadius * 0.55);
+            targetCtx.moveTo(leftCenterX, centerY - iconRadius * 0.55);
+            targetCtx.lineTo(leftCenterX - iconRadius * 0.55, centerY - iconRadius * 0.08);
+            targetCtx.moveTo(leftCenterX, centerY - iconRadius * 0.55);
+            targetCtx.lineTo(leftCenterX + iconRadius * 0.55, centerY - iconRadius * 0.08);
+            targetCtx.stroke();
+            targetCtx.restore();
+
+            // Center icon
+            targetCtx.save();
+            targetCtx.translate(centerX, centerY);
+            if (animation === 'rotate') {
+                targetCtx.rotate(-frame * Math.PI / 110);
+            }
+            targetCtx.scale(scaleFactor, scaleFactor);
+
+            targetCtx.globalAlpha = 0.35;
+            targetCtx.fillStyle = 'white';
+            targetCtx.beginPath();
+            targetCtx.arc(0, 0, logoSize * 0.14, 0, Math.PI * 2);
+            targetCtx.fill();
+            targetCtx.globalAlpha = 1;
+            targetCtx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+            targetCtx.lineWidth = logoSize * 0.018;
+            targetCtx.beginPath();
+            targetCtx.arc(0, 0, logoSize * 0.14, 0, Math.PI * 2);
+            targetCtx.stroke();
+
+            const scale = (logoSize * 0.28) / 24;
+            targetCtx.strokeStyle = 'white';
+            targetCtx.lineWidth = 2.4;
+            targetCtx.lineCap = 'round';
+            targetCtx.lineJoin = 'round';
+            targetCtx.save();
+            targetCtx.scale(scale, scale);
+            targetCtx.translate(-12, -12);
+            const exchangePath = new Path2D('M8 7h11m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4');
+            targetCtx.stroke(exchangePath);
+            targetCtx.restore();
+            targetCtx.restore();
+
+            // Right icon
+            targetCtx.save();
+            targetCtx.translate(rightCenterX, centerY);
+            if (animation === 'rotate') {
+                targetCtx.rotate(-frame * Math.PI / 90);
+            }
+            targetCtx.scale(scaleFactor, scaleFactor);
+            targetCtx.translate(-rightCenterX, -centerY);
+
+            const rightGradient = targetCtx.createLinearGradient(
+                rightCenterX - iconRadius * 1.2,
+                centerY - iconRadius,
+                rightCenterX + iconRadius * 1.2,
+                centerY + iconRadius
+            );
+            rightGradient.addColorStop(0, '#EC4899');
+            rightGradient.addColorStop(0.5, '#F43F5E');
+            rightGradient.addColorStop(1, '#EF4444');
+            targetCtx.fillStyle = rightGradient;
+            targetCtx.beginPath();
+            targetCtx.arc(rightCenterX, centerY, iconRadius, 0, Math.PI * 2);
+            targetCtx.fill();
+
+            targetCtx.strokeStyle = 'white';
+            targetCtx.lineWidth = logoSize * 0.02;
+            targetCtx.beginPath();
+            targetCtx.moveTo(rightCenterX, centerY - iconRadius * 0.55);
+            targetCtx.lineTo(rightCenterX, centerY + iconRadius * 0.55);
+            targetCtx.moveTo(rightCenterX, centerY + iconRadius * 0.55);
+            targetCtx.lineTo(rightCenterX - iconRadius * 0.55, centerY + iconRadius * 0.08);
+            targetCtx.moveTo(rightCenterX, centerY + iconRadius * 0.55);
+            targetCtx.lineTo(rightCenterX + iconRadius * 0.55, centerY + iconRadius * 0.08);
+            targetCtx.stroke();
+            targetCtx.restore();
+
+            const textY = centerY + logoSize * 0.66;
+
+            targetCtx.save();
+            targetCtx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+            targetCtx.shadowBlur = logoSize * 0.3;
+            targetCtx.shadowOffsetY = logoSize * 0.14;
+            targetCtx.fillStyle = 'white';
+            targetCtx.font = `900 ${width * 0.12}px -apple-system, BlinkMacSystemFont, sans-serif`;
+            targetCtx.textAlign = 'center';
+            targetCtx.textBaseline = 'middle';
+            targetCtx.fillText(appName, centerX, textY);
+            targetCtx.restore();
+
+            targetCtx.save();
+            targetCtx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+            targetCtx.font = `600 ${width * 0.046}px -apple-system, BlinkMacSystemFont, sans-serif`;
+            targetCtx.textAlign = 'center';
+            targetCtx.fillText(subtitle, centerX, textY + width * 0.08);
+            targetCtx.restore();
+
+            targetCtx.save();
+            targetCtx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+            targetCtx.font = `500 ${width * 0.035}px -apple-system, BlinkMacSystemFont, sans-serif`;
+            targetCtx.textAlign = 'center';
+            targetCtx.fillText('Beğen • Eşleş • Takas Yap', centerX, textY + width * 0.14);
+            targetCtx.restore();
+
+            const dotsY = height * 0.8;
+            const dotRadius = width * 0.008;
+            const dotSpacing = width * 0.04;
+
+            for (let i = 0; i < 3; i++) {
+                targetCtx.save();
+                const phase = (frame + i * 60) % 180;
+                const scale = 1 + Math.sin(phase * Math.PI / 90) * 0.6;
+                const alpha = 0.5 + Math.sin(phase * Math.PI / 90) * 0.45;
+                targetCtx.globalAlpha = animation === 'none' ? 0.9 : alpha;
+                targetCtx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+                targetCtx.shadowBlur = 18;
+                targetCtx.fillStyle = 'white';
+                targetCtx.beginPath();
+                targetCtx.arc(centerX + (i - 1) * dotSpacing, dotsY, dotRadius * scale, 0, Math.PI * 2);
+                targetCtx.fill();
+                targetCtx.restore();
+            }
+
+            targetCtx.save();
+            targetCtx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            targetCtx.font = `600 ${width * 0.03}px -apple-system, BlinkMacSystemFont, sans-serif`;
+            targetCtx.textAlign = 'center';
+            targetCtx.fillText('⚡ Powered by Teknova', centerX, height * 0.92);
+            targetCtx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            targetCtx.font = `400 ${width * 0.025}px -apple-system, BlinkMacSystemFont, sans-serif`;
+            targetCtx.fillText('v1.0.0', centerX, height * 0.95);
+            targetCtx.restore();
+        }
+
+        function drawSplashScreen(width, height) {
+            canvas.width = width;
+            canvas.height = height;
+            renderSplash(ctx, width, height, animationFrame);
+        }
+
+        function updatePreview() {
+            const size = document.getElementById('previewSize').value;
+            const [width, height] = size.split('x').map(Number);
+            animationFrame = 0;
+            drawSplashScreen(width, height);
+        }
+
+        function animate() {
+            const animation = document.getElementById('animation').value;
+            if (animation !== 'none') {
+                animationFrame = (animationFrame + 2) % 360;
+                renderSplash(ctx, canvas.width, canvas.height, animationFrame);
+            }
+            requestAnimationFrame(animate);
+        }
+
+        function downloadHeroSplash() {
+            const heroImage = document.getElementById('heroSplashImage');
+            if (!heroImage || heroImage.dataset.missing === 'true') {
+                showStatus('⚠️ Hazır splash görseli bulunamadı. Önce "📦 Tüm Boyutları Oluştur" adımını tamamlayın.', 'error');
+                return;
+            }
+            const link = document.createElement('a');
+            link.href = heroImage.src;
+            link.download = 'takas-splash-default.png';
+            link.click();
+        }
+
+        function downloadCurrent() {
+            const size = document.getElementById('previewSize').value;
+            const [width, height] = size.split('x').map(Number);
+
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = width;
+            tempCanvas.height = height;
+            const tempCtx = tempCanvas.getContext('2d');
+
+            const savedFrame = animationFrame;
+            renderSplash(tempCtx, width, height, 0);
+
+            tempCanvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `splash-${size}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showStatus(`✅ ${size} boyutu indirildi!`, 'success');
+            });
+
+            animationFrame = savedFrame;
+        }
+
+        function generateAll() {
+            showStatus('🎨 Tüm boyutlar oluşturuluyor...', 'success');
+
+            const sizes = [
+                { width: 1242, height: 2688, name: 'iphone-14-pro-max' },
+                { width: 1125, height: 2436, name: 'iphone-14-pro' },
+                { width: 828, height: 1792, name: 'iphone-14' },
+                { width: 750, height: 1334, name: 'iphone-se' },
+                { width: 1242, height: 2208, name: 'iphone-8-plus' },
+                { width: 640, height: 1136, name: 'iphone-5' },
+                { width: 2048, height: 2732, name: 'ipad-pro-12-9' },
+                { width: 1668, height: 2388, name: 'ipad-pro-11' },
+                { width: 1536, height: 2048, name: 'ipad-10-2' },
+                { width: 1440, height: 2560, name: 'android-xxxhdpi-port' },
+                { width: 1080, height: 1920, name: 'android-xxhdpi-port' },
+                { width: 720, height: 1280, name: 'android-xhdpi-port' },
+                { width: 480, height: 800, name: 'android-hdpi-port' },
+                { width: 2560, height: 1440, name: 'android-xxxhdpi-land' },
+                { width: 1920, height: 1080, name: 'android-xxhdpi-land' },
+                { width: 1280, height: 720, name: 'android-xhdpi-land' },
+                { width: 800, height: 480, name: 'android-hdpi-land' },
+            ];
+
+            let downloaded = 0;
+            const total = sizes.length;
+
+            sizes.forEach((size, index) => {
+                setTimeout(() => {
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = size.width;
+                    tempCanvas.height = size.height;
+                    const tempCtx = tempCanvas.getContext('2d');
+
+                    renderSplash(tempCtx, size.width, size.height, 0);
+
+                    tempCanvas.toBlob(blob => {
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `splash-${size.name}-${size.width}x${size.height}.png`;
+                        a.click();
+                        URL.revokeObjectURL(url);
+
+                        downloaded++;
+                        if (size.name === 'android-xxhdpi-port') {
+                            const heroImg = document.getElementById('heroSplashImage');
+                            if (heroImg) {
+                                heroImg.dataset.missing = 'false';
+                                heroImg.src = `splash/splash-android-xxhdpi-port-1080x1920.png?v=${Date.now()}`;
+                            }
+                        }
+                        if (downloaded < total) {
+                            showStatus(`✅ ${downloaded}/${total} boyut hazır...`, 'success');
+                        } else {
+                            showStatus(`🎉 Tüm boyutlar hazır! (${total} dosya)`, 'success');
+                        }
+                    });
+                }, index * 180);
+            });
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = type === 'error' ? 'status-error' : 'status-success';
+            status.style.display = 'block';
+
+            if (type !== 'error') {
+                setTimeout(() => {
+                    status.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        const heroImage = document.getElementById('heroSplashImage');
+        if (heroImage) {
+            const markLoaded = () => { heroImage.dataset.missing = 'false'; };
+            if (heroImage.complete && heroImage.naturalWidth > 0) {
+                markLoaded();
+            } else {
+                heroImage.addEventListener('load', markLoaded, { once: true });
+            }
+            heroImage.addEventListener('error', () => {
+                heroImage.dataset.missing = 'true';
+                const wrapper = document.getElementById('heroSplashWrapper');
+                if (wrapper) {
+                    wrapper.innerHTML = '<div class="hero-splash-placeholder">Henüz hazır splash görseli bulunmuyor. "📦 Tüm Boyutlarını Oluştur" butonunu kullanarak yeni görseller oluşturabilirsiniz.</div>';
+                }
+            }, { once: true });
+        }
+
+        document.querySelectorAll('input, select').forEach(el => {
+            el.addEventListener('input', () => {
+                animationFrame = 0;
+                updatePreview();
+            });
+        });
+
+        updatePreview();
+        animate();
+    </script>
+</body>
+</html>

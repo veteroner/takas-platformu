@@ -5,7 +5,7 @@ import { initializeAdMob } from '@/lib/admob';
 
 /**
  * AdMob Başlatıcı Komponenti
- * Uygulama başlangıcında AdMob'u başlatır
+ * Uygulama başlangıcında AdMob'u başlatır (sadece interstitial reklamlar için)
  */
 export default function AdMobInit() {
   useEffect(() => {
@@ -14,4 +14,3 @@ export default function AdMobInit() {
 
   return null; // UI render etmeye gerek yok
 }
-

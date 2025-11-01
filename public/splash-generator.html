@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Splash Screen Generator - Takas Platform</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 900px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    .preview-section {
+      margin-bottom: 30px;
+    }
+
+    .splash-preview {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .controls {
+      display: grid;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    label {
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+
+    input[type="color"],
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    input[type="color"] {
+      height: 50px;
+      cursor: pointer;
+    }
+
+    .button-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 15px 25px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .info {
+      background: #f0f9ff;
+      border-left: 4px solid #0284c7;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .info h3 {
+      color: #0284c7;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .info ul {
+      margin-left: 20px;
+      color: #333;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 Splash Screen Generator</h1>
+    <p class="subtitle">Takas Platform için tüm boyutlarda splash screen görselleri oluşturun</p>
+
+    <div class="preview-section">
+      <h3 style="margin-bottom: 15px;">Önizleme:</h3>
+      <canvas id="preview" class="splash-preview" width="400" height="800"></canvas>
+    </div>
+
+    <div class="controls">
+      <div class="control-group">
+        <label for="bgColor1">Gradient Renk 1:</label>
+        <input type="color" id="bgColor1" value="#EC4899">
+      </div>
+
+      <div class="control-group">
+        <label for="bgColor2">Gradient Renk 2:</label>
+        <input type="color" id="bgColor2" value="#8B5CF6">
+      </div>
+
+      <div class="control-group">
+        <label for="appName">Uygulama Adı:</label>
+        <input type="text" id="appName" value="TAKAS">
+      </div>
+
+      <div class="control-group">
+        <label for="tagline">Slogan:</label>
+        <input type="text" id="tagline" value="Beğen • Eşleş • Takas Yap">
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button onclick="generateAllSizes()">📱 Tüm Boyutları İndir</button>
+      <button onclick="generateSingle(1242, 2688, 'splash-ios.png')">🍎 iOS Splash</button>
+      <button onclick="generateSingle(1080, 1920, 'splash-android.png')">🤖 Android Splash</button>
+    </div>
+
+    <div class="info">
+      <h3>📋 Kullanım Talimatları:</h3>
+      <ul>
+        <li>Renkleri ve metinleri özelleştirin</li>
+        <li>"Tüm Boyutları İndir" ile Android ve iOS için tüm görselleri oluşturun</li>
+        <li>İndirilen görselleri <code>resources/splash</code> klasörüne kopyalayın</li>
+        <li>Terminalde <code>npx capacitor-assets generate</code> komutunu çalıştırın</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('preview');
+    const ctx = canvas.getContext('2d');
+
+    // İnput değişikliklerini dinle
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('input', drawPreview);
+    });
+
+    // İlk önizlemeyi çiz
+    drawPreview();
+
+    function drawPreview() {
+      const bgColor1 = document.getElementById('bgColor1').value;
+      const bgColor2 = document.getElementById('bgColor2').value;
+      const appName = document.getElementById('appName').value;
+      const tagline = document.getElementById('tagline').value;
+
+      // Gradient arka plan
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      gradient.addColorStop(0, bgColor1);
+      gradient.addColorStop(1, bgColor2);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Dekoratif çemberler
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.beginPath();
+      ctx.arc(100, 150, 80, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(300, 650, 120, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Logo (Takas ikonu)
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2 - 50;
+
+      // Işıldayan efekt
+      const glowGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 120);
+      glowGradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
+      glowGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      ctx.fillStyle = glowGradient;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 120, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Logo arka plan
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.beginPath();
+      ctx.roundRect(centerX - 70, centerY - 70, 140, 140, 25);
+      ctx.fill();
+
+      // Takas okları
+      ctx.strokeStyle = 'white';
+      ctx.lineWidth = 8;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      // Sol ok (aşağı)
+      ctx.beginPath();
+      ctx.moveTo(centerX - 30, centerY - 40);
+      ctx.lineTo(centerX - 30, centerY + 40);
+      ctx.moveTo(centerX - 30, centerY + 40);
+      ctx.lineTo(centerX - 45, centerY + 25);
+      ctx.moveTo(centerX - 30, centerY + 40);
+      ctx.lineTo(centerX - 15, centerY + 25);
+      ctx.stroke();
+
+      // Sağ ok (yukarı)
+      ctx.beginPath();
+      ctx.moveTo(centerX + 30, centerY + 40);
+      ctx.lineTo(centerX + 30, centerY - 40);
+      ctx.moveTo(centerX + 30, centerY - 40);
+      ctx.lineTo(centerX + 15, centerY - 25);
+      ctx.moveTo(centerX + 30, centerY - 40);
+      ctx.lineTo(centerX + 45, centerY - 25);
+      ctx.stroke();
+
+      // Uygulama adı
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 48px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(appName, centerX, centerY + 120);
+
+      // Slogan
+      ctx.font = '20px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.fillText(tagline, centerX, centerY + 155);
+
+      // Yükleme noktaları
+      const dotY = centerY + 200;
+      for (let i = 0; i < 3; i++) {
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.arc(centerX - 20 + (i * 20), dotY, 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Alt yazı
+      ctx.font = '14px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.fillText('Powered by Teknova', centerX, canvas.height - 30);
+    }
+
+    function generateSplashScreen(width, height) {
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = width;
+      tempCanvas.height = height;
+      const tempCtx = tempCanvas.getContext('2d');
+
+      const bgColor1 = document.getElementById('bgColor1').value;
+      const bgColor2 = document.getElementById('bgColor2').value;
+      const appName = document.getElementById('appName').value;
+      const tagline = document.getElementById('tagline').value;
+
+      // Scale factor
+      const scale = width / 400;
+
+      // Gradient arka plan
+      const gradient = tempCtx.createLinearGradient(0, 0, width, height);
+      gradient.addColorStop(0, bgColor1);
+      gradient.addColorStop(1, bgColor2);
+      tempCtx.fillStyle = gradient;
+      tempCtx.fillRect(0, 0, width, height);
+
+      // Dekoratif çemberler (ölçeklendirilmiş)
+      tempCtx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+      tempCtx.beginPath();
+      tempCtx.arc(100 * scale, 150 * scale, 80 * scale, 0, Math.PI * 2);
+      tempCtx.fill();
+
+      tempCtx.beginPath();
+      tempCtx.arc(width - 100 * scale, height - 150 * scale, 120 * scale, 0, Math.PI * 2);
+      tempCtx.fill();
+
+      const centerX = width / 2;
+      const centerY = height / 2;
+
+      // Işıldayan efekt
+      const glowGradient = tempCtx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 120 * scale);
+      glowGradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
+      glowGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      tempCtx.fillStyle = glowGradient;
+      tempCtx.beginPath();
+      tempCtx.arc(centerX, centerY, 120 * scale, 0, Math.PI * 2);
+      tempCtx.fill();
+
+      // Logo arka plan
+      tempCtx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+      tempCtx.beginPath();
+      tempCtx.roundRect(centerX - 70 * scale, centerY - 70 * scale, 140 * scale, 140 * scale, 25 * scale);
+      tempCtx.fill();
+
+      // Takas okları
+      tempCtx.strokeStyle = 'white';
+      tempCtx.lineWidth = 8 * scale;
+      tempCtx.lineCap = 'round';
+      tempCtx.lineJoin = 'round';
+
+      // Sol ok
+      tempCtx.beginPath();
+      tempCtx.moveTo(centerX - 30 * scale, centerY - 40 * scale);
+      tempCtx.lineTo(centerX - 30 * scale, centerY + 40 * scale);
+      tempCtx.moveTo(centerX - 30 * scale, centerY + 40 * scale);
+      tempCtx.lineTo(centerX - 45 * scale, centerY + 25 * scale);
+      tempCtx.moveTo(centerX - 30 * scale, centerY + 40 * scale);
+      tempCtx.lineTo(centerX - 15 * scale, centerY + 25 * scale);
+      tempCtx.stroke();
+
+      // Sağ ok
+      tempCtx.beginPath();
+      tempCtx.moveTo(centerX + 30 * scale, centerY + 40 * scale);
+      tempCtx.lineTo(centerX + 30 * scale, centerY - 40 * scale);
+      tempCtx.moveTo(centerX + 30 * scale, centerY - 40 * scale);
+      tempCtx.lineTo(centerX + 15 * scale, centerY - 25 * scale);
+      tempCtx.moveTo(centerX + 30 * scale, centerY - 40 * scale);
+      tempCtx.lineTo(centerX + 45 * scale, centerY - 25 * scale);
+      tempCtx.stroke();
+
+      // Uygulama adı
+      tempCtx.fillStyle = 'white';
+      tempCtx.font = `bold ${48 * scale}px -apple-system, sans-serif`;
+      tempCtx.textAlign = 'center';
+      tempCtx.fillText(appName, centerX, centerY + 120 * scale);
+
+      // Slogan
+      tempCtx.font = `${20 * scale}px -apple-system, sans-serif`;
+      tempCtx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      tempCtx.fillText(tagline, centerX, centerY + 155 * scale);
+
+      // Alt yazı
+      tempCtx.font = `${14 * scale}px -apple-system, sans-serif`;
+      tempCtx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      tempCtx.fillText('Powered by Teknova', centerX, height - 30 * scale);
+
+      return tempCanvas;
+    }
+
+    function downloadImage(canvas, filename) {
+      canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      }, 'image/png');
+    }
+
+    function generateSingle(width, height, filename) {
+      const canvas = generateSplashScreen(width, height);
+      downloadImage(canvas, filename);
+    }
+
+    async function generateAllSizes() {
+      const sizes = [
+        // iOS
+        { width: 1242, height: 2688, name: 'splash-ios-1242x2688.png' },
+        { width: 1125, height: 2436, name: 'splash-ios-1125x2436.png' },
+        { width: 828, height: 1792, name: 'splash-ios-828x1792.png' },
+        { width: 750, height: 1334, name: 'splash-ios-750x1334.png' },
+        { width: 1242, height: 2208, name: 'splash-ios-1242x2208.png' },
+        { width: 640, height: 1136, name: 'splash-ios-640x1136.png' },
+        { width: 2048, height: 2732, name: 'splash-ios-2048x2732.png' },
+        { width: 1668, height: 2388, name: 'splash-ios-1668x2388.png' },
+        { width: 1536, height: 2048, name: 'splash-ios-1536x2048.png' },
+        // Android
+        { width: 480, height: 800, name: 'splash-android-480x800.png' },
+        { width: 720, height: 1280, name: 'splash-android-720x1280.png' },
+        { width: 1080, height: 1920, name: 'splash-android-1080x1920.png' },
+        { width: 1440, height: 2560, name: 'splash-android-1440x2560.png' },
+      ];
+
+      for (const size of sizes) {
+        const canvas = generateSplashScreen(size.width, size.height);
+        await new Promise(resolve => {
+          canvas.toBlob(blob => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = size.name;
+            a.click();
+            URL.revokeObjectURL(url);
+            resolve();
+          }, 'image/png');
+        });
+        // Kısa gecikme ekle
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+
+      alert('✅ Tüm splash screen görselleri indirildi!\n\nİndirilen görselleri resources/splash/ klasörüne kopyalayın ve "npx capacitor-assets generate" komutunu çalıştırın.');
+    }
+  </script>
+</body>
+</html>

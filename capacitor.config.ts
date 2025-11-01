@@ -5,17 +5,18 @@ const config: CapacitorConfig = {
   appName: 'Takas Platform',
   webDir: 'out',
   server: {
-    url: 'https://takasyap.netlify.app',
+    url: 'https://takasyap.netlify.app', // Production API server
     cleartext: true,
     androidScheme: 'https'
   },
   plugins: {
     SplashScreen: {
-      launchShowDuration: 2000,
+      launchShowDuration: 0,
+      launchAutoHide: true,
       backgroundColor: '#EC4899',
       showSpinner: false,
-      splashFullScreen: true,
-      splashImmersive: true
+      splashFullScreen: false,
+      splashImmersive: false,
     },
     StatusBar: {
       style: 'light',

@@ -9,8 +9,6 @@ import { getCurrentUser, updateUserProfile } from '@/lib/auth'
 import { getUserItems } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
 import type { Item } from '@/types'
-import RewardedAdButton from '@/components/RewardedAdButton'
-import { AdMobRewardItem } from '@capacitor-community/admob'
 
 export default function ProfilePage() {
   const router = useRouter()
@@ -24,7 +22,6 @@ export default function ProfilePage() {
     location: '',
     phone: ''
   })
-  const [extraSwipes, setExtraSwipes] = useState(0)
   const [stats, setStats] = useState({
     sharedItems: 0,
     receivedItems: 0,
@@ -159,12 +156,6 @@ export default function ProfilePage() {
       ...editData,
       [e.target.name]: e.target.value
     })
-  }
-
-  const handleRewardEarned = (reward: AdMobRewardItem) => {
-    // Kullanıcıya ekstra swipe hakkı ver
-    setExtraSwipes(prev => prev + 10)
-    alert(`🎉 Tebrikler! ${reward.amount} ${reward.type} kazandınız! +10 ekstra swipe hakkı`)
   }
 
   return (
@@ -420,25 +411,6 @@ export default function ProfilePage() {
                   Tüm Değerlendirmeleri Gör ({stats.receivedItems})
                 </button>
               )}
-            </div>
-          </div>
-
-          {/* Rewarded Ad Button */}
-          <div className="mb-6">
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-              <h3 className="text-white font-semibold mb-3 text-center">
-                Ekstra Swipe Hakkı Kazan
-              </h3>
-              <p className="text-white/70 text-sm text-center mb-4">
-                {extraSwipes > 0 
-                  ? `${extraSwipes} ekstra swipe hakkınız var! 🎉`
-                  : 'Reklam izleyerek 10 ekstra swipe hakkı kazanabilirsiniz'}
-              </p>
-              <RewardedAdButton 
-                onRewardEarned={handleRewardEarned}
-                buttonText="İzle ve Kazan"
-                rewardDescription="+10 Ekstra Swipe"
-              />
             </div>
           </div>
 

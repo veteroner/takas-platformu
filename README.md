@@ -6,6 +6,7 @@ Modern bir ürün takas platformu - Beğen, eşleş, takas yap!
 
 - 📱 **Tinder Tarzı Swipe**: Ürünleri sağa/sola kaydırarak beğen
 - 💬 **Mesajlaşma**: Eşleşen kullanıcılarla sohbet et
+- 🎨 **Modern Splash Screen**: Animasyonlu, hızlı yüklenen profesyonel açılış ekranı
 - 🛡️ **Küfür Filtreleme**: Otomatik küfür ve hakaret engelleme sistemi (300+ kelime)
 - 🚫 **Yasadışı Ürün Engelleme**: Uyuşturucu, silah, vb. otomatik filtreleme (500+ kelime)
 - 🚷 **Kullanıcı Engelleme**: Taciz eden kullanıcıları engelle
@@ -153,7 +154,37 @@ Platform, kullanıcılar arası mesajlaşmada otomatik küfür ve hakaret engell
 - 🚀 [PROFANITY-FILTER-INTEGRATION.md](PROFANITY-FILTER-INTEGRATION.md) - Entegrasyon rehberi
 - 🧪 [TEST-GUIDE.md](TEST-GUIDE.md) - Test rehberi
 
-## �📱 Mobil Uygulama
+## 🎨 Splash Screen
+
+Modern, animasyonlu splash screen sistemi:
+
+```bash
+# Web'de test et
+npm run dev
+# http://localhost:3000 - Splash screen'i gör!
+
+# Native splash görselleri oluştur
+cd resources
+./generate-splash.sh
+
+# Mobil projelere sync et
+npx cap sync ios
+npx cap sync android
+```
+
+**Özellikler:**
+- ⚡ Hızlı yükleme (2.5 saniye)
+- 🎨 Gradient animasyonlar
+- 🔄 Animasyonlu takas ikonu
+- 📱 Web & Native destek
+
+**Dokümantasyon:**
+- 🚀 [SPLASH-QUICKSTART.md](SPLASH-QUICKSTART.md) - Hızlı başlangıç
+- 📖 [SPLASH-SCREEN-NEW.md](SPLASH-SCREEN-NEW.md) - Detaylı rehber
+- ✅ [SPLASH-COMPLETED.md](SPLASH-COMPLETED.md) - Web splash özeti
+- 📱 [NATIVE-SPLASH-COMPLETED.md](NATIVE-SPLASH-COMPLETED.md) - Native splash rehberi
+
+## 📱 Mobil Uygulama
 
 Capacitor ile iOS ve Android uygulamaları oluşturabilirsiniz:
 

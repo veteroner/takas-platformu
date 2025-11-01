@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Takas Platform Ana Renkler -->
+    <color name="colorPrimary">#EC4899</color>
+    <color name="colorPrimaryDark">#8B5CF6</color>
+    <color name="colorAccent">#6366F1</color>
+    
+    <!-- Splash Screen Renkler -->
+    <color name="splashBackground">#8B5CF6</color>
+    <color name="splashGradientStart">#EC4899</color>
+    <color name="splashGradientMiddle">#8B5CF6</color>
+    <color name="splashGradientEnd">#6366F1</color>
+    
+    <!-- Status Bar -->
+    <color name="statusBarColor">#8B5CF6</color>
+    
+    <!-- Text Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="textLight">#F3F4F6</color>
+    <color name="textMedium">#D1D5DB</color>
+</resources>

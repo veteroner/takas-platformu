@@ -1,27 +1,5 @@
-import { AdMob, BannerAdOptions, BannerAdSize, BannerAdPosition, InterstitialAdPluginEvents, RewardAdPluginEvents, AdMobRewardItem, AdLoadInfo } from '@capacitor-community/admob';
+import { AdMob, InterstitialAdPluginEvents, AdLoadInfo } from '@capacitor-community/admob';
 import { Capacitor } from '@capacitor/core';
-
-// Test ID'leri - Gerçek ID'lerle değiştirilecek
-export const AD_IDS = {
-  banner: {
-    ios: 'ca-app-pub-3940256099942544/2934735716', // Test ID
-    android: 'ca-app-pub-3940256099942544/6300978111', // Test ID
-  },
-  interstitial: {
-    ios: 'ca-app-pub-3940256099942544/4411468910', // Test ID
-    android: 'ca-app-pub-3940256099942544/1033173712', // Test ID
-  },
-  rewarded: {
-    ios: 'ca-app-pub-3940256099942544/1712485313', // Test ID
-    android: 'ca-app-pub-3940256099942544/5224354917', // Test ID
-  },
-};
-
-// Platform bazlı ad ID'si al
-function getAdId(type: 'banner' | 'interstitial' | 'rewarded'): string {
-  const platform = Capacitor.getPlatform();
-  return platform === 'ios' ? AD_IDS[type].ios : AD_IDS[type].android;
-}
 
 // AdMob'u başlat
 export async function initializeAdMob(): Promise<void> {
@@ -33,9 +11,8 @@ export async function initializeAdMob(): Promise<void> {
     }
 
     // Types for AdMob.initialize may vary across versions; keep only known fields
-    await AdMob.initialize({
-      initializeForTesting: true,
-    } as any);
+    const init = (AdMob as unknown as { initialize: (opts: { initializeForTesting?: boolean }) => Promise<void> }).initialize;
+    await init({ initializeForTesting: true });
 
     console.log('AdMob initialized successfully');
   } catch (error) {
@@ -43,234 +20,111 @@ export async function initializeAdMob(): Promise<void> {
   }
 }
 
-// Banner Reklam Göster
-export async function showBannerAd(position: BannerAdPosition = BannerAdPosition.BOTTOM_CENTER): Promise<void> {
-  try {
-    if (!Capacitor.isNativePlatform()) return;
+// BANNER REKLAMLAR KALDIRILDI - SADECE INTERSTITIAL REKLAMLAR
 
-    const options: BannerAdOptions = {
-      adId: getAdId('banner'),
-      adSize: BannerAdSize.BANNER,
-      position: position,
-      margin: 0,
-      isTesting: true, // Test modunda
-    };
-
-    await AdMob.showBanner(options);
-    console.log('Banner ad shown');
-  } catch (error) {
-    console.error('Error showing banner ad:', error);
-  }
-}
-
-// Banner Reklamı Gizle
-export async function hideBannerAd(): Promise<void> {
-  try {
-    if (!Capacitor.isNativePlatform()) return;
-    await AdMob.hideBanner();
-    console.log('Banner ad hidden');
-  } catch (error) {
-    console.error('Error hiding banner ad:', error);
-  }
-}
-
-// Banner Reklamı Kaldır
-export async function removeBannerAd(): Promise<void> {
-  try {
-    if (!Capacitor.isNativePlatform()) return;
-    await AdMob.removeBanner();
-    console.log('Banner ad removed');
-  } catch (error) {
-    console.error('Error removing banner ad:', error);
-  }
-}
+// AdMob interstitial hazır mı durumunu takip et
+let interstitialReady = false;
 
 // Interstitial Reklamı Hazırla
 export async function prepareInterstitialAd(): Promise<void> {
   try {
     if (!Capacitor.isNativePlatform()) return;
 
+    // Test Interstitial Ad ID
     await AdMob.prepareInterstitial({
-      adId: getAdId('interstitial'),
-      isTesting: true,
+      adId: 'ca-app-pub-3940256099942544/1033173712', // Test Interstitial Ad ID
+      isTesting: true
     });
 
-    console.log('Interstitial ad prepared');
+    console.log('Interstitial ad prepared successfully');
   } catch (error) {
     console.error('Error preparing interstitial ad:', error);
   }
 }
 
 // Interstitial Reklamı Göster
-export async function showInterstitialAd(): Promise<boolean> {
+export async function showInterstitialAd(): Promise<void> {
   try {
-    if (!Capacitor.isNativePlatform()) return false;
+    if (!Capacitor.isNativePlatform()) return;
 
     await AdMob.showInterstitial();
-    console.log('Interstitial ad shown');
-    return true;
+    console.log('Interstitial ad shown successfully');
   } catch (error) {
     console.error('Error showing interstitial ad:', error);
-    return false;
+    // Reklam gösterilemezse sessizce devam et
   }
 }
 
 // Interstitial Reklam Event Listener'ları
-export function addInterstitialAdListeners(
-  onLoaded?: () => void,
-  onFailedToLoad?: (error: any) => void,
-  onShowed?: () => void,
-  onFailedToShow?: (error: any) => void,
-  onDismissed?: () => void
-): void {
+export function addInterstitialAdListeners(): void {
   if (!Capacitor.isNativePlatform()) return;
 
-  if (onLoaded) {
-    AdMob.addListener(InterstitialAdPluginEvents.Loaded, (info: AdLoadInfo) => {
-      console.log('Interstitial ad loaded', info);
-      onLoaded();
-    });
-  }
+  // Remove existing listeners first
+  removeAllAdListeners();
 
-  if (onFailedToLoad) {
-    AdMob.addListener(InterstitialAdPluginEvents.FailedToLoad, (error) => {
-      console.error('Interstitial ad failed to load', error);
-      onFailedToLoad(error);
-    });
-  }
+  // Reklam yüklendiğinde
+  AdMob.addListener(InterstitialAdPluginEvents.Loaded, (info: AdLoadInfo) => {
+    console.log('Interstitial ad loaded:', info);
+    interstitialReady = true;
+  });
 
-  if (onShowed) {
-    AdMob.addListener(InterstitialAdPluginEvents.Showed, () => {
-      console.log('Interstitial ad showed');
-      onShowed();
-    });
-  }
+  // Reklam yüklenemediğinde
+  AdMob.addListener(InterstitialAdPluginEvents.FailedToLoad, (error: unknown) => {
+    console.error('Interstitial ad failed to load:', error);
+    interstitialReady = false;
+  });
 
-  if (onFailedToShow) {
-    AdMob.addListener(InterstitialAdPluginEvents.FailedToShow, (error) => {
-      console.error('Interstitial ad failed to show', error);
-      onFailedToShow(error);
-    });
-  }
+  // Reklam gösterildiğinde
+  AdMob.addListener(InterstitialAdPluginEvents.Showed, () => {
+    console.log('Interstitial ad showed');
+    interstitialReady = false;
+    // Yeni reklam hazırla
+    prepareInterstitialAd();
+  });
 
-  if (onDismissed) {
-    AdMob.addListener(InterstitialAdPluginEvents.Dismissed, () => {
-      console.log('Interstitial ad dismissed');
-      onDismissed();
-    });
-  }
+  // Reklam gösterilemediğinde
+  AdMob.addListener(InterstitialAdPluginEvents.FailedToShow, (error: unknown) => {
+    console.error('Interstitial ad failed to show:', error);
+    interstitialReady = false;
+  });
+
+  // Reklam kapatıldığında
+  AdMob.addListener(InterstitialAdPluginEvents.Dismissed, () => {
+    console.log('Interstitial ad dismissed');
+    interstitialReady = false;
+    // Yeni reklam hazırla
+    prepareInterstitialAd();
+  });
 }
 
-// Rewarded Reklamı Hazırla
-export async function prepareRewardedAd(): Promise<void> {
-  try {
-    if (!Capacitor.isNativePlatform()) return;
-
-    await AdMob.prepareRewardVideoAd({
-      adId: getAdId('rewarded'),
-      isTesting: true,
-    });
-
-    console.log('Rewarded ad prepared');
-  } catch (error) {
-    console.error('Error preparing rewarded ad:', error);
-  }
-}
-
-// Rewarded Reklamı Göster
-export async function showRewardedAd(): Promise<boolean> {
-  try {
-    if (!Capacitor.isNativePlatform()) return false;
-
-    await AdMob.showRewardVideoAd();
-    console.log('Rewarded ad shown');
-    return true;
-  } catch (error) {
-    console.error('Error showing rewarded ad:', error);
-    return false;
-  }
-}
-
-// Rewarded Reklam Event Listener'ları
-export function addRewardedAdListeners(
-  onLoaded?: () => void,
-  onFailedToLoad?: (error: any) => void,
-  onShowed?: () => void,
-  onFailedToShow?: (error: any) => void,
-  onDismissed?: () => void,
-  onRewarded?: (reward: AdMobRewardItem) => void
-): void {
-  if (!Capacitor.isNativePlatform()) return;
-
-  if (onLoaded) {
-    AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
-      console.log('Rewarded ad loaded', info);
-      onLoaded();
-    });
-  }
-
-  if (onFailedToLoad) {
-    AdMob.addListener(RewardAdPluginEvents.FailedToLoad, (error) => {
-      console.error('Rewarded ad failed to load', error);
-      onFailedToLoad(error);
-    });
-  }
-
-  if (onShowed) {
-    AdMob.addListener(RewardAdPluginEvents.Showed, () => {
-      console.log('Rewarded ad showed');
-      onShowed();
-    });
-  }
-
-  if (onFailedToShow) {
-    AdMob.addListener(RewardAdPluginEvents.FailedToShow, (error) => {
-      console.error('Rewarded ad failed to show', error);
-      onFailedToShow(error);
-    });
-  }
-
-  if (onDismissed) {
-    AdMob.addListener(RewardAdPluginEvents.Dismissed, () => {
-      console.log('Rewarded ad dismissed');
-      onDismissed();
-    });
-  }
-
-  if (onRewarded) {
-    AdMob.addListener(RewardAdPluginEvents.Rewarded, (reward: AdMobRewardItem) => {
-      console.log('User earned reward:', reward);
-      onRewarded(reward);
-    });
-  }
-}
-
-// Tüm event listener'ları temizle
+// Tüm Event Listener'ları Kaldır
 export function removeAllAdListeners(): void {
   if (!Capacitor.isNativePlatform()) return;
-  
-  // Interstitial listeners
-  // Some versions may not expose removeAllListeners in types; guard at runtime
-  (AdMob as any).removeAllListeners?.();
-  console.log('All ad listeners removed');
+  // AdMob removeAllListeners metodu mevcut değil
+  console.log('Ad listeners cleanup requested');
 }
 
-// Swipe sayacı için helper
+// Interstitial hazır mı?
+export function isAdMobInterstitialReady(): boolean {
+  return interstitialReady;
+}
+
+// Swipe Counter Class - Interstitial reklamlar için
 export class SwipeCounter {
   private count: number = 0;
   private threshold: number;
-  private onThresholdReached: () => void;
+  private callback: () => void;
 
-  constructor(threshold: number, onThresholdReached: () => void) {
+  constructor(threshold: number, callback: () => void) {
     this.threshold = threshold;
-    this.onThresholdReached = onThresholdReached;
+    this.callback = callback;
   }
 
   increment(): void {
     this.count++;
     if (this.count >= this.threshold) {
-      this.count = 0;
-      this.onThresholdReached();
+      this.count = 0; // Reset counter
+      this.callback(); // Show ad
     }
   }
 
@@ -282,4 +136,3 @@ export class SwipeCounter {
     return this.count;
   }
 }
-

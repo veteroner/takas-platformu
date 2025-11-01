@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // output: 'export', // API routes olduğu için export kullanılamaz
   images: {
     unoptimized: true,
     remotePatterns: [

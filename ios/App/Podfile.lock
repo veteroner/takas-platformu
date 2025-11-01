@@ -1,17 +1,19 @@
 PODS:
   - Capacitor (7.4.3):
     - CapacitorCordova
-  - CapacitorCommunityAdmob (7.0.3):
+  - CapacitorCommunityAdmob (7.2.0):
     - Capacitor
-    - Google-Mobile-Ads-SDK (= 11.3.0)
-    - GoogleUserMessagingPlatform (< 3.0.0, >= 2.7.0)
+    - Google-Mobile-Ads-SDK (= 12.12.0)
+    - GoogleUserMessagingPlatform (= 3.0.0)
   - CapacitorCordova (7.4.3)
+  - CapacitorSplashScreen (7.0.3):
+    - Capacitor
   - CordovaPluginsStatic (7.4.3):
     - CapacitorCordova
     - OneSignalXCFramework (= 5.2.14)
-  - Google-Mobile-Ads-SDK (11.3.0):
+  - Google-Mobile-Ads-SDK (12.12.0):
     - GoogleUserMessagingPlatform (>= 1.1)
-  - GoogleUserMessagingPlatform (2.7.0)
+  - GoogleUserMessagingPlatform (3.0.0)
   - OneSignalXCFramework (5.2.14):
     - OneSignalXCFramework/OneSignalComplete (= 5.2.14)
   - OneSignalXCFramework/OneSignal (5.2.14):
@@ -63,6 +65,7 @@ DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorCommunityAdmob (from `../../node_modules/@capacitor-community/admob`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
   - CordovaPluginsStatic (from `../capacitor-cordova-ios-plugins`)
 
 SPEC REPOS:
@@ -78,18 +81,21 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor-community/admob"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorSplashScreen:
+    :path: "../../node_modules/@capacitor/splash-screen"
   CordovaPluginsStatic:
     :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
   Capacitor: b4741ca7affb32c1b70debd03df92cbf522d8a80
-  CapacitorCommunityAdmob: 9267ae3b473314fa65765ce4bead9a9175902ab2
+  CapacitorCommunityAdmob: 7f73470006ec4586c13058c5f576c456f82ee343
   CapacitorCordova: 435121e81a2df4d0034f0fb11fcefab5104cfdb5
+  CapacitorSplashScreen: d06ae8804808e9f649a08e7bb7f283c77b688084
   CordovaPluginsStatic: f522a8ad00f2c511cb933e08f8cc399667bef222
-  Google-Mobile-Ads-SDK: 301a16c461c331ba34ff4dab40a22ab7c147af61
-  GoogleUserMessagingPlatform: a8b56893477f67212fbc8411c139e61d463349f5
+  Google-Mobile-Ads-SDK: 4dde70a8c18d96b14f9548759b8cec6ecb0bc3e6
+  GoogleUserMessagingPlatform: f8d0cdad3ca835406755d0a69aa634f00e76d576
   OneSignalXCFramework: 7112f3e89563e41ebc23fe807788f11985ac541c
 
-PODFILE CHECKSUM: 5f090085004110cbf428bff90b5f08092af0ef3c
+PODFILE CHECKSUM: 900728840335d22b73e888821769cf34628e3850
 
 COCOAPODS: 1.16.2

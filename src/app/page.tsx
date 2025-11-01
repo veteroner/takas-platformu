@@ -11,9 +11,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getFeedItems, recordSwipe, checkForMatch, getUserLikedItems, getUserPassedItems } from '@/lib/api'
 import { getCurrentUser } from '@/lib/auth'
-import BannerAd from '@/components/BannerAd'
-import { useInterstitialAd } from '@/hooks/useInterstitialAd'
-import { SwipeCounter } from '@/lib/admob'
+import { useAds } from '@/hooks/useAds'
+import { AdSwipeCounter } from '@/lib/adManager'
 import { loadSeekingPreferencesAsync } from '@/lib/preferences'
 import { filterAndRank } from '@/lib/matching'
 
@@ -32,13 +31,13 @@ export default function HomePage() {
   const [showMatchToast, setShowMatchToast] = useState(false)
   const [matchedUser, setMatchedUser] = useState<{ name: string; avatar?: string; matchId: string } | null>(null)
   
-  // Interstitial reklam hook'u
-  const interstitialAd = useInterstitialAd()
+  // Unified Ads hook'u (Unity Ads öncelikli, yoksa AdMob)
+  const ads = useAds()
   
   // Swipe sayacı - Her 5 swipe'da bir reklam göster
-  const [swipeCounter] = useState(() => new SwipeCounter(5, () => {
-    if (interstitialAd.isReady) {
-      interstitialAd.show()
+  const [swipeCounter] = useState(() => new AdSwipeCounter(5, () => {
+    if (ads.isReady) {
+      ads.show()
     }
   }))
 
@@ -194,7 +193,7 @@ export default function HomePage() {
 
   const handleSwipe = async (direction: 'left' | 'right', item: Item) => {
     try {
-      // Swipe sayacını artır - her 5 swipe'da reklam gösterir
+      // Swipe sayacını artır - her 5 swipe'da interstitial reklam gösterir
       swipeCounter.increment()
       
       // Record swipe in database
@@ -474,8 +473,7 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Banner Reklam */}
-        <BannerAd />
+  {/* Reklamlar: Sadece interstitial. Banner kaldırıldı. */}
 
         {/* Stats - Tıklanabilir */}
         <div className="grid grid-cols-2 gap-4 mb-6">

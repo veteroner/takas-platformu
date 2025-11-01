@@ -2,28 +2,28 @@
   <!-- Background with gradient -->
   <rect width="2732" height="2732" fill="url(#splashGradient)"/>
   
-  <!-- Main Icon - Exchange/Swap Symbol -->
-  <g transform="translate(866, 1000)">
-    <!-- Left Arrow Circle -->
-    <circle cx="200" cy="300" r="150" fill="white" opacity="0.9"/>
-    <path d="M150 300 L250 200 L250 250 L300 250 L300 350 L250 350 L250 400 Z" fill="#6366F1"/>
-    
-    <!-- Right Arrow Circle -->
-    <circle cx="600" cy="300" r="150" fill="white" opacity="0.9"/>
-    <path d="M650 300 L550 400 L550 350 L500 350 L500 250 L550 250 L550 200 Z" fill="#EC4899"/>
-    
-    <!-- Connection Lines -->
-    <path d="M350 260 Q400 240 450 260" stroke="white" stroke-width="18" fill="none" opacity="0.8"/>
-    <path d="M350 340 Q400 360 450 340" stroke="white" stroke-width="18" fill="none" opacity="0.8"/>
-    
-    <!-- Center Symbol -->
-    <circle cx="400" cy="300" r="75" fill="white"/>
-    <path d="M360 300 L400 260 L440 300 L400 340 Z" fill="#8B5CF6"/>
+  <!-- Main Icon - Centered Block -->
+  <g transform="translate(1366, 1270)">
+    <!-- Soft glow -->
+  <circle cx="0" cy="0" r="240" fill="white" opacity="0.10"/>
+  <circle cx="0" cy="0" r="190" fill="white" opacity="0.16"/>
+
+    <!-- Left circle -->
+    <circle cx="-160" cy="0" r="120" fill="white" opacity="0.95"/>
+    <path d="M-200 0 L-120 -80 L-120 -40 L-80 -40 L-80 40 L-120 40 L-120 80 Z" fill="#6366F1"/>
+
+    <!-- Right circle -->
+    <circle cx="160" cy="0" r="120" fill="white" opacity="0.95"/>
+    <path d="M200 0 L120 80 L120 40 L80 40 L80 -40 L120 -40 L120 -80 Z" fill="#EC4899"/>
+
+    <!-- Center diamond -->
+    <circle cx="0" cy="0" r="70" fill="white"/>
+    <path d="M-48 0 L0 -48 L48 0 L0 48 Z" fill="#8B5CF6"/>
   </g>
-  
-  <!-- Bottom Text -->
-  <text x="1366" y="1650" text-anchor="middle" font-size="180" fill="white" font-family="Arial, sans-serif" font-weight="bold">TAKAS</text>
-  <text x="1366" y="1800" text-anchor="middle" font-size="80" fill="white" font-family="Arial, sans-serif" opacity="0.9">Eşyalarını Takas Et</text>
+
+  <!-- Centered Text -->
+  <text x="50%" y="1560" text-anchor="middle" font-size="180" fill="white" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif" font-weight="800" letter-spacing="6">TAKAS</text>
+  <text x="50%" y="1635" text-anchor="middle" font-size="80" fill="white" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif" opacity="0.9">Eşyalarını Takas Et</text>
   
   <defs>
     <linearGradient id="splashGradient" x1="0%" y1="0%" x2="100%" y2="100%">
