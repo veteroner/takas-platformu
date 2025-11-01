@@ -1,0 +1,40 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Gradient tanımları -->
+  <defs>
+    <linearGradient id="appGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#EC4899;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4F46E5;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Arka plan yuvarlak -->
+  <rect width="512" height="512" rx="120" fill="url(#appGradient)"/>
+  
+  <!-- İç parlak efekt -->
+  <circle cx="256" cy="256" r="200" fill="white" opacity="0.1"/>
+  
+  <!-- Takas sembolü - iki ok (büyütülmüş) -->
+  <!-- Sağa ok (üst) -->
+  <g filter="url(#glow)">
+    <path d="M 140 180 L 340 180 L 300 140 M 340 180 L 300 220" stroke="white" stroke-width="35" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    
+    <!-- Sola ok (alt) -->
+    <path d="M 372 332 L 172 332 L 212 292 M 172 332 L 212 372" stroke="white" stroke-width="35" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+  
+  <!-- Ortadaki bağlantı noktaları -->
+  <circle cx="160" cy="180" r="28" fill="white"/>
+  <circle cx="352" cy="332" r="28" fill="white"/>
+  
+  <!-- İç gölge efekti -->
+  <circle cx="160" cy="180" r="20" fill="#EC4899" opacity="0.5"/>
+  <circle cx="352" cy="332" r="20" fill="#4F46E5" opacity="0.5"/>
+</svg>

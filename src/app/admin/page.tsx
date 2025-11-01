@@ -175,13 +175,13 @@ export default function AdminDashboardPage() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-sm font-medium text-gray-400 mb-1">
+                <h3 className="text-sm font-medium text-white mb-1">
                   {card.title}
                 </h3>
 
                 {/* Value */}
                 <div className="flex items-end justify-between">
-                  <p className="text-3xl font-bold">
+                  <p className="text-3xl font-bold text-white">
                     {card.value.toLocaleString('tr-TR')}
                   </p>
                   
@@ -206,7 +206,7 @@ export default function AdminDashboardPage() {
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center">
               <Activity className="w-5 h-5 text-white" />
             </div>
-            <h2 className="text-lg font-semibold">Sistem Durumu</h2>
+            <h2 className="text-lg font-semibold text-white">Sistem Durumu</h2>
           </div>
           <div className="space-y-3">
             <StatusItem label="API Durumu" status="Aktif" positive />
@@ -220,7 +220,7 @@ export default function AdminDashboardPage() {
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
               <AlertTriangle className="w-5 h-5 text-white" />
             </div>
-            <h2 className="text-lg font-semibold">Dikkat Gerektiren</h2>
+            <h2 className="text-lg font-semibold text-white">Dikkat Gerektiren</h2>
           </div>
           <div className="space-y-3">
             <AlertItem 

@@ -264,8 +264,8 @@ export default function HomePage() {
         <div className="max-w-md mx-auto px-4 py-4 pt-12 md:pt-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Image
-              src="/icons/app-icon.svg"
-              alt="Takas App Icon"
+              src="/icons/logo.svg"
+              alt="Takas Logo"
               width={32}
               height={32}
               className="w-8 h-8"
