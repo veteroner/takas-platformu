@@ -11,6 +11,10 @@ import { saveSeekingPreferencesAsync } from '@/lib/preferences'
 import { useProductFilter } from '@/hooks/useProductFilter'
 import { ProductFilterWarning, InlineProductWarning } from '@/components/ProductFilterWarning'
 import { optimizeImage, validateImage, createPreviewURL, revokePreviewURL } from '@/lib/imageOptimizer'
+import { takePhoto, pickImage } from '@/lib/cameraWrapper'
+import { logger, trackUserAction } from '@/lib/logger'
+import { Capacitor } from '@capacitor/core'
+import { CameraResultType, CameraSource } from '@capacitor/camera'
 
 const categories = [
   { id: 'clothing', name: '👕 Giyim', value: 'clothing' },
@@ -69,29 +73,186 @@ export default function UploadPage() {
   const [error, setError] = useState<string | null>(null)
   const [isOptimizing, setIsOptimizing] = useState(false)
   const [optimizationProgress, setOptimizationProgress] = useState<string>('')
+  const [showCameraOptions, setShowCameraOptions] = useState(false)
   
   // Product filter hook
   const { checkProduct, lastResult, clearResult } = useProductFilter()
 
+  // Log component mount
+  useEffect(() => {
+    logger.info('UPLOAD_PAGE', '📱 Upload page mounted', {
+      platform: Capacitor.getPlatform(),
+      isNative: Capacitor.isNativePlatform()
+    })
+    
+    return () => {
+      logger.info('UPLOAD_PAGE', '📱 Upload page unmounted')
+    }
+  }, [])
+
   // Check authentication
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        // For now, create a guest user ID
-        const guestId = `guest-${Date.now()}`
-        setUserId(guestId)
-      } else {
-        setUserId(user.id)
+      logger.info('UPLOAD_PAGE', '🔐 Checking user authentication...')
+      
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          // For now, create a guest user ID
+          const guestId = `guest-${Date.now()}`
+          logger.warn('UPLOAD_PAGE', '⚠️ No authenticated user, using guest ID', { guestId })
+          setUserId(guestId)
+        } else {
+          logger.info('UPLOAD_PAGE', '✅ User authenticated', { userId: user.id })
+          setUserId(user.id)
+        }
+      } catch (error) {
+        logger.error('UPLOAD_PAGE', '❌ Error checking authentication', error as Error)
       }
     }
     checkUser()
   }, [])
 
+  const handleCameraCapture = async () => {
+    trackUserAction('CAMERA_BUTTON_CLICKED', 'UploadPage')
+    
+    try {
+      logger.info('UPLOAD_PAGE', '📸 User clicked camera button')
+      setShowCameraOptions(false)
+      setIsOptimizing(true)
+      setOptimizationProgress('Kamera açılıyor...')
+      setError(null)
+
+      logger.info('UPLOAD_PAGE', '📸 Taking photo...')
+      const photo = await takePhoto({
+        quality: 90,
+        allowEditing: true,
+        resultType: CameraResultType.Uri,
+        source: CameraSource.Camera
+      })
+
+      if (!photo) {
+        logger.info('UPLOAD_PAGE', 'User cancelled camera')
+        setIsOptimizing(false)
+        setOptimizationProgress('')
+        return
+      }
+
+      logger.info('UPLOAD_PAGE', '✅ Photo captured, processing...', {
+        format: photo.format,
+        path: photo.path ? 'exists' : 'none'
+      })
+
+      setOptimizationProgress('Resim optimize ediliyor...')
+
+      // Convert to File
+      const response = await fetch(photo.webPath!)
+      const blob = await response.blob()
+      const file = new File([blob], `photo-${Date.now()}.${photo.format}`, {
+        type: `image/${photo.format}`
+      })
+
+      logger.info('UPLOAD_PAGE', 'Photo converted to File', {
+        size: file.size,
+        type: file.type
+      })
+
+      // Validate
+      const validation = validateImage(file)
+      if (!validation.valid) {
+        throw new Error(validation.error)
+      }
+
+      // Optimize
+      const optimizedFile = await optimizeImage(file)
+      const previewUrl = createPreviewURL(optimizedFile)
+
+      logger.info('UPLOAD_PAGE', '✅ Photo optimized successfully')
+
+      setImages([...images, previewUrl])
+      setImageFiles([...imageFiles, optimizedFile])
+      setOptimizationProgress('')
+    } catch (error: any) {
+      logger.error('UPLOAD_PAGE', '❌ Camera capture failed', error, {
+        message: error?.message,
+        code: error?.code
+      })
+      setError(error?.message || 'Kamera açılırken hata oluştu')
+    } finally {
+      setIsOptimizing(false)
+    }
+  }
+
+  const handleGalleryPick = async () => {
+    trackUserAction('GALLERY_BUTTON_CLICKED', 'UploadPage')
+    
+    try {
+      logger.info('UPLOAD_PAGE', '🖼️ User clicked gallery button')
+      setShowCameraOptions(false)
+      setIsOptimizing(true)
+      setOptimizationProgress('Galeri açılıyor...')
+      setError(null)
+
+      logger.info('UPLOAD_PAGE', '🖼️ Picking from gallery...')
+      const photo = await pickImage({
+        quality: 90,
+        allowEditing: false
+      })
+
+      if (!photo) {
+        logger.info('UPLOAD_PAGE', 'User cancelled gallery')
+        setIsOptimizing(false)
+        setOptimizationProgress('')
+        return
+      }
+
+      logger.info('UPLOAD_PAGE', '✅ Photo picked, processing...', {
+        format: photo.format
+      })
+
+      setOptimizationProgress('Resim optimize ediliyor...')
+
+      // Convert to File
+      const response = await fetch(photo.webPath!)
+      const blob = await response.blob()
+      const file = new File([blob], `photo-${Date.now()}.${photo.format}`, {
+        type: `image/${photo.format}`
+      })
+
+      // Validate
+      const validation = validateImage(file)
+      if (!validation.valid) {
+        throw new Error(validation.error)
+      }
+
+      // Optimize
+      const optimizedFile = await optimizeImage(file)
+      const previewUrl = createPreviewURL(optimizedFile)
+
+      logger.info('UPLOAD_PAGE', '✅ Photo optimized successfully')
+
+      setImages([...images, previewUrl])
+      setImageFiles([...imageFiles, optimizedFile])
+      setOptimizationProgress('')
+    } catch (error: any) {
+      logger.error('UPLOAD_PAGE', '❌ Gallery pick failed', error, {
+        message: error?.message,
+        code: error?.code
+      })
+      setError(error?.message || 'Galeri açılırken hata oluştu')
+    } finally {
+      setIsOptimizing(false)
+    }
+  }
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    trackUserAction('FILE_INPUT_CHANGED', 'UploadPage')
+    
     const files = e.target.files
     if (!files || files.length === 0) return
 
+    logger.info('UPLOAD_PAGE', `📁 File input: ${files.length} files selected`)
+    
     setIsOptimizing(true)
     setError(null)
 
@@ -100,9 +261,16 @@ export default function UploadPage() {
       const newFiles: File[] = []
       
       const filesToProcess = Array.from(files).slice(0, 5 - images.length)
+      logger.info('UPLOAD_PAGE', `Processing ${filesToProcess.length} files...`)
       
       for (let i = 0; i < filesToProcess.length; i++) {
         const file = filesToProcess[i]
+        
+        logger.debug('UPLOAD_PAGE', `Processing file ${i + 1}/${filesToProcess.length}`, {
+          name: file.name,
+          size: file.size,
+          type: file.type
+        })
         
         setOptimizationProgress(`Resim ${i + 1}/${filesToProcess.length} optimize ediliyor...`)
         
@@ -122,12 +290,14 @@ export default function UploadPage() {
         newImages.push(previewUrl)
       }
 
+      logger.info('UPLOAD_PAGE', '✅ All files processed successfully')
+
       setImages([...images, ...newImages])
       setImageFiles([...imageFiles, ...newFiles])
       setOptimizationProgress('')
       
     } catch (err: any) {
-      console.error('Resim yükleme hatası:', err)
+      logger.error('UPLOAD_PAGE', '❌ Image upload error', err)
       setError(err.message || 'Resim yüklenirken hata oluştu')
     } finally {
       setIsOptimizing(false)
@@ -321,21 +491,73 @@ export default function UploadPage() {
                 </div>
               ))}
               
-              {images.length < 5 && (
-                <label className={`aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-purple-500 transition-colors ${
-                  isOptimizing ? 'opacity-50 cursor-not-allowed' : ''
-                }`}>
+              {images.length < 5 && !showCameraOptions && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    trackUserAction('ADD_PHOTO_BUTTON_CLICKED', 'UploadPage')
+                    if (Capacitor.isNativePlatform()) {
+                      setShowCameraOptions(true)
+                    }
+                  }}
+                  disabled={isOptimizing}
+                  className={`aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-purple-500 transition-colors ${
+                    isOptimizing ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                >
                   <Camera className="w-8 h-8 text-gray-400 mb-1" />
                   <span className="text-xs text-gray-500">Ekle</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleImageUpload}
+                  {/* Hidden file input for web fallback */}
+                  {!Capacitor.isNativePlatform() && (
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleImageUpload}
+                      disabled={isOptimizing}
+                      className="hidden"
+                      onClick={(e) => {
+                        // Allow file input on web
+                        const target = e.target as HTMLInputElement
+                        target.click = () => {}
+                      }}
+                    />
+                  )}
+                </button>
+              )}
+              
+              {/* Camera Options Modal (Native only) */}
+              {showCameraOptions && Capacitor.isNativePlatform() && images.length < 5 && (
+                <div className="aspect-square border-2 border-purple-500 bg-purple-50 rounded-lg p-2 flex flex-col gap-2">
+                  <button
+                    type="button"
+                    onClick={handleCameraCapture}
                     disabled={isOptimizing}
-                    className="hidden"
-                  />
-                </label>
+                    className="flex-1 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg flex flex-col items-center justify-center text-xs font-semibold hover:shadow-lg transition-all disabled:opacity-50"
+                  >
+                    <Camera className="w-5 h-5 mb-1" />
+                    Kamera
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleGalleryPick}
+                    disabled={isOptimizing}
+                    className="flex-1 bg-blue-500 text-white rounded-lg flex flex-col items-center justify-center text-xs font-semibold hover:shadow-lg transition-all disabled:opacity-50"
+                  >
+                    <Upload className="w-5 h-5 mb-1" />
+                    Galeri
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowCameraOptions(false)
+                      trackUserAction('CAMERA_OPTIONS_CANCELLED', 'UploadPage')
+                    }}
+                    className="flex-1 bg-gray-300 text-gray-700 rounded-lg flex items-center justify-center text-xs font-semibold"
+                  >
+                    İptal
+                  </button>
+                </div>
               )}
             </div>
             <p className="text-xs text-gray-500">
