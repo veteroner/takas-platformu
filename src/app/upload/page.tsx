@@ -126,9 +126,8 @@ export default function UploadPage() {
       logger.info('UPLOAD_PAGE', '📸 Taking photo...')
       const photo = await takePhoto({
         quality: 90,
-        allowEditing: true,
-        resultType: CameraResultType.Uri,
-        source: CameraSource.Camera
+        allowEditing: true
+        // resultType will be DataUrl by default from cameraWrapper
       })
 
       if (!photo) {
