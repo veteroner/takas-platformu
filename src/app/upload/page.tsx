@@ -140,21 +140,40 @@ export default function UploadPage() {
 
       logger.info('UPLOAD_PAGE', '✅ Photo captured, processing...', {
         format: photo.format,
-        path: photo.path ? 'exists' : 'none'
+        webPath: photo.webPath,
+        path: photo.path,
+        saved: photo.saved
       })
 
       setOptimizationProgress('Resim optimize ediliyor...')
 
       // Convert to File
-      const response = await fetch(photo.webPath!)
+      logger.debug('UPLOAD_PAGE', 'Fetching photo from webPath', { webPath: photo.webPath })
+      
+      if (!photo.webPath) {
+        throw new Error('Photo webPath is null or undefined')
+      }
+
+      const response = await fetch(photo.webPath)
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch photo: ${response.status} ${response.statusText}`)
+      }
+      
       const blob = await response.blob()
+      logger.debug('UPLOAD_PAGE', 'Blob created', {
+        size: blob.size,
+        type: blob.type
+      })
+      
       const file = new File([blob], `photo-${Date.now()}.${photo.format}`, {
         type: `image/${photo.format}`
       })
 
-      logger.info('UPLOAD_PAGE', 'Photo converted to File', {
+      logger.info('UPLOAD_PAGE', '✅ Photo converted to File', {
         size: file.size,
-        type: file.type
+        type: file.type,
+        name: file.name
       })
 
       // Validate
@@ -207,16 +226,40 @@ export default function UploadPage() {
       }
 
       logger.info('UPLOAD_PAGE', '✅ Photo picked, processing...', {
-        format: photo.format
+        format: photo.format,
+        webPath: photo.webPath,
+        path: photo.path
       })
 
       setOptimizationProgress('Resim optimize ediliyor...')
 
       // Convert to File
-      const response = await fetch(photo.webPath!)
+      logger.debug('UPLOAD_PAGE', 'Fetching photo from webPath', { webPath: photo.webPath })
+      
+      if (!photo.webPath) {
+        throw new Error('Photo webPath is null or undefined')
+      }
+
+      const response = await fetch(photo.webPath)
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch photo: ${response.status} ${response.statusText}`)
+      }
+      
       const blob = await response.blob()
+      logger.debug('UPLOAD_PAGE', 'Blob created', {
+        size: blob.size,
+        type: blob.type
+      })
+      
       const file = new File([blob], `photo-${Date.now()}.${photo.format}`, {
         type: `image/${photo.format}`
+      })
+
+      logger.info('UPLOAD_PAGE', '✅ Photo converted to File', {
+        size: file.size,
+        type: file.type,
+        name: file.name
       })
 
       // Validate
@@ -353,15 +396,40 @@ export default function UploadPage() {
       } catch {}
 
       // 1. Upload images to Supabase Storage
+      logger.info('UPLOAD_PAGE', `📤 Uploading ${imageFiles.length} images to Supabase...`)
+      
       const imageUrls: string[] = []
-      for (const file of imageFiles) {
+      for (let i = 0; i < imageFiles.length; i++) {
+        const file = imageFiles[i]
+        logger.info('UPLOAD_PAGE', `Uploading image ${i + 1}/${imageFiles.length}`, {
+          name: file.name,
+          size: `${(file.size / 1024).toFixed(2)} KB`,
+          type: file.type
+        })
+        
         const imageUrl = await uploadImage(file, userId)
+        
         if (imageUrl) {
+          logger.info('UPLOAD_PAGE', `✅ Image ${i + 1} uploaded successfully`)
           imageUrls.push(imageUrl)
+        } else {
+          logger.error('UPLOAD_PAGE', `❌ Image ${i + 1} upload failed - returned null`)
         }
+      }
+      
+      logger.info('UPLOAD_PAGE', `Upload complete: ${imageUrls.length}/${imageFiles.length} images uploaded`)
+      
+      if (imageUrls.length === 0) {
+        throw new Error('Hiçbir resim yüklenemedi. Lütfen tekrar deneyin.')
       }
 
       // 2. Create item in database
+      logger.info('UPLOAD_PAGE', '💾 Creating item in database...', {
+        title: formData.title,
+        category: formData.category,
+        imageCount: imageUrls.length
+      })
+      
       const item = await createItem({
         title: formData.title,
         description: formData.description,
@@ -373,16 +441,21 @@ export default function UploadPage() {
         location: formData.city // Ürünün bulunduğu şehir
       })
 
-      console.log('✅ Ürün başarıyla oluşturuldu:', item)
+      logger.info('UPLOAD_PAGE', '✅ Item created successfully', { itemId: item?.id })
+      
       setIsUploading(false)
       setUploadSuccess(true)
       
       // Redirect after success
       setTimeout(() => {
+        logger.info('UPLOAD_PAGE', '🔄 Redirecting to home...')
         router.push('/')
       }, 2000)
     } catch (err: any) {
-      console.error('❌ Upload hatası:', err)
+      logger.error('UPLOAD_PAGE', '❌ Upload error', err, {
+        message: err?.message,
+        stack: err?.stack
+      })
       setError(err.message || 'Bir hata oluştu')
       setIsUploading(false)
     }

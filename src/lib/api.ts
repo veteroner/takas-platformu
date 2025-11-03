@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import { logger, trackApiCall } from './logger'
 import type { Item } from './supabase'
 import type { SeekingPreferences } from '@/types'
 
@@ -59,10 +60,27 @@ export async function createItem(itemData: {
 
 // Upload image to Supabase Storage
 export async function uploadImage(file: File, userId: string): Promise<string | null> {
+  const end = trackApiCall('POST', 'supabase.storage.upload', { 
+    fileName: file.name,
+    fileSize: file.size,
+    fileType: file.type,
+    userId
+  })
+  
   try {
+    logger.info('API', '📤 Starting image upload...', {
+      fileName: file.name,
+      fileSize: `${(file.size / 1024).toFixed(2)} KB`,
+      fileType: file.type,
+      userId
+    })
+    
     const fileExt = file.name.split('.').pop()
     const fileName = `${userId}/${Date.now()}.${fileExt}`
     
+    logger.debug('API', 'Generated storage path', { fileName, bucket: 'item-images' })
+    
+    logger.info('API', '☁️ Uploading to Supabase Storage...')
     const { data, error } = await supabase.storage
       .from('item-images')
       .upload(fileName, file, {
@@ -70,16 +88,38 @@ export async function uploadImage(file: File, userId: string): Promise<string | 
         upsert: false
       })
 
-    if (error) throw error
+    if (error) {
+      logger.error('API', '❌ Supabase Storage upload error', error as Error, {
+        fileName,
+        bucket: 'item-images',
+        errorMessage: error.message
+      })
+      throw error
+    }
+
+    logger.info('API', '✅ Upload successful, getting public URL...', { path: data?.path })
 
     // Get public URL
     const { data: { publicUrl } } = supabase.storage
       .from('item-images')
       .getPublicUrl(fileName)
 
+    logger.info('API', '✅ Image uploaded successfully', {
+      publicUrl: publicUrl.substring(0, 50) + '...',
+      fullPath: fileName
+    })
+    
+    end()
     return publicUrl
-  } catch (error) {
-    console.error('Error uploading image:', error)
+  } catch (error: any) {
+    logger.error('API', '❌ Upload image failed', error, {
+      fileName: file.name,
+      fileSize: file.size,
+      userId,
+      errorMessage: error?.message,
+      errorCode: error?.code
+    })
+    end()
     return null
   }
 }
