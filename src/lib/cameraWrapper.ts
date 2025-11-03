@@ -121,10 +121,10 @@ export async function takePhoto(options?: CameraOptions): Promise<Photo | null> 
     logger.info(CATEGORY, 'Step 2: Permissions OK, opening camera...')
     
     // Default options
-    const defaultOptions: CameraOptions = {
+    const defaultOptions = {
       quality: 90,
       allowEditing: false,
-      resultType: CameraResultType.Uri,
+      resultType: CameraResultType.DataUrl, // DataUrl ensures webPath is always available
       source: CameraSource.Camera,
       saveToGallery: false,
       correctOrientation: true,
@@ -198,10 +198,10 @@ export async function pickImage(options?: CameraOptions): Promise<Photo | null> 
     logger.info(CATEGORY, 'Step 2: Permissions OK, opening gallery...')
     
     // Default options
-    const defaultOptions: CameraOptions = {
+    const defaultOptions = {
       quality: 90,
       allowEditing: false,
-      resultType: CameraResultType.Uri,
+      resultType: CameraResultType.DataUrl, // DataUrl ensures webPath is always available
       source: CameraSource.Photos,
       correctOrientation: true,
       ...options
