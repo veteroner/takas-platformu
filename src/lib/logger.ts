@@ -72,10 +72,13 @@ class Logger {
     
     // Native platformlarda daha detaylı log
     if (this.isNative) {
-      console.log(`
+      // iOS NSLog formatı için özel log
+      const nativeLog = `
 ═══════════════════════════════════════════════════════
 ${fullMessage}
-───────────────────────────────────────────────────────`)
+───────────────────────────────────────────────────────`
+      
+      console.log(nativeLog)
       
       if (data) {
         console.log('📦 Data:', JSON.stringify(data, null, 2))
@@ -86,6 +89,22 @@ ${fullMessage}
       }
       
       console.log('═══════════════════════════════════════════════════════\n')
+      
+      // CRITICAL: Native alert for errors to ensure visibility
+      if (level === 'error' || level === 'fatal') {
+        const errorMsg = `${category}: ${message}${error ? '\n' + error.message : ''}`
+        console.error('🚨 CRITICAL ERROR:', errorMsg)
+        
+        // Try to show native alert (will work on device)
+        if (typeof window !== 'undefined' && this.isNative) {
+          setTimeout(() => {
+            try {
+              // This will appear as iOS alert on device
+              alert(`DEBUG ERROR\n\n${category}:\n${message}${error ? '\n\nError: ' + error.message : ''}`)
+            } catch {}
+          }, 100)
+        }
+      }
     } else {
       // Web'de normal console
       switch (level) {

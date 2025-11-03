@@ -196,7 +196,14 @@ export default function UploadPage() {
         message: error?.message,
         code: error?.code
       })
-      setError(error?.message || 'Kamera açılırken hata oluştu')
+      
+      const userMessage = error?.message || 'Kamera açılırken hata oluştu'
+      setError(`📸 Kamera Hatası: ${userMessage}`)
+      
+      // Show alert on native for immediate feedback
+      if (Capacitor.isNativePlatform()) {
+        alert(`Kamera Hatası\n\n${userMessage}\n\nDetaylar console'da`)
+      }
     } finally {
       setIsOptimizing(false)
     }
@@ -282,7 +289,14 @@ export default function UploadPage() {
         message: error?.message,
         code: error?.code
       })
-      setError(error?.message || 'Galeri açılırken hata oluştu')
+      
+      const userMessage = error?.message || 'Galeri açılırken hata oluştu'
+      setError(`🖼️ Galeri Hatası: ${userMessage}`)
+      
+      // Show alert on native for immediate feedback
+      if (Capacitor.isNativePlatform()) {
+        alert(`Galeri Hatası\n\n${userMessage}\n\nDetaylar console'da`)
+      }
     } finally {
       setIsOptimizing(false)
     }
