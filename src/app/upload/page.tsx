@@ -140,22 +140,36 @@ export default function UploadPage() {
       logger.info('UPLOAD_PAGE', '✅ Photo captured, processing...', {
         format: photo.format,
         webPath: photo.webPath,
+        dataUrl: photo.dataUrl ? 'exists' : 'null',
+        base64String: photo.base64String ? 'exists' : 'null',
         path: photo.path,
         saved: photo.saved
       })
 
       setOptimizationProgress('Resim optimize ediliyor...')
 
-      // Convert to File
-      logger.debug('UPLOAD_PAGE', 'Fetching photo from webPath', { webPath: photo.webPath })
+      // Convert to File - DataUrl gives us base64 data directly
+      logger.debug('UPLOAD_PAGE', 'Converting photo to file...', { 
+        hasWebPath: !!photo.webPath,
+        hasDataUrl: !!photo.dataUrl,
+        hasBase64: !!photo.base64String
+      })
       
-      if (!photo.webPath) {
-        const error = new Error('Photo webPath is null or undefined - Camera returned invalid photo')
-        logger.error('UPLOAD_PAGE', '❌ WebPath is null!', error, { photo })
+      // Use webPath if available, otherwise use dataUrl (for DataUrl resultType)
+      const photoData = photo.webPath || photo.dataUrl || `data:image/${photo.format};base64,${photo.base64String}`
+      
+      if (!photoData) {
+        const error = new Error('Photo data is null - Camera returned invalid photo')
+        logger.error('UPLOAD_PAGE', '❌ No photo data!', error, { photo })
         throw error
       }
 
-      const response = await fetch(photo.webPath)
+      logger.debug('UPLOAD_PAGE', 'Fetching photo data...', { 
+        dataType: photo.webPath ? 'webPath' : photo.dataUrl ? 'dataUrl' : 'base64',
+        dataLength: photoData.length
+      })
+
+      const response = await fetch(photoData)
       
       if (!response.ok) {
         const error = new Error(`Failed to fetch photo: ${response.status} ${response.statusText}`)
@@ -266,21 +280,35 @@ Stack: ${error?.stack?.substring(0, 200) || 'N/A'}
       logger.info('UPLOAD_PAGE', '✅ Photo picked, processing...', {
         format: photo.format,
         webPath: photo.webPath,
+        dataUrl: photo.dataUrl ? 'exists' : 'null',
+        base64String: photo.base64String ? 'exists' : 'null',
         path: photo.path
       })
 
       setOptimizationProgress('Resim optimize ediliyor...')
 
-      // Convert to File
-      logger.debug('UPLOAD_PAGE', 'Fetching photo from webPath', { webPath: photo.webPath })
+      // Convert to File - DataUrl gives us base64 data directly
+      logger.debug('UPLOAD_PAGE', 'Converting photo to file...', { 
+        hasWebPath: !!photo.webPath,
+        hasDataUrl: !!photo.dataUrl,
+        hasBase64: !!photo.base64String
+      })
       
-      if (!photo.webPath) {
-        const error = new Error('Photo webPath is null or undefined - Gallery returned invalid photo')
-        logger.error('UPLOAD_PAGE', '❌ WebPath is null!', error, { photo })
+      // Use webPath if available, otherwise use dataUrl (for DataUrl resultType)
+      const photoData = photo.webPath || photo.dataUrl || `data:image/${photo.format};base64,${photo.base64String}`
+      
+      if (!photoData) {
+        const error = new Error('Photo data is null - Gallery returned invalid photo')
+        logger.error('UPLOAD_PAGE', '❌ No photo data!', error, { photo })
         throw error
       }
 
-      const response = await fetch(photo.webPath)
+      logger.debug('UPLOAD_PAGE', 'Fetching photo data...', { 
+        dataType: photo.webPath ? 'webPath' : photo.dataUrl ? 'dataUrl' : 'base64',
+        dataLength: photoData.length
+      })
+
+      const response = await fetch(photoData)
       
       if (!response.ok) {
         const error = new Error(`Failed to fetch photo: ${response.status} ${response.statusText}`)
