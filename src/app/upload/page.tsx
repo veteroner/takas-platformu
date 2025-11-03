@@ -151,13 +151,21 @@ export default function UploadPage() {
       logger.debug('UPLOAD_PAGE', 'Fetching photo from webPath', { webPath: photo.webPath })
       
       if (!photo.webPath) {
-        throw new Error('Photo webPath is null or undefined')
+        const error = new Error('Photo webPath is null or undefined - Camera returned invalid photo')
+        logger.error('UPLOAD_PAGE', '❌ WebPath is null!', error, { photo })
+        throw error
       }
 
       const response = await fetch(photo.webPath)
       
       if (!response.ok) {
-        throw new Error(`Failed to fetch photo: ${response.status} ${response.statusText}`)
+        const error = new Error(`Failed to fetch photo: ${response.status} ${response.statusText}`)
+        logger.error('UPLOAD_PAGE', '❌ Fetch failed!', error, { 
+          status: response.status,
+          statusText: response.statusText,
+          url: photo.webPath
+        })
+        throw error
       }
       
       const blob = await response.blob()
@@ -165,6 +173,12 @@ export default function UploadPage() {
         size: blob.size,
         type: blob.type
       })
+      
+      if (!blob || blob.size === 0) {
+        const error = new Error('Blob is empty or null - Photo conversion failed')
+        logger.error('UPLOAD_PAGE', '❌ Empty blob!', error, { blob })
+        throw error
+      }
       
       const file = new File([blob], `photo-${Date.now()}.${photo.format}`, {
         type: `image/${photo.format}`
@@ -198,11 +212,29 @@ export default function UploadPage() {
       })
       
       const userMessage = error?.message || 'Kamera açılırken hata oluştu'
+      const errorDetails = `
+📸 KAMERA HATASI
+
+Hata: ${error?.message || 'Bilinmeyen hata'}
+
+Kod: ${error?.code || 'N/A'}
+
+Tip: ${error?.name || 'Error'}
+
+Platform: ${Capacitor.getPlatform()}
+
+Native: ${Capacitor.isNativePlatform() ? 'Evet' : 'Hayır'}
+
+WebPath: ${error?.webPath || 'N/A'}
+
+Stack: ${error?.stack?.substring(0, 200) || 'N/A'}
+      `.trim()
+      
       setError(`📸 Kamera Hatası: ${userMessage}`)
       
-      // Show alert on native for immediate feedback
+      // Show detailed alert on native
       if (Capacitor.isNativePlatform()) {
-        alert(`Kamera Hatası\n\n${userMessage}\n\nDetaylar console'da`)
+        alert(errorDetails)
       }
     } finally {
       setIsOptimizing(false)
@@ -244,13 +276,21 @@ export default function UploadPage() {
       logger.debug('UPLOAD_PAGE', 'Fetching photo from webPath', { webPath: photo.webPath })
       
       if (!photo.webPath) {
-        throw new Error('Photo webPath is null or undefined')
+        const error = new Error('Photo webPath is null or undefined - Gallery returned invalid photo')
+        logger.error('UPLOAD_PAGE', '❌ WebPath is null!', error, { photo })
+        throw error
       }
 
       const response = await fetch(photo.webPath)
       
       if (!response.ok) {
-        throw new Error(`Failed to fetch photo: ${response.status} ${response.statusText}`)
+        const error = new Error(`Failed to fetch photo: ${response.status} ${response.statusText}`)
+        logger.error('UPLOAD_PAGE', '❌ Fetch failed!', error, { 
+          status: response.status,
+          statusText: response.statusText,
+          url: photo.webPath
+        })
+        throw error
       }
       
       const blob = await response.blob()
@@ -258,6 +298,12 @@ export default function UploadPage() {
         size: blob.size,
         type: blob.type
       })
+      
+      if (!blob || blob.size === 0) {
+        const error = new Error('Blob is empty or null - Photo conversion failed')
+        logger.error('UPLOAD_PAGE', '❌ Empty blob!', error, { blob })
+        throw error
+      }
       
       const file = new File([blob], `photo-${Date.now()}.${photo.format}`, {
         type: `image/${photo.format}`
@@ -291,11 +337,29 @@ export default function UploadPage() {
       })
       
       const userMessage = error?.message || 'Galeri açılırken hata oluştu'
+      const errorDetails = `
+🖼️ GALERİ HATASI
+
+Hata: ${error?.message || 'Bilinmeyen hata'}
+
+Kod: ${error?.code || 'N/A'}
+
+Tip: ${error?.name || 'Error'}
+
+Platform: ${Capacitor.getPlatform()}
+
+Native: ${Capacitor.isNativePlatform() ? 'Evet' : 'Hayır'}
+
+WebPath: ${error?.webPath || 'N/A'}
+
+Stack: ${error?.stack?.substring(0, 200) || 'N/A'}
+      `.trim()
+      
       setError(`🖼️ Galeri Hatası: ${userMessage}`)
       
-      // Show alert on native for immediate feedback
+      // Show detailed alert on native
       if (Capacitor.isNativePlatform()) {
-        alert(`Galeri Hatası\n\n${userMessage}\n\nDetaylar console'da`)
+        alert(errorDetails)
       }
     } finally {
       setIsOptimizing(false)

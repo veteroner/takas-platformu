@@ -89,11 +89,43 @@ export async function uploadImage(file: File, userId: string): Promise<string | 
       })
 
     if (error) {
+      const errorObj = error as any
       logger.error('API', '❌ Supabase Storage upload error', error as Error, {
         fileName,
         bucket: 'item-images',
-        errorMessage: error.message
+        errorMessage: error.message,
+        errorCode: errorObj?.code,
+        errorDetails: errorObj?.details
       })
+      
+      // Show detailed alert on native platform
+      if (typeof window !== 'undefined' && (window as any).Capacitor?.isNativePlatform?.()) {
+        const errorDetails = `
+☁️ SUPABASE UPLOAD HATASI
+
+Hata: ${error.message || 'Bilinmeyen hata'}
+
+Bucket: item-images
+
+Dosya: ${fileName}
+
+Boyut: ${(file.size / 1024).toFixed(2)} KB
+
+Kod: ${errorObj?.code || 'N/A'}
+
+Detay: ${errorObj?.details || 'N/A'}
+
+Çözüm:
+1. Supabase Storage'da 'item-images' bucket var mı?
+2. Bucket public olarak işaretli mi?
+3. Upload policy'ler aktif mi?
+
+Dashboard: app.supabase.com
+        `.trim()
+        
+        alert(errorDetails)
+      }
+      
       throw error
     }
 
