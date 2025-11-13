@@ -323,6 +323,52 @@ export const mockItems: Item[] = [
       country: 'Türkiye'
     },
     tags: ['puzzle', 'van-gogh', 'sanat', '1000-parça', 'eğitici']
+  },
+  {
+    id: '9',
+    title: 'Deri Omuz Çantası',
+    description: 'Hakiki deri vintage omuz çantası. Çok şık ve dayanıklı. Günlük kullanım için ideal.',
+    category: CategoryType.ACCESSORIES,
+    condition: ItemCondition.GOOD,
+    brand: 'Vintage',
+    color: ['Kahverengi', 'Taba'],
+    images: [
+      'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=600&fit=crop'
+    ],
+    ownerId: '3',
+    owner: mockUsers[2],
+    estimatedValue: 150,
+    createdAt: new Date('2024-02-25'),
+    isActive: true,
+    location: {
+      city: 'İzmir',
+      country: 'Türkiye'
+    },
+    tags: ['deri', 'çanta', 'vintage', 'omuz', 'şık']
+  },
+  {
+    id: '10',
+    title: 'Çocuk Bisikleti 16 Jant',
+    description: 'Kırmızı renkli çocuk bisikleti. Yan tekerlek destekli. 5-8 yaş arası için uygun.',
+    category: CategoryType.TOYS_KIDS,
+    condition: ItemCondition.GOOD,
+    brand: 'Bianchi',
+    color: ['Kırmızı', 'Beyaz'],
+    images: [
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=600&fit=crop'
+    ],
+    ownerId: '1',
+    owner: mockUsers[0],
+    estimatedValue: 200,
+    createdAt: new Date('2024-03-01'),
+    isActive: true,
+    location: {
+      city: 'İstanbul',
+      country: 'Türkiye'
+    },
+    tags: ['bisiklet', 'çocuk', 'kırmızı', 'yan-tekerlek', 'spor']
   }
 ]
 
