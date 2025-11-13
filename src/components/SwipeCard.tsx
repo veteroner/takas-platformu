@@ -155,7 +155,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
         onClick={() => onCardClick?.(item)}
       >
         {/* Image Container */}
-  <div className="relative h-[65%] overflow-hidden">
+  <div className="relative h-[75%] overflow-hidden">
           <Image
             src={item.images[0] || '/placeholder-item.jpg'}
             alt={item.title}
@@ -179,19 +179,19 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
         </div>
 
         {/* Content */}
-  <div className="p-6 h-[35%] flex flex-col justify-between">
+  <div className="p-4 h-[25%] flex flex-col justify-between">
           <div>
-            <h3 className="text-xl font-bold text-gray-900 mb-1 truncate">
+            <h3 className="text-lg font-bold text-gray-900 mb-0.5 truncate">
               {item.title}
             </h3>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-gray-700 text-sm font-medium">{item.owner.name}</span>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-gray-700 text-xs font-medium">{item.owner.name}</span>
               <div className="flex items-center gap-1">
-                <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-                <span className="text-gray-600 text-sm">{item.owner.rating.toFixed(1)}</span>
+                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                <span className="text-gray-600 text-xs">{item.owner.rating.toFixed(1)}</span>
               </div>
             </div>
-            <p className="text-gray-600 text-sm line-clamp-2 mb-2">
+            <p className="text-gray-600 text-xs line-clamp-1 mb-1">
               {item.description}
             </p>
           </div>
