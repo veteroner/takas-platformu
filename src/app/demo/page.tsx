@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import SwipeStack from '@/components/SwipeStack'
 import { Item } from '@/types'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Heart, Package, Plus, MessageCircle, User } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { mockItems } from '@/lib/mockData'
@@ -70,6 +70,32 @@ export default function DemoPage() {
           </div>
         </div>
       </main>
+
+      {/* Bottom Navigation (Mobile) */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-white/20 px-2 py-2 pb-safe">
+        <div className="max-w-md mx-auto flex justify-around items-center pb-4 md:pb-2">
+          <div className="flex flex-col items-center py-1 px-2 text-purple-600 min-w-[60px]">
+            <Heart className="w-6 h-6 fill-current" />
+            <span className="text-[10px] mt-1 font-medium">Keşfet</span>
+          </div>
+          <Link href="/" className="flex flex-col items-center py-1 px-2 text-gray-400 min-w-[60px]">
+            <Package className="w-6 h-6" />
+            <span className="text-[10px] mt-1">Ürünlerim</span>
+          </Link>
+          <Link href="/" className="flex flex-col items-center py-1 px-2 text-gray-400 min-w-[60px]">
+            <Plus className="w-6 h-6" />
+            <span className="text-[10px] mt-1">Yükle</span>
+          </Link>
+          <Link href="/" className="flex flex-col items-center py-1 px-2 text-gray-400 min-w-[60px]">
+            <MessageCircle className="w-6 h-6" />
+            <span className="text-[10px] mt-1">Mesajlar</span>
+          </Link>
+          <Link href="/" className="flex flex-col items-center py-1 px-2 text-gray-400 min-w-[60px]">
+            <User className="w-6 h-6" />
+            <span className="text-[10px] mt-1">Profil</span>
+          </Link>
+        </div>
+      </nav>
     </div>
   )
 }
