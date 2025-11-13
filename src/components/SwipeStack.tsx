@@ -93,7 +93,7 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
   }
 
   return (
-    <div className={`relative w-full max-w-md mx-auto h-[500px] md:h-[600px] ${className}`}>
+    <div className={`relative w-full max-w-md mx-auto h-[600px] md:h-[700px] ${className}`}>
       {/* Loading State */}
       {isLoading && stack.length === 0 && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-50 rounded-2xl">
