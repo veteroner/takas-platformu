@@ -4,7 +4,9 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import SwipeStack from '@/components/SwipeStack'
 import { Item } from '@/types'
-import { ArrowLeft, Sparkles } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
+import Image from 'next/image'
 import { mockItems } from '@/lib/mockData'
 
 export default function DemoPage() {
@@ -26,15 +28,26 @@ export default function DemoPage() {
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
-        <div className="max-w-md mx-auto px-4 py-4 pt-12 md:pt-4">
-          <div className="flex items-center">
-            <button 
-              onClick={() => router.push('/')}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            >
-              <ArrowLeft className="w-6 h-6 text-gray-600" />
-            </button>
+        <div className="max-w-md mx-auto px-4 py-4 pt-12 md:pt-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Image
+              src="/icons/logo.svg"
+              alt="Takas Logo"
+              width={32}
+              height={32}
+              className="w-8 h-8"
+            />
+            <h1 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+              Takas
+            </h1>
           </div>
+          
+          <Link 
+            href="/"
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <ArrowLeft className="w-6 h-6 text-gray-600" />
+          </Link>
         </div>
       </header>
 
