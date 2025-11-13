@@ -79,10 +79,18 @@ export default function WelcomePage() {
 
         <button
           onClick={() => router.push('/feed')}
-          className="group w-full bg-white text-purple-600 font-bold text-lg py-5 rounded-2xl shadow-2xl hover:shadow-white/50 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 mb-6"
+          className="group w-full bg-white text-purple-600 font-bold text-lg py-5 rounded-2xl shadow-2xl hover:shadow-white/50 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 mb-4"
         >
           <span>Keşfetmeye Başla</span>
           <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+        </button>
+
+        <button
+          onClick={() => router.push('/demo')}
+          className="group w-full bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 font-semibold text-base py-4 rounded-2xl hover:bg-white/20 hover:border-white/50 transition-all duration-300 flex items-center justify-center gap-2 mb-6"
+        >
+          <Sparkles className="w-5 h-5" />
+          <span>Demo Modunu Dene</span>
         </button>
 
         <div className="flex items-center justify-center gap-4 text-white/90">
