@@ -184,6 +184,13 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
             <h3 className="text-xl font-bold text-gray-900 mb-1 truncate">
               {item.title}
             </h3>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-gray-700 text-sm font-medium">{item.owner.name}</span>
+              <div className="flex items-center gap-1">
+                <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+                <span className="text-gray-600 text-sm">{item.owner.rating.toFixed(1)}</span>
+              </div>
+            </div>
             <p className="text-gray-600 text-sm line-clamp-2 mb-2">
               {item.description}
             </p>
@@ -193,11 +200,6 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
             <div className="flex items-center gap-2 text-gray-500 text-sm">
               <MapPin className="w-4 h-4" />
               <span>{item.location.city}</span>
-            </div>
-
-            <div className="flex items-center gap-2 text-gray-500 text-sm">
-              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-              <span>{item.owner.rating.toFixed(1)}</span>
             </div>
 
             <div className="text-green-600 font-bold">
