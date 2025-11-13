@@ -27,31 +27,16 @@ export default function DemoPage() {
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
         <div className="max-w-md mx-auto px-4 py-4 pt-12 md:pt-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center">
             <button 
               onClick={() => router.push('/')}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
               <ArrowLeft className="w-6 h-6 text-gray-600" />
             </button>
-            
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-purple-600" />
-              <span className="font-bold text-purple-600">Demo Modu</span>
-            </div>
-            
-            <div className="w-10" /> {/* Spacer for centering */}
           </div>
         </div>
       </header>
-
-      {/* Demo Banner */}
-      <div className="max-w-md mx-auto px-4 py-3">
-        <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl p-4 text-center">
-          <p className="font-semibold mb-1">🎁 Demo Modundasınız!</p>
-          <p className="text-sm text-white/90">10 örnek ürünü keşfedin</p>
-        </div>
-      </div>
 
       {/* Content */}
       <main className="max-w-md mx-auto px-4 pb-24">
