@@ -18,7 +18,7 @@
 
     <!-- Android 30 ve öncesi cihazlar için splash tema -->
     <style name="AppTheme.NoActionBarLaunch" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="android:windowBackground">@layout/launch_screen</item>
+        <item name="android:windowBackground">@drawable/splash_gradient</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
