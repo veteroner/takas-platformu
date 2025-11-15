@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Gradient Background -->
-    <item>
-        <shape android:shape="rectangle">
-            <gradient
-                android:angle="135"
-                android:startColor="#EC4899"
-                android:centerColor="#A855F7"
-                android:endColor="#6366F1"
-                android:type="linear" />
-        </shape>
-    </item>
-    
-    <!-- Center Icon -->
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/splash_icon" />
-    </item>
-</layer-list>
+<!-- Minimal splash - sadece gradient background -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="135"
+        android:startColor="#EC4899"
+        android:centerColor="#A855F7"
+        android:endColor="#6366F1"
+        android:type="linear" />
+</shape>
