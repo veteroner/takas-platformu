@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import SwipeStack from '@/components/SwipeStack'
 import MatchToast from '@/components/MatchToast'
@@ -13,12 +13,18 @@ import { getFeedItems, recordSwipe, checkForMatch, getUserLikedItems, getUserPas
 import { getCurrentUser } from '@/lib/auth'
 import { useAds } from '@/hooks/useAds'
 import { AdSwipeCounter } from '@/lib/adManager'
-import { loadSeekingPreferencesAsync } from '@/lib/preferences'
-import { filterAndRank } from '@/lib/matching'
+
+interface User {
+  id: string
+  name: string
+  email: string
+  avatar?: string
+  avatar_url?: string
+}
 
 export default function HomePage() {
   const router = useRouter()
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [items, setItems] = useState<Item[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [likedItems, setLikedItems] = useState<Item[]>([])
@@ -41,44 +47,33 @@ export default function HomePage() {
     }
   }))
 
-  useEffect(() => {
-    loadUser()
-  }, [])
-
-  useEffect(() => {
-    loadInitialItems()
-    if (user?.id) {
-      loadUserSwipes()
-    }
-  }, [user?.id])
-
-  const loadUser = async () => {
+  const loadUser = useCallback(async () => {
     try {
       const currentUser = await getCurrentUser()
       setUser(currentUser)
     } catch (error) {
       console.error('Error loading user:', error)
     }
-  }
+  }, [])
 
-  const loadUserSwipes = async () => {
+  const loadUserSwipes = useCallback(async () => {
     if (!user?.id) return
     
     try {
       // Load liked items from database
       const liked = await getUserLikedItems(user.id)
-      const likedConverted: Item[] = liked.map((item: any) => ({
-        id: item.id,
-        title: item.title,
-        description: item.description || '',
-        images: item.images || [],
-        category: item.category as any,
-        condition: item.condition as any,
-        estimatedValue: item.estimated_value || 0,
+      const likedConverted: Item[] = liked.map((item: Record<string, unknown>) => ({
+        id: item.id as string,
+        title: item.title as string,
+        description: (item.description as string) || '',
+        images: (item.images as string[]) || [],
+        category: item.category as Item['category'],
+        condition: item.condition as ItemCondition,
+        estimatedValue: (item.estimated_value as number) || 0,
         color: ['#FF6B6B', '#FF8E53'],
-        ownerId: item.owner_id || '',
+        ownerId: (item.owner_id as string) || '',
         owner: {
-          id: item.owner_id || '',
+          id: (item.owner_id as string) || '',
           name: 'User',
           email: 'user@example.com',
           avatar: '/icons/icon-192.png',
@@ -91,15 +86,15 @@ export default function HomePage() {
             ageRange: { min: 0, max: 100 }
           },
           location: {
-            city: item.location || 'İstanbul',
+            city: (item.location as string) || 'İstanbul',
             country: 'TR'
           }
         },
         location: {
-          city: item.location || 'İstanbul',
+          city: (item.location as string) || 'İstanbul',
           country: 'TR'
         },
-        createdAt: new Date(item.created_at || Date.now()),
+        createdAt: new Date((item.created_at as string | number) || Date.now()),
         isActive: item.status === 'active',
         tags: []
       }))
@@ -108,13 +103,13 @@ export default function HomePage() {
       // Load passed items (just IDs)
       const passed = await getUserPassedItems(user.id)
       // Convert to Item[] format for consistency (though we only need IDs)
-      setPassedItems(passed.map(id => ({ id } as any)))
+      setPassedItems(passed.map(id => ({ id } as Item)))
     } catch (error) {
       console.error('Error loading user swipes:', error)
     }
-  }
+  }, [user?.id])
 
-  const loadInitialItems = async () => {
+  const loadInitialItems = useCallback(async () => {
     try {
       setIsLoading(true)
       // Load real items from database (skip owner filter when no user)
@@ -126,8 +121,8 @@ export default function HomePage() {
         title: item.title,
         description: item.description,
         images: item.images,
-        category: item.category as any,
-        condition: item.condition as any,
+        category: item.category as Item['category'],
+        condition: item.condition as ItemCondition,
         estimatedValue: item.estimated_value || 0,
         color: ['#FF6B6B', '#FF8E53'],
         ownerId: item.owner_id,
@@ -172,7 +167,7 @@ export default function HomePage() {
       const diverseItems: Item[] = []
       const remainingItems: Item[] = []
       
-      itemsByCategory.forEach((items, category) => {
+      itemsByCategory.forEach((items) => {
         if (items.length > 0) {
           diverseItems.push(items[0]) // İlk ürünü al
           remainingItems.push(...items.slice(1)) // Geri kalanlar
@@ -189,7 +184,18 @@ export default function HomePage() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [user?.id])
+
+  useEffect(() => {
+    loadUser()
+  }, [loadUser])
+
+  useEffect(() => {
+    loadInitialItems()
+    if (user?.id) {
+      loadUserSwipes()
+    }
+  }, [user?.id, loadInitialItems, loadUserSwipes])
 
   const handleSwipe = async (direction: 'left' | 'right', item: Item) => {
     try {
