@@ -82,14 +82,14 @@ export default function AdminSettingsPage() {
         }
         const j = await res.json()
         setRows(j.data || [])
-      } catch (e: any) {
-        setError(e?.message || 'Hata')
+      } catch (e: unknown) {
+        const error = e as Error
+        setError(error?.message || 'Hata')
       } finally {
         setLoading(false)
       }
     }
     run()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Load system stats
@@ -208,7 +208,7 @@ export default function AdminSettingsPage() {
           illegalAttempts: illegalCount || 0
         })
         
-      } catch (e: any) {
+      } catch (e: unknown) {
         console.error('Stats loading error:', e)
       } finally {
         setStatsLoading(false)
@@ -248,8 +248,6 @@ export default function AdminSettingsPage() {
     
     setSendingNotification(true)
     try {
-      const authHeaders = await getAuthHeaders()
-      
       // Hedef kullanıcıları belirle
       let targetUsers: string[] = []
       
@@ -291,8 +289,9 @@ export default function AdminSettingsPage() {
       setNotificationTitle('')
       setNotificationMessage('')
       setTargetUserId('')
-    } catch (e: any) {
-      alert('❌ Hata: ' + (e?.message || 'Bilinmeyen hata'))
+    } catch (e: unknown) {
+      const error = e as Error
+      alert('❌ Hata: ' + (error?.message || 'Bilinmeyen hata'))
     } finally {
       setSendingNotification(false)
     }
@@ -334,8 +333,9 @@ export default function AdminSettingsPage() {
       
       // Reload stats
       window.location.reload()
-    } catch (e: any) {
-      alert('❌ Hata: ' + (e?.message || 'Bilinmeyen hata'))
+    } catch (e: unknown) {
+      const error = e as Error
+      alert('❌ Hata: ' + (error?.message || 'Bilinmeyen hata'))
     } finally {
       setSavingSetting(false)
     }
@@ -490,6 +490,9 @@ export default function AdminSettingsPage() {
                     className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
                       editValue === 'true' ? 'bg-green-500' : 'bg-gray-600'
                     }`}
+                    aria-label={`Durum: ${editValue === 'true' ? 'Aktif' : 'Pasif'}`}
+                    role="switch"
+                    aria-checked={editValue === 'true'}
                   >
                     <span
                       className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
@@ -1015,7 +1018,7 @@ function SystemSettings({
                       ? 'from-yellow-500 to-orange-500'
                       : 'from-green-500 to-emerald-500'
                 }`}
-                style={{ width: `${storagePercent}%` }}
+                style={{ width: `${storagePercent}%` } as React.CSSProperties}
               ></div>
             </div>
             <div className="text-xs text-white/50 mt-1">

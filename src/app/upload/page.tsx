@@ -14,7 +14,6 @@ import { optimizeImage, validateImage, createPreviewURL, revokePreviewURL } from
 import { takePhoto, pickImage } from '@/lib/cameraWrapper'
 import { logger, trackUserAction } from '@/lib/logger'
 import { Capacitor } from '@capacitor/core'
-import { CameraResultType, CameraSource } from '@capacitor/camera'
 
 const categories = [
   { id: 'clothing', name: '👕 Giyim', value: 'clothing' },
@@ -218,29 +217,30 @@ export default function UploadPage() {
       setImages([...images, previewUrl])
       setImageFiles([...imageFiles, optimizedFile])
       setOptimizationProgress('')
-    } catch (error: any) {
-      logger.error('UPLOAD_PAGE', '❌ Camera capture failed', error, {
-        message: error?.message,
-        code: error?.code
+    } catch (error: unknown) {
+      const err = error as Error & { code?: string; webPath?: string; stack?: string }
+      logger.error('UPLOAD_PAGE', '❌ Camera capture failed', err, {
+        message: err?.message,
+        code: err?.code
       })
       
-      const userMessage = error?.message || 'Kamera açılırken hata oluştu'
+      const userMessage = err?.message || 'Kamera açılırken hata oluştu'
       const errorDetails = `
 📸 KAMERA HATASI
 
-Hata: ${error?.message || 'Bilinmeyen hata'}
+Hata: ${err?.message || 'Bilinmeyen hata'}
 
-Kod: ${error?.code || 'N/A'}
+Kod: ${err?.code || 'N/A'}
 
-Tip: ${error?.name || 'Error'}
+Tip: ${err?.name || 'Error'}
 
 Platform: ${Capacitor.getPlatform()}
 
 Native: ${Capacitor.isNativePlatform() ? 'Evet' : 'Hayır'}
 
-WebPath: ${error?.webPath || 'N/A'}
+WebPath: ${err?.webPath || 'N/A'}
 
-Stack: ${error?.stack?.substring(0, 200) || 'N/A'}
+Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
       `.trim()
       
       setError(`📸 Kamera Hatası: ${userMessage}`)
@@ -357,29 +357,30 @@ Stack: ${error?.stack?.substring(0, 200) || 'N/A'}
       setImages([...images, previewUrl])
       setImageFiles([...imageFiles, optimizedFile])
       setOptimizationProgress('')
-    } catch (error: any) {
-      logger.error('UPLOAD_PAGE', '❌ Gallery pick failed', error, {
-        message: error?.message,
-        code: error?.code
+    } catch (error: unknown) {
+      const err = error as Error & { code?: string; webPath?: string; stack?: string }
+      logger.error('UPLOAD_PAGE', '❌ Gallery pick failed', err, {
+        message: err?.message,
+        code: err?.code
       })
       
-      const userMessage = error?.message || 'Galeri açılırken hata oluştu'
+      const userMessage = err?.message || 'Galeri açılırken hata oluştu'
       const errorDetails = `
 🖼️ GALERİ HATASI
 
-Hata: ${error?.message || 'Bilinmeyen hata'}
+Hata: ${err?.message || 'Bilinmeyen hata'}
 
-Kod: ${error?.code || 'N/A'}
+Kod: ${err?.code || 'N/A'}
 
-Tip: ${error?.name || 'Error'}
+Tip: ${err?.name || 'Error'}
 
 Platform: ${Capacitor.getPlatform()}
 
 Native: ${Capacitor.isNativePlatform() ? 'Evet' : 'Hayır'}
 
-WebPath: ${error?.webPath || 'N/A'}
+WebPath: ${err?.webPath || 'N/A'}
 
-Stack: ${error?.stack?.substring(0, 200) || 'N/A'}
+Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
       `.trim()
       
       setError(`🖼️ Galeri Hatası: ${userMessage}`)
@@ -444,9 +445,10 @@ Stack: ${error?.stack?.substring(0, 200) || 'N/A'}
       setImageFiles([...imageFiles, ...newFiles])
       setOptimizationProgress('')
       
-    } catch (err: any) {
-      logger.error('UPLOAD_PAGE', '❌ Image upload error', err)
-      setError(err.message || 'Resim yüklenirken hata oluştu')
+    } catch (err: unknown) {
+      const error = err as Error
+      logger.error('UPLOAD_PAGE', '❌ Image upload error', error)
+      setError(error.message || 'Resim yüklenirken hata oluştu')
     } finally {
       setIsOptimizing(false)
     }
@@ -482,7 +484,7 @@ Stack: ${error?.stack?.substring(0, 200) || 'N/A'}
 
       // Persist seeking preferences (non-blocking)
       try {
-        const filters: any = {}
+        const filters: Record<string, unknown> = {}
         if (seekClothingSize || seekClothingColor) {
           filters.clothing = {
             sizeText: seekClothingSize || undefined,
@@ -497,7 +499,7 @@ Stack: ${error?.stack?.substring(0, 200) || 'N/A'}
           valueMax: seekValueMax ? Number(seekValueMax) : undefined,
           locationCity: seekCity || undefined,
           filters,
-        } as any)
+        })
       } catch {}
 
       // 1. Upload images to Supabase Storage
@@ -538,8 +540,8 @@ Stack: ${error?.stack?.substring(0, 200) || 'N/A'}
       const item = await createItem({
         title: formData.title,
         description: formData.description,
-        category: formData.category as any,
-        condition: formData.condition as any,
+        category: formData.category,
+        condition: formData.condition,
         estimated_value: formData.estimatedValue ? parseFloat(formData.estimatedValue) : undefined,
         images: imageUrls,
         owner_id: userId,
@@ -556,12 +558,13 @@ Stack: ${error?.stack?.substring(0, 200) || 'N/A'}
         logger.info('UPLOAD_PAGE', '🔄 Redirecting to home...')
         router.push('/')
       }, 2000)
-    } catch (err: any) {
-      logger.error('UPLOAD_PAGE', '❌ Upload error', err, {
-        message: err?.message,
-        stack: err?.stack
+    } catch (err: unknown) {
+      const error = err as Error
+      logger.error('UPLOAD_PAGE', '❌ Upload error', error, {
+        message: error?.message,
+        stack: error?.stack
       })
-      setError(err.message || 'Bir hata oluştu')
+      setError(error.message || 'Bir hata oluştu')
       setIsUploading(false)
     }
   }
@@ -659,6 +662,7 @@ Stack: ${error?.stack?.substring(0, 200) || 'N/A'}
                     type="button"
                     onClick={() => removeImage(index)}
                     className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    aria-label={`Resim ${index + 1}'i kaldır`}
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -694,6 +698,7 @@ Stack: ${error?.stack?.substring(0, 200) || 'N/A'}
                       onChange={handleImageUpload}
                       disabled={isOptimizing}
                       className="hidden"
+                      aria-label="Resim dosyası seç"
                       onClick={(e) => {
                         // Allow file input on web
                         const target = e.target as HTMLInputElement
@@ -859,10 +864,11 @@ Stack: ${error?.stack?.substring(0, 200) || 'N/A'}
 
           {/* Location/City */}
           <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <label className="block text-sm font-semibold text-gray-800 mb-2">
+            <label htmlFor="city-select" className="block text-sm font-semibold text-gray-800 mb-2">
               📍 Ürünün Bulunduğu Şehir *
             </label>
             <select
+              id="city-select"
               name="city"
               value={formData.city}
               onChange={handleInputChange}
@@ -888,9 +894,9 @@ Stack: ${error?.stack?.substring(0, 200) || 'N/A'}
                   <button
                     key={category.value}
                     type="button"
-                    onClick={() => toggleSeekCategory(category.value as any)}
+                    onClick={() => toggleSeekCategory(category.value as 'clothing'|'toys'|'electronics'|'books'|'sports'|'home'|'other')}
                     className={`py-2 px-3 rounded-lg border-2 text-sm transition-all font-medium ${
-                      seekCategories.includes(category.value as any)
+                      seekCategories.includes(category.value as 'clothing'|'toys'|'electronics'|'books'|'sports'|'home'|'other')
                         ? 'border-purple-500 bg-purple-500 text-white shadow-md'
                         : 'border-gray-300 bg-white text-gray-700 hover:border-purple-400'
                     }`}
@@ -925,8 +931,9 @@ Stack: ${error?.stack?.substring(0, 200) || 'N/A'}
             </div>
 
             <div className="mt-3">
-              <label className="block text-sm font-semibold text-gray-800 mb-1">Şehir</label>
+              <label htmlFor="seek-city-select" className="block text-sm font-semibold text-gray-800 mb-1">Şehir</label>
               <select
+                id="seek-city-select"
                 value={seekCity}
                 onChange={(e) => setSeekCity(e.target.value)}
                 className="w-full px-3 py-2 border-2 border-gray-300 bg-white rounded-lg text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
@@ -943,10 +950,11 @@ Stack: ${error?.stack?.substring(0, 200) || 'N/A'}
               <div className="text-sm font-semibold text-gray-800 mb-2">Giyim Tercihleri (opsiyonel)</div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Beden (Text)</label>
+                  <label htmlFor="clothing-size-select" className="block text-xs font-medium text-gray-700 mb-1">Beden (Text)</label>
                   <select
+                    id="clothing-size-select"
                     value={seekClothingSize}
-                    onChange={(e) => setSeekClothingSize(e.target.value as any)}
+                    onChange={(e) => setSeekClothingSize(e.target.value as 'XS'|'S'|'M'|'L'|'XL'|'XXL'|'')}
                     className="w-full px-3 py-2 border-2 border-gray-300 bg-white rounded-lg text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                   >
                     <option value="">—</option>
