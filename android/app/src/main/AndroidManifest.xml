@@ -33,6 +33,16 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713"
         />
+        
+        <!-- OneSignal App ID -->
+        <meta-data 
+            android:name="onesignal_app_id" 
+            android:value="f26d64d9-c8c9-48ee-a472-f12cc5c8b629" />
+        
+        <!-- Firebase/FCM Project Number -->
+        <meta-data 
+            android:name="onesignal_google_project_number" 
+            android:value="391113620614" />
     </application>
 
     <!-- Permissions -->

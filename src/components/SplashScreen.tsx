@@ -31,8 +31,8 @@ export default function AppSplashScreen() {
       });
     }
 
-    // Native'de CSS/font yüklenmesi gecikebilir. En az süre + yüklemeyi bekle.
-    const MIN_DURATION = Capacitor.isNativePlatform() ? 3000 : 2000;
+    // Native'de minimal splash zaten gösterildi, bu yüzden daha kısa süre
+    const MIN_DURATION = Capacitor.isNativePlatform() ? 1500 : 2000;
 
     let isMounted = true;
     const waitForFonts = (async () => {

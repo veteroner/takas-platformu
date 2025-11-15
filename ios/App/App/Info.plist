@@ -55,6 +55,12 @@
 	<string>Çektiğiniz fotoğrafları galerinize kaydetmek için izin gerekiyor.</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-3940256099942544~1458002511</string>
+	<key>OneSignal_app_id</key>
+	<string>f26d64d9-c8c9-48ee-a472-f12cc5c8b629</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
