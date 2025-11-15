@@ -4,11 +4,9 @@ import "./globals.css";
 import CookieBanner from "@/components/CookieBanner";
 import ConsentGuard from "@/components/ConsentGuard";
 import AnalyticsLoader from "@/components/AnalyticsLoader";
-import OneSignalInit from "@/components/OneSignalInit";
 import OneSignalCapacitorInit from "@/components/OneSignalCapacitorInit";
 import AdsInit from "@/components/AdsInit";
 import NativeConsentInit from "@/components/NativeConsentInit";
-import AppSplashScreen from "@/components/SplashScreen";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,11 +25,11 @@ export const metadata: Metadata = {
   authors: [{ name: "Takas Platform" }],
   creator: "Takas Platform",
   publisher: "Takas Platform",
-  metadataBase: new URL('http://localhost:3000'),
+  metadataBase: new URL('https://takasyap.netlify.app'),
   openGraph: {
     title: "Takas Platform",
     description: "Beğen, eşleş, takas yap! Modern ürün takas platformu",
-    url: 'http://localhost:3000',
+    url: 'https://takasyap.netlify.app',
     siteName: 'Takas Platform',
     images: [
       {
@@ -58,6 +56,9 @@ export const metadata: Metadata = {
     apple: [
       { url: '/icons/app-icon.svg', sizes: '180x180', type: 'image/svg+xml' }
     ],
+    other: [
+      { rel: 'mask-icon', url: '/icons/app-icon.svg', color: '#EC4899' }
+    ]
   },
   manifest: '/manifest.json',
   viewport: {
@@ -92,13 +93,13 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="msapplication-TileColor" content="#EC4899" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
-        <link rel="apple-touch-icon" href="/icons/app-icon.svg" />
-        <link rel="mask-icon" href="/icons/app-icon.svg" color="#EC4899" />
+        {/* DNS prefetch & preconnect to speed up first load, helpful for WebView */}
+        <link rel="dns-prefetch" href="//takasyap.netlify.app" />
+        <link rel="preconnect" href="https://takasyap.netlify.app" crossOrigin="" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AppSplashScreen />
         <ConsentGuard />
         {children}
         <CookieBanner />
