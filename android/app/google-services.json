@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "391113620614",
+    "project_id": "takasyap-d0780",
+    "storage_bucket": "takasyap-d0780.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:391113620614:android:97731b26f45ae1985d2507",
+        "android_client_info": {
+          "package_name": "com.teknova.takasapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKqN3P5M6QnoKaT9kGYiA2yihkNzGqbGU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
