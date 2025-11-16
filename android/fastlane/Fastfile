@@ -1,0 +1,13 @@
+default_platform(:android)
+
+platform :android do
+  desc 'Build Android APK'
+  lane :build_apk do
+    gradle(task: 'assembleRelease')
+  end
+
+  desc 'Build Android AAB'
+  lane :build_aab do
+    gradle(task: 'bundleRelease')
+  end
+end
