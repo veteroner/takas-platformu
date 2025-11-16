@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
-const ONESIGNAL_APP_ID = 'f26d64d9-c8c9-48ee-a472-f12cc5c8b629'
+const ONESIGNAL_APP_ID = process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID || ''
 
 // Extend Window interface for Cordova
 declare global {
@@ -47,9 +47,13 @@ export default function OneSignalCapacitorInit() {
           
           const OS = windowWithPlugins.plugins.OneSignal
           
-          // Initialize
-          OS.setAppId(ONESIGNAL_APP_ID)
-          console.log('✅ OneSignal App ID set:', ONESIGNAL_APP_ID)
+          // Initialize (env üzerinden)
+          if (ONESIGNAL_APP_ID) {
+            OS.setAppId(ONESIGNAL_APP_ID)
+            console.log('✅ OneSignal App ID set:', ONESIGNAL_APP_ID)
+          } else {
+            console.warn('⚠️ OneSignal App ID missing (NEXT_PUBLIC_ONESIGNAL_APP_ID)')
+          }
           
           // Request permission
           OS.promptForPushNotificationsWithUserResponse()

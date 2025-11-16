@@ -1,4 +1,6 @@
 import type { NextConfig } from "next";
+// Sentry integration
+import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
   // output: 'export', // API routes olduğu için export kullanılamaz
@@ -23,4 +25,7 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  // Sentry build-time options (minimal, safe defaults)
+  silent: true,
+});

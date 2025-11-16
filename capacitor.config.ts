@@ -24,9 +24,10 @@ const config: CapacitorConfig = {
       backgroundColor: '#EC4899'
     },
     AdMob: {
-      appId: 'ca-app-pub-3940256099942544~1458002511', // Test App ID - Gerçek ID ile değiştirilecek
+      // Üretimde .env veya CI gizli değişkeninden okunabilir; build anında process.env kullanılabilir
+      appId: process.env.CAPACITOR_ADMOB_APP_ID || 'TEST',
       testingDevices: [],
-      initializeForTesting: true
+      initializeForTesting: process.env.NODE_ENV !== 'production'
     }
   }
 };
