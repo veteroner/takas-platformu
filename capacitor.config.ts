@@ -8,7 +8,13 @@ const config: CapacitorConfig = {
     // Production: Netlify URL
     url: 'https://takasyap.netlify.app',
     cleartext: true,
-    androidScheme: 'https'
+    androidScheme: 'https',
+    // Offline durumunda gösterilecek sayfa
+    errorPath: 'index.html'
+  },
+  android: {
+    // WebView hata sayfasını gizle ve özel sayfamızı göster
+    allowMixedContent: true
   },
   plugins: {
     SplashScreen: {
