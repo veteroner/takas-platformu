@@ -9,6 +9,7 @@ import AdsInit from "@/components/AdsInit";
 import NativeConsentInit from "@/components/NativeConsentInit";
 import NetworkGuard from "@/components/NetworkGuard";
 import VersionGate from "@/components/VersionGate";
+import { NetworkStatusWrapper } from "@/components/NetworkStatusWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -102,15 +103,17 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ConsentGuard />
-        <NetworkGuard />
-        <VersionGate />
-        {children}
-        <CookieBanner />
-        <AnalyticsLoader />
-        <OneSignalCapacitorInit />
-        <NativeConsentInit />
-        <AdsInit />
+        <NetworkStatusWrapper>
+          <ConsentGuard />
+          <NetworkGuard />
+          <VersionGate />
+          {children}
+          <CookieBanner />
+          <AnalyticsLoader />
+          <OneSignalCapacitorInit />
+          <NativeConsentInit />
+          <AdsInit />
+        </NetworkStatusWrapper>
       </body>
     </html>
   );
