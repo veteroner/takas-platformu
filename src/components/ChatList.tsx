@@ -9,12 +9,44 @@ import { getUserMatches } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { MatchUnreadBadge } from "@/components/UnreadBadge";
 import { supabase } from "@/lib/supabase";
-import { BottomNav } from "@/components/layout";
+
+// Match tipi tanımı
+interface MatchUser {
+  id: string;
+  name: string;
+  email?: string;
+  avatar?: string;
+}
+
+interface MatchItem {
+  id: string;
+  title: string;
+  images?: string[];
+}
+
+interface MatchMessage {
+  id: string;
+  content: string;
+  sender_id: string;
+  created_at: string;
+}
+
+interface Match {
+  id: string;
+  user1_id: string;
+  user2_id: string;
+  user1?: MatchUser;
+  user2?: MatchUser;
+  item1?: MatchItem;
+  item2?: MatchItem;
+  messages?: MatchMessage[];
+  created_at: string;
+}
 
 export default function ChatList() {
   const router = useRouter();
   const [user, setUser] = useState<{id: string; name: string; email: string; avatar?: string} | null>(null);
-  const [matches, setMatches] = useState<Array<{id: string; user1_id: string; user2_id: string; messages?: Array<{content: string; sender_id: string}>}>>([]);
+  const [matches, setMatches] = useState<Match[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
