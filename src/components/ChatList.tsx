@@ -3,17 +3,18 @@
 import React, { useEffect, useState } from "react";
 import { MessageCircle, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+
 import { getCurrentUser } from "@/lib/auth";
 import { getUserMatches } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { MatchUnreadBadge } from "@/components/UnreadBadge";
 import { supabase } from "@/lib/supabase";
+import { BottomNav } from "@/components/layout";
 
 export default function ChatList() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
-  const [matches, setMatches] = useState<any[]>([]);
+  const [user, setUser] = useState<{id: string; name: string; email: string; avatar?: string} | null>(null);
+  const [matches, setMatches] = useState<Array<{id: string; user1_id: string; user2_id: string; messages?: Array<{content: string; sender_id: string}>}>>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

@@ -7,9 +7,8 @@ import AnalyticsLoader from "@/components/AnalyticsLoader";
 import OneSignalCapacitorInit from "@/components/OneSignalCapacitorInit";
 import AdsInit from "@/components/AdsInit";
 import NativeConsentInit from "@/components/NativeConsentInit";
-import NetworkGuard from "@/components/NetworkGuard";
 import VersionGate from "@/components/VersionGate";
-import { NetworkStatusWrapper } from "@/components/NetworkStatusWrapper";
+import NetworkProvider from "@/components/NetworkProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -103,9 +102,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NetworkStatusWrapper>
+        <NetworkProvider>
           <ConsentGuard />
-          <NetworkGuard />
           <VersionGate />
           {children}
           <CookieBanner />
@@ -113,7 +111,7 @@ export default function RootLayout({
           <OneSignalCapacitorInit />
           <NativeConsentInit />
           <AdsInit />
-        </NetworkStatusWrapper>
+        </NetworkProvider>
       </body>
     </html>
   );
