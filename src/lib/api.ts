@@ -12,7 +12,18 @@ export async function getFeedItems(userId?: string, limit: number = 20): Promise
 
     let query = supabase
       .from('items')
-      .select('*')
+      .select(`
+        *,
+        owner:users!owner_id (
+          id,
+          name,
+          email,
+          avatar,
+          rating,
+          total_trades,
+          location
+        )
+      `)
       .eq('status', 'active')
       .order('created_at', { ascending: false })
       .limit(limit)

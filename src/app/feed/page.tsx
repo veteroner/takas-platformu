@@ -139,12 +139,12 @@ export default function HomePage() {
         color: ['#FF6B6B', '#FF8E53'],
         ownerId: item.owner_id,
         owner: {
-          id: item.owner_id,
-          name: 'User',
-          email: 'user@example.com',
-          avatar: '/icons/icon-192.png',
-          rating: 5,
-          totalTrades: 0,
+          id: item.owner?.id || item.owner_id,
+          name: item.owner?.name || 'Anonim Kullanıcı',
+          email: item.owner?.email || '',
+          avatar: item.owner?.avatar || '/icons/icon-192.png',
+          rating: item.owner?.rating || 5,
+          totalTrades: item.owner?.total_trades || 0,
           joinedAt: new Date(),
           preferences: {
             categories: [],
@@ -152,12 +152,12 @@ export default function HomePage() {
             ageRange: { min: 0, max: 100 }
           },
           location: {
-            city: item.location || 'İstanbul', // Database'den gelen şehir
+            city: item.owner?.location || item.location || 'İstanbul',
             country: 'TR'
           }
         },
         location: {
-          city: item.location || 'İstanbul', // Database'den gelen şehir
+          city: item.location || item.owner?.location || 'İstanbul',
           country: 'TR'
         },
         createdAt: new Date(item.created_at),
