@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { MessageCircle, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -49,9 +49,39 @@ export default function ChatList() {
   const [matches, setMatches] = useState<Match[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const loadData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const currentUser = await getCurrentUser();
+      
+      if (!currentUser) {
+        router.push('/login');
+        return;
+      }
+
+      setUser(currentUser);
+
+      // Load user's matches
+      const userMatches = await getUserMatches(currentUser.id);
+      
+      // Son mesaj zamanına göre sırala (en yeni üstte)
+      const sortedMatches = userMatches.sort((a, b) => {
+        const dateA = a.messages?.[0]?.created_at || a.created_at;
+        const dateB = b.messages?.[0]?.created_at || b.created_at;
+        return new Date(dateB).getTime() - new Date(dateA).getTime();
+      });
+      
+      setMatches(sortedMatches);
+    } catch (error) {
+      console.error('Error loading matches:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [router]);
+
   useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]);
 
   // 🔔 Real-time subscription for new messages
   useEffect(() => {
@@ -96,37 +126,7 @@ export default function ChatList() {
       console.log('🔌 ChatList subscription kapatılıyor...');
       supabase.removeChannel(channel);
     };
-  }, [user?.id]);
-
-  const loadData = async () => {
-    try {
-      setIsLoading(true);
-      const currentUser = await getCurrentUser();
-      
-      if (!currentUser) {
-        router.push('/login');
-        return;
-      }
-
-      setUser(currentUser);
-
-      // Load user's matches
-      const userMatches = await getUserMatches(currentUser.id);
-      
-      // Son mesaj zamanına göre sırala (en yeni üstte)
-      const sortedMatches = userMatches.sort((a, b) => {
-        const dateA = a.messages?.[0]?.created_at || a.created_at;
-        const dateB = b.messages?.[0]?.created_at || b.created_at;
-        return new Date(dateB).getTime() - new Date(dateA).getTime();
-      });
-      
-      setMatches(sortedMatches);
-    } catch (error) {
-      console.error('Error loading matches:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  }, [user?.id, loadData]);
 
   if (isLoading) {
     return (
