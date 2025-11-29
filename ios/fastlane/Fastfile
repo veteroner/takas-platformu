@@ -18,6 +18,16 @@ platform :ios do
   lane :build_appstore do
     match(type: 'appstore', readonly: true)
     increment_build_number(xcodeproj: 'App/App.xcodeproj')
+    
+    # Update code signing settings
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: 'App/App.xcodeproj',
+      team_id: '29D6U2Z923',
+      profile_name: 'match AppStore com.teknova.takasapp',
+      code_sign_identity: 'Apple Distribution'
+    )
+    
     build_app(
       scheme: 'App',
       workspace: 'App/App.xcworkspace',
@@ -25,7 +35,9 @@ platform :ios do
       include_bitcode: false,
       output_directory: 'build',
       output_name: 'TakasApp.ipa',
-      silent: true
+      silent: false,
+      clean: true,
+      xcargs: '-allowProvisioningUpdates'
     )
   end
 
