@@ -4,8 +4,11 @@ import { useState, useRef } from 'react'
 import { useSpring, animated, to } from '@react-spring/web'
 import { useDrag } from '@use-gesture/react'
 import Image from 'next/image'
-import { Heart, X, MapPin, Star } from 'lucide-react'
-import { Item, SwipeCardProps } from '@/types'
+import { Heart, X, MapPin } from 'lucide-react'
+import { SwipeCardProps } from '@/types'
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SpringValue = any
 
 const SwipeCard: React.FC<SwipeCardProps> = ({ 
   item, 
@@ -31,11 +34,9 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
     direction: [xDir], 
     velocity: [vx, vy], 
     cancel 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }: any) => {
-    // Stronger vertical scroll protection:
-    // 1. If vertical movement is significantly larger than horizontal
-    // 2. Or if vertical velocity is higher than horizontal velocity
-    // 3. Cancel the gesture to allow native vertical scrolling
+    // Stronger vertical scroll protection
     const isVerticalDominant = Math.abs(my) > Math.abs(mx) * 1.5
     const isVerticalVelocityHigh = Math.abs(vy) > Math.abs(vx) * 1.2
     const hasVerticalMovement = Math.abs(my) > 10
@@ -45,11 +46,10 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
       return
     }
     
-    const trigger = vx > 0.2 // Hız eşiği
+    const trigger = vx > 0.2
     const dir = xDir < 0 ? -1 : 1
     
     if (!active && trigger) {
-      // Kart swipe edildi
       setIsGone(true)
       const direction = dir === 1 ? 'right' : 'left'
       
@@ -60,11 +60,9 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
         config: { friction: 50, tension: 200 }
       })
       
-      // Callback'i çağır
       setTimeout(() => onSwipe(direction, item), 150)
       
     } else {
-      // Aktif drag veya geri dönüş
       api.start({
         x: active ? mx : 0,
         y: active ? my : 0,
@@ -74,12 +72,11 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
       })
     }
   }, {
-    // Gesture configuration to be more restrictive
-    axis: undefined, // Allow both axes but we'll filter in the handler
-    filterTaps: true, // Prevent taps from triggering drag
-    threshold: 10, // Minimum movement to start gesture
-    rubberband: 0.1, // Reduce rubber band effect
-    pointer: { touch: true } // Enable touch events
+    axis: undefined,
+    filterTaps: true,
+    threshold: 10,
+    rubberband: 0.1,
+    pointer: { touch: true }
   })
 
   // Programmatik swipe fonksiyonları
@@ -107,129 +104,176 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
 
   if (isGone) return null
 
+  // Kategori emojisi
+  const getCategoryEmoji = (category: string) => {
+    const cat = category.toLowerCase()
+    if (cat.includes('clothing')) return '👕'
+    if (cat.includes('toys')) return '🧸'
+    if (cat.includes('electronics')) return '📱'
+    if (cat.includes('books')) return '📚'
+    if (cat.includes('sports')) return '⚽'
+    if (cat.includes('home')) return '🏠'
+    return '📦'
+  }
+
+  // Durum badge rengi
+  const getConditionStyle = (condition: string) => {
+    const cond = condition.toLowerCase()
+    if (cond.includes('new') || cond.includes('like_new')) return 'bg-emerald-500'
+    if (cond.includes('good')) return 'bg-blue-500'
+    if (cond.includes('fair')) return 'bg-amber-500'
+    return 'bg-gray-500'
+  }
+
+  const getConditionLabel = (condition: string) => {
+    const cond = condition.toLowerCase()
+    if (cond.includes('like_new')) return 'Sıfır Gibi'
+    if (cond.includes('new')) return 'Yeni'
+    if (cond.includes('good')) return 'İyi'
+    if (cond.includes('fair')) return 'Normal'
+    return 'Kullanılmış'
+  }
+
   return (
-    <div className="relative w-full h-full">
-      {/* Swipe Indicators */}
-      <animated.div
-        className="absolute inset-0 z-10 pointer-events-none"
-        style={{
-          opacity: to([x], (x: any) => Math.abs(x) / 100),
-        }}
-      >
-        {/* Like Indicator (Right) */}
+    <div className="relative w-full h-full flex flex-col">
+      {/* Main Card Area */}
+      <div className="flex-1 relative min-h-0">
+        {/* Swipe Indicators */}
         <animated.div
-          className="absolute top-8 right-8 bg-green-500 text-white px-4 py-2 rounded-full font-bold text-lg flex items-center gap-2"
+          className="absolute inset-0 z-10 pointer-events-none"
           style={{
-            opacity: to([x], (x: any) => (x > 0 ? x / 100 : 0)),
-            transform: to([x], (x: any) => `scale(${1 + Math.max(0, x / 200)})`),
+            opacity: to([x], (xVal: SpringValue) => Math.min(Math.abs(xVal) / 100, 1)),
           }}
         >
-          <Heart className="w-5 h-5 fill-current" />
-          BEĞENDİM
+          {/* Like Indicator (Right) */}
+          <animated.div
+            className="absolute top-6 right-4 bg-green-500 text-white px-3 py-1.5 rounded-full font-bold text-sm flex items-center gap-1.5 shadow-lg"
+            style={{
+              opacity: to([x], (xVal: SpringValue) => (xVal > 0 ? Math.min(xVal / 80, 1) : 0)),
+              transform: to([x], (xVal: SpringValue) => `scale(${1 + Math.max(0, Math.min(xVal / 300, 0.3))})`),
+            }}
+          >
+            <Heart className="w-4 h-4 fill-current" />
+            BEĞENDİM
+          </animated.div>
+
+          {/* Pass Indicator (Left) */}
+          <animated.div
+            className="absolute top-6 left-4 bg-red-500 text-white px-3 py-1.5 rounded-full font-bold text-sm flex items-center gap-1.5 shadow-lg"
+            style={{
+              opacity: to([x], (xVal: SpringValue) => (xVal < 0 ? Math.min(Math.abs(xVal) / 80, 1) : 0)),
+              transform: to([x], (xVal: SpringValue) => `scale(${1 + Math.max(0, Math.min(Math.abs(xVal) / 300, 0.3))})`),
+            }}
+          >
+            <X className="w-4 h-4" />
+            GEÇ
+          </animated.div>
         </animated.div>
 
-        {/* Pass Indicator (Left) */}
+        {/* Main Card */}
         <animated.div
-          className="absolute top-8 left-8 bg-red-500 text-white px-4 py-2 rounded-full font-bold text-lg flex items-center gap-2"
+          ref={cardRef}
+          className="absolute inset-0 bg-white rounded-2xl shadow-xl cursor-grab active:cursor-grabbing overflow-hidden border border-gray-100"
+          {...bind()}
           style={{
-            opacity: to([x], (x: any) => (x < 0 ? Math.abs(x) / 100 : 0)),
-            transform: to([x], (x: any) => `scale(${1 + Math.max(0, Math.abs(x) / 200)})`),
+            x,
+            y,
+            rotate: to([rot], (r: SpringValue) => `${r}deg`),
+            scale: to([scale], (s: SpringValue) => s),
           }}
+          onClick={() => onCardClick?.(item)}
         >
-          <X className="w-5 h-5" />
-          GEÇ
-        </animated.div>
-      </animated.div>
-
-      {/* Main Card */}
-      <animated.div
-        ref={cardRef}
-  className="absolute inset-0 bg-white rounded-2xl shadow-2xl cursor-grab active:cursor-grabbing overflow-hidden"
-        {...bind()}
-        style={{
-          x,
-          y,
-          rotate: to([rot], (r: any) => `${r}deg`),
-          scale: to([scale], (s: any) => s),
-        }}
-        onClick={() => onCardClick?.(item)}
-      >
-        {/* Image Container */}
-  <div className="relative h-[75%] overflow-hidden">
-          <Image
-            src={item.images[0] || '/placeholder-item.jpg'}
-            alt={item.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 400px"
-          />
-          
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-          
-          {/* Category Badge */}
-          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium text-gray-800">
-            {item.category.replace('_', ' ').toUpperCase()}
-          </div>
-
-          {/* Condition Badge */}
-          <div className="absolute top-4 right-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-            {item.condition.replace('_', ' ').toUpperCase()}
-          </div>
-        </div>
-
-        {/* Content */}
-  <div className="p-4 h-[25%] flex flex-col justify-between">
-          <div>
-            <h3 className="text-lg font-bold text-gray-900 mb-0.5 truncate">
-              {item.title}
-            </h3>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-gray-700 text-xs font-medium">{item.owner.name}</span>
-              <div className="flex items-center gap-1">
-                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                <span className="text-gray-600 text-xs">{item.owner.rating.toFixed(1)}</span>
+          {/* Image - Büyük alan */}
+          <div className="relative h-[70%] overflow-hidden bg-gray-100">
+            <Image
+              src={item.images[0] || '/placeholder-item.jpg'}
+              alt={item.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 400px"
+              priority
+            />
+            
+            {/* Gradient Overlay - Sadece alt kısım */}
+            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/70 to-transparent" />
+            
+            {/* Top Badges */}
+            <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
+              <div className="bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-semibold text-gray-800 shadow-sm flex items-center gap-1">
+                {getCategoryEmoji(item.category)}
+                <span className="hidden sm:inline">{item.category.replace('_', ' ')}</span>
+              </div>
+              <div className={`${getConditionStyle(item.condition)} text-white px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm`}>
+                {getConditionLabel(item.condition)}
               </div>
             </div>
-            <p className="text-gray-600 text-xs line-clamp-1 mb-1">
-              {item.description}
-            </p>
-          </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-gray-500 text-sm">
-              <MapPin className="w-4 h-4" />
-              <span>{item.location.city}</span>
-            </div>
-
-            <div className="flex gap-2">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  swipeLeft()
-                }}
-                className="bg-white shadow-md hover:shadow-lg p-2.5 rounded-full transition-all duration-200 hover:scale-110 border border-red-200 hover:border-red-300"
-              >
-                <X className="w-5 h-5 text-red-500" />
-              </button>
-              
-              <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  swipeRight()
-                }}
-                className="bg-white shadow-md hover:shadow-lg p-2.5 rounded-full transition-all duration-200 hover:scale-110 border border-green-200 hover:border-green-300"
-              >
-                <Heart className="w-5 h-5 text-green-500" />
-              </button>
-            </div>
-
-            <div className="text-green-600 font-bold">
-              ~₺{item.estimatedValue}
+            {/* Bottom Info on Image */}
+            <div className="absolute bottom-3 left-3 right-3">
+              <h3 className="text-white font-bold text-lg leading-tight line-clamp-1 drop-shadow-lg">
+                {item.title}
+              </h3>
+              <div className="flex items-center gap-3 mt-1">
+                <span className="text-white/90 text-sm flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5" />
+                  {item.location.city}
+                </span>
+                <span className="text-green-400 font-bold text-sm">
+                  ≈₺{item.estimatedValue}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      </animated.div>
+
+          {/* Content - Kompakt */}
+          <div className="p-3 h-[30%] flex flex-col justify-between">
+            <div>
+              <p className="text-gray-600 text-sm line-clamp-2 leading-snug">
+                {item.description || 'Bu ürün için açıklama bulunmuyor.'}
+              </p>
+            </div>
+
+            {/* Owner Info */}
+            <div className="flex items-center justify-between pt-2 border-t border-gray-100 mt-auto">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
+                  {item.owner.name.charAt(0).toUpperCase()}
+                </div>
+                <span className="text-gray-700 text-sm font-medium truncate max-w-[100px]">
+                  {item.owner.name}
+                </span>
+              </div>
+              <div className="flex items-center gap-1 text-yellow-500">
+                <span className="text-sm">⭐</span>
+                <span className="text-gray-600 text-sm font-medium">{item.owner.rating.toFixed(1)}</span>
+              </div>
+            </div>
+          </div>
+        </animated.div>
+      </div>
+
+      {/* Action Buttons - Kart dışında, altta */}
+      <div className="flex justify-center items-center gap-6 py-4 flex-shrink-0">
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            swipeLeft()
+          }}
+          className="w-14 h-14 bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 border-2 border-red-200 hover:border-red-400 hover:shadow-xl"
+        >
+          <X className="w-7 h-7 text-red-500" />
+        </button>
+        
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            swipeRight()
+          }}
+          className="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 hover:shadow-xl"
+        >
+          <Heart className="w-8 h-8 text-white fill-white" />
+        </button>
+      </div>
     </div>
   )
 }

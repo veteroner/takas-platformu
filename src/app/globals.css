@@ -18,6 +18,16 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Hide scrollbar for category chips */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Safe Area utilities for mobile */
 .pt-safe {
   padding-top: env(safe-area-inset-top, 0);
@@ -38,10 +48,10 @@ body {
 /* Mobile-specific safe area adjustments */
 @media (max-width: 768px) {
   .pt-safe {
-    padding-top: max(env(safe-area-inset-top, 0), 3rem);
+    padding-top: max(env(safe-area-inset-top, 0), 2.5rem);
   }
   
   .pb-safe {
-    padding-bottom: max(env(safe-area-inset-bottom, 0), 1rem);
+    padding-bottom: max(env(safe-area-inset-bottom, 0), 0.5rem);
   }
 }

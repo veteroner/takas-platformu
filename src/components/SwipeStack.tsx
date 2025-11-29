@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import SwipeCard from './SwipeCard'
 import { Item } from '@/types'
-import { Loader2, RotateCcw } from 'lucide-react'
+import { Loader2, RotateCcw, Plus } from 'lucide-react'
+import Link from 'next/link'
 
 interface SwipeStackProps {
   items: Item[]
@@ -30,6 +31,9 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
   useEffect(() => {
     if (items.length > 0) {
       setStack(items.slice(0, Math.min(3, items.length)))
+      setCurrentIndex(0) // Reset index when items change
+    } else {
+      setStack([])
     }
   }, [items])
 
@@ -42,9 +46,8 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
 
     // Update stack - remove swiped item and add new one if available
     setStack(prev => {
-      const newStack = prev.slice(1) // Remove first item
+      const newStack = prev.slice(1)
       
-      // Add new item to the end if available
       if (newIndex + 2 < items.length) {
         newStack.push(items[newIndex + 2])
       }
@@ -63,28 +66,71 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
     setStack(items.slice(0, Math.min(3, items.length)))
   }
 
-  // No more items
-  if (currentIndex >= items.length && !isLoading) {
+  // Loading state
+  if (isLoading && stack.length === 0) {
+    return (
+      <div className={`flex flex-col items-center justify-center h-full ${className}`}>
+        <div className="text-center p-8">
+          <Loader2 className="w-10 h-10 animate-spin text-purple-500 mx-auto mb-4" />
+          <p className="text-gray-600">Ürünler yükleniyor...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // No items
+  if (items.length === 0 && !isLoading) {
     return (
       <div className={`flex flex-col items-center justify-center h-full ${className}`}>
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="text-center p-8"
+          className="text-center p-6 bg-white/70 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg max-w-xs mx-auto"
         >
-          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <RotateCcw className="w-10 h-10 text-gray-400" />
+          <div className="w-16 h-16 bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Plus className="w-8 h-8 text-purple-500" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">
-            Tüm ürünleri gördün!
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+            Henüz ürün yok
           </h3>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 text-sm mb-4">
+            İlk ürünü ekleyen sen ol!
+          </p>
+          <Link
+            href="/upload"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-5 py-2.5 rounded-xl font-medium hover:from-pink-600 hover:to-purple-700 transition-all shadow-lg"
+          >
+            <Plus size={18} />
+            Ürün Ekle
+          </Link>
+        </motion.div>
+      </div>
+    )
+  }
+
+  // No more items to swipe
+  if (currentIndex >= items.length) {
+    return (
+      <div className={`flex flex-col items-center justify-center h-full ${className}`}>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center p-6 bg-white/70 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg max-w-xs mx-auto"
+        >
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <RotateCcw className="w-8 h-8 text-indigo-500" />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+            Tüm ürünleri gördün! 🎉
+          </h3>
+          <p className="text-gray-600 text-sm mb-4">
             Yeni ürünler için daha sonra tekrar dene
           </p>
           <button
             onClick={resetStack}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2.5 rounded-xl font-medium hover:from-blue-600 hover:to-indigo-700 transition-all shadow-lg"
           >
+            <RotateCcw size={18} />
             Baştan Başla
           </button>
         </motion.div>
@@ -93,39 +139,29 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
   }
 
   return (
-    <div className={`relative w-full max-w-md mx-auto h-[600px] md:h-[700px] ${className}`}>
-      {/* Loading State */}
-      {isLoading && stack.length === 0 && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-50 rounded-2xl">
-          <div className="text-center">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-500 mx-auto mb-2" />
-            <p className="text-gray-600">Ürünler yükleniyor...</p>
-          </div>
-        </div>
-      )}
-
+    <div className={`relative w-full h-full ${className}`}>
       {/* Card Stack */}
-  <div className="relative w-full h-full">
+      <div className="relative w-full h-full">
         <AnimatePresence>
           {stack.map((item, index) => (
             <motion.div
               key={item.id}
               className="absolute inset-0"
               initial={{
-                scale: 0.95 - index * 0.05,
-                y: index * 4,
-                opacity: 1 - index * 0.1,
+                scale: 1 - index * 0.03,
+                y: index * 6,
+                opacity: 1 - index * 0.15,
                 zIndex: stack.length - index
               }}
               animate={{
-                scale: 0.95 - index * 0.05,
-                y: index * 4,
-                opacity: 1 - index * 0.1,
+                scale: 1 - index * 0.03,
+                y: index * 6,
+                opacity: 1 - index * 0.15,
                 zIndex: stack.length - index
               }}
               exit={{
                 opacity: 0,
-                scale: 0.8,
+                scale: 0.9,
                 transition: { duration: 0.2 }
               }}
               style={{
@@ -141,14 +177,17 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
               ) : (
                 // Background cards (non-interactive)
                 <div 
-                  className="w-full h-full bg-white rounded-2xl shadow-lg border border-gray-100"
-                  style={{
-                    backgroundImage: `url(${item.images[0] || '/placeholder-item.jpg'})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                  }}
+                  className="w-full h-full bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-white/80 rounded-2xl" />
+                  <div 
+                    className="w-full h-[70%] bg-gray-200"
+                    style={{
+                      backgroundImage: `url(${item.images[0] || '/placeholder-item.jpg'})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  />
+                  <div className="p-3 h-[30%] bg-white" />
                 </div>
               )}
             </motion.div>
@@ -156,20 +195,20 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
         </AnimatePresence>
       </div>
 
-      {/* Progress Indicator */}
-      <div className="absolute bottom-4 left-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm">
-        {currentIndex + 1} / {items.length}
-      </div>
+      {/* Progress Indicator - Üst köşede */}
+      {items.length > 0 && (
+        <div className="absolute top-2 right-2 bg-black/40 text-white px-2.5 py-1 rounded-full text-xs font-medium backdrop-blur-sm z-20">
+          {Math.min(currentIndex + 1, items.length)} / {items.length}
+        </div>
+      )}
 
       {/* Loading More Indicator */}
       {isLoading && stack.length > 0 && (
-        <div className="absolute top-4 right-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm flex items-center gap-2">
+        <div className="absolute top-2 left-2 bg-purple-500 text-white px-2.5 py-1 rounded-full text-xs flex items-center gap-1.5 z-20">
           <Loader2 className="w-3 h-3 animate-spin" />
           Yükleniyor...
         </div>
       )}
-  {/* Alt boşluk - scroll serbestliği için */}
-  <div className="w-full h-24" />
     </div>
   )
 }

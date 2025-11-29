@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import SwipeStack from '@/components/SwipeStack'
 import MatchToast from '@/components/MatchToast'
 import { Item, ItemCondition } from '@/types'
-import { Heart, MessageCircle, User, Settings, LogIn, Plus, Package } from 'lucide-react'
+import { Heart, MessageCircle, User, Settings, LogIn, Plus, Package, Shirt, Gamepad2, Smartphone, BookOpen, Dumbbell, Home, LayoutGrid } from 'lucide-react'
 import { UnreadBadge } from '@/components/UnreadBadge'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -13,6 +13,17 @@ import { getFeedItems, recordSwipe, checkForMatch, getUserLikedItems, getUserPas
 import { getCurrentUser } from '@/lib/auth'
 import { useAds } from '@/hooks/useAds'
 import { AdSwipeCounter } from '@/lib/adManager'
+
+// Kategori tanımları
+const CATEGORIES = [
+  { id: null, label: 'Tümü', icon: LayoutGrid, color: 'from-purple-500 to-pink-500' },
+  { id: 'clothing', label: 'Giyim', icon: Shirt, color: 'from-pink-500 to-rose-500' },
+  { id: 'toys', label: 'Oyuncak', icon: Gamepad2, color: 'from-orange-500 to-amber-500' },
+  { id: 'electronics', label: 'Elektronik', icon: Smartphone, color: 'from-blue-500 to-cyan-500' },
+  { id: 'books', label: 'Kitap', icon: BookOpen, color: 'from-green-500 to-emerald-500' },
+  { id: 'sports', label: 'Spor', icon: Dumbbell, color: 'from-red-500 to-orange-500' },
+  { id: 'home', label: 'Ev', icon: Home, color: 'from-violet-500 to-purple-500' },
+]
 
 interface User {
   id: string
@@ -29,7 +40,6 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true)
   const [likedItems, setLikedItems] = useState<Item[]>([])
   const [passedItems, setPassedItems] = useState<Item[]>([])
-  const [viewMode, setViewMode] = useState<'swipe' | 'grid'>('swipe') // Varsayılan: Swipe (Tinder tarzı)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null) // Seçilen kategori
   const [showLikedItems, setShowLikedItems] = useState(false) // Beğenilen ürünler görünümü
   
@@ -197,6 +207,15 @@ export default function HomePage() {
     }
   }, [user?.id, loadInitialItems, loadUserSwipes])
 
+  // Filtrelenmiş ürünler - useMemo ile optimize
+  const filteredItems = useMemo(() => {
+    if (!selectedCategory) return items
+    return items.filter(item => {
+      const cat = String(item.category).toLowerCase()
+      return cat.includes(selectedCategory.toLowerCase())
+    })
+  }, [items, selectedCategory])
+
   const handleSwipe = async (direction: 'left' | 'right', item: Item) => {
     try {
       // Swipe sayacını artır - her 5 swipe'da interstitial reklam gösterir
@@ -243,53 +262,36 @@ export default function HomePage() {
   }
 
   const handleItemClick = (item: Item) => {
-    // Kategoriye göre filtrele ve swipe moduna geç
+    // Ürün detay sayfasına git (ileride)
     console.log('Item clicked:', item)
-    setSelectedCategory(item.category)
-    setViewMode('swipe')
-    
-    // İlk sırada tıklanan ürün, sonra aynı kategoriden diğerleri
-    const categoryItems = items.filter(i => i.category === item.category)
-    const clickedIndex = categoryItems.findIndex(i => i.id === item.id)
-    
-    if (clickedIndex !== -1) {
-      // Tıklanan ürünü başa al
-      const reordered = [
-        categoryItems[clickedIndex],
-        ...categoryItems.slice(0, clickedIndex),
-        ...categoryItems.slice(clickedIndex + 1)
-      ]
-      setItems(reordered)
-    }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
-        <div className="max-w-md mx-auto px-4 py-4 pt-12 md:pt-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+    <div className="min-h-[100dvh] bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex flex-col">
+      {/* Header - Kompakt */}
+      <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe flex-shrink-0">
+        <div className="max-w-md mx-auto px-4 py-3 pt-10 md:pt-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
             <Image
               src="/icons/logo.svg"
               alt="Takas Logo"
-              width={32}
-              height={32}
-              className="w-8 h-8"
+              width={28}
+              height={28}
+              className="w-7 h-7"
             />
-            <h1 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
               Takas
             </h1>
           </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {!!user ? (
               <>
                 <Link href="/upload" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                  <Plus className="w-6 h-6 text-gray-600" />
+                  <Plus className="w-5 h-5 text-gray-600" />
                 </Link>
                 <Link href="/messages" className="p-2 hover:bg-gray-100 rounded-full transition-colors relative">
-                  <MessageCircle className="w-6 h-6 text-gray-600" />
-                  {/* Okunmamış mesaj badge'i */}
+                  <MessageCircle className="w-5 h-5 text-gray-600" />
                   <UnreadBadge userId={user?.id || null} />
                 </Link>
                 <Link href="/profile" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
@@ -297,203 +299,80 @@ export default function HomePage() {
                     <Image
                       src={user.avatar}
                       alt={user.name}
-                      width={24}
-                      height={24}
-                      className="w-6 h-6 rounded-full object-cover"
+                      width={20}
+                      height={20}
+                      className="w-5 h-5 rounded-full object-cover"
                     />
                   ) : (
-                    <User className="w-6 h-6 text-gray-600" />
+                    <User className="w-5 h-5 text-gray-600" />
                   )}
                 </Link>
                 <Link href="/settings" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                  <Settings className="w-6 h-6 text-gray-600" />
+                  <Settings className="w-5 h-5 text-gray-600" />
                 </Link>
               </>
             ) : (
               <Link 
                 href="/login"
-                className="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg"
+                className="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1.5 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg text-sm"
               >
-                <LogIn size={16} />
-                Giriş Yap
+                <LogIn size={14} />
+                Giriş
               </Link>
             )}
           </div>
         </div>
+
+        {/* Kategori Filtreleri - Yatay Scroll */}
+        <div className="px-2 pb-3 overflow-x-auto scrollbar-hide">
+          <div className="flex gap-2 min-w-max px-2">
+            {CATEGORIES.map((cat) => {
+              const Icon = cat.icon
+              const isSelected = selectedCategory === cat.id
+              return (
+                <button
+                  key={cat.id || 'all'}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                    isSelected
+                      ? `bg-gradient-to-r ${cat.color} text-white shadow-md scale-105`
+                      : 'bg-white/70 text-gray-700 hover:bg-white hover:shadow-sm'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{cat.label}</span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-md mx-auto p-4 pt-6">
-        {/* Instructions & View Toggle */}
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            {viewMode === 'grid' ? 'İlgilendiğin kategoriyi seç' : 'Takas yapmaya hazır mısın?'}
-          </h2>
-          <p className="text-gray-600 mb-4">
-            {viewMode === 'swipe' 
-              ? selectedCategory 
-                ? `${selectedCategory} kategorisinde geziniyorsun - Beğen veya geç!`
-                : 'Beğendiğin ürünleri sağa, beğenmediklerini sola kaydır'
-              : 'İlgini çeken ürüne tıkla, benzer ürünleri keşfet!'
-            }
-          </p>
-          
-          {/* View Mode Toggle - Sadece swipe modundayken geri butonu göster */}
-          {viewMode === 'swipe' ? (
-            <button
-              onClick={() => {
-                setViewMode('grid')
-                setSelectedCategory(null)
-                loadInitialItems() // Tüm ürünleri tekrar yükle
-              }}
-              className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-full px-6 py-2 text-gray-700 hover:bg-white/90 transition-all"
-            >
-              ← Tüm Kategorilere Dön
-            </button>
-          ) : null}
+      {/* Main Content - Flex grow */}
+      <main className="flex-1 flex flex-col max-w-md mx-auto w-full px-3 py-3 overflow-hidden">
+        {/* Swipe Stack - Ana alan */}
+        <div className="flex-1 min-h-0">
+          <SwipeStack
+            items={filteredItems}
+            onSwipe={handleSwipe}
+            onItemClick={handleItemClick}
+            isLoading={isLoading}
+            className="w-full h-full"
+          />
         </div>
 
-        {/* Swipe Stack View */}
-        {viewMode === 'swipe' && (
-          <div className="h-[500px] md:h-[600px] mb-6">
-            <SwipeStack
-              items={selectedCategory ? items.filter(i => i.category === selectedCategory) : items}
-              onSwipe={handleSwipe}
-              onItemClick={handleItemClick}
-              isLoading={isLoading}
-              className="w-full h-full"
-            />
-          </div>
-        )}
-
-        {/* Grid View */}
-        {viewMode === 'grid' && (
-          <div className="mb-6">
-            {isLoading ? (
-              <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-                <p className="text-gray-600">Ürünler yükleniyor...</p>
-              </div>
-            ) : items.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-gray-600 mb-4">Henüz ürün yok</p>
-                {user && (
-                  <Link
-                    href="/upload"
-                    className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg"
-                  >
-                    <Plus size={20} />
-                    İlk Ürünü Ekle
-                  </Link>
-                )}
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 gap-4">
-                {items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 cursor-pointer group"
-                    onClick={() => handleItemClick(item)}
-                  >
-                    {/* Image */}
-                    <div className="relative h-48 bg-gradient-to-br from-pink-100 to-purple-100">
-                      {item.images && item.images.length > 0 ? (
-                        <Image
-                          src={item.images[0]}
-                          alt={item.title}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-300"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <Heart className="w-16 h-16 text-pink-300" />
-                        </div>
-                      )}
-                      {/* Category Badge */}
-                      <div className="absolute top-2 left-2">
-                        <span className="bg-white text-xs font-semibold px-3 py-1 rounded-full text-gray-800 shadow-sm">
-                          {item.category}
-                        </span>
-                      </div>
-                      {/* Condition Badge */}
-                      <div className="absolute top-2 right-2">
-                        <span className={`text-xs font-semibold px-3 py-1 rounded-full shadow-sm ${
-                          item.condition === ItemCondition.LIKE_NEW 
-                            ? 'bg-blue-500 text-white'
-                            : item.condition === ItemCondition.GOOD
-                            ? 'bg-green-500 text-white'
-                            : 'bg-gray-500 text-white'
-                        }`}>
-                          {item.condition === ItemCondition.LIKE_NEW ? 'Sıfır Gibi' : 
-                           item.condition === ItemCondition.GOOD ? 'İyi' : 
-                           item.condition === ItemCondition.FAIR ? 'Normal' : 'Kullanılmış'}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    {/* Info */}
-                    <div className="p-3">
-                      <h3 className="font-bold text-gray-900 mb-1 line-clamp-1">
-                        {item.title}
-                      </h3>
-                      <p className="text-sm text-gray-600 mb-2 line-clamp-2">
-                        {item.description}
-                      </p>
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-medium text-gray-700">
-                          📍 {item.location.city}
-                        </span>
-                        <span className="text-sm font-bold text-green-600">
-                          ≈₺{item.estimatedValue}
-                        </span>
-                      </div>
-                      
-                      {/* Action Buttons */}
-                      {user && (
-                        <div className="flex gap-2">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleSwipe('left', item)
-                            }}
-                            className="flex-1 py-2.5 rounded-lg bg-red-500 hover:bg-red-600 transition-colors shadow-sm"
-                          >
-                            <span className="text-xl text-white font-bold">✕</span>
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleSwipe('right', item)
-                            }}
-                            className="flex-1 py-2.5 rounded-lg bg-green-500 hover:bg-green-600 transition-colors shadow-sm"
-                          >
-                            <span className="text-xl text-white font-bold">♥</span>
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-  {/* Reklamlar: Sadece interstitial. Banner kaldırıldı. */}
-
-        {/* Stats - Tıklanabilir */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
+        {/* Stats - Kompakt */}
+        <div className="flex gap-3 py-3 flex-shrink-0">
           <button 
             onClick={() => setShowLikedItems(!showLikedItems)}
-            className="bg-white/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20 hover:bg-white/90 transition-all transform hover:scale-105 active:scale-95"
+            className="flex-1 bg-white/70 backdrop-blur-sm rounded-xl py-2.5 px-4 text-center border border-white/20 hover:bg-white/90 transition-all flex items-center justify-center gap-2"
           >
-            <div className="text-2xl font-bold text-green-600">{likedItems.length}</div>
-            <div className="text-sm text-gray-600">Beğenilen</div>
-            {showLikedItems && <div className="text-xs text-purple-600 mt-1">👇 Aşağıda gösteriliyor</div>}
+            <span className="text-lg font-bold text-green-600">{likedItems.length}</span>
+            <span className="text-xs text-gray-600">Beğenilen</span>
           </button>
-          <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
-            <div className="text-2xl font-bold text-red-600">{passedItems.length}</div>
-            <div className="text-sm text-gray-600">Geçilen</div>
+          <div className="flex-1 bg-white/70 backdrop-blur-sm rounded-xl py-2.5 px-4 text-center border border-white/20 flex items-center justify-center gap-2">
+            <span className="text-lg font-bold text-red-600">{passedItems.length}</span>
+            <span className="text-xs text-gray-600">Geçilen</span>
           </div>
         </div>
 
@@ -563,54 +442,52 @@ export default function HomePage() {
 
         {/* Login CTA (sadece giriş yapmamış kullanıcılar için) */}
         {!user && (
-          <div className="text-center bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6 mt-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">Hoş Geldin!</h3>
-            <p className="text-gray-600 mb-4">Takas yapmaya başlamak için giriş yap veya hesap oluştur.</p>
+          <div className="text-center bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 flex-shrink-0">
+            <p className="text-gray-600 mb-3 text-sm">Takas yapmak için giriş yap</p>
             <Link 
               href="/login"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-5 py-2 rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg text-sm"
             >
-              <LogIn size={20} />
-              Başla
+              <LogIn size={16} />
+              Giriş Yap
             </Link>
           </div>
         )}
-        
-        {/* Bottom padding for fixed navigation */}
-        <div className="h-24 md:h-16"></div>
       </main>
 
-      {/* Bottom Navigation (Mobile) - 5 Buton */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-white/20 px-2 py-2 pb-safe">
-        <div className="max-w-md mx-auto flex justify-around items-center pb-4 md:pb-2">
-          <button className="flex flex-col items-center py-1 px-2 text-purple-600 min-w-[60px]">
-            <Heart className="w-6 h-6 fill-current" />
-            <span className="text-[10px] mt-1 font-medium">Keşfet</span>
+      {/* Bottom Navigation - Kompakt */}
+      <nav className="bg-white/95 backdrop-blur-md border-t border-gray-200 px-2 py-1.5 pb-safe flex-shrink-0">
+        <div className="max-w-md mx-auto flex justify-around items-center pb-2">
+          <button className="flex flex-col items-center py-1 px-3 text-purple-600">
+            <Heart className="w-5 h-5 fill-current" />
+            <span className="text-[10px] mt-0.5 font-medium">Keşfet</span>
           </button>
           {!!user ? (
             <>
-              <Link href="/my-items" className="flex flex-col items-center py-1 px-2 text-gray-400 min-w-[60px]">
-                <Package className="w-6 h-6" />
-                <span className="text-[10px] mt-1">Ürünlerim</span>
+              <Link href="/my-items" className="flex flex-col items-center py-1 px-3 text-gray-400">
+                <Package className="w-5 h-5" />
+                <span className="text-[10px] mt-0.5">Ürünlerim</span>
               </Link>
-              <Link href="/upload" className="flex flex-col items-center py-1 px-2 text-gray-400 min-w-[60px]">
-                <Plus className="w-6 h-6" />
-                <span className="text-[10px] mt-1">Yükle</span>
+              <Link href="/upload" className="flex flex-col items-center py-1 px-3 text-gray-400">
+                <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-2 rounded-full -mt-4 shadow-lg">
+                  <Plus className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-[10px] mt-0.5">Yükle</span>
               </Link>
-              <Link href="/messages" className="flex flex-col items-center py-1 px-2 text-gray-400 relative min-w-[60px]">
-                <MessageCircle className="w-6 h-6" />
-                <span className="text-[10px] mt-1">Mesajlar</span>
+              <Link href="/messages" className="flex flex-col items-center py-1 px-3 text-gray-400 relative">
+                <MessageCircle className="w-5 h-5" />
+                <span className="text-[10px] mt-0.5">Mesajlar</span>
                 <UnreadBadge userId={user?.id || null} />
               </Link>
-              <Link href="/profile" className="flex flex-col items-center py-1 px-2 text-gray-400 min-w-[60px]">
-                <User className="w-6 h-6" />
-                <span className="text-[10px] mt-1">Profil</span>
+              <Link href="/profile" className="flex flex-col items-center py-1 px-3 text-gray-400">
+                <User className="w-5 h-5" />
+                <span className="text-[10px] mt-0.5">Profil</span>
               </Link>
             </>
           ) : (
-            <Link href="/login" className="flex flex-col items-center py-1 px-2 text-gray-400 min-w-[60px]">
-              <LogIn className="w-6 h-6" />
-              <span className="text-[10px] mt-1">Giriş</span>
+            <Link href="/login" className="flex flex-col items-center py-1 px-3 text-gray-400">
+              <LogIn className="w-5 h-5" />
+              <span className="text-[10px] mt-0.5">Giriş</span>
             </Link>
           )}
         </div>
@@ -624,7 +501,6 @@ export default function HomePage() {
           otherUserAvatar={matchedUser.avatar}
           onClose={() => {
             setShowMatchToast(false)
-            // Immediately redirect to direct chat with matched user
             router.push(`/chat/${matchedUser.matchId}`)
           }}
         />
