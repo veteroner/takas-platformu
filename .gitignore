@@ -49,3 +49,4 @@ ios/App/Pods
 
 # Netlify
 .netlify/
+takas-release.keystore
