@@ -29,11 +29,14 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
 
   // Initialize stack with first few items
   useEffect(() => {
+    console.log('📦 SwipeStack items received:', items.length, items)
     if (items.length > 0) {
       setStack(items.slice(0, Math.min(3, items.length)))
       setCurrentIndex(0) // Reset index when items change
+      console.log('📦 Stack initialized with:', items.slice(0, Math.min(3, items.length)).length, 'items')
     } else {
       setStack([])
+      console.log('📦 No items, stack cleared')
     }
   }, [items])
 
@@ -139,7 +142,7 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
   }
 
   return (
-    <div className={`relative w-full h-full min-h-[400px] ${className}`}>
+    <div className={`relative w-full ${className}`} style={{ height: 'calc(100vh - 280px)', minHeight: '400px' }}>
       {/* Card Stack */}
       <div className="absolute inset-0">
         <AnimatePresence>

@@ -209,6 +209,7 @@ export default function HomePage() {
 
   // Filtrelenmiş ürünler - useMemo ile optimize
   const filteredItems = useMemo(() => {
+    console.log('🎯 Feed items:', items.length, 'Selected category:', selectedCategory)
     if (!selectedCategory) return items
     return items.filter(item => {
       const cat = String(item.category).toLowerCase()
@@ -350,14 +351,14 @@ export default function HomePage() {
 
       {/* Main Content - Flex grow */}
       <main className="flex-1 flex flex-col max-w-md mx-auto w-full px-3 py-3 overflow-hidden">
-        {/* Swipe Stack - Ana alan - Sabit yükseklik */}
-        <div className="flex-1 min-h-[400px] relative">
+        {/* Swipe Stack - Ana alan */}
+        <div className="flex-1 relative">
           <SwipeStack
             items={filteredItems}
             onSwipe={handleSwipe}
             onItemClick={handleItemClick}
             isLoading={isLoading}
-            className="w-full h-full absolute inset-0"
+            className="w-full"
           />
         </div>
 
