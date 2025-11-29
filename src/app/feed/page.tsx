@@ -122,8 +122,10 @@ export default function HomePage() {
   const loadInitialItems = useCallback(async () => {
     try {
       setIsLoading(true)
+      console.log('📡 Loading feed items for user:', user?.id || 'guest')
       // Load real items from database (skip owner filter when no user)
       const feedItems = await getFeedItems(user?.id)
+      console.log('📡 Feed items received from API:', feedItems?.length || 0, feedItems)
       
             // Convert Supabase items to frontend Item type
       const convertedItems: Item[] = feedItems.map(item => ({
@@ -200,12 +202,20 @@ export default function HomePage() {
     loadUser()
   }, [loadUser])
 
+  // İlk mount'ta hemen items yükle
   useEffect(() => {
+    console.log('🔄 useEffect triggered - loading items...')
     loadInitialItems()
+  }, []) // Sadece mount'ta çalış
+  
+  // User değiştiğinde tekrar yükle
+  useEffect(() => {
     if (user?.id) {
+      console.log('👤 User loaded, reloading items for user:', user.id)
+      loadInitialItems()
       loadUserSwipes()
     }
-  }, [user?.id, loadInitialItems, loadUserSwipes])
+  }, [user?.id])
 
   // Filtrelenmiş ürünler - useMemo ile optimize
   const filteredItems = useMemo(() => {
