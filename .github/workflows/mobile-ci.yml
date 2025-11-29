@@ -24,9 +24,17 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Build AAB
-        run: cd android && ./gradlew bundleRelease
-      - name: Upload artifact
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/takas-release.keystore
+      - name: Build Signed AAB
+        run: |
+          cd android && ./gradlew bundleRelease \
+            -Pandroid.injected.signing.store.file=$PWD/app/takas-release.keystore \
+            -Pandroid.injected.signing.store.password=${{ secrets.ANDROID_KEYSTORE_PASSWORD }} \
+            -Pandroid.injected.signing.key.alias=${{ secrets.ANDROID_KEY_ALIAS }} \
+            -Pandroid.injected.signing.key.password=${{ secrets.ANDROID_KEY_PASSWORD }}
+      - name: Upload AAB
         uses: actions/upload-artifact@v4
         with:
           name: app-release.aab
@@ -47,16 +55,27 @@ jobs:
         run: npx cap sync ios
       - name: Install Fastlane
         run: gem install fastlane --no-document
-      - name: Build iOS
+      - name: Setup SSH for Match
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.MATCH_DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - name: Build iOS with Fastlane
         run: |
           cd ios
-          fastlane build_testflight --verbose
+          fastlane match appstore --readonly
+          fastlane build_appstore
         env:
-          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
-          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
           MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
-      - name: Upload artifact
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+      - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
+          name: app-release.ipa
+          path: ios/build/*.ipa
           name: ios-build
           path: ios/build/*.ipa

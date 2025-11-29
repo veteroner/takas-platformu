@@ -14,6 +14,21 @@ platform :ios do
     upload_to_testflight(skip_waiting_for_build_processing: true)
   end
 
+  desc 'Build iOS app for App Store (CI)'
+  lane :build_appstore do
+    match(type: 'appstore', readonly: true)
+    increment_build_number(xcodeproj: 'App/App.xcodeproj')
+    build_app(
+      scheme: 'App',
+      workspace: 'App/App.xcworkspace',
+      export_method: 'app-store',
+      include_bitcode: false,
+      output_directory: 'build',
+      output_name: 'TakasApp.ipa',
+      silent: true
+    )
+  end
+
   desc 'Bump version (semantic)'
   lane :bump_version do |options|
     version = options[:version]
