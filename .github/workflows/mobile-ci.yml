@@ -77,5 +77,3 @@ jobs:
         with:
           name: app-release.ipa
           path: ios/build/*.ipa
-          name: ios-build
-          path: ios/build/*.ipa
