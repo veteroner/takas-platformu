@@ -350,14 +350,14 @@ export default function HomePage() {
 
       {/* Main Content - Flex grow */}
       <main className="flex-1 flex flex-col max-w-md mx-auto w-full px-3 py-3 overflow-hidden">
-        {/* Swipe Stack - Ana alan */}
-        <div className="flex-1 min-h-0">
+        {/* Swipe Stack - Ana alan - Sabit yükseklik */}
+        <div className="flex-1 min-h-[400px] relative">
           <SwipeStack
             items={filteredItems}
             onSwipe={handleSwipe}
             onItemClick={handleItemClick}
             isLoading={isLoading}
-            className="w-full h-full"
+            className="w-full h-full absolute inset-0"
           />
         </div>
 

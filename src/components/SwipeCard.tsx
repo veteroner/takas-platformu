@@ -171,7 +171,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
       {/* Main Card */}
       <animated.div
         ref={cardRef}
-        className="absolute inset-x-0 top-0 bottom-20 bg-white rounded-2xl shadow-xl cursor-grab active:cursor-grabbing overflow-hidden border border-gray-100"
+        className="absolute inset-x-0 top-0 bottom-16 bg-white rounded-2xl shadow-xl cursor-grab active:cursor-grabbing overflow-hidden border border-gray-100"
         {...bind()}
         style={{
           x,
