@@ -16,6 +16,9 @@ platform :ios do
 
   desc 'Build iOS app for App Store (CI)'
   lane :build_appstore do
+    # Setup keychain for CI
+    setup_ci if ENV['CI']
+    
     match(type: 'appstore', readonly: true)
     increment_build_number(xcodeproj: 'App/App.xcodeproj')
     
@@ -31,13 +34,17 @@ platform :ios do
     build_app(
       scheme: 'App',
       workspace: 'App/App.xcworkspace',
+      configuration: 'Release',
       export_method: 'app-store',
+      export_options: {
+        provisioningProfiles: {
+          'com.teknova.takasapp' => 'match AppStore com.teknova.takasapp'
+        }
+      },
       include_bitcode: false,
       output_directory: 'build',
       output_name: 'TakasApp.ipa',
-      silent: false,
-      clean: true,
-      xcargs: '-allowProvisioningUpdates'
+      clean: true
     )
   end
 

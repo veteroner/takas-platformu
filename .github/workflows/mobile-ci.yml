@@ -67,6 +67,10 @@ jobs:
           echo '[]' > ios/App/App/capacitor.plugins.json
       - name: Update Capacitor plugins
         run: npx cap update ios
+      - name: Install CocoaPods
+        run: |
+          cd ios/App
+          pod install --repo-update
       - name: Install Fastlane
         run: gem install fastlane --no-document
       - name: Setup SSH for Match
