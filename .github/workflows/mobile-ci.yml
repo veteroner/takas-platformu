@@ -21,8 +21,14 @@ jobs:
         run: npm ci
       - name: Build Web (for Capacitor assets)
         run: npm run build
+      - name: Create Capacitor assets directory
+        run: |
+          mkdir -p android/app/src/main/assets/public
+          mkdir -p ios/App/App/public
+          echo '{}' > android/app/src/main/assets/capacitor.config.json
+          echo '[]' > android/app/src/main/assets/capacitor.plugins.json
       - name: Sync Capacitor
-        run: npx cap sync android
+        run: npx cap sync android --inline
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
@@ -55,8 +61,13 @@ jobs:
         run: npm ci
       - name: Build Web
         run: npm run build
+      - name: Create Capacitor assets directory
+        run: |
+          mkdir -p ios/App/App/public
+          echo '{}' > ios/App/App/capacitor.config.json
+          echo '[]' > ios/App/App/capacitor.plugins.json
       - name: Sync Capacitor
-        run: npx cap sync ios
+        run: npx cap sync ios --inline
       - name: Install Fastlane
         run: gem install fastlane --no-document
       - name: Setup SSH for Match
