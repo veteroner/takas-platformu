@@ -76,6 +76,14 @@ export default function WelcomePage() {
           </div>
         </div>
 
+
+        <Link
+          href="/feed"
+          className="group w-full bg-white text-purple-600 font-bold text-lg py-5 rounded-2xl shadow-2xl hover:shadow-white/50 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 mb-6"
+        >
+          <span>Keşfetmeye Başla</span>
+          <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+        </Link>
         
         <div className="flex items-center justify-center gap-4 text-white/90">
           <Link href="/login" className="hover:text-white transition-colors font-medium">
