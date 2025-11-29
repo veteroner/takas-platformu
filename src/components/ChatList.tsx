@@ -109,7 +109,7 @@ export default function ChatList() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:to-black">
-      <div className="w-full max-w-md mx-auto">
+      <div className="w-full max-w-md lg:max-w-lg xl:max-w-xl mx-auto">
         {/* Header */}
         <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
           <div className="px-4 py-4 pt-12 md:pt-4 flex items-center gap-3">

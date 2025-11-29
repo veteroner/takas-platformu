@@ -55,3 +55,19 @@ body {
     padding-bottom: max(env(safe-area-inset-bottom, 0), 0.5rem);
   }
 }
+
+/* Tablet optimizations */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .swipe-card {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
+
+/* Large screen card sizing */
+@media (min-width: 1024px) {
+  .swipe-card {
+    max-width: 450px;
+    margin: 0 auto;
+  }
+}

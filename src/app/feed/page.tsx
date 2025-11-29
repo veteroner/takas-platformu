@@ -281,7 +281,7 @@ export default function HomePage() {
     <div className="min-h-[100dvh] bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex flex-col">
       {/* Header - Kompakt */}
       <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe flex-shrink-0">
-        <div className="max-w-md mx-auto px-4 py-3 pt-10 md:pt-3 flex items-center justify-between">
+        <div className="max-w-md lg:max-w-lg xl:max-w-xl mx-auto px-4 py-3 pt-10 md:pt-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Image
               src="/icons/logo.svg"
@@ -360,7 +360,7 @@ export default function HomePage() {
       </header>
 
       {/* Main Content - Flex grow */}
-      <main className="flex-1 flex flex-col max-w-md mx-auto w-full px-3 py-3 overflow-hidden">
+      <main className="flex-1 flex flex-col max-w-md lg:max-w-lg xl:max-w-xl mx-auto w-full px-3 py-3 overflow-hidden">
         {/* Swipe Stack - Ana alan */}
         <div className="flex-1 relative">
           <SwipeStack
@@ -468,7 +468,7 @@ export default function HomePage() {
 
       {/* Bottom Navigation - Kompakt */}
       <nav className="bg-white/95 backdrop-blur-md border-t border-gray-200 px-2 py-1.5 pb-safe flex-shrink-0">
-        <div className="max-w-md mx-auto flex justify-around items-center pb-2">
+        <div className="max-w-md lg:max-w-lg xl:max-w-xl mx-auto flex justify-around items-center pb-2">
           <button className="flex flex-col items-center py-1 px-3 text-purple-600">
             <Heart className="w-5 h-5 fill-current" />
             <span className="text-[10px] mt-0.5 font-medium">Keşfet</span>

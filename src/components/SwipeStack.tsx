@@ -142,7 +142,7 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
   }
 
   return (
-    <div className={`relative w-full ${className}`} style={{ height: 'calc(100vh - 280px)', minHeight: '400px' }}>
+    <div className={`relative w-full ${className}`} style={{ height: 'calc(100dvh - 280px)', minHeight: '400px', maxHeight: '700px' }}>
       {/* Card Stack */}
       <div className="w-full h-full relative">
         <AnimatePresence>
