@@ -1,12 +1,11 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { ArrowRight, Sparkles, Heart, Package, Users } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 export default function WelcomePage() {
-  const router = useRouter()
+  
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
