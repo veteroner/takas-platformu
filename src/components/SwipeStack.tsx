@@ -144,12 +144,12 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
   return (
     <div className={`relative w-full ${className}`} style={{ height: 'calc(100vh - 280px)', minHeight: '400px' }}>
       {/* Card Stack */}
-      <div className="absolute inset-0">
+      <div className="w-full h-full relative">
         <AnimatePresence>
           {stack.map((item, index) => (
             <motion.div
               key={item.id}
-              className="absolute inset-0"
+              className="absolute inset-0 w-full h-full"
               initial={{
                 scale: 1 - index * 0.03,
                 y: index * 6,

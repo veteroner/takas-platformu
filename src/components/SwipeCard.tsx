@@ -17,6 +17,9 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
 }) => {
   const cardRef = useRef<HTMLDivElement>(null)
   const [isGone, setIsGone] = useState(false)
+  
+  // Debug log
+  console.log('🃏 SwipeCard rendering:', item.title, item.images?.[0]?.substring(0, 50))
 
   // Animasyon için spring konfigürasyonu
   const [{ x, y, rot, scale }, api] = useSpring(() => ({
@@ -135,7 +138,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
   }
 
   return (
-    <div className="absolute inset-0">
+    <div className="w-full h-full">
       {/* Swipe Indicators */}
       <animated.div
         className="absolute inset-0 z-10 pointer-events-none"
@@ -171,7 +174,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
       {/* Main Card */}
       <animated.div
         ref={cardRef}
-        className="absolute inset-x-0 top-0 bottom-16 bg-white rounded-2xl shadow-xl cursor-grab active:cursor-grabbing overflow-hidden border border-gray-100"
+        className="w-full h-[calc(100%-70px)] bg-white rounded-2xl shadow-xl cursor-grab active:cursor-grabbing overflow-hidden border border-gray-100"
         {...bind()}
         style={{
           x,
@@ -249,8 +252,8 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
         </div>
       </animated.div>
 
-      {/* Action Buttons - Kart altında sabit */}
-      <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center gap-6 py-2">
+      {/* Action Buttons - Kart altında */}
+      <div className="flex justify-center items-center gap-6 py-2 h-[70px]">
         <button
           onClick={(e) => {
             e.stopPropagation()
