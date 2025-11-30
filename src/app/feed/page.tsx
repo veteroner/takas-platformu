@@ -334,9 +334,9 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Kategori Filtreleri - Yatay Scroll */}
+        {/* Kategori Filtreleri - Ortalanmış */}
         <div className="px-2 pb-3 overflow-x-auto scrollbar-hide">
-          <div className="flex gap-2 min-w-max px-2">
+          <div className="flex gap-2 min-w-max px-2 justify-center mx-auto max-w-fit">
             {CATEGORIES.map((cat) => {
               const Icon = cat.icon
               const isSelected = selectedCategory === cat.id
