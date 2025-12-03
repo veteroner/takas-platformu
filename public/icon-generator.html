@@ -6,13 +6,13 @@
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; background: #1a1a2e; color: white; }
         canvas { border: 1px solid #333; margin: 10px; border-radius: 8px; }
-        .size-label { margin: 10px 0; font-weight: bold; color: #EC4899; }
-        h1 { background: linear-gradient(90deg, #EC4899, #8B5CF6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        a { color: #8B5CF6; margin-left: 10px; }
+        .size-label { margin: 10px 0; font-weight: bold; color: #9333EA; }
+        h1 { background: linear-gradient(90deg, #9333EA, #7C3AED); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        a { color: #9333EA; margin-left: 10px; }
     </style>
 </head>
 <body>
-    <h1>TakaZone App Icon Generator</h1>
+    <h1>TakaZone App Icon Generator - 3D Cube</h1>
     <div id="icons"></div>
     
     <script>
@@ -34,54 +34,55 @@
             
             // Create gradient background
             const gradient = ctx.createLinearGradient(0, 0, size, size);
-            gradient.addColorStop(0, '#EC4899');
-            gradient.addColorStop(0.5, '#8B5CF6');
-            gradient.addColorStop(1, '#4F46E5');
+            gradient.addColorStop(0, '#9333EA');
+            gradient.addColorStop(1, '#7C3AED');
             
             // Draw background with rounded corners
-            const radius = size * 0.22;
+            const radius = size * 0.2;
             ctx.beginPath();
             ctx.roundRect(0, 0, size, size, radius);
             ctx.fillStyle = gradient;
             ctx.fill();
             
-            // Draw TZ letters
-            ctx.fillStyle = 'white';
+            // Draw 3D Cube
             ctx.strokeStyle = 'white';
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
             
-            const scale = size / 32;
-            ctx.lineWidth = 2.2 * scale;
+            const scale = size / 512;
+            ctx.lineWidth = 16 * scale;
             
-            // T letter
+            const cx = size / 2;
+            const topY = size * 0.23;
+            const midY = size * 0.51;
+            const botY = size * 0.78;
+            const leftX = size * 0.26;
+            const rightX = size * 0.74;
+            
+            // Üst yüzey
             ctx.beginPath();
-            ctx.moveTo(6 * scale, 9 * scale);
-            ctx.lineTo(13 * scale, 9 * scale);
+            ctx.moveTo(cx, topY);
+            ctx.lineTo(rightX, topY + (midY - topY) * 0.5);
+            ctx.lineTo(cx, midY);
+            ctx.lineTo(leftX, topY + (midY - topY) * 0.5);
+            ctx.closePath();
             ctx.stroke();
             
+            // Sol yüzey
             ctx.beginPath();
-            ctx.moveTo(9.5 * scale, 9 * scale);
-            ctx.lineTo(9.5 * scale, 17 * scale);
+            ctx.moveTo(leftX, topY + (midY - topY) * 0.5);
+            ctx.lineTo(leftX, botY - (botY - midY) * 0.3);
+            ctx.lineTo(cx, botY);
+            ctx.lineTo(cx, midY);
             ctx.stroke();
             
-            // Z letter
-            ctx.lineWidth = 2 * scale;
+            // Sağ yüzey
             ctx.beginPath();
-            ctx.moveTo(16 * scale, 9 * scale);
-            ctx.lineTo(25 * scale, 9 * scale);
-            ctx.lineTo(16 * scale, 17 * scale);
-            ctx.lineTo(25 * scale, 17 * scale);
+            ctx.moveTo(rightX, topY + (midY - topY) * 0.5);
+            ctx.lineTo(rightX, botY - (botY - midY) * 0.3);
+            ctx.lineTo(cx, botY);
+            ctx.lineTo(cx, midY);
             ctx.stroke();
-            
-            // ZONE text (only for larger sizes)
-            if (size >= 64) {
-                ctx.font = `bold ${5.5 * scale}px Arial`;
-                ctx.textAlign = 'center';
-                ctx.globalAlpha = 0.95;
-                ctx.fillText('ZONE', 16 * scale, 26 * scale);
-                ctx.globalAlpha = 1;
-            }
             
             // Add download link
             const link = document.createElement('a');

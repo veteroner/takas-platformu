@@ -1,29 +1,23 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- TakaZone Mini Logo -->
+  <!-- TakaZone Logo - 3D Cube -->
   <defs>
     <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#EC4899;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#8B5CF6;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#4F46E5;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#9333EA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7C3AED;stop-opacity:1" />
     </linearGradient>
   </defs>
   
   <!-- Arka plan -->
   <rect width="32" height="32" rx="7" fill="url(#logoGradient)"/>
   
-  <!-- TZ Mini -->
-  <g>
-    <!-- T harfi -->
-    <path d="M 7 10 L 13 10" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
-    <path d="M 10 10 L 10 17" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
-    
-    <!-- Z harfi -->
-    <path d="M 16 10 L 24 10 L 16 17 L 24 17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- 3D Küp -->
+  <g stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Üst yüzey -->
+    <path d="M 16 7 L 24 11.5 L 16 16 L 8 11.5 Z"/>
+    <!-- Sol yüzey -->
+    <path d="M 8 11.5 L 8 20.5 L 16 25 L 16 16"/>
+    <!-- Sağ yüzey -->
+    <path d="M 24 11.5 L 24 20.5 L 16 25 L 16 16"/>
   </g>
-  
-  <!-- ZONE mini text -->
-  <text x="16" y="25" font-family="Arial" font-size="5" font-weight="bold" fill="white" opacity="0.9" text-anchor="middle">
-    ZONE
-  </text>
 </svg>
 </svg>
