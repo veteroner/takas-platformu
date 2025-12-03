@@ -21,11 +21,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Takas Platform - Ürün Takas Uygulaması",
+  title: "TakaZone - Ürün Takas Uygulaması",
   description: "Beğen, eşleş, takas yap! Modern ürün takas platformu ile istediğin ürünleri bul ve takas et.",
-  keywords: "takas, ürün değişimi, alışveriş, ikinci el, eşya takası",
-  authors: [{ name: "Takas Platform" }],
-  creator: "Takas Platform",
+  keywords: "takazone, takas, ürün değişimi, alışveriş, ikinci el, eşya takası",
+  authors: [{ name: "TakaZone" }],
+  creator: "TakaZone",
   publisher: "TakaZone",
   metadataBase: new URL('https://takazone.com'),
   openGraph: {
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
         url: '/icons/app-icon.svg',
         width: 512,
         height: 512,
-        alt: 'Takas Platform Logo',
+        alt: 'TakaZone Logo',
       },
     ],
     locale: 'tr_TR',
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Takas Platform',
+    title: 'TakaZone',
     description: 'Beğen, eşleş, takas yap! Modern ürün takas platformu',
     images: ['/icons/app-icon.svg'],
   },
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Takas'
+    title: 'TakaZone'
   }
 };
 
@@ -91,7 +91,7 @@ export default function RootLayout({
       <head>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Takas" />
+        <meta name="apple-mobile-web-app-title" content="TakaZone" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="msapplication-TileColor" content="#EC4899" />
         <meta name="msapplication-config" content="/browserconfig.xml" />

@@ -35,7 +35,7 @@ export default function WelcomePage() {
         </div>
 
         <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 drop-shadow-lg">
-          Takas
+          TakaZone
         </h1>
         <p className="text-xl text-white/90 mb-2 font-medium">
           İhtiyacın Olmayan Eşyalarını

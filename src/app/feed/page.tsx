@@ -285,13 +285,13 @@ export default function HomePage() {
           <div className="flex items-center gap-2">
             <Image
               src="/icons/logo.svg"
-              alt="Takas Logo"
+              alt="TakaZone Logo"
               width={28}
               height={28}
               className="w-7 h-7"
             />
             <h1 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
-              Takas
+              TakaZone
             </h1>
           </div>
           

@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.teknova.takasapp',
-  appName: 'Takas Platform',
+  appName: 'TakaZone',
   webDir: 'out',
   server: {
     // Production: Netlify URL

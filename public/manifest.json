@@ -1,7 +1,7 @@
 {
-  "name": "Takas Platform",
-  "short_name": "Takas",
-  "description": "Ürün takas platformu - Beğen, eşleş, takas yap!",
+  "name": "TakaZone",
+  "short_name": "TakaZone",
+  "description": "TakaZone - Beğen, eşleş, takas yap!",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#EC4899",
