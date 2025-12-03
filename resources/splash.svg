@@ -2,34 +2,27 @@
   <!-- Background with gradient -->
   <rect width="2732" height="2732" fill="url(#splashGradient)"/>
   
-  <!-- Main Icon - Centered Block -->
-  <g transform="translate(1366, 1270)">
-    <!-- Soft glow -->
-  <circle cx="0" cy="0" r="240" fill="white" opacity="0.10"/>
-  <circle cx="0" cy="0" r="190" fill="white" opacity="0.16"/>
-
-    <!-- Left circle -->
-    <circle cx="-160" cy="0" r="120" fill="white" opacity="0.95"/>
-    <path d="M-200 0 L-120 -80 L-120 -40 L-80 -40 L-80 40 L-120 40 L-120 80 Z" fill="#6366F1"/>
-
-    <!-- Right circle -->
-    <circle cx="160" cy="0" r="120" fill="white" opacity="0.95"/>
-    <path d="M200 0 L120 80 L120 40 L80 40 L80 -40 L120 -40 L120 -80 Z" fill="#EC4899"/>
-
-    <!-- Center diamond -->
-    <circle cx="0" cy="0" r="70" fill="white"/>
-    <path d="M-48 0 L0 -48 L48 0 L0 48 Z" fill="#8B5CF6"/>
+  <!-- Main Icon - 3D Cube Centered -->
+  <g transform="translate(1366, 1200)">
+    <!-- Cube Icon scaled up -->
+    <g transform="translate(-200,-150) scale(2.5)" stroke="#ffffff" stroke-width="28" fill="none" stroke-linejoin="round" stroke-linecap="round">
+      <!-- top -->
+      <path d="M160 80 L240 120 L160 160 L80 120 Z"/>
+      <!-- left -->
+      <path d="M80 120 L80 200 L160 240 L160 160 Z"/>
+      <!-- right -->
+      <path d="M240 120 L240 200 L160 240 L160 160 Z"/>
+    </g>
   </g>
 
-  <!-- Centered Text -->
-  <text x="50%" y="1560" text-anchor="middle" font-size="180" fill="white" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif" font-weight="800" letter-spacing="6">TAKAS</text>
-  <text x="50%" y="1635" text-anchor="middle" font-size="80" fill="white" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif" opacity="0.9">Eşyalarını Takas Et</text>
+  <!-- TakaZone Text -->
+  <text x="50%" y="1580" text-anchor="middle" font-size="200" fill="white" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif" font-weight="700" letter-spacing="4">TakaZone</text>
+  <text x="50%" y="1680" text-anchor="middle" font-size="80" fill="white" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif" opacity="0.9">Takas Et, Yeni Şeyler Keşfet.</text>
   
   <defs>
     <linearGradient id="splashGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#EC4899;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#8B5CF6;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#6366F1;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#A855F7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7C3AED;stop-opacity:1" />
     </linearGradient>
   </defs>
 </svg>
