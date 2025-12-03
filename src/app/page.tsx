@@ -1,16 +1,45 @@
 'use client'
 
-import { ArrowRight, Sparkles, Heart, Package, Users } from 'lucide-react'
+import { ArrowRight, Sparkles, Heart, Package, Users, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { getCurrentUser } from '@/lib/auth'
 
 export default function WelcomePage() {
   
   const [isVisible, setIsVisible] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const router = useRouter()
 
   useEffect(() => {
-    setTimeout(() => setIsVisible(true), 100)
-  }, [])
+    const checkUser = async () => {
+      try {
+        const currentUser = await getCurrentUser()
+        if (currentUser) {
+          router.replace('/feed')
+          return
+        }
+      } catch (error) {
+        console.error('Auth check error:', error)
+      } finally {
+        setIsLoading(false)
+        setTimeout(() => setIsVisible(true), 100)
+      }
+    }
+    checkUser()
+  }, [router])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-600 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-12 h-12 text-white animate-spin mx-auto mb-4" />
+          <p className="text-white/80">Yükleniyor...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-600 flex flex-col items-center justify-center p-6 relative overflow-hidden">
@@ -75,7 +104,6 @@ export default function WelcomePage() {
             </div>
           </div>
         </div>
-
 
         <Link
           href="/feed"
