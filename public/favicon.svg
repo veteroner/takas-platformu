@@ -1,22 +1,16 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- TakaZone Favicon - 3D Cube -->
-  <defs>
-    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#9333EA;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#7C3AED;stop-opacity:1" />
-    </linearGradient>
-  </defs>
   
   <!-- Arka plan -->
-  <rect width="32" height="32" rx="6" fill="url(#bgGradient)"/>
+  <rect width="32" height="32" rx="7" fill="#9855E0"/>
   
   <!-- 3D Küp -->
-  <g stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none">
+  <g stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
     <!-- Üst yüzey -->
-    <path d="M 16 7 L 24 11.5 L 16 16 L 8 11.5 Z"/>
+    <path d="M 16 6 L 25 11 L 16 16 L 7 11 Z"/>
     <!-- Sol yüzey -->
-    <path d="M 8 11.5 L 8 20.5 L 16 25 L 16 16"/>
+    <path d="M 7 11 L 7 21 L 16 26 L 16 16"/>
     <!-- Sağ yüzey -->
-    <path d="M 24 11.5 L 24 20.5 L 16 25 L 16 16"/>
+    <path d="M 25 11 L 25 21 L 16 26 L 16 16"/>
   </g>
 </svg>

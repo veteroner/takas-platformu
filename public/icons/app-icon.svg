@@ -1,28 +1,19 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- TakaZone App Icon - 3D Cube -->
-  <defs>
-    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#9333EA;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#7C3AED;stop-opacity:1" />
-    </linearGradient>
-  </defs>
+  <!-- TakaZone App Icon - 3D Cube (Exact Match) -->
   
   <!-- Arka plan - yuvarlatılmış kare -->
-  <rect width="512" height="512" rx="100" fill="url(#bgGradient)"/>
+  <rect width="512" height="512" rx="115" fill="#9855E0"/>
   
-  <!-- 3D Küp -->
-  <g stroke="white" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <!-- Üst yüzey -->
-    <path d="M 256 120 L 380 190 L 256 260 L 132 190 Z"/>
+  <!-- 3D Küp - Tam resme uygun -->
+  <g stroke="white" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Üst yüzey (elmas şekli) -->
+    <path d="M 256 100 L 390 180 L 256 260 L 122 180 Z"/>
     
     <!-- Sol yüzey -->
-    <path d="M 132 190 L 132 330 L 256 400 L 256 260"/>
+    <path d="M 122 180 L 122 340 L 256 420 L 256 260"/>
     
     <!-- Sağ yüzey -->
-    <path d="M 380 190 L 380 330 L 256 400 L 256 260"/>
-    
-    <!-- Dikey orta çizgi -->
-    <path d="M 256 260 L 256 400"/>
+    <path d="M 390 180 L 390 340 L 256 420 L 256 260"/>
   </g>
 </svg>
 </svg>
