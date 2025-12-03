@@ -19,9 +19,10 @@ export default function ForgotPasswordPage() {
     try {
       await resetPassword(email)
       setSuccess(true)
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Reset password error:', err)
-      setError(err.message || 'Bir hata oluştu. Lütfen tekrar deneyin.')
+      const errorMessage = err instanceof Error ? err.message : 'Bir hata oluştu. Lütfen tekrar deneyin.'
+      setError(errorMessage)
     } finally {
       setIsLoading(false)
     }
