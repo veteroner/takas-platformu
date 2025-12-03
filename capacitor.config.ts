@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'out',
   server: {
     // Production: Netlify URL
-    url: 'https://takasyap.netlify.app',
+    url: 'https://takazone.com',
     cleartext: true,
     androidScheme: 'https',
     // Offline durumunda gösterilecek sayfa

@@ -130,7 +130,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </button>
             <div>
               <h1 className="text-xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
-                TakasYap
+                TakaZone
               </h1>
               <p className="text-xs text-gray-400">Admin Panel</p>
             </div>

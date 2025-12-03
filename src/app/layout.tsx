@@ -26,13 +26,13 @@ export const metadata: Metadata = {
   keywords: "takas, ürün değişimi, alışveriş, ikinci el, eşya takası",
   authors: [{ name: "Takas Platform" }],
   creator: "Takas Platform",
-  publisher: "Takas Platform",
-  metadataBase: new URL('https://takasyap.netlify.app'),
+  publisher: "TakaZone",
+  metadataBase: new URL('https://takazone.com'),
   openGraph: {
-    title: "Takas Platform",
+    title: "TakaZone",
     description: "Beğen, eşleş, takas yap! Modern ürün takas platformu",
-    url: 'https://takasyap.netlify.app',
-    siteName: 'Takas Platform',
+    url: 'https://takazone.com',
+    siteName: 'TakaZone',
     images: [
       {
         url: '/icons/app-icon.svg',
@@ -96,8 +96,8 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#EC4899" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
         {/* DNS prefetch & preconnect to speed up first load, helpful for WebView */}
-        <link rel="dns-prefetch" href="//takasyap.netlify.app" />
-        <link rel="preconnect" href="https://takasyap.netlify.app" crossOrigin="" />
+        <link rel="dns-prefetch" href="//takazone.com" />
+        <link rel="preconnect" href="https://takazone.com" crossOrigin="" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

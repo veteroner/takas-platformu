@@ -24,7 +24,7 @@ jobs:
       - name: Prepare Capacitor assets
         run: |
           mkdir -p android/app/src/main/assets/public
-          echo '{"appId":"com.teknova.takasapp","appName":"Takas Platform","webDir":"out","server":{"url":"https://takasyap.netlify.app","cleartext":true}}' > android/app/src/main/assets/capacitor.config.json
+          echo '{"appId":"com.teknova.takasapp","appName":"TakaZone","webDir":"out","server":{"url":"https://takazone.com","cleartext":true}}' > android/app/src/main/assets/capacitor.config.json
           echo '[]' > android/app/src/main/assets/capacitor.plugins.json
       - name: Update Capacitor plugins
         run: npx cap update android
@@ -63,7 +63,7 @@ jobs:
       - name: Prepare Capacitor assets
         run: |
           mkdir -p ios/App/App/public
-          echo '{"appId":"com.teknova.takasapp","appName":"Takas Platform","webDir":"out","server":{"url":"https://takasyap.netlify.app","cleartext":true}}' > ios/App/App/capacitor.config.json
+          echo '{"appId":"com.teknova.takasapp","appName":"TakaZone","webDir":"out","server":{"url":"https://takazone.com","cleartext":true}}' > ios/App/App/capacitor.config.json
           echo '[]' > ios/App/App/capacitor.plugins.json
       - name: Update Capacitor plugins
         run: npx cap update ios

@@ -173,8 +173,8 @@ export default function AdminSettingsPage() {
         }, {} as Record<string, string>) || {}
         
         setAppSettings({
-          appName: settingsMap.app_name || 'TakasYap',
-          supportEmail: settingsMap.support_email || 'support@takasyap.com',
+          appName: settingsMap.app_name || 'TakaZone',
+          supportEmail: settingsMap.support_email || 'support@takazone.com',
           minIosVersion: settingsMap.min_ios_version || '1.0.0',
           minAndroidVersion: settingsMap.min_android_version || '1.0.0',
           pushEnabled: settingsMap.push_enabled === 'true',
@@ -616,10 +616,10 @@ function GeneralSettings({
       <SettingCard 
         icon={<Globe className="w-5 h-5" />}
         title="Uygulama Adı"
-        description={settings?.appName || 'TakasYap'}
+        description={settings?.appName || 'TakaZone'}
         action={
           <button 
-            onClick={() => onEdit('app_name', 'Uygulama Adı', settings?.appName || 'TakasYap', 'text')}
+            onClick={() => onEdit('app_name', 'Uygulama Adı', settings?.appName || 'TakaZone', 'text')}
             className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white text-sm font-medium"
           >
             Düzenle
@@ -629,10 +629,10 @@ function GeneralSettings({
       <SettingCard 
         icon={<Mail className="w-5 h-5" />}
         title="Destek Email"
-        description={settings?.supportEmail || 'support@takasyap.com'}
+        description={settings?.supportEmail || 'support@takazone.com'}
         action={
           <button 
-            onClick={() => onEdit('support_email', 'Destek Email', settings?.supportEmail || 'support@takasyap.com', 'email')}
+            onClick={() => onEdit('support_email', 'Destek Email', settings?.supportEmail || 'support@takazone.com', 'email')}
             className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white text-sm font-medium"
           >
             Düzenle

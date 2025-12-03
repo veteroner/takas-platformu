@@ -150,7 +150,7 @@ export default function AdminDashboardPage() {
           Hoş Geldiniz 👋
         </h1>
         <p className="text-white">
-          TakasYap platformunun genel durumunu buradan takip edebilirsiniz.
+          TakaZone platformunun genel durumunu buradan takip edebilirsiniz.
         </p>
       </div>
 
