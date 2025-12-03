@@ -2,19 +2,21 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>App Icon Generator</title>
+    <title>TakaZone App Icon Generator</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        canvas { border: 1px solid #ccc; margin: 10px; }
-        .size-label { margin: 10px 0; font-weight: bold; }
+        body { font-family: Arial, sans-serif; margin: 40px; background: #1a1a2e; color: white; }
+        canvas { border: 1px solid #333; margin: 10px; border-radius: 8px; }
+        .size-label { margin: 10px 0; font-weight: bold; color: #EC4899; }
+        h1 { background: linear-gradient(90deg, #EC4899, #8B5CF6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        a { color: #8B5CF6; margin-left: 10px; }
     </style>
 </head>
 <body>
-    <h1>Takas App Icon Generator</h1>
+    <h1>TakaZone App Icon Generator</h1>
     <div id="icons"></div>
     
     <script>
-        const sizes = [16, 32, 48, 64, 128, 180, 192, 512];
+        const sizes = [16, 32, 48, 64, 128, 180, 192, 512, 1024];
         const container = document.getElementById('icons');
         
         sizes.forEach(size => {
@@ -34,45 +36,58 @@
             const gradient = ctx.createLinearGradient(0, 0, size, size);
             gradient.addColorStop(0, '#EC4899');
             gradient.addColorStop(0.5, '#8B5CF6');
-            gradient.addColorStop(1, '#6366F1');
+            gradient.addColorStop(1, '#4F46E5');
             
             // Draw background with rounded corners
-            const radius = size * 0.2;
+            const radius = size * 0.22;
             ctx.beginPath();
             ctx.roundRect(0, 0, size, size, radius);
             ctx.fillStyle = gradient;
             ctx.fill();
             
-            // Draw exchange symbol
-            const centerX = size / 2;
-            const centerY = size / 2;
-            const symbolSize = size * 0.4;
-            
+            // Draw TZ letters
             ctx.fillStyle = 'white';
-            ctx.globalAlpha = 0.9;
+            ctx.strokeStyle = 'white';
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
             
-            // Left arrow
-            ctx.beginPath();
-            ctx.arc(centerX - symbolSize/3, centerY, symbolSize/6, 0, 2 * Math.PI);
-            ctx.fill();
+            const scale = size / 32;
+            ctx.lineWidth = 2.2 * scale;
             
-            // Right arrow  
+            // T letter
             ctx.beginPath();
-            ctx.arc(centerX + symbolSize/3, centerY, symbolSize/6, 0, 2 * Math.PI);
-            ctx.fill();
+            ctx.moveTo(6 * scale, 9 * scale);
+            ctx.lineTo(13 * scale, 9 * scale);
+            ctx.stroke();
             
-            // Center circle
-            ctx.globalAlpha = 1;
             ctx.beginPath();
-            ctx.arc(centerX, centerY, symbolSize/8, 0, 2 * Math.PI);
-            ctx.fill();
+            ctx.moveTo(9.5 * scale, 9 * scale);
+            ctx.lineTo(9.5 * scale, 17 * scale);
+            ctx.stroke();
+            
+            // Z letter
+            ctx.lineWidth = 2 * scale;
+            ctx.beginPath();
+            ctx.moveTo(16 * scale, 9 * scale);
+            ctx.lineTo(25 * scale, 9 * scale);
+            ctx.lineTo(16 * scale, 17 * scale);
+            ctx.lineTo(25 * scale, 17 * scale);
+            ctx.stroke();
+            
+            // ZONE text (only for larger sizes)
+            if (size >= 64) {
+                ctx.font = `bold ${5.5 * scale}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.globalAlpha = 0.95;
+                ctx.fillText('ZONE', 16 * scale, 26 * scale);
+                ctx.globalAlpha = 1;
+            }
             
             // Add download link
             const link = document.createElement('a');
-            link.href = canvas.toDataURL();
-            link.download = `takas-icon-${size}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.download = `takazone-icon-${size}.png`;
             link.textContent = 'Download';
-            link.style.marginLeft = '10px';
             container.appendChild(link);
             container.appendChild(document.createElement('br'));
         });

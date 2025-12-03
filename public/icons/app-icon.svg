@@ -1,5 +1,5 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Gradient tanımları -->
+  <!-- TakaZone App Icon -->
   <defs>
     <linearGradient id="appGradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#EC4899;stop-opacity:1" />
@@ -7,7 +7,7 @@
       <stop offset="100%" style="stop-color:#4F46E5;stop-opacity:1" />
     </linearGradient>
     <filter id="glow">
-      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
       <feMerge>
         <feMergeNode in="coloredBlur"/>
         <feMergeNode in="SourceGraphic"/>
@@ -15,26 +15,29 @@
     </filter>
   </defs>
   
-  <!-- Arka plan yuvarlak -->
-  <rect width="512" height="512" rx="120" fill="url(#appGradient)"/>
+  <!-- Arka plan -->
+  <rect width="512" height="512" rx="110" fill="url(#appGradient)"/>
   
   <!-- İç parlak efekt -->
-  <circle cx="256" cy="256" r="200" fill="white" opacity="0.1"/>
+  <ellipse cx="256" cy="180" rx="180" ry="120" fill="white" opacity="0.08"/>
   
-  <!-- Takas sembolü - iki ok (büyütülmüş) -->
-  <!-- Sağa ok (üst) -->
+  <!-- TZ Logo (TakaZone) -->
   <g filter="url(#glow)">
-    <path d="M 140 180 L 340 180 L 300 140 M 340 180 L 300 220" stroke="white" stroke-width="35" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <!-- T harfi -->
+    <path d="M 130 170 L 230 170" stroke="white" stroke-width="32" stroke-linecap="round"/>
+    <path d="M 180 170 L 180 280" stroke="white" stroke-width="32" stroke-linecap="round"/>
     
-    <!-- Sola ok (alt) -->
-    <path d="M 372 332 L 172 332 L 212 292 M 172 332 L 212 372" stroke="white" stroke-width="35" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <!-- Z harfi (takas okları ile) -->
+    <path d="M 270 170 L 380 170 L 270 280 L 380 280" stroke="white" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    
+    <!-- Z üzerinde ok uçları -->
+    <path d="M 355 170 L 380 170 L 368 155" stroke="white" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M 295 280 L 270 280 L 282 295" stroke="white" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
   </g>
   
-  <!-- Ortadaki bağlantı noktaları -->
-  <circle cx="160" cy="180" r="28" fill="white"/>
-  <circle cx="352" cy="332" r="28" fill="white"/>
-  
-  <!-- İç gölge efekti -->
-  <circle cx="160" cy="180" r="20" fill="#EC4899" opacity="0.5"/>
-  <circle cx="352" cy="332" r="20" fill="#4F46E5" opacity="0.5"/>
+  <!-- ZONE yazısı -->
+  <text x="256" y="370" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="bold" fill="white" opacity="0.95" text-anchor="middle" letter-spacing="8">
+    ZONE
+  </text>
+</svg>
 </svg>

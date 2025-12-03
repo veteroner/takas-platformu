@@ -1,5 +1,5 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Gradient tanımları -->
+  <!-- TakaZone Mini Logo -->
   <defs>
     <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#EC4899;stop-opacity:1" />
@@ -8,17 +8,22 @@
     </linearGradient>
   </defs>
   
-  <!-- Ana yuvarlak arka plan -->
-  <circle cx="16" cy="16" r="15" fill="url(#logoGradient)" opacity="0.1"/>
+  <!-- Arka plan -->
+  <rect width="32" height="32" rx="7" fill="url(#logoGradient)"/>
   
-  <!-- Takas sembolü - iki ok -->
-  <!-- Sağa ok (üst) -->
-  <path d="M 8 11 L 20 11 L 17 8 M 20 11 L 17 14" stroke="url(#logoGradient)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- TZ Mini -->
+  <g>
+    <!-- T harfi -->
+    <path d="M 7 10 L 13 10" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M 10 10 L 10 17" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+    
+    <!-- Z harfi -->
+    <path d="M 16 10 L 24 10 L 16 17 L 24 17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
   
-  <!-- Sola ok (alt) -->
-  <path d="M 24 21 L 12 21 L 15 18 M 12 21 L 15 24" stroke="url(#logoGradient)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  
-  <!-- Ortadaki bağlantı noktaları -->
-  <circle cx="10" cy="11" r="2" fill="url(#logoGradient)"/>
-  <circle cx="22" cy="21" r="2" fill="url(#logoGradient)"/>
+  <!-- ZONE mini text -->
+  <text x="16" y="25" font-family="Arial" font-size="5" font-weight="bold" fill="white" opacity="0.9" text-anchor="middle">
+    ZONE
+  </text>
+</svg>
 </svg>
