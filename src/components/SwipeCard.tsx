@@ -119,6 +119,18 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
     return '📦'
   }
 
+  // Kategori Türkçe çevirisi
+  const getCategoryLabel = (category: string) => {
+    const cat = category.toLowerCase()
+    if (cat.includes('clothing')) return 'Giyim'
+    if (cat.includes('toys')) return 'Oyuncak'
+    if (cat.includes('electronics')) return 'Elektronik'
+    if (cat.includes('books')) return 'Kitap'
+    if (cat.includes('sports')) return 'Spor'
+    if (cat.includes('home')) return 'Ev'
+    return 'Diğer'
+  }
+
   // Durum badge rengi
   const getConditionStyle = (condition: string) => {
     const cond = condition.toLowerCase()
@@ -202,7 +214,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
           <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
             <div className="bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-semibold text-gray-800 shadow-sm flex items-center gap-1">
               {getCategoryEmoji(item.category)}
-              <span className="hidden sm:inline">{item.category.replace('_', ' ')}</span>
+              <span className="hidden sm:inline">{getCategoryLabel(item.category)}</span>
             </div>
             <div className={`${getConditionStyle(item.condition)} text-white px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm`}>
               {getConditionLabel(item.condition)}
