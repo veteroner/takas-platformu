@@ -46,7 +46,7 @@
             ctx.fill();
             
             // Draw 3D Cube - exact design from new SVG
-            // ViewBox is 512, cube transform: translate(56,56) scale(0.78)
+            // ViewBox is 512, cube transform: translate(56,40) scale(0.78)
             ctx.strokeStyle = 'white';
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
@@ -56,7 +56,7 @@
                 return (x * 0.78 + 56) / 512 * size;
             }
             function transformY(y) {
-                return (y * 0.78 + 56) / 512 * size;
+                return (y * 0.78 + 40) / 512 * size;  // Changed from 56 to 40
             }
             
             // Top face: M256 128 L384 192 L256 256 L128 192 Z
@@ -85,6 +85,13 @@
             ctx.lineTo(transformX(256), transformY(256));
             ctx.closePath();
             ctx.stroke();
+            
+            // Draw TakaZone text
+            ctx.fillStyle = 'white';
+            ctx.font = `bold ${size * 0.14}px Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('TakaZone', size / 2, size * 0.88);
             
             // Add download link
             const link = document.createElement('a');

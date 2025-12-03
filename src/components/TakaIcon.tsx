@@ -29,11 +29,23 @@ export default function TakaIcon({
 
       <rect x="16" y="16" width="480" height="480" rx="110" fill="url(#takaGradient)" />
 
-      <g transform="translate(56,56) scale(0.78)" fill="none" stroke="#ffffff" strokeWidth="28" strokeLinejoin="round" strokeLinecap="round">
+      <g transform="translate(56,40) scale(0.78)" fill="none" stroke="#ffffff" strokeWidth="28" strokeLinejoin="round" strokeLinecap="round">
         <path d="M256 128 L384 192 L256 256 L128 192 Z" />
         <path d="M128 192 L128 320 L256 384 L256 256 Z" />
         <path d="M384 192 L384 320 L256 384 L256 256 Z" />
       </g>
+
+      <text 
+        x="256" 
+        y="450" 
+        fontFamily="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif" 
+        fontSize="72" 
+        fontWeight="700" 
+        fill="#ffffff" 
+        textAnchor="middle"
+      >
+        TakaZone
+      </text>
     </svg>
   );
 }
