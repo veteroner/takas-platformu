@@ -124,6 +124,28 @@ export async function isAuthenticated(): Promise<boolean> {
 }
 
 /**
+ * Request password reset email
+ */
+export async function resetPassword(email: string) {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${typeof window !== 'undefined' ? window.location.origin : 'https://takazone.com'}/reset-password`
+  })
+
+  if (error) throw error
+}
+
+/**
+ * Update user password (after reset)
+ */
+export async function updatePassword(newPassword: string) {
+  const { error } = await supabase.auth.updateUser({
+    password: newPassword
+  })
+
+  if (error) throw error
+}
+
+/**
  * Listen to auth state changes
  */
 export function onAuthStateChange(callback: (user: AuthUser | null) => void) {

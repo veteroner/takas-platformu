@@ -175,6 +175,18 @@ export default function LoginPage() {
               </button>
             </div>
 
+            {/* Forgot Password Link (Login only) */}
+            {!isRegister && (
+              <div className="text-right -mt-2">
+                <Link
+                  href="/forgot-password"
+                  className="text-white/70 hover:text-white text-sm transition-colors"
+                >
+                  Şifremi Unuttum
+                </Link>
+              </div>
+            )}
+
             {/* Confirm Password Field (Register only) */}
             {isRegister && (
               <div className="relative">
