@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="600" viewBox="0 0 1400 600" xmlns="http://www.w3.org/2000/svg">
+
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A855F7"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon background -->
+  <rect x="80" y="80" width="440" height="440" rx="120" fill="url(#grad)"/>
+
+  <!-- Cube Icon -->
+  <g transform="translate(80,80) scale(0.42)" stroke="#ffffff" stroke-width="55" fill="none" stroke-linejoin="round" stroke-linecap="round">
+
+    <!-- top -->
+    <path d="M512 256 L704 352 L512 448 L320 352 Z"/>
+    <!-- left -->
+    <path d="M320 352 L320 640 L512 736 L512 448 Z"/>
+    <!-- right -->
+    <path d="M704 352 L704 640 L512 736 L512 448 Z"/>
+
+    <!-- edges -->
+    <path d="M320 352 L512 256 L704 352"/>
+    <path d="M320 640 L512 736 L704 640"/>
+    <path d="M512 448 L512 736"/>
+
+  </g>
+
+  <!-- Brand Name -->
+  <text x="580" y="300"
+        font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial"
+        font-size="150"
+        font-weight="700"
+        fill="#6D28D9">
+    TakaZone
+  </text>
+
+  <!-- Tagline -->
+  <text x="580" y="390"
+        font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial"
+        font-size="48"
+        font-weight="400"
+        fill="#7C3AED">
+    Takas Et, Yeni Şeyler Keşfet.
+  </text>
+
+</svg>

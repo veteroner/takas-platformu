@@ -6,9 +6,9 @@
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; background: #1a1a2e; color: white; }
         canvas { border: 1px solid #333; margin: 10px; border-radius: 8px; }
-        .size-label { margin: 10px 0; font-weight: bold; color: #9333EA; }
-        h1 { background: linear-gradient(90deg, #9333EA, #7C3AED); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        a { color: #9333EA; margin-left: 10px; }
+        .size-label { margin: 10px 0; font-weight: bold; color: #A855F7; }
+        h1 { background: linear-gradient(90deg, #A855F7, #7C3AED); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        a { color: #A855F7; margin-left: 10px; }
     </style>
 </head>
 <body>
@@ -32,56 +32,58 @@
             
             const ctx = canvas.getContext('2d');
             
-            // Create gradient background
+            // Create gradient background (#A855F7 → #7C3AED)
             const gradient = ctx.createLinearGradient(0, 0, size, size);
-            gradient.addColorStop(0, '#9333EA');
+            gradient.addColorStop(0, '#A855F7');
             gradient.addColorStop(1, '#7C3AED');
             
-            // Draw background with rounded corners
-            const radius = size * 0.2;
+            // Draw background with rounded corners (rx=110 in 512 viewbox ≈ 21.5%)
+            const radius = size * 0.215;
+            const padding = size * 0.03125; // 16/512
             ctx.beginPath();
-            ctx.roundRect(0, 0, size, size, radius);
+            ctx.roundRect(padding, padding, size - padding * 2, size - padding * 2, radius);
             ctx.fillStyle = gradient;
             ctx.fill();
             
-            // Draw 3D Cube
+            // Draw 3D Cube - exact design from new SVG
+            // ViewBox is 512, cube transform: translate(56,56) scale(0.78)
             ctx.strokeStyle = 'white';
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
+            ctx.lineWidth = (28 * 0.78 / 512) * size; // stroke-width="28" scaled
             
-            const scale = size / 512;
-            ctx.lineWidth = 16 * scale;
+            function transformX(x) {
+                return (x * 0.78 + 56) / 512 * size;
+            }
+            function transformY(y) {
+                return (y * 0.78 + 56) / 512 * size;
+            }
             
-            const cx = size / 2;
-            const topY = size * 0.23;
-            const midY = size * 0.51;
-            const botY = size * 0.78;
-            const leftX = size * 0.26;
-            const rightX = size * 0.74;
-            
-            // Üst yüzey
+            // Top face: M256 128 L384 192 L256 256 L128 192 Z
             ctx.beginPath();
-            ctx.moveTo(cx, topY);
-            ctx.lineTo(rightX, topY + (midY - topY) * 0.5);
-            ctx.lineTo(cx, midY);
-            ctx.lineTo(leftX, topY + (midY - topY) * 0.5);
+            ctx.moveTo(transformX(256), transformY(128));
+            ctx.lineTo(transformX(384), transformY(192));
+            ctx.lineTo(transformX(256), transformY(256));
+            ctx.lineTo(transformX(128), transformY(192));
             ctx.closePath();
             ctx.stroke();
             
-            // Sol yüzey
+            // Left face: M128 192 L128 320 L256 384 L256 256 Z
             ctx.beginPath();
-            ctx.moveTo(leftX, topY + (midY - topY) * 0.5);
-            ctx.lineTo(leftX, botY - (botY - midY) * 0.3);
-            ctx.lineTo(cx, botY);
-            ctx.lineTo(cx, midY);
+            ctx.moveTo(transformX(128), transformY(192));
+            ctx.lineTo(transformX(128), transformY(320));
+            ctx.lineTo(transformX(256), transformY(384));
+            ctx.lineTo(transformX(256), transformY(256));
+            ctx.closePath();
             ctx.stroke();
             
-            // Sağ yüzey
+            // Right face: M384 192 L384 320 L256 384 L256 256 Z
             ctx.beginPath();
-            ctx.moveTo(rightX, topY + (midY - topY) * 0.5);
-            ctx.lineTo(rightX, botY - (botY - midY) * 0.3);
-            ctx.lineTo(cx, botY);
-            ctx.lineTo(cx, midY);
+            ctx.moveTo(transformX(384), transformY(192));
+            ctx.lineTo(transformX(384), transformY(320));
+            ctx.lineTo(transformX(256), transformY(384));
+            ctx.lineTo(transformX(256), transformY(256));
+            ctx.closePath();
             ctx.stroke();
             
             // Add download link
