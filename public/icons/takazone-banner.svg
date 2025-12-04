@@ -11,21 +11,15 @@
   <!-- Icon background -->
   <rect x="80" y="80" width="440" height="440" rx="120" fill="url(#grad)"/>
 
-  <!-- Cube Icon -->
-  <g transform="translate(80,80) scale(0.42)" stroke="#ffffff" stroke-width="55" fill="none" stroke-linejoin="round" stroke-linecap="round">
-
-    <!-- top -->
-    <path d="M512 256 L704 352 L512 448 L320 352 Z"/>
-    <!-- left -->
-    <path d="M320 352 L320 640 L512 736 L512 448 Z"/>
-    <!-- right -->
-    <path d="M704 352 L704 640 L512 736 L512 448 Z"/>
-
-    <!-- edges -->
-    <path d="M320 352 L512 256 L704 352"/>
-    <path d="M320 640 L512 736 L704 640"/>
-    <path d="M512 448 L512 736"/>
-
+  <!-- Takas/Exchange Icon -->
+  <g transform="translate(300, 220)">
+    <!-- Üst Ok (Sağa) -->
+    <path d="M-100 -15 L40 -15 L40 -35 L75 0 L40 35 L40 15 L-100 15 Z" 
+          fill="#ffffff" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
+    
+    <!-- Alt Ok (Sola) -->
+    <path d="M100 50 L-40 50 L-40 70 L-75 35 L-40 0 L-40 20 L100 20 Z" 
+          fill="#ffffff" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
   </g>
 
   <!-- Brand Name -->

@@ -45,45 +45,40 @@
             ctx.fillStyle = gradient;
             ctx.fill();
             
-            // Draw 3D Cube - exact design from new SVG
-            // ViewBox is 512, cube transform: translate(56,40) scale(0.78)
+            // Draw Takas/Exchange Icon
+            ctx.fillStyle = 'white';
             ctx.strokeStyle = 'white';
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
-            ctx.lineWidth = (28 * 0.78 / 512) * size; // stroke-width="28" scaled
+            ctx.lineWidth = 4 * (size / 512);
             
-            function transformX(x) {
-                return (x * 0.78 + 56) / 512 * size;
-            }
-            function transformY(y) {
-                return (y * 0.78 + 40) / 512 * size;  // Changed from 56 to 40
-            }
+            const centerX = size / 2;
+            const centerY = size * 0.35; // 180/512
             
-            // Top face: M256 128 L384 192 L256 256 L128 192 Z
+            // Üst Ok (Sağa) - M-140 -20 L60 -20 L60 -50 L110 0 L60 50 L60 20 L-140 20 Z
             ctx.beginPath();
-            ctx.moveTo(transformX(256), transformY(128));
-            ctx.lineTo(transformX(384), transformY(192));
-            ctx.lineTo(transformX(256), transformY(256));
-            ctx.lineTo(transformX(128), transformY(192));
+            ctx.moveTo(centerX - 140 * (size/512), centerY - 20 * (size/512));
+            ctx.lineTo(centerX + 60 * (size/512), centerY - 20 * (size/512));
+            ctx.lineTo(centerX + 60 * (size/512), centerY - 50 * (size/512));
+            ctx.lineTo(centerX + 110 * (size/512), centerY);
+            ctx.lineTo(centerX + 60 * (size/512), centerY + 50 * (size/512));
+            ctx.lineTo(centerX + 60 * (size/512), centerY + 20 * (size/512));
+            ctx.lineTo(centerX - 140 * (size/512), centerY + 20 * (size/512));
             ctx.closePath();
+            ctx.fill();
             ctx.stroke();
             
-            // Left face: M128 192 L128 320 L256 384 L256 256 Z
+            // Alt Ok (Sola) - M140 70 L-60 70 L-60 100 L-110 50 L-60 0 L-60 30 L140 30 Z
             ctx.beginPath();
-            ctx.moveTo(transformX(128), transformY(192));
-            ctx.lineTo(transformX(128), transformY(320));
-            ctx.lineTo(transformX(256), transformY(384));
-            ctx.lineTo(transformX(256), transformY(256));
+            ctx.moveTo(centerX + 140 * (size/512), centerY + 70 * (size/512));
+            ctx.lineTo(centerX - 60 * (size/512), centerY + 70 * (size/512));
+            ctx.lineTo(centerX - 60 * (size/512), centerY + 100 * (size/512));
+            ctx.lineTo(centerX - 110 * (size/512), centerY + 50 * (size/512));
+            ctx.lineTo(centerX - 60 * (size/512), centerY);
+            ctx.lineTo(centerX - 60 * (size/512), centerY + 30 * (size/512));
+            ctx.lineTo(centerX + 140 * (size/512), centerY + 30 * (size/512));
             ctx.closePath();
-            ctx.stroke();
-            
-            // Right face: M384 192 L384 320 L256 384 L256 256 Z
-            ctx.beginPath();
-            ctx.moveTo(transformX(384), transformY(192));
-            ctx.lineTo(transformX(384), transformY(320));
-            ctx.lineTo(transformX(256), transformY(384));
-            ctx.lineTo(transformX(256), transformY(256));
-            ctx.closePath();
+            ctx.fill();
             ctx.stroke();
             
             // Draw TakaZone text
@@ -91,7 +86,7 @@
             ctx.font = `bold ${size * 0.14}px Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText('TakaZone', size / 2, size * 0.88);
+            ctx.fillText('TakaZone', size / 2, size * 0.82);
             
             // Add download link
             const link = document.createElement('a');
