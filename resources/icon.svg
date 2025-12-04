@@ -1,21 +1,26 @@
-<svg width="512" height="512" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#A855F7"/>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="50%" stop-color="#A855F7"/>
       <stop offset="100%" stop-color="#7C3AED"/>
     </linearGradient>
-    <linearGradient id="arrow" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="rgba(255,255,255,0.95)"/>
-      <stop offset="100%" stop-color="rgba(255,255,255,0.65)"/>
-    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
-  <rect width="600" height="600" rx="140" fill="url(#bg)"/>
-  <circle cx="300" cy="300" r="180" fill="white" opacity="0.06"/>
-  <g transform="translate(150,140)" stroke="white" stroke-width="22" fill="none" stroke-linejoin="round">
-    <path d="M150 60 L250 110 L150 160 L50 110 Z"/>
-    <path d="M50 110 L50 230 L150 280 L150 160 Z"/>
-    <path d="M250 110 L250 230 L150 280 L150 160 Z"/>
+  <rect width="512" height="512" rx="115" fill="url(#bgGrad)"/>
+  <circle cx="256" cy="256" r="200" fill="white" opacity="0.03"/>
+  <circle cx="256" cy="256" r="150" fill="white" opacity="0.03"/>
+  <g transform="translate(256, 256)" filter="url(#glow)">
+    <path d="M-130 0 C-130 -60, -70 -60, -40 0 C-10 60, 50 60, 80 0" stroke="white" stroke-width="32" fill="none" stroke-linecap="round"/>
+    <path d="M130 0 C130 60, 70 60, 40 0 C10 -60, -50 -60, -80 0" stroke="white" stroke-width="32" fill="none" stroke-linecap="round"/>
+    <path d="M-145 -15 L-130 0 L-145 15" stroke="white" stroke-width="24" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M145 15 L130 0 L145 -15" stroke="white" stroke-width="24" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="0" cy="0" r="16" fill="white"/>
   </g>
-  <path d="M180 200 A140 140 0 0 1 420 200 L405 185 M420 200 L405 215" stroke="url(#arrow)" stroke-width="22" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M420 400 A140 140 0 0 1 180 400 L195 415 M180 400 L195 385" stroke="url(#arrow)" stroke-width="22" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

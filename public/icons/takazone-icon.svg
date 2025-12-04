@@ -1,29 +1,26 @@
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#A855F7"/>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="50%" stop-color="#A855F7"/>
       <stop offset="100%" stop-color="#7C3AED"/>
     </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
-
-  <rect x="16" y="16" width="480" height="480" rx="110" fill="url(#grad)"/>
-
-  <!-- Takas/Exchange Icon -->
-  <g transform="translate(256, 180)">
-    <!-- Üst Ok (Sağa) -->
-    <path d="M-140 -20 L60 -20 L60 -50 L110 0 L60 50 L60 20 L-140 20 Z" 
-          fill="#ffffff" stroke="#ffffff" stroke-width="4" stroke-linejoin="round"/>
-    
-    <!-- Alt Ok (Sola) -->
-    <path d="M140 70 L-60 70 L-60 100 L-110 50 L-60 0 L-60 30 L140 30 Z" 
-          fill="#ffffff" stroke="#ffffff" stroke-width="4" stroke-linejoin="round"/>
+  <rect width="512" height="512" rx="115" fill="url(#bgGrad)"/>
+  <circle cx="256" cy="256" r="200" fill="white" opacity="0.03"/>
+  <circle cx="256" cy="256" r="150" fill="white" opacity="0.03"/>
+  <g transform="translate(256, 256)" filter="url(#glow)">
+    <path d="M-130 0 C-130 -60, -70 -60, -40 0 C-10 60, 50 60, 80 0" stroke="white" stroke-width="32" fill="none" stroke-linecap="round"/>
+    <path d="M130 0 C130 60, 70 60, 40 0 C10 -60, -50 -60, -80 0" stroke="white" stroke-width="32" fill="none" stroke-linecap="round"/>
+    <path d="M-145 -15 L-130 0 L-145 15" stroke="white" stroke-width="24" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M145 15 L130 0 L145 -15" stroke="white" stroke-width="24" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="0" cy="0" r="16" fill="white"/>
   </g>
-
-  <!-- TakaZone Text -->
-  <text x="256" y="420" 
-        font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif" 
-        font-size="72" 
-        font-weight="700" 
-        fill="#ffffff" 
-        text-anchor="middle">TakaZone</text>
 </svg>
