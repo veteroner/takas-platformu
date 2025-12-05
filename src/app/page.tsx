@@ -1,6 +1,7 @@
 'use client'
 
-import { ArrowRight, Sparkles, Heart, Package, Users, Loader2 } from 'lucide-react'
+import { ArrowRight, Sparkles, Heart, Users, Loader2 } from 'lucide-react'
+import TakaIcon from '@/components/TakaIcon'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
