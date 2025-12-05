@@ -18,12 +18,14 @@ const config: CapacitorConfig = {
   },
   plugins: {
     SplashScreen: {
-      launchShowDuration: 0,
-      launchAutoHide: true,
+      launchShowDuration: 3000,
+      launchAutoHide: false,
+      launchFadeOutDuration: 500,
       backgroundColor: '#EC4899',
-      showSpinner: false,
-      splashFullScreen: false,
-      splashImmersive: false,
+      showSpinner: true,
+      spinnerColor: '#FFFFFF',
+      splashFullScreen: true,
+      splashImmersive: true,
     },
     StatusBar: {
       style: 'light',

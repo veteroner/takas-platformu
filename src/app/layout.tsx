@@ -9,6 +9,7 @@ import AdsInit from "@/components/AdsInit";
 import NativeConsentInit from "@/components/NativeConsentInit";
 import VersionGate from "@/components/VersionGate";
 import NetworkProvider from "@/components/NetworkProvider";
+import SplashScreenManager from "@/components/SplashScreenManager";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -104,6 +105,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NetworkProvider>
+          <SplashScreenManager />
           <ConsentGuard />
           <VersionGate />
           {children}
