@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import SwipeStack from '@/components/SwipeStack'
 import MatchToast from '@/components/MatchToast'
+import TakaIcon from '@/components/TakaIcon'
 import { Item, ItemCondition } from '@/types'
 import { Heart, MessageCircle, User, Settings, LogIn, Plus, Package, Shirt, Gamepad2, Smartphone, BookOpen, Dumbbell, Home, LayoutGrid } from 'lucide-react'
 import { UnreadBadge } from '@/components/UnreadBadge'
@@ -283,13 +284,7 @@ export default function HomePage() {
       <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe flex-shrink-0">
         <div className="max-w-md lg:max-w-lg xl:max-w-xl mx-auto px-4 py-3 pt-10 md:pt-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Image
-              src="/icons/logo.svg"
-              alt="TakaZone Logo"
-              width={28}
-              height={28}
-              className="w-7 h-7"
-            />
+            <TakaIcon className="w-7 h-7 text-purple-600" />
             <h1 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
               TakaZone
             </h1>
