@@ -28,6 +28,9 @@ public class MainActivity extends BridgeActivity {
         // WebView'e özel error handler ekle
         WebView webView = getBridge().getWebView();
         if (webView != null) {
+            // WebView background color'ını splash background'a ayarla (siyah ekran sorununu önlemek için)
+            webView.setBackgroundColor(0xFF8B5CF6); // splashBackground color (#8B5CF6)
+            
             webView.setWebViewClient(new WebViewClient() {
                 
                 @Override
@@ -37,6 +40,13 @@ public class MainActivity extends BridgeActivity {
                     if (!url.contains("file://")) {
                         hasLoadedOfflinePage = false;
                     }
+                }
+
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    super.onPageFinished(view, url);
+                    // Sayfa yüklendiğinde WebView background'ı şeffaf yap (içerik görünsün)
+                    view.setBackgroundColor(0x00000000); // Transparent
                 }
 
                 @Override

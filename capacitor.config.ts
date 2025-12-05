@@ -18,13 +18,12 @@ const config: CapacitorConfig = {
   },
   plugins: {
     SplashScreen: {
+      // iOS siyah ekranı önlemek için splash'ı otomatik kapat
       launchShowDuration: 2000,
       launchAutoHide: true,
       launchFadeOutDuration: 300,
       backgroundColor: '#EC4899',
       showSpinner: false,
-      androidSplashResourceName: 'splash',
-      androidScaleType: 'CENTER_CROP',
       splashFullScreen: true,
       splashImmersive: true,
     },
