@@ -9,6 +9,8 @@ export default function TakaIcon({
   className?: string;
   ariaLabel?: string;
 }) {
+  const uniqueId = React.useId();
+  
   return (
     <svg
       className={className}
@@ -21,32 +23,26 @@ export default function TakaIcon({
       style={{ display: "block" }}
     >
       <defs>
-        <linearGradient id="takaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#A855F7" />
+        <linearGradient id={`bg-${uniqueId}`} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#9333EA" />
           <stop offset="100%" stopColor="#7C3AED" />
         </linearGradient>
       </defs>
 
-      <rect x="16" y="16" width="480" height="480" rx="110" fill="url(#takaGradient)" />
+      <rect width="512" height="512" rx="108" fill={`url(#bg-${uniqueId})`} />
 
-      <g transform="translate(256, 180)">
-        <path d="M-140 -20 L60 -20 L60 -50 L110 0 L60 50 L60 20 L-140 20 Z" 
-              fill="#ffffff" stroke="#ffffff" strokeWidth="4" strokeLinejoin="round"/>
-        <path d="M140 70 L-60 70 L-60 100 L-110 50 L-60 0 L-60 30 L140 30 Z" 
-              fill="#ffffff" stroke="#ffffff" strokeWidth="4" strokeLinejoin="round"/>
+      <g transform="translate(256, 256)">
+        {/* Upper arrow (pointing right) */}
+        <g transform="translate(0, -50)">
+          <line x1="-100" y1="0" x2="70" y2="0" stroke="white" strokeWidth="36" strokeLinecap="round" />
+          <polyline points="40,-35 85,0 40,35" stroke="white" strokeWidth="36" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        </g>
+        {/* Lower arrow (pointing left) */}
+        <g transform="translate(0, 50)">
+          <line x1="100" y1="0" x2="-70" y2="0" stroke="white" strokeWidth="36" strokeLinecap="round" />
+          <polyline points="-40,35 -85,0 -40,-35" stroke="white" strokeWidth="36" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        </g>
       </g>
-
-      <text 
-        x="256" 
-        y="420" 
-        fontFamily="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif" 
-        fontSize="72" 
-        fontWeight="700" 
-        fill="#ffffff" 
-        textAnchor="middle"
-      >
-        TakaZone
-      </text>
     </svg>
   );
 }
