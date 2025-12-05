@@ -1,18 +1,37 @@
-import { AdMob, InterstitialAdPluginEvents, AdLoadInfo } from '@capacitor-community/admob';
 import { Capacitor } from '@capacitor/core';
+
+// AdMob modülünü dinamik olarak yükle
+let AdMobModule: typeof import('@capacitor-community/admob') | null = null;
+
+async function getAdMobModule() {
+  if (AdMobModule) return AdMobModule;
+  
+  if (!Capacitor.isNativePlatform()) {
+    return null;
+  }
+  
+  try {
+    AdMobModule = await import('@capacitor-community/admob');
+    return AdMobModule;
+  } catch (error) {
+    console.warn('AdMob modülü yüklenemedi:', error);
+    return null;
+  }
+}
 
 // AdMob'u başlat
 export async function initializeAdMob(): Promise<void> {
   try {
     // Web platformunda AdMob çalışmaz
     if (!Capacitor.isNativePlatform()) {
-      console.log('AdMob is not available on web platform');
+      console.log('Ads are not available on web platform');
       return;
     }
 
-    // Types for AdMob.initialize may vary across versions; keep only known fields
-    const init = (AdMob as unknown as { initialize: (opts: { initializeForTesting?: boolean }) => Promise<void> }).initialize;
-    await init({ initializeForTesting: true });
+    const admob = await getAdMobModule();
+    if (!admob) return;
+
+    await admob.AdMob.initialize({ initializeForTesting: true });
 
     console.log('AdMob initialized successfully');
   } catch (error) {
@@ -30,8 +49,11 @@ export async function prepareInterstitialAd(): Promise<void> {
   try {
     if (!Capacitor.isNativePlatform()) return;
 
+    const admob = await getAdMobModule();
+    if (!admob) return;
+
     // Test Interstitial Ad ID
-    await AdMob.prepareInterstitial({
+    await admob.AdMob.prepareInterstitial({
       adId: 'ca-app-pub-3940256099942544/1033173712', // Test Interstitial Ad ID
       isTesting: true
     });
@@ -47,7 +69,10 @@ export async function showInterstitialAd(): Promise<void> {
   try {
     if (!Capacitor.isNativePlatform()) return;
 
-    await AdMob.showInterstitial();
+    const admob = await getAdMobModule();
+    if (!admob) return;
+
+    await admob.AdMob.showInterstitial();
     console.log('Interstitial ad shown successfully');
   } catch (error) {
     console.error('Error showing interstitial ad:', error);
@@ -56,20 +81,25 @@ export async function showInterstitialAd(): Promise<void> {
 }
 
 // Interstitial Reklam Event Listener'ları
-export function addInterstitialAdListeners(): void {
+export async function addInterstitialAdListeners(): Promise<void> {
   if (!Capacitor.isNativePlatform()) return;
+
+  const admob = await getAdMobModule();
+  if (!admob) return;
 
   // Remove existing listeners first
   removeAllAdListeners();
 
+  const { AdMob, InterstitialAdPluginEvents } = admob;
+
   // Reklam yüklendiğinde
-  AdMob.addListener(InterstitialAdPluginEvents.Loaded, (info: AdLoadInfo) => {
+  AdMob.addListener(InterstitialAdPluginEvents.Loaded, (info) => {
     console.log('Interstitial ad loaded:', info);
     interstitialReady = true;
   });
 
   // Reklam yüklenemediğinde
-  AdMob.addListener(InterstitialAdPluginEvents.FailedToLoad, (error: unknown) => {
+  AdMob.addListener(InterstitialAdPluginEvents.FailedToLoad, (error) => {
     console.error('Interstitial ad failed to load:', error);
     interstitialReady = false;
   });
@@ -83,7 +113,7 @@ export function addInterstitialAdListeners(): void {
   });
 
   // Reklam gösterilemediğinde
-  AdMob.addListener(InterstitialAdPluginEvents.FailedToShow, (error: unknown) => {
+  AdMob.addListener(InterstitialAdPluginEvents.FailedToShow, (error) => {
     console.error('Interstitial ad failed to show:', error);
     interstitialReady = false;
   });
