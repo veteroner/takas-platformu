@@ -2,7 +2,22 @@
 
 import { useEffect } from 'react';
 import { Capacitor } from '@capacitor/core';
-import { SplashScreen } from '@capacitor/splash-screen';
+
+/**
+ * SplashScreen plugin'i dinamik olarak yükle (sadece native platformda)
+ */
+async function getSplashScreenPlugin() {
+  if (!Capacitor.isNativePlatform()) {
+    return null;
+  }
+  try {
+    const { SplashScreen } = await import('@capacitor/splash-screen');
+    return SplashScreen;
+  } catch (error) {
+    console.warn('SplashScreen plugin yüklenemedi:', error);
+    return null;
+  }
+}
 
 /**
  * Bu bileşen, native uygulamalarda splash screen'in
@@ -16,6 +31,13 @@ export default function SplashScreenManager() {
         try {
           // Sayfa içeriğinin yüklenmesi için kısa bir gecikme
           await new Promise(resolve => setTimeout(resolve, 500));
+          
+          // SplashScreen plugin'i dinamik olarak al
+          const SplashScreen = await getSplashScreenPlugin();
+          if (!SplashScreen) {
+            console.warn('SplashScreen plugin mevcut değil');
+            return;
+          }
           
           // Splash screen'i gizle
           await SplashScreen.hide({
