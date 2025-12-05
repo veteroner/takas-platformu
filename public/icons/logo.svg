@@ -1,18 +1,21 @@
-<svg width="32" height="32" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#8B5CF6"/>
-      <stop offset="50%" stop-color="#A855F7"/>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9333EA"/>
       <stop offset="100%" stop-color="#7C3AED"/>
     </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="115" fill="url(#bgGrad)"/>
-  <circle cx="256" cy="256" r="200" fill="white" opacity="0.03"/>
+  <rect width="512" height="512" rx="108" fill="url(#bg)"/>
   <g transform="translate(256, 256)">
-    <path d="M-130 0 C-130 -60, -70 -60, -40 0 C-10 60, 50 60, 80 0" stroke="white" stroke-width="32" fill="none" stroke-linecap="round"/>
-    <path d="M130 0 C130 60, 70 60, 40 0 C10 -60, -50 -60, -80 0" stroke="white" stroke-width="32" fill="none" stroke-linecap="round"/>
-    <path d="M-145 -15 L-130 0 L-145 15" stroke="white" stroke-width="24" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M145 15 L130 0 L145 -15" stroke="white" stroke-width="24" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="0" cy="0" r="16" fill="white"/>
+    <!-- Üst ok (sağa) -->
+    <g transform="translate(0, -50)">
+      <line x1="-100" y1="0" x2="70" y2="0" stroke="white" stroke-width="36" stroke-linecap="round"/>
+      <polyline points="40,-35 85,0 40,35" stroke="white" stroke-width="36" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <!-- Alt ok (sola) -->
+    <g transform="translate(0, 50)">
+      <line x1="100" y1="0" x2="-70" y2="0" stroke="white" stroke-width="36" stroke-linecap="round"/>
+      <polyline points="-40,35 -85,0 -40,-35" stroke="white" stroke-width="36" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
   </g>
 </svg>
