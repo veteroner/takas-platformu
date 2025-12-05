@@ -1,5 +1,4 @@
 import { Capacitor } from '@capacitor/core';
-import { App } from '@capacitor/app';
 
 /**
  * Native Platform İzin Yönetimi
@@ -10,6 +9,22 @@ import { App } from '@capacitor/app';
 interface TrackingPermission {
   granted: boolean;
   status: 'authorized' | 'denied' | 'restricted' | 'notDetermined' | 'unavailable';
+}
+
+/**
+ * App plugin'i dinamik olarak yükle (sadece native platformda)
+ */
+async function getAppPlugin() {
+  if (!Capacitor.isNativePlatform()) {
+    return null;
+  }
+  try {
+    const { App } = await import('@capacitor/app');
+    return App;
+  } catch {
+    console.warn('App plugin yüklenemedi');
+    return null;
+  }
 }
 
 /**
@@ -32,8 +47,11 @@ export async function requestTrackingPermission(): Promise<TrackingPermission> {
       // Capacitor plugin ile entegre edilmeli (örn: @capacitor/app-tracking-transparency)
       
       console.log('iOS ATT permission flow started');
-      const info = await App.getInfo();
-      console.log('App info (ATT context):', info);
+      const App = await getAppPlugin();
+      if (App) {
+        const info = await App.getInfo();
+        console.log('App info (ATT context):', info);
+      }
       // Gerçek ATT diyaloğu için native plugin entegrasyonu eklenecek.
       return { granted: true, status: 'authorized' };
     } catch (error) {
@@ -70,9 +88,17 @@ export async function checkTrackingPermission(): Promise<TrackingPermission> {
   const platform = Capacitor.getPlatform();
 
   if (platform === 'ios') {
-    const info = await App.getInfo();
-    console.log('App info (ATT check):', info);
-    return { granted: true, status: 'authorized' };
+    try {
+      const App = await getAppPlugin();
+      if (App) {
+        const info = await App.getInfo();
+        console.log('App info (ATT check):', info);
+      }
+      return { granted: true, status: 'authorized' };
+    } catch (error) {
+      console.error('ATT check error:', error);
+      return { granted: false, status: 'denied' };
+    }
   }
 
   if (platform === 'android') {

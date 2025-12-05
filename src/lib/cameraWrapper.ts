@@ -3,17 +3,45 @@
  * Kamera açılma sorunlarını yakalamak için detaylı loglar
  */
 
-import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera'
 import { Capacitor } from '@capacitor/core'
 import { logger } from './logger'
 
+// Type imports only (won't be included in bundle)
+import type { CameraResultType as CameraResultTypeEnum, CameraSource as CameraSourceEnum, Photo } from '@capacitor/camera'
+
 const CATEGORY = 'CAMERA'
+
+// Re-export types for external use
+export type { Photo }
+
+// Camera plugin'i ve sabitleri dinamik olarak yükle
+let CameraModule: typeof import('@capacitor/camera') | null = null
+let CameraResultType: typeof CameraResultTypeEnum
+let CameraSource: typeof CameraSourceEnum
+
+async function getCameraModule() {
+  if (CameraModule) return CameraModule
+  
+  if (!Capacitor.isNativePlatform()) {
+    return null
+  }
+  
+  try {
+    CameraModule = await import('@capacitor/camera')
+    CameraResultType = CameraModule.CameraResultType
+    CameraSource = CameraModule.CameraSource
+    return CameraModule
+  } catch (error) {
+    logger.warn(CATEGORY, 'Camera plugin yüklenemedi', error as Error)
+    return null
+  }
+}
 
 export interface CameraOptions {
   quality?: number
   allowEditing?: boolean
-  resultType?: CameraResultType
-  source?: CameraSource
+  resultType?: typeof CameraResultTypeEnum
+  source?: typeof CameraSourceEnum
   saveToGallery?: boolean
   correctOrientation?: boolean
   width?: number
@@ -35,7 +63,14 @@ export async function checkCameraPermissions(): Promise<boolean> {
       return true
     }
 
-    const permissions = await Camera.checkPermissions()
+    const cameraModule = await getCameraModule()
+    if (!cameraModule) {
+      logger.warn(CATEGORY, 'Camera module not available')
+      end()
+      return false
+    }
+
+    const permissions = await cameraModule.Camera.checkPermissions()
     logger.info(CATEGORY, 'Camera permissions status', permissions)
     
     const hasPermission = permissions.camera === 'granted' || permissions.photos === 'granted'
@@ -70,7 +105,14 @@ export async function requestCameraPermissions(): Promise<boolean> {
       return true
     }
 
-    const permissions = await Camera.requestPermissions({ permissions: ['camera', 'photos'] })
+    const cameraModule = await getCameraModule()
+    if (!cameraModule) {
+      logger.warn(CATEGORY, 'Camera module not available')
+      end()
+      return false
+    }
+
+    const permissions = await cameraModule.Camera.requestPermissions({ permissions: ['camera', 'photos'] })
     logger.info(CATEGORY, 'Camera permissions request result', permissions)
     
     const granted = permissions.camera === 'granted' || permissions.photos === 'granted'
@@ -104,6 +146,19 @@ export async function takePhoto(options?: CameraOptions): Promise<Photo | null> 
     const platform = Capacitor.getPlatform()
     logger.info(CATEGORY, `Platform: ${platform}`)
     
+    if (!Capacitor.isNativePlatform()) {
+      logger.warn(CATEGORY, 'Camera not available on web platform')
+      end()
+      return null
+    }
+
+    const cameraModule = await getCameraModule()
+    if (!cameraModule) {
+      logger.error(CATEGORY, 'Camera module not available')
+      end()
+      return null
+    }
+
     // Check permissions first
     logger.info(CATEGORY, 'Step 1: Checking permissions...')
     const hasPermission = await checkCameraPermissions()
@@ -124,8 +179,8 @@ export async function takePhoto(options?: CameraOptions): Promise<Photo | null> 
     const defaultOptions = {
       quality: 90,
       allowEditing: false,
-      resultType: CameraResultType.DataUrl, // DataUrl ensures webPath is always available
-      source: CameraSource.Camera,
+      resultType: cameraModule.CameraResultType.DataUrl, // DataUrl ensures webPath is always available
+      source: cameraModule.CameraSource.Camera,
       saveToGallery: false,
       correctOrientation: true,
       width: 1920,
@@ -137,7 +192,7 @@ export async function takePhoto(options?: CameraOptions): Promise<Photo | null> 
     
     // Take photo
     logger.info(CATEGORY, '📸 Calling Camera.getPhoto()...')
-    const photo = await Camera.getPhoto(defaultOptions)
+    const photo = await cameraModule.Camera.getPhoto(defaultOptions)
     
     logger.info(CATEGORY, '✅ Photo captured successfully', {
       format: photo.format,
@@ -148,17 +203,18 @@ export async function takePhoto(options?: CameraOptions): Promise<Photo | null> 
     
     end()
     return photo
-  } catch (error: any) {
-    logger.error(CATEGORY, '❌ Error taking photo', error, {
-      message: error?.message,
-      code: error?.code,
-      name: error?.name
+  } catch (error: unknown) {
+    const err = error as Error & { code?: string }
+    logger.error(CATEGORY, '❌ Error taking photo', err, {
+      message: err?.message,
+      code: err?.code,
+      name: err?.name
     })
     
     end()
     
     // User cancelled
-    if (error?.message?.includes('cancel') || error?.code === 'USER_CANCELLED') {
+    if (err?.message?.includes('cancel') || err?.code === 'USER_CANCELLED') {
       logger.info(CATEGORY, 'User cancelled camera')
       return null
     }
@@ -181,6 +237,19 @@ export async function pickImage(options?: CameraOptions): Promise<Photo | null> 
     const platform = Capacitor.getPlatform()
     logger.info(CATEGORY, `Platform: ${platform}`)
     
+    if (!Capacitor.isNativePlatform()) {
+      logger.warn(CATEGORY, 'Gallery not available on web platform')
+      end()
+      return null
+    }
+
+    const cameraModule = await getCameraModule()
+    if (!cameraModule) {
+      logger.error(CATEGORY, 'Camera module not available')
+      end()
+      return null
+    }
+
     // Check permissions
     logger.info(CATEGORY, 'Step 1: Checking permissions...')
     const hasPermission = await checkCameraPermissions()
@@ -201,8 +270,8 @@ export async function pickImage(options?: CameraOptions): Promise<Photo | null> 
     const defaultOptions = {
       quality: 90,
       allowEditing: false,
-      resultType: CameraResultType.DataUrl, // DataUrl ensures webPath is always available
-      source: CameraSource.Photos,
+      resultType: cameraModule.CameraResultType.DataUrl, // DataUrl ensures webPath is always available
+      source: cameraModule.CameraSource.Photos,
       correctOrientation: true,
       ...options
     }
@@ -211,7 +280,7 @@ export async function pickImage(options?: CameraOptions): Promise<Photo | null> 
     
     // Pick photo
     logger.info(CATEGORY, '🖼️ Calling Camera.getPhoto() with Photos source...')
-    const photo = await Camera.getPhoto(defaultOptions)
+    const photo = await cameraModule.Camera.getPhoto(defaultOptions)
     
     logger.info(CATEGORY, '✅ Photo picked successfully', {
       format: photo.format,
@@ -221,17 +290,18 @@ export async function pickImage(options?: CameraOptions): Promise<Photo | null> 
     
     end()
     return photo
-  } catch (error: any) {
-    logger.error(CATEGORY, '❌ Error picking photo', error, {
-      message: error?.message,
-      code: error?.code,
-      name: error?.name
+  } catch (error: unknown) {
+    const err = error as Error & { code?: string }
+    logger.error(CATEGORY, '❌ Error picking photo', err, {
+      message: err?.message,
+      code: err?.code,
+      name: err?.name
     })
     
     end()
     
     // User cancelled
-    if (error?.message?.includes('cancel') || error?.code === 'USER_CANCELLED') {
+    if (err?.message?.includes('cancel') || err?.code === 'USER_CANCELLED') {
       logger.info(CATEGORY, 'User cancelled gallery')
       return null
     }
