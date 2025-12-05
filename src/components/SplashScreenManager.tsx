@@ -3,90 +3,65 @@
 import { useEffect } from 'react';
 import { Capacitor } from '@capacitor/core';
 
+let splashHidden = false;
+
 /**
- * SplashScreen plugin'i dinamik olarak yükle (sadece native platformda)
+ * Splash screen'i güvenli bir şekilde gizle
+ * iOS'ta web içeriği yüklenmeden önce splash kapanmamalı
  */
-async function getSplashScreenPlugin() {
-  if (!Capacitor.isNativePlatform()) {
-    return null;
-  }
+async function hideSplashScreen() {
+  // Zaten gizlenmişse çık
+  if (splashHidden) return;
+  
+  // Sadece native platformda çalış
+  if (!Capacitor.isNativePlatform()) return;
+  
   try {
+    // Dinamik import - web'de hata vermez
     const { SplashScreen } = await import('@capacitor/splash-screen');
-    return SplashScreen;
+    
+    // Splash'ı gizle
+    await SplashScreen.hide({
+      fadeOutDuration: 300
+    });
+    
+    splashHidden = true;
+    console.log('[SplashScreenManager] Splash gizlendi');
   } catch (error) {
-    console.warn('SplashScreen plugin yüklenemedi:', error);
-    return null;
+    console.error('[SplashScreenManager] Hata:', error);
+    splashHidden = true; // Hata olsa da tekrar deneme
   }
 }
-
-let splashHidden = false;
 
 /**
  * Bu bileşen, native uygulamalarda splash screen'in
  * web içeriği yüklendikten sonra gizlenmesini sağlar.
+ * 
+ * Strateji:
+ * 1. Component mount olduğunda = React hazır
+ * 2. 500ms bekle = web içeriği render edildi
+ * 3. Splash'ı kapat
  */
 export default function SplashScreenManager() {
   useEffect(() => {
-    const hideSplash = async () => {
-      // Zaten gizlenmişse tekrar çalıştırma
-      if (splashHidden) {
-        return;
-      }
+    // Sayfa yüklendiğinde splash'ı gizle
+    // 500ms bekleme: React hydration + ilk render tamamlansın
+    const timer = setTimeout(() => {
+      hideSplashScreen();
+    }, 500);
 
-      // Sadece native platformlarda çalış
-      if (!Capacitor.isNativePlatform()) {
-        return;
+    // Yedek: 3 saniye içinde her türlü kapat (deadlock önleme)
+    const fallbackTimer = setTimeout(() => {
+      if (!splashHidden) {
+        console.warn('[SplashScreenManager] Fallback ile splash kapatılıyor');
+        hideSplashScreen();
       }
+    }, 3000);
 
-      try {
-        // SplashScreen plugin'i dinamik olarak al
-        const SplashScreen = await getSplashScreenPlugin();
-        if (!SplashScreen) {
-          console.warn('SplashScreen plugin mevcut değil');
-          return;
-        }
-
-        // Minimum bekleme süresi - sayfa içeriğinin render olması için
-        // Siyah ekran sorununu önlemek için manuel gizlemeyi devre dışı bıraktık.
-        // Native config'deki launchAutoHide: true (2000ms) ayarını kullanıyoruz.
-        /*
-        await new Promise(resolve => setTimeout(resolve, 200));
-        
-        // Splash screen'i gizle
-        await SplashScreen.hide({
-          fadeOutDuration: 200
-        });
-        */
-        console.log('Splash screen native auto-hide bekleniyor...');
-        
-        splashHidden = true;
-        console.log('Splash screen gizlendi');
-      } catch (error) {
-        console.error('Splash screen gizlenirken hata:', error);
-        // Hata olsa bile flag'i set et ki tekrar denemesin
-        splashHidden = true;
-      }
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(fallbackTimer);
     };
-
-    // Birden fazla event listener ile daha güvenilir hale getir
-    // DOMContentLoaded - DOM hazır olduğunda
-    // load - Tüm kaynaklar yüklendiğinde
-    // readystatechange - Document ready state değiştiğinde
-
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-      // Sayfa zaten yüklenmiş veya yükleniyor
-      hideSplash();
-    } else {
-      // DOMContentLoaded daha erken tetiklenir
-      document.addEventListener('DOMContentLoaded', hideSplash);
-      // load event'i de ekle (fallback)
-      window.addEventListener('load', hideSplash);
-      
-      return () => {
-        document.removeEventListener('DOMContentLoaded', hideSplash);
-        window.removeEventListener('load', hideSplash);
-      };
-    }
   }, []);
 
   return null;

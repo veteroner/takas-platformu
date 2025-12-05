@@ -18,12 +18,13 @@ const config: CapacitorConfig = {
   },
   plugins: {
     SplashScreen: {
-      // iOS siyah ekranı önlemek için splash'ı otomatik kapat
-      launchShowDuration: 2000,
-      launchAutoHide: true,
-      launchFadeOutDuration: 300,
+      // iOS: Web içeriği yüklenene kadar splash göster
+      // launchAutoHide: false = JS tarafından manuel kapatılacak
+      launchShowDuration: 0,  // 0 = sonsuza kadar bekle (JS kapatır)
+      launchAutoHide: false,  // Manuel kapatma
       backgroundColor: '#EC4899',
-      showSpinner: false,
+      showSpinner: true,      // Yükleniyor göstergesi
+      spinnerColor: '#FFFFFF',
       splashFullScreen: true,
       splashImmersive: true,
     },
