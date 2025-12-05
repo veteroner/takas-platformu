@@ -18,13 +18,13 @@ const config: CapacitorConfig = {
   },
   plugins: {
     SplashScreen: {
-      // iOS: Web içeriği yüklenene kadar splash göster
-      // launchAutoHide: false = JS tarafından manuel kapatılacak
-      launchShowDuration: 0,  // 0 = sonsuza kadar bekle (JS kapatır)
-      launchAutoHide: false,  // Manuel kapatma
+      // iOS: Splash'ı 3 saniye göster ve otomatik kapat
+      // Bu süre içinde web yüklenmeli, yüklenmezse de uygulama açılır
+      launchShowDuration: 3000,  // 3 saniye sonra otomatik kapat
+      launchAutoHide: true,      // Otomatik kapanış aktif
+      launchFadeOutDuration: 500,
       backgroundColor: '#EC4899',
-      showSpinner: true,      // Yükleniyor göstergesi
-      spinnerColor: '#FFFFFF',
+      showSpinner: false,
       splashFullScreen: true,
       splashImmersive: true,
     },
@@ -33,10 +33,10 @@ const config: CapacitorConfig = {
       backgroundColor: '#EC4899'
     },
     AdMob: {
-      // Üretimde .env veya CI gizli değişkeninden okunabilir; build anında process.env kullanılabilir
-      appId: process.env.CAPACITOR_ADMOB_APP_ID || 'TEST',
+      // iOS: Test App ID (Production'da gerçek ID kullanın)
+      appId: 'ca-app-pub-3940256099942544~1458002511',
       testingDevices: [],
-      initializeForTesting: process.env.NODE_ENV !== 'production'
+      initializeForTesting: true
     }
   }
 };
