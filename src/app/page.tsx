@@ -59,7 +59,7 @@ export default function WelcomePage() {
           <div className="relative">
             <div className="absolute inset-0 bg-white/20 rounded-full blur-2xl animate-pulse"></div>
             <div className="relative bg-white/90 backdrop-blur-sm p-6 rounded-full shadow-2xl">
-              <Package className="w-16 h-16 text-purple-600" />
+              <TakaIcon className="w-16 h-16 text-purple-600" />
             </div>
           </div>
         </div>
