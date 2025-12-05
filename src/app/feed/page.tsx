@@ -5,8 +5,10 @@ import { useRouter } from 'next/navigation'
 import SwipeStack from '@/components/SwipeStack'
 import MatchToast from '@/components/MatchToast'
 import TakaIcon from '@/components/TakaIcon'
+import DesktopGridView from '@/components/DesktopGridView'
+import { useDeviceType } from '@/hooks/useDeviceType'
 import { Item, ItemCondition } from '@/types'
-import { Heart, MessageCircle, User, Settings, LogIn, Plus, Package, Shirt, Gamepad2, Smartphone, BookOpen, Dumbbell, Home, LayoutGrid } from 'lucide-react'
+import { Heart, MessageCircle, User, Settings, LogIn, Plus, Package, Shirt, Gamepad2, Smartphone, BookOpen, Dumbbell, Home, LayoutGrid, Search, Filter, Bell } from 'lucide-react'
 import { UnreadBadge } from '@/components/UnreadBadge'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -278,11 +280,24 @@ export default function HomePage() {
     console.log('Item clicked:', item)
   }
 
+  // 🎯 Device Type Detection
+  const { isMobile, isDesktop } = useDeviceType()
+
+  // Desktop Grid View için like/pass handlers
+  const handleDesktopLike = useCallback(async (item: Item) => {
+    await handleSwipe('right', item)
+  }, [handleSwipe])
+
+  const handleDesktopPass = useCallback(async (item: Item) => {
+    await handleSwipe('left', item)
+  }, [handleSwipe])
+
   return (
     <div className="min-h-[100dvh] bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex flex-col">
-      {/* Header - Kompakt */}
-      <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe flex-shrink-0">
-        <div className="max-w-md lg:max-w-lg xl:max-w-xl mx-auto px-4 py-3 pt-10 md:pt-3 flex items-center justify-between">
+      {/* Header - Desktop için genişletilmiş, Mobil için kompakt */}
+      <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe flex-shrink-0 sticky top-0 z-50">
+        <div className={`mx-auto px-4 py-3 pt-10 md:pt-3 flex items-center justify-between ${isDesktop ? 'max-w-7xl' : 'max-w-md'}`}>
+          {/* Logo */}
           <div className="flex items-center gap-2">
             <TakaIcon className="w-7 h-7 text-purple-600" />
             <h1 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
@@ -290,48 +305,92 @@ export default function HomePage() {
             </h1>
           </div>
           
+          {/* Desktop: Arama ve Filtreler */}
+          {isDesktop && (
+            <div className="flex-1 max-w-xl mx-8">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Ürün ara..."
+                  className="w-full pl-10 pr-4 py-2.5 rounded-full border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 outline-none transition-all bg-white/70"
+                />
+                <button className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-gray-100 rounded-full">
+                  <Filter className="w-4 h-4 text-gray-500" />
+                </button>
+              </div>
+            </div>
+          )}
+          
+          {/* Navigation Actions */}
           <div className="flex items-center gap-3">
             {!!user ? (
               <>
-                <Link href="/upload" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                  <Plus className="w-5 h-5 text-gray-600" />
+                {/* Desktop: Daha fazla buton göster */}
+                {isDesktop && (
+                  <>
+                    <Link href="/feed" className="flex items-center gap-2 px-4 py-2 text-purple-600 font-medium hover:bg-purple-50 rounded-lg transition-colors">
+                      <LayoutGrid className="w-5 h-5" />
+                      <span>Keşfet</span>
+                    </Link>
+                    <Link href="/my-items" className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+                      <Package className="w-5 h-5" />
+                      <span>Ürünlerim</span>
+                    </Link>
+                  </>
+                )}
+                
+                <Link href="/upload" className={`${isDesktop ? 'flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all shadow-md' : 'p-2 hover:bg-gray-100 rounded-full transition-colors'}`}>
+                  <Plus className={`${isDesktop ? 'w-5 h-5' : 'w-5 h-5 text-gray-600'}`} />
+                  {isDesktop && <span>Ürün Ekle</span>}
                 </Link>
+                
                 <Link href="/messages" className="p-2 hover:bg-gray-100 rounded-full transition-colors relative">
                   <MessageCircle className="w-5 h-5 text-gray-600" />
                   <UnreadBadge userId={user?.id || null} />
                 </Link>
+                
+                {isDesktop && (
+                  <Link href="/notifications" className="p-2 hover:bg-gray-100 rounded-full transition-colors relative">
+                    <Bell className="w-5 h-5 text-gray-600" />
+                  </Link>
+                )}
+                
                 <Link href="/profile" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                   {user?.avatar ? (
                     <Image
                       src={user.avatar}
                       alt={user.name}
-                      width={20}
-                      height={20}
-                      className="w-5 h-5 rounded-full object-cover"
+                      width={isDesktop ? 32 : 20}
+                      height={isDesktop ? 32 : 20}
+                      className={`${isDesktop ? 'w-8 h-8' : 'w-5 h-5'} rounded-full object-cover`}
                     />
                   ) : (
                     <User className="w-5 h-5 text-gray-600" />
                   )}
                 </Link>
-                <Link href="/settings" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                  <Settings className="w-5 h-5 text-gray-600" />
-                </Link>
+                
+                {!isDesktop && (
+                  <Link href="/settings" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                    <Settings className="w-5 h-5 text-gray-600" />
+                  </Link>
+                )}
               </>
             ) : (
               <Link 
                 href="/login"
-                className="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1.5 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg text-sm"
+                className="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg text-sm"
               >
-                <LogIn size={14} />
-                Giriş
+                <LogIn size={16} />
+                Giriş Yap
               </Link>
             )}
           </div>
         </div>
 
-        {/* Kategori Filtreleri - Ortalanmış */}
-        <div className="px-2 pb-3 overflow-x-auto scrollbar-hide">
-          <div className="flex gap-2 min-w-max px-2 justify-center mx-auto max-w-fit">
+        {/* Kategori Filtreleri */}
+        <div className={`px-2 pb-3 overflow-x-auto scrollbar-hide ${isDesktop ? 'border-t border-gray-100 pt-3' : ''}`}>
+          <div className={`flex gap-2 ${isDesktop ? 'justify-center max-w-7xl mx-auto' : 'min-w-max px-2 justify-center mx-auto max-w-fit'}`}>
             {CATEGORIES.map((cat) => {
               const Icon = cat.icon
               const isSelected = selectedCategory === cat.id
@@ -339,10 +398,10 @@ export default function HomePage() {
                 <button
                   key={cat.id || 'all'}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                     isSelected
                       ? `bg-gradient-to-r ${cat.color} text-white shadow-md scale-105`
-                      : 'bg-white/70 text-gray-700 hover:bg-white hover:shadow-sm'
+                      : 'bg-white/70 text-gray-700 hover:bg-white hover:shadow-sm border border-gray-100'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -354,21 +413,55 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Main Content - Flex grow */}
-      <main className="flex-1 flex flex-col max-w-md lg:max-w-lg xl:max-w-xl mx-auto w-full px-3 py-3 overflow-hidden">
-        {/* Swipe Stack - Ana alan */}
-        <div className="flex-1 relative">
-          <SwipeStack
+      {/* 🎯 MAIN CONTENT - Desktop vs Mobile */}
+      {isDesktop ? (
+        /* ========== DESKTOP GRID VIEW ========== */
+        <main className="flex-1 overflow-auto">
+          <DesktopGridView
             items={filteredItems}
-            onSwipe={handleSwipe}
-            onItemClick={handleItemClick}
+            likedItems={likedItems}
+            passedItems={passedItems}
+            onLike={handleDesktopLike}
+            onPass={handleDesktopPass}
             isLoading={isLoading}
-            className="w-full"
           />
-        </div>
+          
+          {/* Login CTA for Desktop */}
+          {!user && (
+            <div className="max-w-7xl mx-auto px-6 py-8">
+              <div className="text-center bg-gradient-to-r from-pink-50 to-purple-50 border border-purple-100 rounded-2xl p-8">
+                <h2 className="text-2xl font-bold text-gray-800 mb-3">Takas Yapmaya Hazır mısın? 🔄</h2>
+                <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                  Giriş yap ve binlerce ürün arasından sana uygun olanları bul. 
+                  Takas yap, tasarruf et!
+                </p>
+                <Link 
+                  href="/login"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg font-medium"
+                >
+                  <LogIn size={20} />
+                  Ücretsiz Kayıt Ol
+                </Link>
+              </div>
+            </div>
+          )}
+        </main>
+      ) : (
+        /* ========== MOBILE SWIPE VIEW ========== */
+        <main className="flex-1 flex flex-col max-w-md mx-auto w-full px-3 py-3 overflow-hidden">
+          {/* Swipe Stack - Ana alan */}
+          <div className="flex-1 relative">
+            <SwipeStack
+              items={filteredItems}
+              onSwipe={handleSwipe}
+              onItemClick={handleItemClick}
+              isLoading={isLoading}
+              className="w-full"
+            />
+          </div>
 
-        {/* Stats - Kompakt */}
-        <div className="flex gap-3 py-3 flex-shrink-0">
+          {/* Stats - Kompakt */}
+          <div className="flex gap-3 py-3 flex-shrink-0">
           <button 
             onClick={() => setShowLikedItems(!showLikedItems)}
             className="flex-1 bg-white/70 backdrop-blur-sm rounded-xl py-2.5 px-4 text-center border border-white/20 hover:bg-white/90 transition-all flex items-center justify-center gap-2"
@@ -380,124 +473,127 @@ export default function HomePage() {
             <span className="text-lg font-bold text-red-600">{passedItems.length}</span>
             <span className="text-xs text-gray-600">Geçilen</span>
           </div>
-        </div>
+          </div>
 
-        {/* Beğenilen Ürünler Grid */}
-        {showLikedItems && likedItems.length > 0 && (
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-gray-800">💚 Beğendiğin Ürünler</h2>
-              <button 
-                onClick={() => setShowLikedItems(false)}
-                className="text-sm text-gray-600 hover:text-gray-800"
-              >
-                Gizle ✕
-              </button>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              {likedItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all transform hover:scale-105"
+          {/* Beğenilen Ürünler Grid */}
+          {showLikedItems && likedItems.length > 0 && (
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-gray-800">💚 Beğendiğin Ürünler</h2>
+                <button 
+                  onClick={() => setShowLikedItems(false)}
+                  className="text-sm text-gray-600 hover:text-gray-800"
                 >
-                  <div className="relative aspect-square">
-                    <Image
-                      src={item.images[0] || '/placeholder.png'}
-                      alt={item.title}
-                      fill
-                      className="object-cover"
-                    />
-                    <div className="absolute top-2 right-2 bg-white rounded-full px-2 py-1 text-xs font-semibold shadow-sm">
-                      {(() => {
-                        const cat = String(item.category).toLowerCase()
-                        if (cat.includes('clothing')) return '👕'
-                        if (cat.includes('toys')) return '🧸'
-                        if (cat.includes('electronics')) return '📱'
-                        if (cat.includes('books')) return '📚'
-                        if (cat.includes('accessories')) return '👜'
-                        if (cat.includes('shoes')) return '👟'
-                        return '📦'
-                      })()}
+                  Gizle ✕
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {likedItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className="bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all transform hover:scale-105"
+                  >
+                    <div className="relative aspect-square">
+                      <Image
+                        src={item.images[0] || '/placeholder.png'}
+                        alt={item.title}
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute top-2 right-2 bg-white rounded-full px-2 py-1 text-xs font-semibold shadow-sm">
+                        {(() => {
+                          const cat = String(item.category).toLowerCase()
+                          if (cat.includes('clothing')) return '👕'
+                          if (cat.includes('toys')) return '🧸'
+                          if (cat.includes('electronics')) return '📱'
+                          if (cat.includes('books')) return '📚'
+                          if (cat.includes('accessories')) return '👜'
+                          if (cat.includes('shoes')) return '👟'
+                          return '📦'
+                        })()}
+                      </div>
+                    </div>
+                    <div className="p-3">
+                      <h3 className="font-bold text-sm text-gray-900 truncate">{item.title}</h3>
+                      <p className="text-xs font-medium text-gray-700 mt-1">📍 {item.location?.city}</p>
+                      <p className="text-sm font-bold text-green-600 mt-1">≈₺{item.estimatedValue}</p>
                     </div>
                   </div>
-                  <div className="p-3">
-                    <h3 className="font-bold text-sm text-gray-900 truncate">{item.title}</h3>
-                    <p className="text-xs font-medium text-gray-700 mt-1">📍 {item.location?.city}</p>
-                    <p className="text-sm font-bold text-green-600 mt-1">≈₺{item.estimatedValue}</p>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-
-        {/* Beğenilen Ürün Yoksa */}
-        {showLikedItems && likedItems.length === 0 && (
-          <div className="mb-6 bg-white/70 backdrop-blur-sm rounded-xl p-8 text-center border border-white/20">
-            <Heart className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">Henüz beğeni yok</h3>
-            <p className="text-sm text-gray-600">Ürünleri kaydırıp beğenmeye başla! 💚</p>
-            <button 
-              onClick={() => setShowLikedItems(false)}
-              className="mt-4 text-sm text-purple-600 hover:text-purple-800 font-medium"
-            >
-              Kapat
-            </button>
-          </div>
-        )}
-
-        {/* Login CTA (sadece giriş yapmamış kullanıcılar için) */}
-        {!user && (
-          <div className="text-center bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 flex-shrink-0">
-            <p className="text-gray-600 mb-3 text-sm">Takas yapmak için giriş yap</p>
-            <Link 
-              href="/login"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-5 py-2 rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg text-sm"
-            >
-              <LogIn size={16} />
-              Giriş Yap
-            </Link>
-          </div>
-        )}
-      </main>
-
-      {/* Bottom Navigation - Kompakt */}
-      <nav className="bg-white/95 backdrop-blur-md border-t border-gray-200 px-2 py-1.5 pb-safe flex-shrink-0">
-        <div className="max-w-md lg:max-w-lg xl:max-w-xl mx-auto flex justify-around items-center pb-2">
-          <button className="flex flex-col items-center py-1 px-3 text-purple-600">
-            <Heart className="w-5 h-5 fill-current" />
-            <span className="text-[10px] mt-0.5 font-medium">Keşfet</span>
-          </button>
-          {!!user ? (
-            <>
-              <Link href="/my-items" className="flex flex-col items-center py-1 px-3 text-gray-400">
-                <Package className="w-5 h-5" />
-                <span className="text-[10px] mt-0.5">Ürünlerim</span>
-              </Link>
-              <Link href="/upload" className="flex flex-col items-center py-1 px-3 text-gray-400">
-                <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-2 rounded-full -mt-4 shadow-lg">
-                  <Plus className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-[10px] mt-0.5">Yükle</span>
-              </Link>
-              <Link href="/messages" className="flex flex-col items-center py-1 px-3 text-gray-400 relative">
-                <MessageCircle className="w-5 h-5" />
-                <span className="text-[10px] mt-0.5">Mesajlar</span>
-                <UnreadBadge userId={user?.id || null} />
-              </Link>
-              <Link href="/profile" className="flex flex-col items-center py-1 px-3 text-gray-400">
-                <User className="w-5 h-5" />
-                <span className="text-[10px] mt-0.5">Profil</span>
-              </Link>
-            </>
-          ) : (
-            <Link href="/login" className="flex flex-col items-center py-1 px-3 text-gray-400">
-              <LogIn className="w-5 h-5" />
-              <span className="text-[10px] mt-0.5">Giriş</span>
-            </Link>
           )}
-        </div>
-      </nav>
+
+          {/* Beğenilen Ürün Yoksa */}
+          {showLikedItems && likedItems.length === 0 && (
+            <div className="mb-6 bg-white/70 backdrop-blur-sm rounded-xl p-8 text-center border border-white/20">
+              <Heart className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">Henüz beğeni yok</h3>
+              <p className="text-sm text-gray-600">Ürünleri kaydırıp beğenmeye başla! 💚</p>
+              <button 
+                onClick={() => setShowLikedItems(false)}
+                className="mt-4 text-sm text-purple-600 hover:text-purple-800 font-medium"
+              >
+                Kapat
+              </button>
+            </div>
+          )}
+
+          {/* Login CTA (sadece giriş yapmamış kullanıcılar için) */}
+          {!user && (
+            <div className="text-center bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 flex-shrink-0">
+              <p className="text-gray-600 mb-3 text-sm">Takas yapmak için giriş yap</p>
+              <Link 
+                href="/login"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-5 py-2 rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg text-sm"
+              >
+                <LogIn size={16} />
+                Giriş Yap
+              </Link>
+            </div>
+          )}
+        </main>
+      )}
+
+      {/* Bottom Navigation - Sadece Mobil */}
+      {isMobile && (
+        <nav className="bg-white/95 backdrop-blur-md border-t border-gray-200 px-2 py-1.5 pb-safe flex-shrink-0">
+          <div className="max-w-md mx-auto flex justify-around items-center pb-2">
+            <button className="flex flex-col items-center py-1 px-3 text-purple-600">
+              <Heart className="w-5 h-5 fill-current" />
+              <span className="text-[10px] mt-0.5 font-medium">Keşfet</span>
+            </button>
+            {!!user ? (
+              <>
+                <Link href="/my-items" className="flex flex-col items-center py-1 px-3 text-gray-400">
+                  <Package className="w-5 h-5" />
+                  <span className="text-[10px] mt-0.5">Ürünlerim</span>
+                </Link>
+                <Link href="/upload" className="flex flex-col items-center py-1 px-3 text-gray-400">
+                  <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-2 rounded-full -mt-4 shadow-lg">
+                    <Plus className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="text-[10px] mt-0.5">Yükle</span>
+                </Link>
+                <Link href="/messages" className="flex flex-col items-center py-1 px-3 text-gray-400 relative">
+                  <MessageCircle className="w-5 h-5" />
+                  <span className="text-[10px] mt-0.5">Mesajlar</span>
+                  <UnreadBadge userId={user?.id || null} />
+                </Link>
+                <Link href="/profile" className="flex flex-col items-center py-1 px-3 text-gray-400">
+                  <User className="w-5 h-5" />
+                  <span className="text-[10px] mt-0.5">Profil</span>
+                </Link>
+              </>
+            ) : (
+              <Link href="/login" className="flex flex-col items-center py-1 px-3 text-gray-400">
+                <LogIn className="w-5 h-5" />
+                <span className="text-[10px] mt-0.5">Giriş</span>
+              </Link>
+            )}
+          </div>
+        </nav>
+      )}
 
       {/* Match Toast Notification */}
       {matchedUser && (
