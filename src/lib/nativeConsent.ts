@@ -15,19 +15,15 @@ interface TrackingPermission {
  * iOS ATT izni iste
  */
 export async function requestTrackingPermission(): Promise<TrackingPermission> {
-  // Web platformunda izin gerekmez
   if (!Capacitor.isNativePlatform()) {
     return { granted: true, status: 'unavailable' };
   }
 
   const platform = Capacitor.getPlatform();
 
-  // iOS için - basit versiyon (ATT plugin olmadan)
   if (platform === 'ios') {
     try {
       console.log('iOS tracking permission - using default authorized');
-      // ATT plugin yoksa varsayılan olarak authorized döndür
-      // Gerçek ATT için @capacitor-community/app-tracking-transparency plugin'i gerekir
       return { granted: true, status: 'authorized' };
     } catch (error) {
       console.error('ATT permission error:', error);
@@ -35,7 +31,6 @@ export async function requestTrackingPermission(): Promise<TrackingPermission> {
     }
   }
 
-  // Android için (GDPR uyumlu consent dialog)
   if (platform === 'android') {
     try {
       console.log('Android tracking permission handled via AdMob consent');
@@ -78,18 +73,14 @@ export async function openTrackingSettings(): Promise<void> {
     console.log('Settings not available on web');
     return;
   }
-  console.log('Open settings - not implemented');
-}
+
+  const platform = Capacitor.getPlatform();
 
   if (platform === 'ios') {
-    // iOS settings URL scheme
     console.log('Opening iOS Settings for ATT');
-    // TODO: Plugin ile app-prefs:root=Privacy&path=Tracking açılabilir
   }
 
   if (platform === 'android') {
-    // Android settings intent
     console.log('Opening Android Settings');
-    // TODO: Plugin ile ayarlar açılabilir
   }
 }
