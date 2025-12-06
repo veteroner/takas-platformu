@@ -8,7 +8,7 @@ import TakaIcon from '@/components/TakaIcon'
 import DesktopGridView from '@/components/DesktopGridView'
 import { useDeviceType } from '@/hooks/useDeviceType'
 import { Item, ItemCondition } from '@/types'
-import { Heart, MessageCircle, User, Settings, LogIn, Plus, Package, Shirt, Gamepad2, Smartphone, BookOpen, Dumbbell, Home, LayoutGrid, Search, Filter, Bell } from 'lucide-react'
+import { Heart, MessageCircle, User, Settings, LogIn, Plus, Package, Shirt, Gamepad2, Smartphone, BookOpen, Dumbbell, Home, LayoutGrid, Search, Filter, Bell, Sparkles } from 'lucide-react'
 import { UnreadBadge } from '@/components/UnreadBadge'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -369,6 +369,12 @@ export default function HomePage() {
                     <User className="w-5 h-5 text-gray-600" />
                   )}
                 </Link>
+                
+                {!isDesktop && (
+                  <Link href="/preferences" className="p-2 hover:bg-gray-100 rounded-full transition-colors" title="Eşleştirme Tercihlerim">
+                    <Sparkles className="w-5 h-5 text-yellow-500" />
+                  </Link>
+                )}
                 
                 {!isDesktop && (
                   <Link href="/settings" className="p-2 hover:bg-gray-100 rounded-full transition-colors">

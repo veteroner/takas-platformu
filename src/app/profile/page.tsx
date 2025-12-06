@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ArrowLeft, Edit3, MapPin, Phone, Calendar, Star, Package, Gift, Camera } from 'lucide-react'
+import { ArrowLeft, Edit3, MapPin, Phone, Calendar, Star, Package, Gift, Camera, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
@@ -398,7 +398,16 @@ export default function ProfilePage() {
       </div>
 
       {/* Action Buttons */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Link
+          href="/preferences"
+          className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 backdrop-blur-lg rounded-2xl p-6 hover:from-yellow-500/30 hover:to-orange-500/30 transition-colors border border-yellow-500/30 text-center"
+        >
+          <Sparkles className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
+          <div className="text-white font-semibold">Akıllı Eşleştirme</div>
+          <div className="text-white/70 text-sm mt-1">Beden ve tercih ayarları</div>
+        </Link>
+
         <Link
           href="/settings"
           className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 hover:bg-white/20 transition-colors border border-white/20 text-center"
@@ -462,6 +471,13 @@ export default function ProfilePage() {
                 >
                   <Gift className="w-5 h-5" />
                   <span>Eşleşmelerim</span>
+                </Link>
+                <Link
+                  href="/preferences"
+                  className="flex items-center gap-3 p-3 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 hover:from-yellow-500/30 hover:to-orange-500/30 rounded-xl text-white transition-colors"
+                >
+                  <Sparkles className="w-5 h-5 text-yellow-400" />
+                  <span>Eşleştirme Tercihlerim</span>
                 </Link>
                 <Link
                   href="/settings"
