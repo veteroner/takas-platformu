@@ -16,6 +16,10 @@ import { logger, trackUserAction } from '@/lib/logger'
 import { Capacitor } from '@capacitor/core'
 import DesktopLayout from '@/components/DesktopLayout'
 import { useDeviceType } from '@/hooks/useDeviceType'
+import ItemAttributeFields from '@/components/ItemAttributeFields'
+import { saveItemAttributes } from '@/lib/matchingService'
+import { TOY_AGE_RANGES } from '@/types/matching'
+import type { ClothingSizeText, GenderType, Season, Style, ToyType, ToyGender, BookAgeGroup, DbCategory } from '@/types/matching'
 
 const categories = [
   { id: 'clothing', name: '👕 Giyim', value: 'clothing' },
@@ -63,6 +67,24 @@ export default function UploadPage() {
     estimatedValue: '',
     city: '' // Ürünün bulunduğu şehir
   })
+  
+  // Akıllı eşleştirme için ürün özellikleri
+  const [itemAttributes, setItemAttributes] = useState({
+    sizeText: '' as ClothingSizeText | '',
+    gender: '' as GenderType | '',
+    season: '' as Season | '',
+    style: '' as Style | '',
+    brand: '',
+    color: '',
+    toyAgeRange: '',
+    toyType: '' as ToyType | '',
+    toyGender: '' as ToyGender | '',
+    bookGenre: '',
+    bookLanguage: 'tr',
+    bookAgeGroup: '' as BookAgeGroup | '',
+    conditionScore: 7
+  })
+  
   // Seeking preferences local state (simple v1)
   const [seekCategories, setSeekCategories] = useState<Array<'clothing'|'toys'|'electronics'|'books'|'sports'|'home'|'other'>>([])
   const [seekValueMin, setSeekValueMin] = useState<string>('')
@@ -553,6 +575,30 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
 
       logger.info('UPLOAD_PAGE', '✅ Item created successfully', { itemId: item?.id })
       
+      // 3. Akıllı eşleştirme için ürün özelliklerini kaydet
+      if (item?.id) {
+        const ageRange = itemAttributes.toyAgeRange ? TOY_AGE_RANGES[itemAttributes.toyAgeRange as keyof typeof TOY_AGE_RANGES] : null
+        
+        await saveItemAttributes(item.id, {
+          sizeText: itemAttributes.sizeText || undefined,
+          gender: itemAttributes.gender || undefined,
+          season: itemAttributes.season || undefined,
+          style: itemAttributes.style || undefined,
+          brand: itemAttributes.brand || undefined,
+          color: itemAttributes.color || undefined,
+          toyAgeMin: ageRange?.min,
+          toyAgeMax: ageRange?.max,
+          toyType: itemAttributes.toyType || undefined,
+          toyGender: itemAttributes.toyGender || undefined,
+          bookGenre: itemAttributes.bookGenre || undefined,
+          bookLanguage: itemAttributes.bookLanguage || undefined,
+          bookAgeGroup: itemAttributes.bookAgeGroup || undefined,
+          conditionScore: itemAttributes.conditionScore
+        })
+        
+        logger.info('UPLOAD_PAGE', '✅ Item attributes saved for smart matching')
+      }
+      
       setIsUploading(false)
       setUploadSuccess(true)
       
@@ -767,6 +813,17 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                       <option value="other">📦 Diğer</option>
                     </select>
                   </div>
+
+                  {/* Akıllı Eşleştirme - Kategori Bazlı Alanlar */}
+                  {formData.category && (
+                    <div className="col-span-2">
+                      <ItemAttributeFields
+                        category={formData.category as DbCategory}
+                        attributes={itemAttributes}
+                        onChange={(field, value) => setItemAttributes(prev => ({ ...prev, [field]: value }))}
+                      />
+                    </div>
+                  )}
 
                   {/* Condition */}
                   <div>
@@ -1122,6 +1179,17 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
               ))}
             </div>
           </div>
+
+          {/* Akıllı Eşleştirme - Kategori Bazlı Alanlar (Mobil) */}
+          {formData.category && (
+            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+              <ItemAttributeFields
+                category={formData.category as DbCategory}
+                attributes={itemAttributes}
+                onChange={(field, value) => setItemAttributes(prev => ({ ...prev, [field]: value }))}
+              />
+            </div>
+          )}
 
           {/* Condition */}
           <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
