@@ -90,20 +90,12 @@ ${fullMessage}
       
       console.log('═══════════════════════════════════════════════════════\n')
       
-      // CRITICAL: Native alert for errors to ensure visibility
-      if (level === 'error' || level === 'fatal') {
+      // CRITICAL: Native alert for errors - ONLY in development
+      if ((level === 'error' || level === 'fatal') && process.env.NODE_ENV === 'development') {
         const errorMsg = `${category}: ${message}${error ? '\n' + error.message : ''}`
         console.error('🚨 CRITICAL ERROR:', errorMsg)
         
-        // Try to show native alert (will work on device)
-        if (typeof window !== 'undefined' && this.isNative) {
-          setTimeout(() => {
-            try {
-              // This will appear as iOS alert on device
-              alert(`DEBUG ERROR\n\n${category}:\n${message}${error ? '\n\nError: ' + error.message : ''}`)
-            } catch {}
-          }, 100)
-        }
+        // Debug alerts disabled in production
       }
     } else {
       // Web'de normal console

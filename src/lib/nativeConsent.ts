@@ -12,25 +12,7 @@ interface TrackingPermission {
 }
 
 /**
- * App plugin'i dinamik olarak yükle (sadece native platformda)
- */
-async function getAppPlugin() {
-  if (!Capacitor.isNativePlatform()) {
-    return null;
-  }
-  try {
-    const { App } = await import('@capacitor/app');
-    return App;
-  } catch {
-    console.warn('App plugin yüklenemedi');
-    return null;
-  }
-}
-
-/**
  * iOS ATT izni iste
- * NOT: Info.plist'e NSUserTrackingUsageDescription eklenmeli:
- * "Kişiselleştirilmiş reklamlar ve içerik için izleme izni gereklidir."
  */
 export async function requestTrackingPermission(): Promise<TrackingPermission> {
   // Web platformunda izin gerekmez
@@ -40,19 +22,12 @@ export async function requestTrackingPermission(): Promise<TrackingPermission> {
 
   const platform = Capacitor.getPlatform();
 
-  // iOS için ATT kontrolü
+  // iOS için - basit versiyon (ATT plugin olmadan)
   if (platform === 'ios') {
     try {
-      // iOS 14.5+ ATT framework'ü gerektirir
-      // Capacitor plugin ile entegre edilmeli (örn: @capacitor/app-tracking-transparency)
-      
-      console.log('iOS ATT permission flow started');
-      const App = await getAppPlugin();
-      if (App) {
-        const info = await App.getInfo();
-        console.log('App info (ATT context):', info);
-      }
-      // Gerçek ATT diyaloğu için native plugin entegrasyonu eklenecek.
+      console.log('iOS tracking permission - using default authorized');
+      // ATT plugin yoksa varsayılan olarak authorized döndür
+      // Gerçek ATT için @capacitor-community/app-tracking-transparency plugin'i gerekir
       return { granted: true, status: 'authorized' };
     } catch (error) {
       console.error('ATT permission error:', error);
@@ -64,9 +39,6 @@ export async function requestTrackingPermission(): Promise<TrackingPermission> {
   if (platform === 'android') {
     try {
       console.log('Android tracking permission handled via AdMob consent');
-      
-      // AdMob consent form zaten GDPR uyumlu
-      // Ek bir dialog gerekmez
       return { granted: true, status: 'authorized' };
     } catch (error) {
       console.error('Android consent error:', error);
@@ -88,17 +60,7 @@ export async function checkTrackingPermission(): Promise<TrackingPermission> {
   const platform = Capacitor.getPlatform();
 
   if (platform === 'ios') {
-    try {
-      const App = await getAppPlugin();
-      if (App) {
-        const info = await App.getInfo();
-        console.log('App info (ATT check):', info);
-      }
-      return { granted: true, status: 'authorized' };
-    } catch (error) {
-      console.error('ATT check error:', error);
-      return { granted: false, status: 'denied' };
-    }
+    return { granted: true, status: 'authorized' };
   }
 
   if (platform === 'android') {
@@ -116,8 +78,8 @@ export async function openTrackingSettings(): Promise<void> {
     console.log('Settings not available on web');
     return;
   }
-
-  const platform = Capacitor.getPlatform();
+  console.log('Open settings - not implemented');
+}
 
   if (platform === 'ios') {
     // iOS settings URL scheme

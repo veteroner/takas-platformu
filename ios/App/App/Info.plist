@@ -36,16 +36,7 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Ürün fotoğraflarını seçmek için fotoğraf galerinize erişmemiz gerekiyor.</string>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>Kişiselleştirilmiş reklamlar ve içerik sunabilmek için izleme izninize ihtiyacımız var.</string>
-	<key>OneSignal_app_id</key>
-	<string>f26d64d9-c8c9-48ee-a472-f12cc5c8b629</string>
-	<key>SKAdNetworkItems</key>
-	<array>
-		<dict>
-			<key>SKAdNetworkIdentifier</key>
-			<string>cstr6suwn9.skadnetwork</string>
-		</dict>
-	</array>
+	<string>Kişiselleştirilmiş reklamlar için izleme izninize ihtiyacımız var.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
