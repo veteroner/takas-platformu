@@ -83,7 +83,10 @@ jobs:
         run: |
           cd ios
           fastlane certificates
-          fastlane build_appstore --verbose
+          fastlane build_appstore --verbose 2>&1 || true
+          echo "=== GYM LOG ===" 
+          cat ~/Library/Logs/gym/App-App.log 2>/dev/null || echo "No gym log found"
+          exit 1
         env:
           MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
