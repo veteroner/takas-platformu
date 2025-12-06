@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { getCurrentUser } from '@/lib/auth'
+import { CompactFooter } from '@/components/Footer'
 
 export default function WelcomePage() {
   
@@ -127,6 +128,9 @@ export default function WelcomePage() {
         <p className="mt-8 text-white/60 text-sm">
           Ücretsiz, kolay ve eğlenceli! 🚀
         </p>
+
+        {/* Footer */}
+        <CompactFooter variant="transparent" />
       </div>
     </div>
   )

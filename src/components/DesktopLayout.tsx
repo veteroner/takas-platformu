@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Home, MessageCircle, Package, User, Search, Upload, Heart, Settings, ArrowLeft } from 'lucide-react'
 import { useDeviceType } from '@/hooks/useDeviceType'
+import Footer from '@/components/Footer'
 
 interface DesktopLayoutProps {
   children: ReactNode
@@ -134,6 +135,9 @@ export default function DesktopLayout({
       <main className={`${maxWidthClasses[maxWidth]} mx-auto px-4 lg:px-8 py-6 ${centerContent ? 'flex justify-center' : ''}`}>
         {children}
       </main>
+
+      {/* Footer */}
+      <Footer variant="transparent" />
     </div>
   )
 }

@@ -1,0 +1,348 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { ArrowLeft, Bell, Heart, MessageCircle, Package, CheckCircle, Trash2, Check } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import Image from 'next/image'
+import { supabase } from '@/lib/supabase'
+import DesktopLayout from '@/components/DesktopLayout'
+import { useDeviceType } from '@/hooks/useDeviceType'
+import { formatDistanceToNow } from 'date-fns'
+import { tr } from 'date-fns/locale'
+
+interface Notification {
+  id: string
+  type: 'match' | 'message' | 'like' | 'system' | 'trade_complete' | 'trade_request'
+  title: string
+  message: string
+  read: boolean
+  createdAt: Date
+  data?: {
+    itemId?: string
+    itemImage?: string
+    userId?: string
+    userName?: string
+    userAvatar?: string
+    matchId?: string
+    chatId?: string
+  }
+}
+
+export default function NotificationsPage() {
+  const router = useRouter()
+  const { isMobile } = useDeviceType()
+  const [notifications, setNotifications] = useState<Notification[]>([])
+  const [loading, setLoading] = useState(true)
+  const [filter, setFilter] = useState<'all' | 'unread'>('all')
+
+  useEffect(() => {
+    loadNotifications()
+  }, [])
+
+  const loadNotifications = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        router.push('/login')
+        return
+      }
+
+      // Gerçek bildirimler için: supabase'den çek
+      // Şimdilik mock data kullanalım
+      const mockNotifications: Notification[] = [
+        {
+          id: '1',
+          type: 'match',
+          title: 'Yeni Eşleşme! 🎉',
+          message: 'Ahmet ile eşleştiniz! Nike Spor Ayakkabı için takas başlatabilirsiniz.',
+          read: false,
+          createdAt: new Date(Date.now() - 1000 * 60 * 30), // 30 dk önce
+          data: {
+            userName: 'Ahmet',
+            userAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ahmet',
+            matchId: 'match-1'
+          }
+        },
+        {
+          id: '2',
+          type: 'message',
+          title: 'Yeni Mesaj',
+          message: 'Zeynep: "Merhaba, ürün hala mevcut mu?"',
+          read: false,
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 saat önce
+          data: {
+            userName: 'Zeynep',
+            userAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Zeynep',
+            chatId: 'chat-1'
+          }
+        },
+        {
+          id: '3',
+          type: 'like',
+          title: 'Ürününüz Beğenildi',
+          message: 'Vintage Deri Ceket ürününüz 5 kişi tarafından beğenildi!',
+          read: true,
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 gün önce
+          data: {
+            itemId: 'item-1',
+            itemImage: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=100'
+          }
+        },
+        {
+          id: '4',
+          type: 'trade_complete',
+          title: 'Takas Tamamlandı ✅',
+          message: 'Mehmet ile takasınız başarıyla tamamlandı! Değerlendirme yapmayı unutmayın.',
+          read: true,
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2), // 2 gün önce
+          data: {
+            userName: 'Mehmet',
+            matchId: 'match-2'
+          }
+        },
+        {
+          id: '5',
+          type: 'system',
+          title: 'Hoş Geldiniz!',
+          message: 'TakasZone\'a hoş geldiniz! Profilinizi tamamlayarak daha iyi eşleşmeler bulabilirsiniz.',
+          read: true,
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7), // 1 hafta önce
+        }
+      ]
+
+      setNotifications(mockNotifications)
+    } catch (error) {
+      console.error('Error loading notifications:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const markAsRead = async (id: string) => {
+    setNotifications(prev => 
+      prev.map(n => n.id === id ? { ...n, read: true } : n)
+    )
+  }
+
+  const markAllAsRead = async () => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })))
+  }
+
+  const deleteNotification = async (id: string) => {
+    setNotifications(prev => prev.filter(n => n.id !== id))
+  }
+
+  const getIcon = (type: Notification['type']) => {
+    switch (type) {
+      case 'match': return <Heart className="w-5 h-5 text-pink-500" />
+      case 'message': return <MessageCircle className="w-5 h-5 text-blue-500" />
+      case 'like': return <Heart className="w-5 h-5 text-red-500" />
+      case 'trade_complete': return <CheckCircle className="w-5 h-5 text-green-500" />
+      case 'trade_request': return <Package className="w-5 h-5 text-purple-500" />
+      case 'system': return <Bell className="w-5 h-5 text-gray-500" />
+      default: return <Bell className="w-5 h-5 text-gray-500" />
+    }
+  }
+
+  const getLink = (notification: Notification): string => {
+    switch (notification.type) {
+      case 'match':
+      case 'trade_complete':
+      case 'trade_request':
+        return '/matches'
+      case 'message':
+        return notification.data?.chatId ? `/chat/${notification.data.chatId}` : '/messages'
+      case 'like':
+        return notification.data?.itemId ? `/item/${notification.data.itemId}` : '/my-items'
+      default:
+        return '#'
+    }
+  }
+
+  const filteredNotifications = filter === 'unread' 
+    ? notifications.filter(n => !n.read)
+    : notifications
+
+  const unreadCount = notifications.filter(n => !n.read).length
+
+  const NotificationsContent = () => (
+    <>
+      {/* Header Actions */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex gap-2">
+          <button
+            onClick={() => setFilter('all')}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              filter === 'all' 
+                ? 'bg-white/20 text-white' 
+                : 'bg-white/10 text-white/70 hover:bg-white/15'
+            }`}
+          >
+            Tümü ({notifications.length})
+          </button>
+          <button
+            onClick={() => setFilter('unread')}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              filter === 'unread' 
+                ? 'bg-white/20 text-white' 
+                : 'bg-white/10 text-white/70 hover:bg-white/15'
+            }`}
+          >
+            Okunmamış ({unreadCount})
+          </button>
+        </div>
+
+        {unreadCount > 0 && (
+          <button
+            onClick={markAllAsRead}
+            className="flex items-center gap-2 px-3 py-2 text-sm text-white/80 hover:text-white transition-colors"
+          >
+            <Check className="w-4 h-4" />
+            Tümünü Okundu İşaretle
+          </button>
+        )}
+      </div>
+
+      {/* Notifications List */}
+      {loading ? (
+        <div className="flex items-center justify-center py-20">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+        </div>
+      ) : filteredNotifications.length === 0 ? (
+        <div className="text-center py-20">
+          <Bell className="w-16 h-16 mx-auto text-white/30 mb-4" />
+          <h3 className="text-xl font-semibold text-white mb-2">
+            {filter === 'unread' ? 'Okunmamış bildirim yok' : 'Bildirim bulunmuyor'}
+          </h3>
+          <p className="text-white/60">
+            {filter === 'unread' 
+              ? 'Tüm bildirimlerinizi okudunuz!' 
+              : 'Yeni bildirimler burada görünecek'}
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {filteredNotifications.map((notification) => (
+            <Link
+              key={notification.id}
+              href={getLink(notification)}
+              onClick={() => markAsRead(notification.id)}
+              className={`block bg-white/10 backdrop-blur-lg rounded-2xl p-4 border transition-all hover:bg-white/15 ${
+                notification.read 
+                  ? 'border-white/10' 
+                  : 'border-pink-500/50 bg-white/15'
+              }`}
+            >
+              <div className="flex items-start gap-4">
+                {/* Icon or Avatar */}
+                <div className={`p-3 rounded-xl ${
+                  notification.read ? 'bg-white/10' : 'bg-white/20'
+                }`}>
+                  {notification.data?.userAvatar ? (
+                    <Image
+                      src={notification.data.userAvatar}
+                      alt=""
+                      width={24}
+                      height={24}
+                      className="w-6 h-6 rounded-full"
+                    />
+                  ) : notification.data?.itemImage ? (
+                    <Image
+                      src={notification.data.itemImage}
+                      alt=""
+                      width={24}
+                      height={24}
+                      className="w-6 h-6 rounded object-cover"
+                    />
+                  ) : (
+                    getIcon(notification.type)
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className={`font-semibold ${
+                      notification.read ? 'text-white/80' : 'text-white'
+                    }`}>
+                      {notification.title}
+                    </h3>
+                    {!notification.read && (
+                      <span className="w-2 h-2 bg-pink-500 rounded-full flex-shrink-0 mt-2"></span>
+                    )}
+                  </div>
+                  <p className={`text-sm mt-1 ${
+                    notification.read ? 'text-white/50' : 'text-white/70'
+                  }`}>
+                    {notification.message}
+                  </p>
+                  <p className="text-xs text-white/40 mt-2">
+                    {formatDistanceToNow(notification.createdAt, { 
+                      addSuffix: true, 
+                      locale: tr 
+                    })}
+                  </p>
+                </div>
+
+                {/* Delete Button */}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    deleteNotification(notification.id)
+                  }}
+                  className="p-2 text-white/30 hover:text-white/60 transition-colors"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+    </>
+  )
+
+  // Desktop Layout
+  if (!isMobile) {
+    return (
+      <DesktopLayout title="Bildirimler" maxWidth="2xl">
+        <NotificationsContent />
+      </DesktopLayout>
+    )
+  }
+
+  // Mobile Layout
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400">
+      {/* Header */}
+      <div className="sticky top-0 z-10 bg-black/20 backdrop-blur-lg border-b border-white/10">
+        <div className="flex items-center justify-between px-4 py-4">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => router.back()}
+              className="p-2 hover:bg-white/10 rounded-full transition-colors"
+            >
+              <ArrowLeft className="w-6 h-6 text-white" />
+            </button>
+            <div className="flex items-center gap-2">
+              <Bell className="w-6 h-6 text-white" />
+              <h1 className="text-xl font-bold text-white">Bildirimler</h1>
+              {unreadCount > 0 && (
+                <span className="bg-pink-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                  {unreadCount}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="p-4">
+        <NotificationsContent />
+      </div>
+    </div>
+  )
+}
