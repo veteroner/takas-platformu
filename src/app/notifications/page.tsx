@@ -37,87 +37,87 @@ export default function NotificationsPage() {
   const [filter, setFilter] = useState<'all' | 'unread'>('all')
 
   useEffect(() => {
-    loadNotifications()
-  }, [])
-
-  const loadNotifications = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        router.push('/login')
-        return
-      }
-
-      // Gerçek bildirimler için: supabase'den çek
-      // Şimdilik mock data kullanalım
-      const mockNotifications: Notification[] = [
-        {
-          id: '1',
-          type: 'match',
-          title: 'Yeni Eşleşme! 🎉',
-          message: 'Ahmet ile eşleştiniz! Nike Spor Ayakkabı için takas başlatabilirsiniz.',
-          read: false,
-          createdAt: new Date(Date.now() - 1000 * 60 * 30), // 30 dk önce
-          data: {
-            userName: 'Ahmet',
-            userAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ahmet',
-            matchId: 'match-1'
-          }
-        },
-        {
-          id: '2',
-          type: 'message',
-          title: 'Yeni Mesaj',
-          message: 'Zeynep: "Merhaba, ürün hala mevcut mu?"',
-          read: false,
-          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 saat önce
-          data: {
-            userName: 'Zeynep',
-            userAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Zeynep',
-            chatId: 'chat-1'
-          }
-        },
-        {
-          id: '3',
-          type: 'like',
-          title: 'Ürününüz Beğenildi',
-          message: 'Vintage Deri Ceket ürününüz 5 kişi tarafından beğenildi!',
-          read: true,
-          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 gün önce
-          data: {
-            itemId: 'item-1',
-            itemImage: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=100'
-          }
-        },
-        {
-          id: '4',
-          type: 'trade_complete',
-          title: 'Takas Tamamlandı ✅',
-          message: 'Mehmet ile takasınız başarıyla tamamlandı! Değerlendirme yapmayı unutmayın.',
-          read: true,
-          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2), // 2 gün önce
-          data: {
-            userName: 'Mehmet',
-            matchId: 'match-2'
-          }
-        },
-        {
-          id: '5',
-          type: 'system',
-          title: 'Hoş Geldiniz!',
-          message: 'TakasZone\'a hoş geldiniz! Profilinizi tamamlayarak daha iyi eşleşmeler bulabilirsiniz.',
-          read: true,
-          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7), // 1 hafta önce
+    const loadNotifications = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          router.push('/login')
+          return
         }
-      ]
 
-      setNotifications(mockNotifications)
-    } catch (error) {
-      console.error('Error loading notifications:', error)
-    } finally {
-      setLoading(false)
+        // Gerçek bildirimler için: supabase'den çek
+        // Şimdilik mock data kullanalım
+        const mockNotifications: Notification[] = [
+          {
+            id: '1',
+            type: 'match',
+            title: 'Yeni Eşleşme! 🎉',
+            message: 'Ahmet ile eşleştiniz! Nike Spor Ayakkabı için takas başlatabilirsiniz.',
+            read: false,
+            createdAt: new Date(Date.now() - 1000 * 60 * 30),
+            data: {
+              userName: 'Ahmet',
+              userAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ahmet',
+              matchId: 'match-1'
+            }
+          },
+          {
+            id: '2',
+            type: 'message',
+            title: 'Yeni Mesaj',
+            message: 'Zeynep: "Merhaba, ürün hala mevcut mu?"',
+            read: false,
+            createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
+            data: {
+              userName: 'Zeynep',
+              userAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Zeynep',
+              chatId: 'chat-1'
+            }
+          },
+          {
+            id: '3',
+            type: 'like',
+            title: 'Ürününüz Beğenildi',
+            message: 'Vintage Deri Ceket ürününüz 5 kişi tarafından beğenildi!',
+            read: true,
+            createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
+            data: {
+              itemId: 'item-1',
+              itemImage: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=100'
+            }
+          },
+          {
+            id: '4',
+            type: 'trade_complete',
+            title: 'Takas Tamamlandı ✅',
+            message: 'Mehmet ile takasınız başarıyla tamamlandı! Değerlendirme yapmayı unutmayın.',
+            read: true,
+            createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2),
+            data: {
+              userName: 'Mehmet',
+              matchId: 'match-2'
+            }
+          },
+          {
+            id: '5',
+            type: 'system',
+            title: 'Hoş Geldiniz!',
+            message: 'TakasZone\'a hoş geldiniz! Profilinizi tamamlayarak daha iyi eşleşmeler bulabilirsiniz.',
+            read: true,
+            createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
+          }
+        ]
+
+        setNotifications(mockNotifications)
+      } catch (error) {
+        console.error('Error loading notifications:', error)
+      } finally {
+        setLoading(false)
+      }
     }
-  }
+
+    loadNotifications()
+  }, [router])
 
   const markAsRead = async (id: string) => {
     setNotifications(prev => 
