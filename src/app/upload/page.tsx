@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Camera, X, Upload, ArrowLeft, Check } from 'lucide-react'
+import { Camera, X, Upload, ArrowLeft, Check, Info, Package, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -14,6 +14,8 @@ import { optimizeImage, validateImage, createPreviewURL, revokePreviewURL } from
 import { takePhoto, pickImage } from '@/lib/cameraWrapper'
 import { logger, trackUserAction } from '@/lib/logger'
 import { Capacitor } from '@capacitor/core'
+import DesktopLayout from '@/components/DesktopLayout'
+import { useDeviceType } from '@/hooks/useDeviceType'
 
 const categories = [
   { id: 'clothing', name: '👕 Giyim', value: 'clothing' },
@@ -49,6 +51,7 @@ const cities = [
 
 export default function UploadPage() {
   const router = useRouter()
+  const { isMobile } = useDeviceType()
   const [images, setImages] = useState<string[]>([])
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [userId, setUserId] = useState<string | null>(null)
@@ -586,6 +589,64 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
     setSeekCategories(prev => prev.includes(ct) ? prev.filter(c => c !== ct) : [...prev, ct])
   }
 
+  // Upload Tips Component for desktop sidebar
+  const UploadTipsPanel = () => (
+    <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-6 sticky top-24">
+      <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+        💡 Başarılı Takas İçin İpuçları
+      </h3>
+      <div className="space-y-4">
+        <div className="flex gap-3">
+          <div className="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Camera className="w-4 h-4 text-pink-600" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-gray-700">Net Fotoğraflar</p>
+            <p className="text-xs text-gray-500">İyi aydınlatılmış, net fotoğraflar çekin. Farklı açılardan 3-5 fotoğraf ideal.</p>
+          </div>
+        </div>
+        <div className="flex gap-3">
+          <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Info className="w-4 h-4 text-purple-600" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-gray-700">Detaylı Açıklama</p>
+            <p className="text-xs text-gray-500">Ürünün durumunu, kusurlarını ve özelliklerini açıkça belirtin.</p>
+          </div>
+        </div>
+        <div className="flex gap-3">
+          <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Package className="w-4 h-4 text-indigo-600" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-gray-700">Doğru Kategori</p>
+            <p className="text-xs text-gray-500">Doğru kategori seçimi, ürününüzün doğru kişilere ulaşmasını sağlar.</p>
+          </div>
+        </div>
+        <div className="flex gap-3">
+          <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Sparkles className="w-4 h-4 text-green-600" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-gray-700">Tercihler Belirle</p>
+            <p className="text-xs text-gray-500">Ne ile takas yapmak istediğinizi belirtin, daha hızlı eşleşin.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div className="mt-6 pt-4 border-t border-gray-100">
+        <div className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-4">
+          <p className="text-xs text-gray-600 mb-2">
+            <strong>📌 Hatırlatma:</strong> Yasadışı, tehlikeli veya uygunsuz içerikler yasaktır.
+          </p>
+          <Link href="/kurals" className="text-xs text-pink-600 hover:text-pink-700 font-medium">
+            Topluluk kurallarını oku →
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+
   if (uploadSuccess) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex items-center justify-center">
@@ -600,6 +661,245 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
     )
   }
 
+  // Desktop Layout
+  if (!isMobile) {
+    return (
+      <DesktopLayout title="Ürün Yükle" maxWidth="6xl">
+        <div className="grid grid-cols-3 gap-8">
+          {/* Main Form - 2 columns */}
+          <div className="col-span-2">
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-8">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center">
+                  <Upload className="w-5 h-5 text-white" />
+                </div>
+                Yeni Ürün Ekle
+              </h2>
+
+              {/* Illegal Content Warning */}
+              {lastResult && !lastResult.isClean && (
+                <ProductFilterWarning result={lastResult} className="mb-6" />
+              )}
+
+              {/* Error Message */}
+              {error && !lastResult && (
+                <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                  <p className="text-sm">{error}</p>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-8">
+                {/* Image Upload - Desktop Grid */}
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                      <Camera className="w-5 h-5 text-pink-500" />
+                      Fotoğraflar (En fazla 5)
+                    </h3>
+                    {imageFiles.length > 0 && (
+                      <span className="text-sm text-green-600 font-medium bg-green-50 px-3 py-1 rounded-full">
+                        ✅ Optimize edildi
+                      </span>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-5 gap-4">
+                    {images.map((src, i) => (
+                      <div key={i} className="relative aspect-square group">
+                        <Image src={src} alt="" fill className="object-cover rounded-xl border-2 border-gray-200" />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(i)}
+                          className="absolute -top-2 -right-2 w-7 h-7 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                    {images.length < 5 && (
+                      <label className="aspect-square border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-pink-400 hover:bg-pink-50/50 transition-all">
+                        <Camera className="w-8 h-8 text-gray-400 mb-2" />
+                        <span className="text-sm text-gray-500">Ekle</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={handleImageUpload}
+                          className="hidden"
+                        />
+                      </label>
+                    )}
+                  </div>
+                </div>
+
+                {/* Two Column Form Fields */}
+                <div className="grid grid-cols-2 gap-6">
+                  {/* Title */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Ürün Adı</label>
+                    <input
+                      type="text"
+                      name="title"
+                      value={formData.title}
+                      onChange={handleInputChange}
+                      placeholder="Örn: Kız Çocuk Yazlık Elbise"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  {/* Category */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                    <select
+                      name="category"
+                      value={formData.category}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      required
+                    >
+                      <option value="">Seçiniz</option>
+                      <option value="clothing">👗 Giyim</option>
+                      <option value="toys">🧸 Oyuncak</option>
+                      <option value="electronics">📱 Elektronik</option>
+                      <option value="books">📚 Kitap</option>
+                      <option value="sports">⚽ Spor</option>
+                      <option value="home">🏠 Ev</option>
+                      <option value="other">📦 Diğer</option>
+                    </select>
+                  </div>
+
+                  {/* Condition */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Ürün Durumu</label>
+                    <select
+                      name="condition"
+                      value={formData.condition}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      required
+                    >
+                      <option value="">Seçiniz</option>
+                      <option value="new">✨ Sıfır - Hiç kullanılmadı</option>
+                      <option value="like-new">🌟 Yeni gibi</option>
+                      <option value="good">👍 İyi durumda</option>
+                      <option value="fair">👌 Orta</option>
+                    </select>
+                  </div>
+
+                  {/* Age Group */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Yaş Grubu</label>
+                    <select
+                      name="ageGroup"
+                      value={formData.ageGroup}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                    >
+                      <option value="">Seçiniz (opsiyonel)</option>
+                      <option value="0-1">👶 0-1 yaş</option>
+                      <option value="1-3">🧒 1-3 yaş</option>
+                      <option value="3-6">👧 3-6 yaş</option>
+                      <option value="6-9">🧑 6-9 yaş</option>
+                      <option value="9-12">👦 9-12 yaş</option>
+                      <option value="12+">🧑‍🤝‍🧑 12+ yaş</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Description - Full Width */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Açıklama</label>
+                  <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    placeholder="Ürün hakkında detaylı bilgi verin..."
+                    rows={4}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent resize-none"
+                    required
+                  />
+                </div>
+
+                {/* Seek Preferences */}
+                <div className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-purple-500" />
+                    Ne ile takas etmek istersiniz?
+                  </h3>
+                  <div className="grid grid-cols-4 gap-3">
+                    {(['clothing', 'toys', 'electronics', 'books', 'sports', 'home', 'other'] as const).map(cat => {
+                      const icons: Record<string, string> = {
+                        clothing: '👗', toys: '🧸', electronics: '📱', books: '📚',
+                        sports: '⚽', home: '🏠', other: '📦'
+                      }
+                      const labels: Record<string, string> = {
+                        clothing: 'Giyim', toys: 'Oyuncak', electronics: 'Elektronik',
+                        books: 'Kitap', sports: 'Spor', home: 'Ev', other: 'Diğer'
+                      }
+                      return (
+                        <button
+                          key={cat}
+                          type="button"
+                          onClick={() => toggleSeekCategory(cat)}
+                          className={`p-3 rounded-xl border-2 transition-all text-center ${
+                            seekCategories.includes(cat)
+                              ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white border-transparent'
+                              : 'bg-white border-gray-200 hover:border-pink-300'
+                          }`}
+                        >
+                          <span className="text-xl block mb-1">{icons[cat]}</span>
+                          <span className="text-sm font-medium">{labels[cat]}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                  <p className="text-xs text-gray-500 mt-3">Birden fazla kategori seçebilirsiniz</p>
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={isUploading || images.length === 0 || (lastResult !== null && !lastResult.isClean)}
+                  className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-4 rounded-xl font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-lg"
+                >
+                  {isUploading ? (
+                    <>
+                      <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Yükleniyor...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="w-6 h-6" />
+                      Ürünü Yükle
+                    </>
+                  )}
+                </button>
+
+                {images.length === 0 && (
+                  <p className="text-center text-sm text-gray-500 -mt-4">
+                    Ürün yüklemek için en az 1 fotoğraf eklemelisiniz
+                  </p>
+                )}
+
+                {lastResult && !lastResult.isClean && (
+                  <p className="text-center text-sm text-red-600 -mt-4">
+                    ⚠️ Yasadışı içerik nedeniyle yükleme engellendi
+                  </p>
+                )}
+              </form>
+            </div>
+          </div>
+
+          {/* Tips Sidebar - 1 column */}
+          <div className="col-span-1">
+            <UploadTipsPanel />
+          </div>
+        </div>
+      </DesktopLayout>
+    )
+  }
+
+  // Mobile Layout
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
       {/* Header */}

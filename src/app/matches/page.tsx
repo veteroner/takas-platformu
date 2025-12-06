@@ -3,15 +3,19 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { ArrowLeft, Filter, Package, RefreshCw } from 'lucide-react'
 import { getCurrentUser } from '@/lib/auth'
 import { getFeedItems, getUserItems } from '@/lib/api'
 import type { Item } from '@/types'
 import { loadSeekingPreferencesAsync, saveSeekingPreferencesAsync } from '@/lib/preferences'
 import { filterAndRank, suggestPackages } from '@/lib/matching'
+import DesktopLayout from '@/components/DesktopLayout'
+import { useDeviceType } from '@/hooks/useDeviceType'
 
 type DbCategory = 'clothing'|'toys'|'electronics'|'books'|'sports'|'home'|'other'
 
 export default function MatchesPage() {
+  const { isMobile } = useDeviceType()
   const [user, setUser] = useState<any>(null)
   const [feed, setFeed] = useState<Item[]>([])
   const [myItems, setMyItems] = useState<Item[]>([])
@@ -172,11 +176,16 @@ export default function MatchesPage() {
     } as any)
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center">Yükleniyor...</div>
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+      <p className="text-gray-600">Yükleniyor...</p>
+    </div>
+  </div>
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
         <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-8 text-center">
           <h2 className="text-xl font-semibold mb-2">Eşleşmeleri görmek için giriş yap</h2>
           <Link href="/login" className="inline-block mt-2 bg-purple-600 text-white px-4 py-2 rounded-lg">Giriş</Link>
@@ -185,120 +194,169 @@ export default function MatchesPage() {
     )
   }
 
+  // Preferences Panel Component
+  const PreferencesPanel = ({ className = '' }: { className?: string }) => (
+    <div className={`bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 ${className}`}>
+      <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+        <Filter className="w-5 h-5" />
+        Tercihler
+      </h3>
+      <div className="grid grid-cols-2 gap-2 mb-3">
+        {(['clothing','toys','electronics','books','sports','home','other'] as const).map(ct => (
+          <button key={ct} type="button" onClick={() => toggleCategory(ct)}
+            className={`py-2 px-3 rounded-lg border-2 text-xs transition-all ${categories.includes(ct)?'border-purple-500 bg-purple-50 text-purple-700':'border-gray-200 hover:border-purple-300'}`}>{ct}</button>
+        ))}
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="block text-sm mb-1">Min ₺</label>
+          <input value={valueMin} onChange={e=>setValueMin(e.target.value)} type="number" className="w-full px-3 py-2 border rounded-lg" />
+        </div>
+        <div>
+          <label className="block text-sm mb-1">Max ₺</label>
+          <input value={valueMax} onChange={e=>setValueMax(e.target.value)} type="number" className="w-full px-3 py-2 border rounded-lg" />
+        </div>
+      </div>
+      <div className="mt-3">
+        <label className="block text-sm mb-1">Şehir</label>
+        <input value={city} onChange={e=>setCity(e.target.value)} className="w-full px-3 py-2 border rounded-lg" placeholder="İstanbul" />
+      </div>
+      <div className="mt-3 grid grid-cols-2 gap-3">
+        <div>
+          <label className="block text-xs mb-1">Giyim Beden</label>
+          <select value={clothSize} onChange={e=>setClothSize(e.target.value as any)} className="w-full px-3 py-2 border rounded-lg">
+            <option value="">—</option>
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+            <option value="XXL">XXL</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-xs mb-1">Giyim Renk</label>
+          <input value={clothColor} onChange={e=>setClothColor(e.target.value)} className="w-full px-3 py-2 border rounded-lg" placeholder="Kırmızı, Siyah" />
+        </div>
+      </div>
+      <div className="mt-3 text-right">
+        <button onClick={savePrefs} className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">Kaydet</button>
+      </div>
+    </div>
+  )
+
+  // Matched Items Grid Component
+  const MatchedItemsGrid = ({ columns = 2 }: { columns?: number }) => (
+    <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4">
+      <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+        <Package className="w-5 h-5" />
+        Eşleşen Ürünler ({ranked.length})
+      </h3>
+      <div className={`grid gap-3 ${columns === 4 ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' : 'grid-cols-2'}`}>
+        {ranked.map(it => (
+          <div key={it.id} className="bg-white rounded-lg border p-2 hover:shadow-md transition-shadow">
+            <div className="relative w-full aspect-square rounded overflow-hidden mb-2">
+              {it.images?.[0] ? (
+                <Image src={it.images[0]} alt={it.title} fill className="object-cover" />
+              ) : (
+                <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                  <Package className="w-8 h-8 text-gray-300" />
+                </div>
+              )}
+            </div>
+            <div className="text-sm font-medium line-clamp-2">{it.title}</div>
+            <div className="text-xs text-gray-500">₺{it.estimatedValue || 0}</div>
+          </div>
+        ))}
+      </div>
+      {!ranked.length && (
+        <p className="text-sm text-gray-600 text-center py-8">Tercihlerine uyan ürün bulunamadı. Kategorileri genişletmeyi dene.</p>
+      )}
+    </div>
+  )
+
+  // Cross-trade Packages Component
+  const CrossTradePackages = () => (
+    <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4">
+      <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+        <RefreshCw className="w-5 h-5" />
+        Çapraz Takas Paket Önerileri
+      </h3>
+      {myItems.length ? (
+        <div className="mb-3">
+          <label className="block text-sm mb-1">Vermek İstediğin Ürün</label>
+          <select value={selectedOfferId} onChange={e=>setSelectedOfferId(e.target.value)} className="w-full px-3 py-2 border rounded-lg">
+            <option value="">Seçiniz</option>
+            {myItems.map(mi => (
+              <option key={mi.id} value={mi.id}>{mi.title} — ₺{mi.estimatedValue || 0}</option>
+            ))}
+          </select>
+        </div>
+      ) : (
+        <p className="text-sm text-gray-600 mb-2">Önce bir ürün yükleyerek çapraz takas paketlerini görebilirsin.</p>
+      )}
+
+      {offer && packages.length > 0 ? (
+        <div className="space-y-3">
+          {packages.map((p, idx) => (
+            <div key={idx} className="border rounded-lg p-3 bg-white">
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-sm font-medium">Paket #{idx+1}</div>
+                <div className="text-xs text-gray-600">Toplam: ₺{p.total} • Fark: ₺{Math.abs((offer?.estimatedValue||0)-p.total)}</div>
+              </div>
+              <ul className="list-disc pl-5 text-sm text-gray-700">
+                {p.items.map(it => (<li key={it.id}>{it.title} — ₺{it.estimatedValue||0}</li>))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      ) : offer ? (
+        <p className="text-sm text-gray-600">Uygun paket önerisi bulunamadı.</p>
+      ) : null}
+    </div>
+  )
+
+  // Desktop görünüm
+  if (!isMobile) {
+    return (
+      <DesktopLayout title="Eşleşmeler" maxWidth="7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Sol Panel - Tercihler */}
+          <div className="lg:col-span-1 space-y-4">
+            <PreferencesPanel />
+            <CrossTradePackages />
+          </div>
+          
+          {/* Sağ Panel - Eşleşen Ürünler */}
+          <div className="lg:col-span-3">
+            <MatchedItemsGrid columns={4} />
+          </div>
+        </div>
+      </DesktopLayout>
+    )
+  }
+
+  // Mobil görünüm
+
+  // Mobil görünüm
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
       <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
         <div className="max-w-md mx-auto px-4 py-4 pt-12 md:pt-4 flex items-center justify-between">
-          <h1 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Sana Uygun Eşleşmeler</h1>
-          <Link href="/" className="text-sm text-gray-600 hover:text-gray-800">Ana sayfa</Link>
+          <div className="flex items-center gap-3">
+            <Link href="/" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+              <ArrowLeft className="w-6 h-6 text-gray-600" />
+            </Link>
+            <h1 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Eşleşmeler</h1>
+          </div>
         </div>
       </header>
 
       <main className="max-w-md mx-auto p-4 pb-24 space-y-6">
-        {/* Prefs */}
-        <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4">
-          <h3 className="font-semibold text-gray-800 mb-2">🎯 Tercihler</h3>
-          <div className="grid grid-cols-2 gap-2 mb-3">
-            {(['clothing','toys','electronics','books','sports','home','other'] as const).map(ct => (
-              <button key={ct} type="button" onClick={() => toggleCategory(ct)}
-                className={`py-2 px-3 rounded-lg border-2 text-xs transition-all ${categories.includes(ct)?'border-purple-500 bg-purple-50 text-purple-700':'border-gray-200 hover:border-purple-300'}`}>{ct}</button>
-            ))}
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm mb-1">Min ₺</label>
-              <input value={valueMin} onChange={e=>setValueMin(e.target.value)} type="number" className="w-full px-3 py-2 border rounded-lg" />
-            </div>
-            <div>
-              <label className="block text-sm mb-1">Max ₺</label>
-              <input value={valueMax} onChange={e=>setValueMax(e.target.value)} type="number" className="w-full px-3 py-2 border rounded-lg" />
-            </div>
-          </div>
-          <div className="mt-3">
-            <label className="block text-sm mb-1">Şehir</label>
-            <input value={city} onChange={e=>setCity(e.target.value)} className="w-full px-3 py-2 border rounded-lg" placeholder="İstanbul" />
-          </div>
-          <div className="mt-3 grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs mb-1">Giyim Beden (Text)</label>
-              <select value={clothSize} onChange={e=>setClothSize(e.target.value as any)} className="w-full px-3 py-2 border rounded-lg">
-                <option value="">—</option>
-                <option value="XS">XS</option>
-                <option value="S">S</option>
-                <option value="M">M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
-                <option value="XXL">XXL</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs mb-1">Giyim Renk(ler)</label>
-              <input value={clothColor} onChange={e=>setClothColor(e.target.value)} className="w-full px-3 py-2 border rounded-lg" placeholder="Kırmızı, Siyah" />
-            </div>
-          </div>
-          <div className="mt-3 text-right">
-            <button onClick={savePrefs} className="bg-purple-600 text-white px-4 py-2 rounded-lg">Kaydet</button>
-          </div>
-        </div>
-
-        {/* Ranked list */}
-        <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4">
-          <h3 className="font-semibold text-gray-800 mb-3">🔎 Eşleşen Ürünler</h3>
-          <div className="grid grid-cols-2 gap-3">
-            {ranked.map(it => (
-              <div key={it.id} className="bg-white rounded-lg border p-2">
-                <div className="relative w-full aspect-square rounded overflow-hidden mb-2">
-                  {it.images?.[0] ? (
-                    <Image src={it.images[0]} alt={it.title} fill className="object-cover" />
-                  ) : (
-                    <div className="w-full h-full bg-gray-100" />
-                  )}
-                </div>
-                <div className="text-sm font-medium line-clamp-2">{it.title}</div>
-                <div className="text-xs text-gray-500">₺{it.estimatedValue || 0}</div>
-              </div>
-            ))}
-          </div>
-          {!ranked.length && (
-            <p className="text-sm text-gray-600">Tercihlerine uyan ürün bulunamadı. Kategorileri genişletmeyi dene.</p>
-          )}
-        </div>
-
-        {/* Cross-trade packages */}
-        <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4">
-          <h3 className="font-semibold text-gray-800 mb-3">🔄 Çapraz Takas Paket Önerileri</h3>
-          {myItems.length ? (
-            <div className="mb-3">
-              <label className="block text-sm mb-1">Vermek İstediğin Ürünün</label>
-              <select value={selectedOfferId} onChange={e=>setSelectedOfferId(e.target.value)} className="w-full px-3 py-2 border rounded-lg">
-                <option value="">Seçiniz</option>
-                {myItems.map(mi => (
-                  <option key={mi.id} value={mi.id}>{mi.title} — ₺{mi.estimatedValue || 0}</option>
-                ))}
-              </select>
-            </div>
-          ) : (
-            <p className="text-sm text-gray-600 mb-2">Önce bir ürün yükleyerek çapraz takas paketlerini görebilirsin.</p>
-          )}
-
-          {offer && packages.length > 0 ? (
-            <div className="space-y-3">
-              {packages.map((p, idx) => (
-                <div key={idx} className="border rounded-lg p-3 bg-white">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="text-sm font-medium">Paket #{idx+1}</div>
-                    <div className="text-xs text-gray-600">Toplam: ₺{p.total} • Fark: ₺{Math.abs((offer?.estimatedValue||0)-p.total)}</div>
-                  </div>
-                  <ul className="list-disc pl-5 text-sm text-gray-700">
-                    {p.items.map(it => (<li key={it.id}>{it.title} — ₺{it.estimatedValue||0}</li>))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          ) : offer ? (
-            <p className="text-sm text-gray-600">Uygun paket önerisi bulunamadı. Toleransı artırmayı veya kategorileri genişletmeyi deneyin.</p>
-          ) : null}
-        </div>
+        <PreferencesPanel />
+        <MatchedItemsGrid columns={2} />
+        <CrossTradePackages />
       </main>
     </div>
   )

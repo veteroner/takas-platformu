@@ -2,8 +2,9 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { ArrowLeft, Send, MoreVertical, CheckCircle } from 'lucide-react'
+import { ArrowLeft, Send, MoreVertical, CheckCircle, MessageCircle, Package, User } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { getCurrentUser } from '@/lib/auth'
 import { getMatchMessages, sendMessage, confirmMatchCompletion, rateUser, hasUserRatedMatch } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
@@ -13,6 +14,8 @@ import { BlockReportModal, BlockedUserNotice } from '@/components/BlockReportMod
 import { useBlockUser } from '@/hooks/useBlockAndReport'
 import { useMarkAsRead } from '@/hooks/useUnreadMessages'
 import RatingModal from '@/components/RatingModal'
+import DesktopLayout from '@/components/DesktopLayout'
+import { useDeviceType } from '@/hooks/useDeviceType'
 
 // Dynamic route - no static generation
 export const dynamic = 'force-dynamic'
@@ -21,6 +24,7 @@ export default function ChatPage() {
   const params = useParams()
   const router = useRouter()
   const matchId = params.id as string
+  const { isMobile } = useDeviceType()
   
   const [user, setUser] = useState<any>(null)
   const [messages, setMessages] = useState<any[]>([])
@@ -362,6 +366,167 @@ export default function ChatPage() {
     }
   }
 
+  // Shared Message Bubble Component
+  const MessageBubble = ({ msg }: { msg: any }) => {
+    const isMine = msg.sender_id === user?.id
+    
+    const getMessageStatus = () => {
+      if (!isMine) return null
+      if (msg.read_at) return <span className="ml-1" title="Görüldü">✓✓</span>
+      else if (msg.read) return <span className="ml-1" title="İletildi">✓✓</span>
+      else return <span className="ml-1" title="Gönderildi">✓</span>
+    }
+    
+    return (
+      <div className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
+        <div className={`max-w-[70%] rounded-2xl px-4 py-2.5 shadow-sm ${
+          isMine 
+            ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white' 
+            : 'bg-white border border-gray-200 text-gray-900'
+        }`}>
+          <p className="text-sm leading-relaxed">{msg.content}</p>
+          <div className={`flex items-center justify-end gap-1 text-xs mt-1 ${isMine ? 'text-white/80' : 'text-gray-500'}`}>
+            <span>{new Date(msg.created_at).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</span>
+            {getMessageStatus()}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Shared Input Component
+  const MessageInput = () => (
+    <div className="bg-white border-t border-gray-200 p-4">
+      {filterWarning && (
+        <div className="mb-3">
+          <MessageFilterWarning
+            reason={filterWarning}
+            severity="high"
+            onClose={() => setFilterWarning(null)}
+          />
+        </div>
+      )}
+      
+      <div className="flex items-center gap-2">
+        <input
+          type="text"
+          value={newMessage}
+          onChange={(e) => {
+            setNewMessage(e.target.value)
+            if (filterWarning) setFilterWarning(null)
+          }}
+          onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
+          placeholder={isBlocked ? "Kullanıcı engellenmiş" : isBanned ? "Mesaj gönderemezsiniz" : "Mesajınızı yazın..."}
+          disabled={isBanned || isSending || isBlocked}
+          className="flex-1 bg-gray-100 border-2 border-gray-300 rounded-full px-4 py-3 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-purple-500 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+        />
+        <button
+          onClick={handleSend}
+          disabled={!newMessage.trim() || isBanned || isSending || isBlocked}
+          className="bg-gradient-to-r from-pink-500 to-purple-600 text-white p-3 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isSending ? (
+            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+          ) : (
+            <Send className="w-5 h-5" />
+          )}
+        </button>
+      </div>
+    </div>
+  )
+
+  // User Info Sidebar for Desktop
+  const UserInfoSidebar = () => (
+    <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-6 sticky top-24">
+      {/* User Profile */}
+      <div className="text-center mb-6">
+        <div className="w-24 h-24 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
+          {otherUser?.avatar_url ? (
+            <Image src={otherUser.avatar_url} alt="" width={96} height={96} className="w-full h-full object-cover" />
+          ) : (
+            <User className="w-12 h-12 text-white" />
+          )}
+        </div>
+        <h3 className="text-xl font-bold text-gray-800">{otherUser?.name || 'Kullanıcı'}</h3>
+        <p className="text-sm text-gray-500">{otherUser?.email}</p>
+      </div>
+
+      {/* Match Status */}
+      <div className="space-y-3 mb-6">
+        <div className={`w-full rounded-xl py-3 px-4 text-sm text-center font-medium ${
+          matchStatus === 'completed' 
+            ? 'bg-green-100 text-green-800 border border-green-200'
+            : matchStatus === 'pending_completion'
+            ? 'bg-yellow-100 text-yellow-800 border border-yellow-200'
+            : 'bg-blue-100 text-blue-800 border border-blue-200'
+        }`}>
+          {matchStatus === 'completed' && '✅ Takas Tamamlandı'}
+          {matchStatus === 'pending_completion' && '⏳ Onay Bekleniyor'}
+          {matchStatus === 'active' && '💬 Aktif Sohbet'}
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="space-y-3">
+        {!isBlocked && matchStatus === 'active' && (
+          <button
+            onClick={handleCompleteMatch}
+            disabled={isCompletingMatch}
+            className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 px-4 rounded-xl font-medium text-sm hover:from-pink-600 hover:to-purple-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+          >
+            {isCompletingMatch ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                İşleniyor...
+              </>
+            ) : (
+              <>
+                <CheckCircle className="w-4 h-4" />
+                Takası Tamamla
+              </>
+            )}
+          </button>
+        )}
+
+        {matchStatus === 'completed' && !userHasRated && (
+          <button
+            onClick={() => setShowRatingModal(true)}
+            className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 px-4 rounded-xl font-medium text-sm hover:from-yellow-600 hover:to-orange-600 transition-all flex items-center justify-center gap-2"
+          >
+            ⭐ Puanla
+          </button>
+        )}
+
+        {!isBlocked && (
+          <button
+            onClick={() => setShowBlockReportModal(true)}
+            className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-medium text-sm hover:bg-gray-200 transition-all"
+          >
+            Engelle / Şikayet Et
+          </button>
+        )}
+
+        <Link 
+          href="/messages"
+          className="w-full block text-center bg-white border border-gray-200 text-gray-700 py-3 px-4 rounded-xl font-medium text-sm hover:bg-gray-50 transition-all"
+        >
+          ← Tüm Mesajlar
+        </Link>
+      </div>
+
+      {/* Info Section */}
+      <div className="mt-6 pt-6 border-t border-gray-100">
+        <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+          <MessageCircle className="w-4 h-4" />
+          <span>{messages.length} mesaj</span>
+        </div>
+        <p className="text-xs text-gray-400">
+          Takaslarınızı güvenle tamamlayın. Şüpheli durumları bildirin.
+        </p>
+      </div>
+    </div>
+  )
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex items-center justify-center">
@@ -373,6 +538,93 @@ export default function ChatPage() {
     )
   }
 
+  // Desktop Layout
+  if (!isMobile) {
+    return (
+      <DesktopLayout title="Sohbet" maxWidth="7xl">
+        <div className="grid grid-cols-4 gap-6 h-[calc(100vh-180px)]">
+          {/* Chat Area - 3 columns */}
+          <div className="col-span-3 bg-white/70 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg flex flex-col overflow-hidden">
+            {/* Chat Header */}
+            <div className="bg-white border-b border-gray-200 p-4 flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center overflow-hidden">
+                {otherUser?.avatar_url ? (
+                  <Image src={otherUser.avatar_url} alt="" width={48} height={48} className="w-full h-full object-cover" />
+                ) : (
+                  <User className="w-6 h-6 text-white" />
+                )}
+              </div>
+              <div className="flex-1">
+                <h2 className="font-bold text-gray-800">{otherUser?.name || 'Kullanıcı'}</h2>
+                <p className="text-xs text-gray-500">
+                  {matchStatus === 'completed' ? '✅ Takas Tamamlandı' : 'Çevrimiçi'}
+                </p>
+              </div>
+            </div>
+
+            {/* Ban Banner */}
+            {isBanned && banDetails && (
+              <BanStatusBanner
+                bannedUntil={banDetails.bannedUntil}
+                reason={banDetails.reason}
+                totalViolations={banDetails.totalViolations}
+              />
+            )}
+
+            {/* Blocked Notice */}
+            {isBlocked && (
+              <div className="p-4">
+                <BlockedUserNotice userName={otherUser?.name || 'Kullanıcı'} />
+              </div>
+            )}
+
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
+              {messages.map((msg) => (
+                <MessageBubble key={msg.id} msg={msg} />
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input */}
+            <MessageInput />
+          </div>
+
+          {/* Sidebar - 1 column */}
+          <div className="col-span-1">
+            <UserInfoSidebar />
+          </div>
+        </div>
+
+        {/* Modals */}
+        {showBlockReportModal && otherUser && user && (
+          <BlockReportModal
+            isOpen={showBlockReportModal}
+            onClose={() => setShowBlockReportModal(false)}
+            targetUserId={otherUser.id}
+            targetUserName={otherUser.name}
+            currentUserId={user.id}
+            onSuccess={() => {
+              setIsBlocked(true)
+              loadData()
+            }}
+          />
+        )}
+
+        {otherUser && (
+          <RatingModal
+            isOpen={showRatingModal}
+            onClose={() => setShowRatingModal(false)}
+            onSubmit={handleSubmitRating}
+            otherUserName={otherUser.name}
+            otherUserAvatar={otherUser.avatar_url}
+          />
+        )}
+      </DesktopLayout>
+    )
+  }
+
+  // Mobile Layout
   return (
     <div className="h-screen bg-gray-50 flex flex-col">
       {/* Ban Banner */}
@@ -473,80 +725,15 @@ export default function ChatPage() {
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((msg) => {
-          const isMine = msg.sender_id === user?.id
-          
-          // Mesaj durumu: Gönderildi / Görüldü
-          const getMessageStatus = () => {
-            if (!isMine) return null // Karşı tarafın mesajlarında gösterme
-            
-            if (msg.read_at) {
-              return <span className="ml-1" title="Görüldü">✓✓</span> // Görüldü (mavi tick)
-            } else if (msg.read) {
-              return <span className="ml-1" title="İletildi">✓✓</span> // İletildi (gri tick)
-            } else {
-              return <span className="ml-1" title="Gönderildi">✓</span> // Gönderildi (tek tick)
-            }
-          }
-          
-          return (
-            <div key={msg.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[70%] rounded-2xl px-4 py-2.5 shadow-sm ${
-                isMine 
-                  ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white' 
-                  : 'bg-white border border-gray-200 text-gray-900'
-              }`}>
-                <p className="text-sm leading-relaxed">{msg.content}</p>
-                <div className={`flex items-center justify-end gap-1 text-xs mt-1 ${isMine ? 'text-white/80' : 'text-gray-500'}`}>
-                  <span>{new Date(msg.created_at).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</span>
-                  {getMessageStatus()}
-                </div>
-              </div>
-            </div>
-          )
-        })}
+        {messages.map((msg) => (
+          <MessageBubble key={msg.id} msg={msg} />
+        ))}
         <div ref={messagesEndRef} />
       </div>
 
       {/* Input */}
-      <div className="bg-white border-t border-gray-200 p-4 pb-safe">
-        {/* Filter Warning */}
-        {filterWarning && (
-          <div className="mb-3">
-            <MessageFilterWarning
-              reason={filterWarning}
-              severity="high"
-              onClose={() => setFilterWarning(null)}
-            />
-          </div>
-        )}
-        
-        <div className="flex items-center gap-2">
-          <input
-            type="text"
-            value={newMessage}
-            onChange={(e) => {
-              setNewMessage(e.target.value)
-              // Yazarken warning'i temizle
-              if (filterWarning) setFilterWarning(null)
-            }}
-            onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-            placeholder={isBlocked ? "Kullanıcı engellenmiş" : isBanned ? "Mesaj gönderemezsiniz" : "Mesajınızı yazın..."}
-            disabled={isBanned || isSending || isBlocked}
-            className="flex-1 bg-gray-100 border-2 border-gray-300 rounded-full px-4 py-3 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-purple-500 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
-          />
-          <button
-            onClick={handleSend}
-            disabled={!newMessage.trim() || isBanned || isSending || isBlocked}
-            className="bg-gradient-to-r from-pink-500 to-purple-600 text-white p-3 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isSending ? (
-              <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-            ) : (
-              <Send className="w-5 h-5" />
-            )}
-          </button>
-        </div>
+      <div className="pb-safe">
+        <MessageInput />
       </div>
 
       {/* Rating Modal */}

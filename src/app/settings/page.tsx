@@ -6,9 +6,12 @@ import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { getCurrentUser } from '@/lib/auth'
+import DesktopLayout from '@/components/DesktopLayout'
+import { useDeviceType } from '@/hooks/useDeviceType'
 
 export default function SettingsPage() {
   const router = useRouter()
+  const { isMobile } = useDeviceType()
   const [user, setUser] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [settings, setSettings] = useState({
@@ -99,6 +102,204 @@ export default function SettingsPage() {
     setShowDeleteConfirm(false)
   }
 
+  // Settings Content Component
+  const SettingsContent = () => (
+    <div className="space-y-6">
+      {/* Notification Settings */}
+      <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/20">
+        <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-3">
+          <Bell size={24} />
+          Bildirimler
+        </h2>
+        
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-white font-medium">Push Bildirimleri</div>
+              <div className="text-white/70 text-sm">Yeni mesajlar ve eşleşmeler için bildirim al</div>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.notifications}
+                onChange={(e) => setSettings({...settings, notifications: e.target.checked})}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-green-500 peer-checked:to-blue-600"></div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      {/* Privacy Settings */}
+      <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/20">
+        <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-3">
+          <Shield size={24} />
+          Gizlilik
+        </h2>
+        
+        <div className="space-y-4">
+          <div>
+            <label className="block text-white font-medium mb-2">Profil Görünürlüğü</label>
+            <select
+              value={settings.privacy}
+              onChange={(e) => setSettings({...settings, privacy: e.target.value as 'public' | 'private'})}
+              className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white/50"
+            >
+              <option value="public" className="bg-purple-600">Herkese Açık</option>
+              <option value="private" className="bg-purple-600">Gizli</option>
+            </select>
+            <p className="text-white/70 text-sm mt-1">
+              {settings.privacy === 'public' 
+                ? 'Profilin tüm kullanıcılar tarafından görülebilir' 
+                : 'Profilin sadece etkileşimde bulunduğun kişiler tarafından görülebilir'
+              }
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Language Settings */}
+      <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/20">
+        <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-3">
+          <Globe size={24} />
+          Dil
+        </h2>
+        
+        <div className="space-y-4">
+          <div>
+            <label className="block text-white font-medium mb-2">Uygulama Dili</label>
+            <select
+              value={settings.language}
+              onChange={(e) => setSettings({...settings, language: e.target.value as 'tr' | 'en'})}
+              className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white/50"
+            >
+              <option value="tr" className="bg-purple-600">Türkçe</option>
+              <option value="en" className="bg-purple-600">English</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Theme Settings */}
+      <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/20">
+        <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-3">
+          <Monitor size={24} />
+          Tema
+        </h2>
+        
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { value: 'light', label: 'Açık', icon: Sun },
+            { value: 'dark', label: 'Koyu', icon: Moon },
+            { value: 'system', label: 'Sistem', icon: Monitor }
+          ].map((theme) => {
+            const Icon = theme.icon
+            return (
+              <button
+                key={theme.value}
+                onClick={() => setSettings({...settings, theme: theme.value as any})}
+                className={`p-4 rounded-2xl border-2 transition-all duration-200 ${
+                  settings.theme === theme.value
+                    ? 'border-white bg-white/20'
+                    : 'border-white/20 bg-white/5 hover:bg-white/10'
+                }`}
+              >
+                <Icon size={24} className="text-white mx-auto mb-2" />
+                <div className="text-white text-sm font-medium">{theme.label}</div>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Account Actions */}
+      <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/20">
+        <h2 className="text-xl font-semibold text-white mb-4">Hesap İşlemleri</h2>
+        
+        <div className="space-y-3">
+          <Link
+            href="/data-privacy"
+            className="w-full flex items-center justify-center gap-3 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-100 px-6 py-3 rounded-xl transition-colors"
+          >
+            <Shield size={20} />
+            Veri Gizliliği ve Güvenlik
+          </Link>
+
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-3 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/50 text-orange-100 px-6 py-3 rounded-xl transition-colors"
+          >
+            <LogOut size={20} />
+            Çıkış Yap
+          </button>
+          
+          <button
+            onClick={() => setShowDeleteConfirm(true)}
+            className="w-full flex items-center justify-center gap-3 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-100 px-6 py-3 rounded-xl transition-colors"
+          >
+            <Trash2 size={20} />
+            Hesabı Sil
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Delete Modal
+  const DeleteModal = () => (
+    showDeleteConfirm && (
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 max-w-md w-full border border-white/20">
+          <h3 className="text-xl font-bold text-white mb-4">Hesabı Sil</h3>
+          <p className="text-white/80 mb-6">
+            Bu işlem geri alınamaz. Tüm verileriniz kalıcı olarak silinecek. Emin misiniz?
+          </p>
+          <div className="flex gap-4">
+            <button
+              onClick={() => setShowDeleteConfirm(false)}
+              className="flex-1 py-2 px-4 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors border border-white/20"
+            >
+              İptal
+            </button>
+            <button
+              onClick={handleDeleteAccount}
+              className="flex-1 py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-xl transition-colors"
+            >
+              Sil
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  )
+
+  // Desktop görünüm
+  if (!isMobile) {
+    return (
+      <DesktopLayout title="Ayarlar" maxWidth="2xl" centerContent>
+        <div className="w-full max-w-2xl">
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="text-3xl font-bold text-white">Ayarlar</h1>
+            <button
+              onClick={handleSave}
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl transition-all duration-200 shadow-lg"
+            >
+              <Save size={20} />
+              Kaydet
+            </button>
+          </div>
+          <SettingsContent />
+        </div>
+        <DeleteModal />
+      </DesktopLayout>
+    )
+  }
+
+  // Mobil görünüm
+
+  // Mobil görünüm
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400">
       <div className="container mx-auto px-4 py-8">
@@ -121,174 +322,12 @@ export default function SettingsPage() {
           </button>
         </div>
 
-        <div className="max-w-2xl mx-auto space-y-6">
+        <div className="max-w-2xl mx-auto">
           <h1 className="text-3xl font-bold text-white text-center mb-8">Ayarlar</h1>
-
-          {/* Notification Settings */}
-          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/20">
-            <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-3">
-              <Bell size={24} />
-              Bildirimler
-            </h2>
-            
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-white font-medium">Push Bildirimleri</div>
-                  <div className="text-white/70 text-sm">Yeni mesajlar ve eşleşmeler için bildirim al</div>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={settings.notifications}
-                    onChange={(e) => setSettings({...settings, notifications: e.target.checked})}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-green-500 peer-checked:to-blue-600"></div>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          {/* Privacy Settings */}
-          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/20">
-            <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-3">
-              <Shield size={24} />
-              Gizlilik
-            </h2>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="block text-white font-medium mb-2">Profil Görünürlüğü</label>
-                <select
-                  value={settings.privacy}
-                  onChange={(e) => setSettings({...settings, privacy: e.target.value as 'public' | 'private'})}
-                  className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white/50"
-                >
-                  <option value="public" className="bg-purple-600">Herkese Açık</option>
-                  <option value="private" className="bg-purple-600">Gizli</option>
-                </select>
-                <p className="text-white/70 text-sm mt-1">
-                  {settings.privacy === 'public' 
-                    ? 'Profilin tüm kullanıcılar tarafından görülebilir' 
-                    : 'Profilin sadece etkileşimde bulunduğun kişiler tarafından görülebilir'
-                  }
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Language Settings */}
-          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/20">
-            <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-3">
-              <Globe size={24} />
-              Dil
-            </h2>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="block text-white font-medium mb-2">Uygulama Dili</label>
-                <select
-                  value={settings.language}
-                  onChange={(e) => setSettings({...settings, language: e.target.value as 'tr' | 'en'})}
-                  className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white/50"
-                >
-                  <option value="tr" className="bg-purple-600">Türkçe</option>
-                  <option value="en" className="bg-purple-600">English</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* Theme Settings */}
-          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/20">
-            <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-3">
-              <Monitor size={24} />
-              Tema
-            </h2>
-            
-            <div className="grid grid-cols-3 gap-3">
-              {[
-                { value: 'light', label: 'Açık', icon: Sun },
-                { value: 'dark', label: 'Koyu', icon: Moon },
-                { value: 'system', label: 'Sistem', icon: Monitor }
-              ].map((theme) => {
-                const Icon = theme.icon
-                return (
-                  <button
-                    key={theme.value}
-                    onClick={() => setSettings({...settings, theme: theme.value as any})}
-                    className={`p-4 rounded-2xl border-2 transition-all duration-200 ${
-                      settings.theme === theme.value
-                        ? 'border-white bg-white/20'
-                        : 'border-white/20 bg-white/5 hover:bg-white/10'
-                    }`}
-                  >
-                    <Icon size={24} className="text-white mx-auto mb-2" />
-                    <div className="text-white text-sm font-medium">{theme.label}</div>
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-
-          {/* Account Actions */}
-          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/20">
-            <h2 className="text-xl font-semibold text-white mb-4">Hesap İşlemleri</h2>
-            
-            <div className="space-y-3">
-              <Link
-                href="/data-privacy"
-                className="w-full flex items-center justify-center gap-3 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-100 px-6 py-3 rounded-xl transition-colors"
-              >
-                <Shield size={20} />
-                Veri Gizliliği ve Güvenlik
-              </Link>
-
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center justify-center gap-3 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/50 text-orange-100 px-6 py-3 rounded-xl transition-colors"
-              >
-                <LogOut size={20} />
-                Çıkış Yap
-              </button>
-              
-              <button
-                onClick={() => setShowDeleteConfirm(true)}
-                className="w-full flex items-center justify-center gap-3 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-100 px-6 py-3 rounded-xl transition-colors"
-              >
-                <Trash2 size={20} />
-                Hesabı Sil
-              </button>
-            </div>
-          </div>
+          <SettingsContent />
         </div>
 
-        {/* Delete Confirmation Modal */}
-        {showDeleteConfirm && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-            <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 max-w-md w-full border border-white/20">
-              <h3 className="text-xl font-bold text-white mb-4">Hesabı Sil</h3>
-              <p className="text-white/80 mb-6">
-                Bu işlem geri alınamaz. Tüm verileriniz kalıcı olarak silinecek. Emin misiniz?
-              </p>
-              <div className="flex gap-4">
-                <button
-                  onClick={() => setShowDeleteConfirm(false)}
-                  className="flex-1 py-2 px-4 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors border border-white/20"
-                >
-                  İptal
-                </button>
-                <button
-                  onClick={handleDeleteAccount}
-                  className="flex-1 py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-xl transition-colors"
-                >
-                  Sil
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        <DeleteModal />
       </div>
     </div>
   )
