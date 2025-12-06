@@ -1,0 +1,63 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Fetch certificates and provisioning profiles"
+  lane :certificates do
+    match(
+      type: "appstore",
+      app_identifier: "com.teknova.takasapp",
+      readonly: true
+    )
+  end
+
+  desc "Build for App Store"
+  lane :build_appstore do
+    # Fetch certificates
+    match(
+      type: "appstore",
+      app_identifier: "com.teknova.takasapp",
+      readonly: true
+    )
+
+    # Update code signing settings
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "App/App.xcodeproj",
+      team_id: ENV["TEAM_ID"],
+      profile_name: "match AppStore com.teknova.takasapp",
+      code_sign_identity: "iPhone Distribution"
+    )
+
+    # Build the app
+    build_app(
+      workspace: "App/App.xcworkspace",
+      scheme: "App",
+      export_method: "app-store",
+      output_directory: "./build",
+      output_name: "TakaZone.ipa",
+      clean: true,
+      export_options: {
+        provisioningProfiles: {
+          "com.teknova.takasapp" => "match AppStore com.teknova.takasapp"
+        }
+      }
+    )
+  end
+
+  desc "Upload to App Store Connect"
+  lane :upload_appstore do
+    upload_to_app_store(
+      skip_metadata: true,
+      skip_screenshots: true,
+      skip_app_version_update: true
+    )
+  end
+
+  desc "Build and upload to TestFlight"
+  lane :beta do
+    build_appstore
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true
+    )
+  end
+end

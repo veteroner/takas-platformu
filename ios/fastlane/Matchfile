@@ -1,0 +1,6 @@
+# Match configuration for code signing
+git_url(ENV["MATCH_GIT_URL"])
+storage_mode("git")
+type("appstore")
+app_identifier(["com.teknova.takasapp"])
+username(ENV["FASTLANE_USER"])
