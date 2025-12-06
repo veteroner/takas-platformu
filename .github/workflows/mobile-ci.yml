@@ -83,7 +83,7 @@ jobs:
         run: |
           cd ios
           fastlane certificates
-          fastlane build_appstore
+          fastlane build_appstore --verbose
         env:
           MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
@@ -91,6 +91,12 @@ jobs:
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
           TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      - name: Upload build logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build-logs
+          path: ~/Library/Logs/gym/*.log
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:

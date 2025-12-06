@@ -19,7 +19,7 @@ platform :ios do
       readonly: true
     )
 
-    # Build the app
+    # Build the app with automatic signing
     build_app(
       workspace: "App/App.xcworkspace",
       scheme: "App",
@@ -27,13 +27,7 @@ platform :ios do
       output_directory: "./build",
       output_name: "TakaZone.ipa",
       clean: true,
-      xcargs: "-allowProvisioningUpdates",
-      export_options: {
-        signingStyle: "manual",
-        provisioningProfiles: {
-          "com.teknova.takasapp" => "match AppStore com.teknova.takasapp"
-        }
-      }
+      xcargs: "DEVELOPMENT_TEAM=#{ENV['TEAM_ID']} -allowProvisioningUpdates"
     )
   end
 
