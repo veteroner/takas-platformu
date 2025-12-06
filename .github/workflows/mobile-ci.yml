@@ -79,27 +79,42 @@ jobs:
           echo "${{ secrets.MATCH_DEPLOY_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
+      
+      - name: Setup Keychain
+        run: |
+          # Create a temporary keychain for CI
+          security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+          security set-keychain-settings -t 3600 -u build.keychain
+          # Allow codesign to access keychain
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" build.keychain
+        env:
+          KEYCHAIN_PASSWORD: ${{ github.run_id }}
+      
       - name: Build iOS with Fastlane
         run: |
           cd ios
-          fastlane certificates
-          fastlane build_appstore --verbose 2>&1 || true
-          echo "=== GYM LOG ===" 
-          cat ~/Library/Logs/gym/App-App.log 2>/dev/null || echo "No gym log found"
-          exit 1
+          fastlane build_appstore --verbose
         env:
           MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_KEYCHAIN_NAME: build.keychain
+          MATCH_KEYCHAIN_PASSWORD: ${{ github.run_id }}
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
           TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      
       - name: Upload build logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: ios-build-logs
-          path: ~/Library/Logs/gym/*.log
+          path: |
+            ~/Library/Logs/gym/*.log
+            ios/build/*.log
+      
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:

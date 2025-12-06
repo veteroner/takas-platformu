@@ -12,14 +12,24 @@ platform :ios do
 
   desc "Build for App Store"
   lane :build_appstore do
-    # Fetch certificates
+    # Fetch certificates and provisioning profiles
     match(
       type: "appstore",
       app_identifier: "com.teknova.takasapp",
       readonly: true
     )
 
-    # Build the app with automatic signing
+    # Update project to use manual code signing with the provisioning profile from match
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "App/App.xcodeproj",
+      team_id: ENV['TEAM_ID'],
+      profile_name: ENV['sigh_com.teknova.takasapp_appstore_profile-name'],
+      code_sign_identity: "iPhone Distribution",
+      targets: ["App"]
+    )
+
+    # Build the app with manual signing
     build_app(
       workspace: "App/App.xcworkspace",
       scheme: "App",
@@ -27,7 +37,11 @@ platform :ios do
       output_directory: "./build",
       output_name: "TakaZone.ipa",
       clean: true,
-      xcargs: "DEVELOPMENT_TEAM=#{ENV['TEAM_ID']} -allowProvisioningUpdates"
+      export_options: {
+        provisioningProfiles: {
+          "com.teknova.takasapp" => ENV['sigh_com.teknova.takasapp_appstore_profile-name']
+        }
+      }
     )
   end
 
