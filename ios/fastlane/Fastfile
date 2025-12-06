@@ -19,15 +19,6 @@ platform :ios do
       readonly: true
     )
 
-    # Update code signing settings
-    update_code_signing_settings(
-      use_automatic_signing: false,
-      path: "App/App.xcodeproj",
-      team_id: ENV["TEAM_ID"],
-      profile_name: "match AppStore com.teknova.takasapp",
-      code_sign_identity: "iPhone Distribution"
-    )
-
     # Build the app
     build_app(
       workspace: "App/App.xcworkspace",
@@ -36,7 +27,9 @@ platform :ios do
       output_directory: "./build",
       output_name: "TakaZone.ipa",
       clean: true,
+      xcargs: "-allowProvisioningUpdates",
       export_options: {
+        signingStyle: "manual",
         provisioningProfiles: {
           "com.teknova.takasapp" => "match AppStore com.teknova.takasapp"
         }
