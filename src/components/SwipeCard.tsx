@@ -30,55 +30,69 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
     config: { friction: 50, tension: 500 }
   }))
 
-  // Drag gesture handler with better vertical scroll protection
+  // Drag gesture handler with smooth horizontal swipe
   const bind = useDrag(({ 
     active, 
     movement: [mx, my], 
     direction: [xDir], 
-    velocity: [vx, vy], 
-    cancel 
+    velocity: [vx], 
+    first,
+    memo
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }: any) => {
-    // Stronger vertical scroll protection
-    const isVerticalDominant = Math.abs(my) > Math.abs(mx) * 1.5
-    const isVerticalVelocityHigh = Math.abs(vy) > Math.abs(vx) * 1.2
-    const hasVerticalMovement = Math.abs(my) > 10
-    
-    if ((isVerticalDominant || isVerticalVelocityHigh) && hasVerticalMovement) {
-      cancel?.()
-      return
+    // İlk harekette yönü belirle ve memo'da sakla
+    if (first) {
+      const isHorizontal = Math.abs(mx) > Math.abs(my)
+      return isHorizontal ? 'horizontal' : 'vertical'
     }
     
-    const trigger = vx > 0.2
+    // Dikey hareket ise swipe'ı iptal et
+    if (memo === 'vertical') {
+      return memo
+    }
+    
+    // Yatay swipe trigger kontrolü
+    const trigger = Math.abs(vx) > 0.3 || Math.abs(mx) > 100
     const dir = xDir < 0 ? -1 : 1
     
-    if (!active && trigger) {
+    if (!active && trigger && Math.abs(mx) > 50) {
       setIsGone(true)
       const direction = dir === 1 ? 'right' : 'left'
       
       api.start({
         x: (200 + window.innerWidth) * dir,
-        rot: mx / 100 + (dir * 10 * vx),
+        rot: mx / 100 + (dir * 10 * Math.abs(vx)),
         scale: 1.1,
         config: { friction: 50, tension: 200 }
       })
       
       setTimeout(() => onSwipe(direction, item), 150)
       
-    } else {
+    } else if (active) {
       api.start({
-        x: active ? mx : 0,
-        y: active ? my : 0,
-        rot: active ? mx / 100 : 0,
-        scale: active ? 1.05 : 1,
-        immediate: active
+        x: mx,
+        y: 0, // Dikey hareketi engelle
+        rot: mx / 100,
+        scale: 1.05,
+        immediate: true
+      })
+    } else {
+      // Geri dön
+      api.start({
+        x: 0,
+        y: 0,
+        rot: 0,
+        scale: 1,
+        config: { friction: 50, tension: 400 }
       })
     }
+    
+    return memo
   }, {
-    axis: undefined,
+    axis: 'x', // Sadece yatay eksende çalış
     filterTaps: true,
-    threshold: 10,
-    rubberband: 0.1,
+    threshold: 5,
+    rubberband: false,
     pointer: { touch: true }
   })
 
@@ -186,13 +200,14 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
       {/* Main Card */}
       <animated.div
         ref={cardRef}
-        className="w-full h-[calc(100%-70px)] bg-white rounded-2xl shadow-xl cursor-grab active:cursor-grabbing overflow-hidden border border-gray-100"
+        className="w-full h-[calc(100%-70px)] bg-white rounded-2xl shadow-xl cursor-grab active:cursor-grabbing overflow-hidden border border-gray-100 select-none"
         {...bind()}
         style={{
           x,
           y,
           rotate: to([rot], (r: SpringValue) => `${r}deg`),
           scale: to([scale], (s: SpringValue) => s),
+          touchAction: 'pan-y', // Dikey scroll'a izin ver
         }}
         onClick={() => onCardClick?.(item)}
       >
