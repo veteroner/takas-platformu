@@ -19,13 +19,13 @@ export default function KvkkPage() {
         <ul>
           <li><strong>Unvan:</strong> Teknova Tarım Hayvancılık Bilişim Reklam Limited Şirketi</li>
           <li><strong>MERSİS No:</strong> 0836100073000001</li>
-          <li><strong>Ticaret Sicil No:</strong> [Ticaret sicil numarası eklenecek]</li>
-          <li><strong>Vergi Kimlik No:</strong> [Vergi kimlik numarası eklenecek]</li>
-          <li><strong>Adres:</strong> Mevlana Mahallesi 8/23 Sincan/Ankara</li>
-          <li><strong>Telefon:</strong> [Telefon numarası eklenecek]</li>
+          <li><strong>Vergi Kimlik No:</strong> 8361000730</li>
+          <li><strong>Vergi Dairesi:</strong> Sincan Vergi Dairesi Müdürlüğü</li>
+          <li><strong>Adres:</strong> Mevlana Mahallesi No:8 Kapı No:23, 06949 Sincan/Ankara</li>
+          <li><strong>Telefon:</strong> 0543 509 84 85</li>
           <li><strong>E-posta:</strong> bilgi@teknovagroup.com</li>
           <li><strong>KVKK İletişim:</strong> kvkk@teknovagroup.com</li>
-          <li><strong>Veri Koruma Sorumlusu:</strong> [İsim ve iletişim bilgisi eklenecek]</li>
+          <li><strong>Veri Sorumlusu Temsilcisi:</strong> İsa Bozkurt</li>
         </ul>
       </div>
 

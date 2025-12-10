@@ -18,8 +18,15 @@ export default function TermsPage() {
       
       <h3>1.1 Taraflar</h3>
       <ul>
-        <li><strong>Platform:</strong> Teknova Group tarafından işletilen takas platformu</li>
-        <li><strong>Şirket:</strong> Teknova Group ve/veya hukuki halefler</li>
+        <li><strong>Platform:</strong> TakasZone - Çocuk giysi ve oyuncak takas platformu</li>
+        <li><strong>Şirket:</strong> Teknova Tarım Hayvancılık Bilişim Reklam Limited Şirketi</li>
+        <li><strong>MERSİS No:</strong> 0836100073000001</li>
+        <li><strong>VKN:</strong> 8361000730</li>
+        <li><strong>Vergi Dairesi:</strong> Sincan Vergi Dairesi Müdürlüğü</li>
+        <li><strong>Adres:</strong> Mevlana Mahallesi No:8 Kapı No:23, 06949 Sincan/Ankara</li>
+        <li><strong>Telefon:</strong> 0543 509 84 85</li>
+        <li><strong>E-posta:</strong> bilgi@teknovagroup.com</li>
+        <li><strong>Veri Sorumlusu:</strong> İsa Bozkurt</li>
         <li><strong>Kullanıcı:</strong> Platforma kayıt olan ve hizmetleri kullanan gerçek/tüzel kişiler</li>
         <li><strong>Üye:</strong> Kayıt işlemini tamamlamış ve hesap sahibi olan kullanıcılar</li>
         <li><strong>Hizmet:</strong> Platform üzerinden sunulan tüm özellik ve işlevler</li>

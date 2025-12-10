@@ -86,9 +86,16 @@ export default function AboutPage() {
           <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
             <Users className="w-5 h-5" /> Şirket Bilgileri
           </h3>
-          <p className="text-white/80 text-sm mb-2">TEKNOVA TARIM HAYVANCILIK BİLİŞİM REKLAM LTD. ŞTİ.</p>
-          <p className="text-white/60 text-sm">Mevlana Mahallesi No: 8/23, 06949 Sincan/Ankara</p>
-          <p className="text-white/60 text-sm">bilgi@teknovagroup.com</p>
+          <p className="text-white/80 text-sm mb-2 font-medium">TEKNOVA TARIM HAYVANCILIK BİLİŞİM REKLAM LTD. ŞTİ.</p>
+          <div className="space-y-1 mt-3">
+            <p className="text-white/70 text-sm">📍 Mevlana Mahallesi No:8 Kapı No:23, 06949 Sincan/Ankara</p>
+            <p className="text-white/70 text-sm">📧 bilgi@teknovagroup.com</p>
+            <p className="text-white/70 text-sm">📞 0543 509 84 85</p>
+            <p className="text-white/70 text-sm">🏢 MERSİS: 0836100073000001</p>
+            <p className="text-white/70 text-sm">🔢 VKN: 8361000730</p>
+            <p className="text-white/70 text-sm">🏦 Vergi Dairesi: Sincan Vergi Dairesi Müdürlüğü</p>
+            <p className="text-white/70 text-sm">👤 Veri Sorumlusu: İsa Bozkurt</p>
+          </div>
         </div>
 
         <Link href="/destek" className="block bg-gradient-to-r from-pink-500 to-orange-400 text-white font-semibold py-4 rounded-2xl text-center">

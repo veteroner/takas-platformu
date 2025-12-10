@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowLeft, Mail, MapPin, MessageCircle, HelpCircle, FileText } from 'lucide-react'
+import { ArrowLeft, Mail, MapPin, MessageCircle, HelpCircle, FileText, Phone, Building } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -54,11 +54,27 @@ export default function SupportPage() {
               <p className="text-white/70 text-sm">bilgi@teknovagroup.com</p>
             </div>
           </a>
-          <div className="flex items-start gap-3 p-3 bg-white/10 rounded-xl">
+          <a href="tel:+905435098485" className="flex items-center gap-3 p-3 bg-white/10 rounded-xl mb-3">
+            <Phone className="w-5 h-5 text-pink-300" />
+            <div>
+              <p className="text-white font-medium">Telefon</p>
+              <p className="text-white/70 text-sm">0543 509 84 85</p>
+            </div>
+          </a>
+          <div className="flex items-start gap-3 p-3 bg-white/10 rounded-xl mb-3">
             <MapPin className="w-5 h-5 text-pink-300" />
             <div>
               <p className="text-white font-medium">Adres</p>
-              <p className="text-white/70 text-sm">Mevlana Mahallesi No: 8/23<br/>06949 Sincan/Ankara</p>
+              <p className="text-white/70 text-sm">Mevlana Mahallesi No:8 Kapı No:23<br/>06949 Sincan/Ankara</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3 p-3 bg-white/10 rounded-xl">
+            <Building className="w-5 h-5 text-pink-300" />
+            <div>
+              <p className="text-white font-medium">Şirket Bilgileri</p>
+              <p className="text-white/70 text-sm">MERSİS: 0836100073000001</p>
+              <p className="text-white/70 text-sm">VKN: 8361000730</p>
+              <p className="text-white/70 text-sm">Veri Sorumlusu: İsa Bozkurt</p>
             </div>
           </div>
         </div>
