@@ -2,345 +2,279 @@
 
 export default function KvkkPage() {
   return (
-    <div className="prose prose-gray max-w-3xl mx-auto px-4 py-10">
-      <h1>KVKK Aydınlatma Metni</h1>
-      
-      <p className="text-sm text-gray-600">Son Güncelleme: {new Date().toLocaleDateString('tr-TR')}</p>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500 mb-2">
+          KVKK Aydınlatma Metni
+        </h1>
+        <p className="text-sm text-gray-500">Son Güncelleme: 10 Aralık 2025</p>
+      </div>
 
-      <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-400 my-6">
-        <p className="text-sm font-medium">
-          <strong>KVKK Aydınlatma Yükümlülüğü:</strong> Bu metin, 6698 sayılı Kişisel Verilerin 
-          Korunması Kanunu'nun 10. maddesi uyarınca hazırlanmıştır.
+      <div className="bg-gradient-to-r from-purple-100 to-pink-100 p-4 rounded-xl border-l-4 border-purple-500">
+        <p className="text-sm text-gray-700">
+          <strong>6698 sayılı Kişisel Verilerin Korunması Kanunu</strong> kapsamında, 
+          kişisel verilerinizin işlenmesine ilişkin sizi bilgilendirmek amacıyla bu metin hazırlanmıştır.
         </p>
       </div>
 
-      <h2>1. Veri Sorumlusu Kimliği</h2>
-      <div className="bg-purple-50/50 p-4 rounded-lg">
-        <ul>
-          <li><strong>Unvan:</strong> Teknova Tarım Hayvancılık Bilişim Reklam Limited Şirketi</li>
-          <li><strong>MERSİS No:</strong> 0836100073000001</li>
-          <li><strong>Vergi Kimlik No:</strong> 8361000730</li>
-          <li><strong>Vergi Dairesi:</strong> Sincan Vergi Dairesi Müdürlüğü</li>
-          <li><strong>Adres:</strong> Mevlana Mahallesi No:8 Kapı No:23, 06949 Sincan/Ankara</li>
-          <li><strong>Telefon:</strong> 0543 509 84 85</li>
-          <li><strong>E-posta:</strong> bilgi@teknovagroup.com</li>
-          <li><strong>Veri Sorumlusu Temsilcisi:</strong> İsa Bozkurt</li>
-        </ul>
-      </div>
-
-      <h2>2. İşlenen Kişisel Veriler ve Kategorileri</h2>
-      
-      <h3>2.1 Kimlik Verileri</h3>
-      <ul>
-        <li>Ad, soyad</li>
-        <li>Doğum tarihi (yaş doğrulaması)</li>
-        <li>Kimlik numarası (gerekli durumlarda)</li>
-        <li>Profil fotoğrafı</li>
-      </ul>
-
-      <h3>2.2 İletişim Verileri</h3>
-      <ul>
-        <li>E-posta adresi</li>
-        <li>Telefon numarası</li>
-        <li>Açık adres bilgisi (opsiyonel)</li>
-        <li>Konum bilgisi (yaklaşık - rıza ile)</li>
-      </ul>
-
-      <h3>2.3 Hesap ve Güvenlik Verileri</h3>
-      <ul>
-        <li>Kullanıcı adı</li>
-        <li>Şifre (hashlenerek saklanır)</li>
-        <li>IP adresi ve oturum bilgileri</li>
-        <li>Cihaz kimliği ve tarayıcı bilgileri</li>
-        <li>Güvenlik logları</li>
-      </ul>
-
-      <h3>2.4 İşlem ve İçerik Verileri</h3>
-      <ul>
-        <li>İlan içerikleri ve fotoğraflar</li>
-        <li>Mesaj içerikleri</li>
-        <li>Platform kullanım geçmişi</li>
-        <li>Etkileşim verileri (beğeni, görüntüleme)</li>
-        <li>Tercih ve ilgi alanları</li>
-      </ul>
-
-      <h3>2.5 Özel Kategorili Veriler</h3>
-      <div className="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400 my-4">
-        <p className="text-sm">
-          <strong>Uyarı:</strong> Platform üzerinden özel kategorili (hassas) kişisel veri 
-          paylaşımı yapmayınız. Bu tür veriler tespit edildiğinde derhal silinecektir.
-        </p>
-      </div>
-
-      <h2>3. Veri İşleme Amaçları</h2>
-      
-      <table className="min-w-full border border-gray-300 text-sm">
-        <thead>
-          <tr className="bg-purple-100">
-            <th className="border border-gray-300 px-4 py-2">Amaç</th>
-            <th className="border border-gray-300 px-4 py-2">Veri Kategorisi</th>
-            <th className="border border-gray-300 px-4 py-2">Saklama Süresi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">Hesap oluşturma ve yönetimi</td>
-            <td className="border border-gray-300 px-4 py-2">Kimlik, İletişim, Hesap</td>
-            <td className="border border-gray-300 px-4 py-2">Hesap kapatma + 6 ay</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">Hizmet sunumu</td>
-            <td className="border border-gray-300 px-4 py-2">Tüm veriler</td>
-            <td className="border border-gray-300 px-4 py-2">Aktif kullanım süresi</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">Güvenlik ve dolandırıcılık önleme</td>
-            <td className="border border-gray-300 px-4 py-2">Güvenlik, IP, Cihaz</td>
-            <td className="border border-gray-300 px-4 py-2">6 ay - 2 yıl</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">5651 sayılı Kanun gereği</td>
-            <td className="border border-gray-300 px-4 py-2">İletişim logları</td>
-            <td className="border border-gray-300 px-4 py-2">2 yıl</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">Pazarlama (rıza ile)</td>
-            <td className="border border-gray-300 px-4 py-2">İletişim, Tercihler</td>
-            <td className="border border-gray-300 px-4 py-2">Rıza geri çekilene kadar</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>4. Hukuki Sebepler (KVKK m.5)</h2>
-      
-      <h3>4.1 Açık Rıza Gerektiren İşlemler (m.5/1)</h3>
-      <ul>
-        <li>Pazarlama iletileri gönderimi</li>
-        <li>Kişiselleştirilmiş öneriler</li>
-        <li>Konum tabanlı hizmetler</li>
-        <li>Analitik ve reklam çerezleri</li>
-        <li>Sosyal medya entegrasyonları</li>
-      </ul>
-
-      <h3>4.2 Sözleşmenin İfası (m.5/2-c)</h3>
-      <ul>
-        <li>Hesap oluşturma ve yönetimi</li>
-        <li>Takas platformu hizmetleri</li>
-        <li>Mesajlaşma ve iletişim</li>
-        <li>İlan yayınlama ve yönetimi</li>
-      </ul>
-
-      <h3>4.3 Hukuki Yükümlülük (m.5/2-ç)</h3>
-      <ul>
-        <li>5651 sayılı Kanun gereği log tutma</li>
-        <li>Vergi mevzuatı gereklilikleri</li>
-        <li>Tüketici mevzuatı yükümlülükleri</li>
-        <li>Kişisel verilerin korunması mevzuatı</li>
-      </ul>
-
-      <h3>4.4 Meşru Menfaat (m.5/2-f)</h3>
-      <ul>
-        <li>Platform güvenliği ve istikrarı</li>
-        <li>Dolandırıcılık önleme</li>
-        <li>Hizmet iyileştirme ve geliştirme</li>
-        <li>Teknik destek ve bakım</li>
-      </ul>
-
-      <h2>5. Veri Aktarımı ve Paylaşımı</h2>
-      
-      <h3>5.1 Yurtiçi Aktarımlar</h3>
-      <ul>
-        <li><strong>Hukuk Danışmanları:</strong> Hukuki süreçler için gerekli veriler</li>
-        <li><strong>Muhasebe Firması:</strong> Mali kayıtlar ve faturalama</li>
-        <li><strong>BT Destek Şirketi:</strong> Teknik bakım ve destek için</li>
-        <li><strong>Güvenlik Şirketi:</strong> Siber güvenlik ve izleme</li>
-        <li><strong>Kargo Şirketleri:</strong> Teslimat süreçleri için</li>
-        <li><strong>Yetkili Kamu Kurumları:</strong> Yasal zorunluluk halinde</li>
-      </ul>
-
-      <h3>5.2 Yurtdışı Aktarımlar</h3>
-      <div className="bg-emerald-50 p-4 rounded-lg border-l-4 border-green-400 my-4">
-        <p className="text-sm">
-          <strong>Güvenli Transfer:</strong> Verileriniz yalnızca AB/İsveç (eu-north-1) bölgesinde 
-          bulunan Supabase altyapısında işlenmektedir. Bu aktarım GDPR'nin 45. maddesi 
-          kapsamında "yeterlilik kararı" olan ülkeye yapıldığından ek güvence gerektirmez.
-        </p>
-      </div>
-
-      <h2>6. Veri Saklama Süreleri ve İmha</h2>
-      
-      <table className="min-w-full border border-gray-300 text-sm">
-        <thead>
-          <tr className="bg-purple-100">
-            <th className="border border-gray-300 px-4 py-2">Veri Türü</th>
-            <th className="border border-gray-300 px-4 py-2">Saklama Süresi</th>
-            <th className="border border-gray-300 px-4 py-2">İmha Yöntemi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">Hesap Verileri</td>
-            <td className="border border-gray-300 px-4 py-2">Hesap kapatma + 6 ay</td>
-            <td className="border border-gray-300 px-4 py-2">Güvenli silme</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">İletişim Logları</td>
-            <td className="border border-gray-300 px-4 py-2">2 yıl (5651 sayılı Kanun)</td>
-            <td className="border border-gray-300 px-4 py-2">Otomatik silme</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">Mali Kayıtlar</td>
-            <td className="border border-gray-300 px-4 py-2">10 yıl (Vergi mevzuatı)</td>
-            <td className="border border-gray-300 px-4 py-2">Anonimleştirme</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">Pazarlama Verileri</td>
-            <td className="border border-gray-300 px-4 py-2">Rıza geri çekilene kadar</td>
-            <td className="border border-gray-300 px-4 py-2">Derhal silme</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">Güvenlik Logları</td>
-            <td className="border border-gray-300 px-4 py-2">6 ay - 2 yıl</td>
-            <td className="border border-gray-300 px-4 py-2">Otomatik silme</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>7. Kişisel Veri Sahibinin Hakları (KVKK m.11)</h2>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
-        <div className="bg-purple-50 p-4 rounded-lg">
-          <h4 className="font-semibold text-blue-800">Temel Haklar</h4>
-          <ul className="text-sm mt-2">
-            <li>• Bilgi alma hakkı</li>
-            <li>• Erişim hakkı</li>
-            <li>• Düzeltme hakkı</li>
-            <li>• Silme hakkı</li>
-          </ul>
+      {/* Veri Sorumlusu */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          1. Veri Sorumlusu
+        </h2>
+        <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+          <p><strong>Şirket:</strong> Teknova Tarım Hayvancılık Bilişim Reklam Ltd. Şti.</p>
+          <p><strong>MERSİS No:</strong> 0836100073000001</p>
+          <p><strong>VKN:</strong> 8361000730</p>
+          <p><strong>Adres:</strong> Mevlana Mahallesi No:8 Kapı No:23, 06949 Sincan/Ankara</p>
+          <p><strong>Telefon:</strong> 0543 509 84 85</p>
+          <p><strong>E-posta:</strong> bilgi@teknovagroup.com</p>
+          <p><strong>Veri Sorumlusu Temsilcisi:</strong> İsa Bozkurt</p>
         </div>
-        <div className="bg-emerald-50 p-4 rounded-lg">
-          <h4 className="font-semibold text-emerald-700">İleri Haklar</h4>
-          <ul className="text-sm mt-2">
-            <li>• İşlemenin durdurulması</li>
-            <li>• Aktarım bilgisi alma</li>
-            <li>• İtiraz etme hakkı</li>
-            <li>• Tazminat talep etme</li>
-          </ul>
-        </div>
-      </div>
+      </section>
 
-      <h3>7.1 Hak Kullanım Süreci</h3>
-      <ol>
-        <li><strong>Başvuru:</strong> bilgi@teknovagroup.com adresine kimlik belgesi ile</li>
-        <li><strong>Kimlik Doğrulama:</strong> 3 iş günü içinde</li>
-        <li><strong>Değerlendirme:</strong> En geç 30 gün içinde yanıt</li>
-        <li><strong>Sonuç Bildirimi:</strong> E-posta veya yazılı olarak</li>
-        <li><strong>İtiraz:</strong> KVKK Kuruluna başvuru hakkı</li>
-      </ol>
-
-      <h2>8. Güvenlik Tedbirleri</h2>
-      
-      <h3>8.1 Teknik Güvenlik Tedbirleri</h3>
-      <ul>
-        <li><strong>Şifreleme:</strong> SSL/TLS (min. TLS 1.2), AES-256 veritabanı şifreleme</li>
-        <li><strong>Erişim Kontrolü:</strong> Rol bazlı yetkilendirme sistemi</li>
-        <li><strong>Ağ Güvenliği:</strong> Güvenlik duvarı, DDoS koruması</li>
-        <li><strong>İzleme:</strong> 7/24 güvenlik izleme ve log analizi</li>
-        <li><strong>Yedekleme:</strong> Otomatik yedekleme ve felaket kurtarma</li>
-        <li><strong>Test:</strong> Düzenli penetrasyon testleri ve zafiyet taraması</li>
-      </ul>
-
-      <h3>8.2 İdari Güvenlik Tedbirleri</h3>
-      <ul>
-        <li><strong>Personel Eğitimi:</strong> Düzenli KVKK ve güvenlik eğitimleri</li>
-        <li><strong>Gizlilik Sözleşmeleri:</strong> Tüm çalışanlar için zorunlu</li>
-        <li><strong>Erişim Yönetimi:</strong> En az yetki prensibi</li>
-        <li><strong>Denetim:</strong> Düzenli iç denetim ve risk değerlendirmesi</li>
-        <li><strong>Olay Müdahale:</strong> Veri ihlali müdahale planı</li>
-      </ul>
-
-      <h2>9. Çerezler ve Takip Teknolojileri</h2>
-      
-      <p>Detaylı bilgi için lütfen <strong>Çerez Politikası</strong> sayfamızı inceleyiniz.</p>
-      
-      <h3>9.1 Çerez Türleri</h3>
-      <ul>
-        <li><strong>Zorunlu Çerezler:</strong> Platform işlevselliği için gerekli</li>
-        <li><strong>Performans Çerezleri:</strong> Analitik ve iyileştirme</li>
-        <li><strong>İşlevsel Çerezler:</strong> Kişiselleştirme ve tercihler</li>
-        <li><strong>Pazarlama Çerezleri:</strong> Reklam ve hedefleme (rıza ile)</li>
-      </ul>
-
-      <h2>10. Veri İhlali Bildirim Süreci</h2>
-      
-      <div className="bg-rose-50 p-4 rounded-lg border-l-4 border-rose-400 my-6">
-        <h4 className="font-semibold text-rose-700">Veri İhlali Durumunda:</h4>
-        <ul className="text-sm mt-2">
-          <li>• KVKK Kuruluna 72 saat içinde bildirim</li>
-          <li>• Yüksek riskli ihlallerde veri sahiplerine bildirim</li>
-          <li>• Alınan tedbirlerin şeffaf paylaşımı</li>
-          <li>• İhlal nedenlerinin ve önleyici tedbirlerin açıklanması</li>
-        </ul>
-      </div>
-
-      <h2>11. Otomatik Karar Verme ve Profilleme</h2>
-      
-      <p>Platform'da kullanılan otomatik karar verme sistemleri:</p>
-      <ul>
-        <li><strong>Eşleştirme Algoritması:</strong> Takas önerileri için</li>
-        <li><strong>Güvenlik Algoritması:</strong> Dolandırıcılık tespiti</li>
-        <li><strong>Öneri Sistemi:</strong> İçerik ve kullanıcı önerileri</li>
-        <li><strong>Risk Değerlendirme:</strong> Hesap güvenlik skoru</li>
-      </ul>
-      
-      <p className="text-sm text-gray-600 mt-4">
-        Bu sistemlere itiraz etme hakkınız bulunmaktadır. İtiraz için bilgi@teknovagroup.com 
-        adresine başvurabilirsiniz.
-      </p>
-
-      <h2>12. İletişim ve Şikayet</h2>
-      
-      <div className="bg-purple-50/50 p-4 rounded-lg">
-        <h3>Veri Koruma Sorumlusu</h3>
-        <ul className="mt-2">
-          <li><strong>Veri Sorumlusu:</strong> İsa Bozkurt</li>
-          <li><strong>E-posta:</strong> bilgi@teknovagroup.com</li>
-          <li><strong>Telefon:</strong> 0543 509 84 85</li>
-          <li><strong>Adres:</strong> Mevlana Mahallesi No:8 Kapı No:23, 06949 Sincan/Ankara</li>
-          <li><strong>Çalışma Saatleri:</strong> 09:00-17:00 (Pazartesi-Cuma)</li>
-        </ul>
-        
-        <h3 className="mt-4">Başvuru Kanalları</h3>
-        <ul className="mt-2">
-          <li><strong>Online Destek:</strong> takazone.com/destek</li>
-          <li><strong>KVKK Başvuru Sistemi:</strong> kvkk.gov.tr</li>
-          <li><strong>Posta:</strong> Yukarıdaki adrese iadeli taahhütlü</li>
-          <li><strong>Elden Teslim:</strong> Yukarıdaki adreste alındı belgesi ile</li>
-        </ul>
-      </div>
-
-      <div className="bg-purple-50 p-6 rounded-lg mt-8 border border-purple-200">
-        <p className="text-sm">
-          <strong>Aydınlatma Metni Bilgileri:</strong><br/>
-          <strong>Hazırlık Tarihi:</strong> {new Date().toLocaleDateString('tr-TR')}<br/>
-          <strong>Yürürlük Tarihi:</strong> {new Date().toLocaleDateString('tr-TR')}<br/>
-          <strong>Versiyon:</strong> 2.0<br/>
-          <strong>Son Güncelleme:</strong> {new Date().toLocaleDateString('tr-TR')}<br/>
-          <strong>Sonraki İnceleme:</strong> {new Date(Date.now() + 365*24*60*60*1000).toLocaleDateString('tr-TR')}<br/>
-          <strong>Hazırlayan:</strong> Veri Koruma Sorumlusu<br/>
-          <strong>Onaylayan:</strong> Genel Müdür<br/>
-          <strong>Hukuki Dayanak:</strong> KVKK m.10, GDPR m.13-14
+      {/* İşlenen Veriler */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          2. İşlenen Kişisel Veriler
+        </h2>
+        <p className="text-gray-600 mb-4">
+          TakaZone platformunu kullandığınızda aşağıdaki kişisel verileriniz işlenmektedir:
         </p>
         
-        <div className="mt-4 p-3 bg-blue-100 rounded border-l-4 border-purple-400">
-          <p className="text-sm font-medium text-blue-800">
-            Bu aydınlatma metni KVKK'nın 10. maddesi uyarınca veri sahiplerini bilgilendirmek 
-            amacıyla hazırlanmıştır. Sorularınız için yukarıdaki iletişim kanallarını kullanabilirsiniz.
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="bg-purple-50 rounded-xl p-4">
+            <h3 className="font-semibold text-purple-700 mb-2">■ Kimlik Bilgileri</h3>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li>• Ad, soyad</li>
+              <li>• Profil fotoğrafı</li>
+              <li>• Doğum tarihi (yaş doğrulaması)</li>
+            </ul>
+          </div>
+          
+          <div className="bg-pink-50 rounded-xl p-4">
+            <h3 className="font-semibold text-pink-700 mb-2">■ İletişim Bilgileri</h3>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li>• E-posta adresi</li>
+              <li>• Telefon numarası</li>
+              <li>• Konum bilgisi (izninizle)</li>
+            </ul>
+          </div>
+          
+          <div className="bg-orange-50 rounded-xl p-4">
+            <h3 className="font-semibold text-orange-700 mb-2">■ Kullanıcı Bilgileri</h3>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li>• Kullanıcı adı ve şifre (şifreli)</li>
+              <li>• İlan içerikleri ve fotoğraflar</li>
+              <li>• Mesaj içerikleri</li>
+            </ul>
+          </div>
+          
+          <div className="bg-blue-50 rounded-xl p-4">
+            <h3 className="font-semibold text-blue-700 mb-2">■ İşlem Bilgileri</h3>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li>• Platform kullanım geçmişi</li>
+              <li>• Beğeni ve etkileşimler</li>
+              <li>• Cihaz ve tarayıcı bilgileri</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* İşleme Amaçları */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          3. Veri İşleme Amaçları
+        </h2>
+        <p className="text-gray-600 mb-4">Kişisel verileriniz aşağıdaki amaçlarla işlenmektedir:</p>
+        
+        <ul className="space-y-2 text-gray-700">
+          <li className="flex items-start gap-2">
+            <span className="text-purple-500 mt-1">✓</span>
+            <span>Hesap oluşturma ve üyelik hizmetlerinin sunulması</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-purple-500 mt-1">✓</span>
+            <span>Takas işlemlerinin gerçekleştirilmesi ve eşleştirme yapılması</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-purple-500 mt-1">✓</span>
+            <span>Kullanıcılar arası mesajlaşma hizmetinin sağlanması</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-purple-500 mt-1">✓</span>
+            <span>Platform güvenliğinin sağlanması ve dolandırıcılığın önlenmesi</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-purple-500 mt-1">✓</span>
+            <span>Yasal yükümlülüklerin yerine getirilmesi</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-purple-500 mt-1">✓</span>
+            <span>Hizmet kalitesinin artırılması ve kullanıcı deneyiminin iyileştirilmesi</span>
+          </li>
+        </ul>
+      </section>
+
+      {/* Hukuki Sebepler */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          4. Hukuki Sebepler
+        </h2>
+        <p className="text-gray-600 mb-4">
+          Kişisel verileriniz, KVKK'nın 5. ve 6. maddelerinde belirtilen aşağıdaki hukuki sebeplere dayanılarak işlenmektedir:
+        </p>
+        
+        <ul className="space-y-2 text-gray-700">
+          <li>■ Açık rızanızın bulunması</li>
+          <li>■ Sözleşmenin kurulması veya ifası için gerekli olması</li>
+          <li>■ Hukuki yükümlülüğümüzün yerine getirilmesi</li>
+          <li>■ Meşru menfaatlerimiz için veri işlenmesinin zorunlu olması</li>
+        </ul>
+      </section>
+
+      {/* Veri Aktarımı */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          5. Veri Aktarımı
+        </h2>
+        <p className="text-gray-600 mb-4">
+          Kişisel verileriniz, yukarıda belirtilen amaçlar doğrultusunda aşağıdaki taraflarla paylaşılabilir:
+        </p>
+        
+        <div className="bg-gray-50 rounded-xl p-4 space-y-2 text-sm text-gray-700">
+          <p>■ <strong>Yetkili Kamu Kurumları:</strong> Yasal zorunluluk halinde</p>
+          <p>■ <strong>Hizmet Sağlayıcılar:</strong> Sunucu barındırma, teknik destek</p>
+          <p>■ <strong>İş Ortakları:</strong> Ödeme ve bildirim hizmetleri</p>
+        </div>
+        
+        <div className="bg-amber-50 rounded-xl p-4 mt-4 border-l-4 border-amber-400">
+          <p className="text-sm text-gray-700">
+            <strong>Önemli:</strong> Verileriniz yurt dışına aktarılması durumunda, KVKK'nın 9. maddesi 
+            kapsamında gerekli güvenlik önlemleri alınmaktadır.
           </p>
         </div>
+      </section>
+
+      {/* Saklama Süresi */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          6. Saklama Süresi
+        </h2>
+        <p className="text-gray-600 mb-4">
+          Kişisel verileriniz, işleme amaçlarının gerektirdiği süre boyunca ve yasal yükümlülükler 
+          çerçevesinde saklanmaktadır:
+        </p>
+        
+        <div className="bg-gray-50 rounded-xl p-4 space-y-2 text-sm text-gray-700">
+          <p>■ Hesap verileri: Üyelik süresince + hesap kapatmadan sonra 6 ay</p>
+          <p>■ İşlem kayıtları: 10 yıl (Vergi mevzuatı gereği)</p>
+          <p>■ Mesajlaşma verileri: 2 yıl</p>
+          <p>■ Log kayıtları: 2 yıl (5651 sayılı Kanun gereği)</p>
+        </div>
+      </section>
+
+      {/* Haklarınız */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          7. KVKK Kapsamındaki Haklarınız
+        </h2>
+        <p className="text-gray-600 mb-4">
+          KVKK'nın 11. maddesi uyarınca aşağıdaki haklara sahipsiniz:
+        </p>
+        
+        <ul className="space-y-2 text-gray-700">
+          <li className="flex items-start gap-2">
+            <span className="text-green-500 mt-1">●</span>
+            <span>Kişisel verilerinizin işlenip işlenmediğini öğrenme</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-green-500 mt-1">●</span>
+            <span>İşlenmişse buna ilişkin bilgi talep etme</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-green-500 mt-1">●</span>
+            <span>İşlenme amacını ve amaca uygun kullanılıp kullanılmadığını öğrenme</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-green-500 mt-1">●</span>
+            <span>Yurt içi/dışı aktarılan üçüncü kişileri bilme</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-green-500 mt-1">●</span>
+            <span>Eksik veya yanlış işlenmişse düzeltilmesini isteme</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-green-500 mt-1">●</span>
+            <span>Silinmesini veya yok edilmesini isteme</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-green-500 mt-1">●</span>
+            <span>Otomatik sistemlerle analiz sonucu aleyhinize çıkan sonuca itiraz etme</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-green-500 mt-1">●</span>
+            <span>Kanuna aykırı işleme nedeniyle zararınızın giderilmesini talep etme</span>
+          </li>
+        </ul>
+      </section>
+
+      {/* Başvuru */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          8. Başvuru Yöntemi
+        </h2>
+        <p className="text-gray-600 mb-4">
+          Yukarıda belirtilen haklarınızı kullanmak için aşağıdaki yöntemlerle bize başvurabilirsiniz:
+        </p>
+        
+        <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 space-y-3">
+          <p className="flex items-center gap-2">
+            <span className="text-purple-500">📧</span>
+            <strong>E-posta:</strong> bilgi@teknovagroup.com
+          </p>
+          <p className="flex items-center gap-2">
+            <span className="text-purple-500">📞</span>
+            <strong>Telefon:</strong> 0543 509 84 85
+          </p>
+          <p className="flex items-center gap-2">
+            <span className="text-purple-500">📍</span>
+            <strong>Adres:</strong> Mevlana Mah. No:8 Kapı No:23, 06949 Sincan/Ankara
+          </p>
+          <p className="flex items-center gap-2">
+            <span className="text-purple-500">🌐</span>
+            <strong>Online:</strong> takazone.com/destek
+          </p>
+        </div>
+        
+        <div className="bg-blue-50 rounded-xl p-4 mt-4 border-l-4 border-blue-400">
+          <p className="text-sm text-gray-700">
+            Başvurularınız <strong>30 gün</strong> içinde sonuçlandırılacaktır. Başvurular ücretsizdir, 
+            ancak işlemin ayrıca bir maliyet gerektirmesi halinde Kişisel Verileri Koruma Kurulu 
+            tarafından belirlenen ücret tarifesi uygulanabilir.
+          </p>
+        </div>
+      </section>
+
+      {/* Şikayet */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          9. Şikayet Hakkı
+        </h2>
+        <p className="text-gray-600">
+          Başvurunuzun reddedilmesi, verilen cevabı yetersiz bulmanız veya süresinde cevap 
+          verilmemesi halinde <strong>Kişisel Verileri Koruma Kurulu'na</strong> şikayette bulunabilirsiniz.
+        </p>
+        <p className="text-sm text-gray-500 mt-2">
+          Web: <a href="https://kvkk.gov.tr" className="text-purple-600 hover:underline" target="_blank" rel="noopener noreferrer">kvkk.gov.tr</a>
+        </p>
+      </section>
+
+      {/* Footer */}
+      <div className="bg-gray-100 rounded-xl p-4 text-center text-sm text-gray-600">
+        <p><strong>Teknova Tarım Hayvancılık Bilişim Reklam Ltd. Şti.</strong></p>
+        <p className="mt-1">Bu aydınlatma metni 10.12.2025 tarihinde güncellenmiştir.</p>
       </div>
     </div>
   )
 }
-
-
