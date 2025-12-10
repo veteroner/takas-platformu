@@ -1026,12 +1026,36 @@ BEGIN
   DELETE FROM public.filtered_messages 
   WHERE user_id = user_id_to_delete;
 
-  -- 12. Kullanıcı profilini sil
+  -- 12. Bildirim tercihlerini sil (KVKK genişletme)
+  DELETE FROM public.notification_prefs WHERE user_id = user_id_to_delete;
+  
+  -- 13. Bildirimleri sil (KVKK genişletme)
+  DELETE FROM public.notifications WHERE user_id = user_id_to_delete;
+  
+  -- 14. FCM tokenlarını sil (KVKK genişletme)
+  DELETE FROM public.fcm_tokens WHERE user_id = user_id_to_delete;
+  
+  -- 15. Kullanıcı aktivite loglarını sil (KVKK genişletme)
+  DELETE FROM public.user_activity_log WHERE user_id = user_id_to_delete;
+  
+  -- 16. Swipe geçmişini sil (KVKK genişletme)
+  DELETE FROM public.swipes WHERE user_id = user_id_to_delete;
+  
+  -- 17. Consent kayıtlarını sil (KVKK genişletme)
+  DELETE FROM public.user_consents WHERE user_id = user_id_to_delete;
+  
+  -- 18. Chat ban kayıtlarını sil
+  DELETE FROM public.user_chat_bans WHERE user_id = user_id_to_delete;
+  
+  -- 19. Violation kayıtlarını sil
+  DELETE FROM public.user_violations WHERE user_id = user_id_to_delete;
+
+  -- 20. Kullanıcı profilini sil
   DELETE FROM public.users WHERE id = user_id_to_delete;
   GET DIAGNOSTICS deleted_count = ROW_COUNT;
   RAISE NOTICE 'Deleted user profile: %', deleted_count;
 
-  -- 13. Auth kullanıcısını sil (Supabase Auth)
+  -- 21. Auth kullanıcısını sil (Supabase Auth)
   -- NOT: Bu işlem manuel olarak yapılmalı veya Supabase Dashboard'dan
   -- çünkü auth.users tablosu RLS ve fonksiyon izinlerine tabi değil
 
