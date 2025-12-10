@@ -188,9 +188,8 @@ export default function ConsentPage() {
         <div className="bg-green-50 p-4 rounded-lg">
           <h4 className="font-semibold text-green-800">Direkt İletişim</h4>
           <ul className="text-sm mt-2">
-            <li>• E-posta: riza@teknovagroup.com</li>
-            <li>• KVKK: kvkk@teknovagroup.com</li>
-            <li>• Telefon: [Numara eklenecek]</li>
+            <li>• E-posta: bilgi@teknovagroup.com</li>
+            <li>• Telefon: 0543 509 84 85</li>
             <li>• Canlı destek: Platform üzerinden</li>
           </ul>
         </div>
@@ -311,10 +310,9 @@ export default function ConsentPage() {
       <div className="bg-gray-50 p-4 rounded-lg">
         <h3>Rıza Yönetimi ve Sorularınız İçin</h3>
         <ul className="mt-2">
-          <li><strong>Rıza İşlemleri:</strong> riza@teknovagroup.com</li>
-          <li><strong>KVKK Sorumlusu:</strong> kvkk@teknovagroup.com</li>
-          <li><strong>Genel Destek:</strong> destek@teknovagroup.com</li>
-          <li><strong>Telefon:</strong> [Telefon numarası eklenecek]</li>
+          <li><strong>E-posta:</strong> bilgi@teknovagroup.com</li>
+          <li><strong>Telefon:</strong> 0543 509 84 85</li>
+          <li><strong>Website:</strong> takaszone.com</li>
           <li><strong>Canlı Destek:</strong> Platform üzerinden 7/24</li>
           <li><strong>Çalışma Saatleri:</strong> 09:00-18:00 (Pazartesi-Cuma)</li>
         </ul>

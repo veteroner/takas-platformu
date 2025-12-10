@@ -24,7 +24,6 @@ export default function KvkkPage() {
           <li><strong>Adres:</strong> Mevlana Mahallesi No:8 Kapı No:23, 06949 Sincan/Ankara</li>
           <li><strong>Telefon:</strong> 0543 509 84 85</li>
           <li><strong>E-posta:</strong> bilgi@teknovagroup.com</li>
-          <li><strong>KVKK İletişim:</strong> kvkk@teknovagroup.com</li>
           <li><strong>Veri Sorumlusu Temsilcisi:</strong> İsa Bozkurt</li>
         </ul>
       </div>
@@ -232,7 +231,7 @@ export default function KvkkPage() {
 
       <h3>7.1 Hak Kullanım Süreci</h3>
       <ol>
-        <li><strong>Başvuru:</strong> kvkk@teknovagroup.com adresine kimlik belgesi ile</li>
+        <li><strong>Başvuru:</strong> bilgi@teknovagroup.com adresine kimlik belgesi ile</li>
         <li><strong>Kimlik Doğrulama:</strong> 3 iş günü içinde</li>
         <li><strong>Değerlendirme:</strong> En geç 30 gün içinde yanıt</li>
         <li><strong>Sonuç Bildirimi:</strong> E-posta veya yazılı olarak</li>
@@ -295,7 +294,7 @@ export default function KvkkPage() {
       </ul>
       
       <p className="text-sm text-gray-600 mt-4">
-        Bu sistemlere itiraz etme hakkınız bulunmaktadır. İtiraz için kvkk@teknovagroup.com 
+        Bu sistemlere itiraz etme hakkınız bulunmaktadır. İtiraz için bilgi@teknovagroup.com 
         adresine başvurabilirsiniz.
       </p>
 
@@ -304,15 +303,16 @@ export default function KvkkPage() {
       <div className="bg-gray-50 p-4 rounded-lg">
         <h3>Veri Koruma Sorumlusu</h3>
         <ul className="mt-2">
-          <li><strong>E-posta:</strong> kvkk@teknovagroup.com</li>
-          <li><strong>Telefon:</strong> [Telefon numarası eklenecek]</li>
-          <li><strong>Adres:</strong> Mevlana Mahallesi 8/23 Sincan/Ankara</li>
+          <li><strong>Veri Sorumlusu:</strong> İsa Bozkurt</li>
+          <li><strong>E-posta:</strong> bilgi@teknovagroup.com</li>
+          <li><strong>Telefon:</strong> 0543 509 84 85</li>
+          <li><strong>Adres:</strong> Mevlana Mahallesi No:8 Kapı No:23, 06949 Sincan/Ankara</li>
           <li><strong>Çalışma Saatleri:</strong> 09:00-17:00 (Pazartesi-Cuma)</li>
         </ul>
         
         <h3 className="mt-4">Başvuru Kanalları</h3>
         <ul className="mt-2">
-          <li><strong>Online Form:</strong> [Website link eklenecek]</li>
+          <li><strong>Online Destek:</strong> takaszone.com/destek</li>
           <li><strong>KVKK Başvuru Sistemi:</strong> kvkk.gov.tr</li>
           <li><strong>Posta:</strong> Yukarıdaki adrese iadeli taahhütlü</li>
           <li><strong>Elden Teslim:</strong> Yukarıdaki adreste alındı belgesi ile</li>

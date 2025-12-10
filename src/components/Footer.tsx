@@ -103,8 +103,8 @@ export default function Footer({ variant = 'transparent', className = '' }: Foot
             </h3>
             <ul className="space-y-2">
               <li>
-                <a href="mailto:destek@takaszone.com" className={`text-sm ${linkClass} transition-colors`}>
-                  destek@takaszone.com
+                <a href="mailto:bilgi@teknovagroup.com" className={`text-sm ${linkClass} transition-colors`}>
+                  bilgi@teknovagroup.com
                 </a>
               </li>
               <li>

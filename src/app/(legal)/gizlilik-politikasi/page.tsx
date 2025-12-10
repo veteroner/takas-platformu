@@ -32,7 +32,6 @@ export default function PrivacyPage() {
         <li><strong>Adres:</strong> Mevlana Mahallesi No:8 Kapı No:23, 06949 Sincan/Ankara</li>
         <li><strong>Telefon:</strong> 0543 509 84 85</li>
         <li><strong>E-posta:</strong> bilgi@teknovagroup.com</li>
-        <li><strong>KVKK İletişim:</strong> kvkk@teknovagroup.com</li>
         <li><strong>Veri Sorumlusu Temsilcisi:</strong> İsa Bozkurt</li>
       </ul>
 
@@ -171,9 +170,9 @@ export default function PrivacyPage() {
         <li><strong>Tazminat hakkı:</strong> Hukuka aykırı işleme nedeniyle zararın tazminini isteme</li>
       </ul>
 
-      <h3>8.1 Hak Kullanımı Prosedürü</h3>
+<h3>8.1 Hak Kullanımı Prosüdürü</h3>
       <p>
-        Haklarınızı kullanmak için <strong>kvkk@teknovagroup.com</strong> adresine 
+        Haklarınızı kullanmak için <strong>bilgi@teknovagroup.com</strong> adresine 
         kimlik belgesi fotokopisi ile birlikte başvurabilirsiniz. Başvurular:
       </p>
       <ul>
@@ -231,9 +230,10 @@ export default function PrivacyPage() {
       <div className="bg-gray-50 p-4 rounded-lg">
         <p><strong>Veri Koruma Sorumlusu:</strong></p>
         <ul className="mt-2">
-          <li><strong>E-posta:</strong> kvkk@teknovagroup.com</li>
-          <li><strong>Telefon:</strong> [Telefon numarası eklenecek]</li>
-          <li><strong>Adres:</strong> Mevlana Mahallesi 8/23 Sincan/Ankara</li>
+          <li><strong>E-posta:</strong> bilgi@teknovagroup.com</li>
+          <li><strong>Telefon:</strong> 0543 509 84 85</li>
+          <li><strong>Adres:</strong> Mevlana Mahallesi No:8 Kapı No:23, 06949 Sincan/Ankara</li>
+          <li><strong>Website:</strong> takaszone.com</li>
         </ul>
         
         <p className="mt-4"><strong>Yetkili Kurumlar:</strong></p>
