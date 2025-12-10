@@ -7,6 +7,9 @@ export async function PATCH(req: NextRequest) {
     if (!verified) {
       return NextResponse.json({ error: 'Yetkisiz istek' }, { status: 401 })
     }
+    if (verified.requires2FA) {
+      return NextResponse.json({ error: '2FA required', requires2FA: true }, { status: 403 })
+    }
 
     const supabaseAdmin = getSupabaseAdmin()
     if (!supabaseAdmin) {

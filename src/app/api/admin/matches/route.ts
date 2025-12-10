@@ -4,6 +4,7 @@ import { getSupabaseAdmin, verifyAdminRequest } from '@/lib/admin'
 export async function GET(req: NextRequest) {
   const verified = await verifyAdminRequest(req)
   if (!verified) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (verified.requires2FA) return NextResponse.json({ error: '2FA required', requires2FA: true }, { status: 403 })
 
   const supabase = getSupabaseAdmin()
   if (!supabase) return NextResponse.json({ error: 'Database not configured' }, { status: 503 })
@@ -21,6 +22,7 @@ export async function GET(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   const verified = await verifyAdminRequest(req)
   if (!verified) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (verified.requires2FA) return NextResponse.json({ error: '2FA required', requires2FA: true }, { status: 403 })
 
   const supabase = getSupabaseAdmin()
   if (!supabase) return NextResponse.json({ error: 'Database not configured' }, { status: 503 })

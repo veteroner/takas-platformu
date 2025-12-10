@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { REPORT_TYPE_OPTIONS, type ReportType, getReportTypeLabel } from '@/constants/reportTypes'
 import { AlertCircle, CheckCircle, XCircle, Clock, Search } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { getAdminHeaders } from '@/lib/admin-fetch'
 
 interface Report {
   id: string
@@ -137,10 +138,10 @@ export default function AdminReportsPage() {
       const token = session?.access_token
       const res = await fetch('/api/admin/reports', {
         method: 'PATCH',
-        headers: {
+        headers: getAdminHeaders({
           'Content-Type': 'application/json',
           ...(token ? { Authorization: `Bearer ${token}` } : {})
-        },
+        }),
         body: JSON.stringify({ id: reportId, update: updateData })
       })
 

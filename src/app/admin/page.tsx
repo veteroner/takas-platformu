@@ -12,6 +12,7 @@ import {
   TrendingDown,
   Activity
 } from 'lucide-react'
+import { getAdminHeaders } from '@/lib/admin-fetch'
 
 type Metrics = {
   users: number
@@ -37,9 +38,9 @@ export default function AdminDashboardPage() {
         const { data: { session } } = await supabase.auth.getSession()
         const token = session?.access_token
 
-        // Get basic metrics from API
+        // Get basic metrics from API with 2FA token
         const res = await fetch('/api/admin/metrics', {
-          headers: token ? { Authorization: `Bearer ${token}` } : undefined
+          headers: getAdminHeaders(token ? { Authorization: `Bearer ${token}` } : {})
         })
         if (!res.ok) {
           const j = await res.json().catch(()=>({}))

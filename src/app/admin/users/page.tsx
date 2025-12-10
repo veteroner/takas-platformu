@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { getAdminHeaders } from '@/lib/admin-fetch'
 
 type User = {
   id: string
@@ -26,7 +27,7 @@ export default function AdminUsersPage() {
   const getAuthHeaders = async (): Promise<Record<string, string>> => {
     const { data: { session } } = await supabase.auth.getSession()
     const token = session?.access_token
-    return token ? { Authorization: `Bearer ${token}` } : {}
+    return getAdminHeaders(token ? { Authorization: `Bearer ${token}` } : {})
   }
 
   useEffect(() => {

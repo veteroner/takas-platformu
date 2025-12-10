@@ -1,11 +1,13 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import type { NextRequest } from 'next/server'
+import { verifyAdmin2FAToken } from './admin-2fa'
 
 type VerifiedAdmin = {
   user: {
     id: string
     email: string
   }
+  requires2FA?: boolean
 }
 
 let cachedAdminClient: SupabaseClient | null = null
@@ -54,7 +56,11 @@ export function extractBearerToken(req: NextRequest): string | null {
   return null
 }
 
-export async function verifyAdminRequest(req: NextRequest): Promise<VerifiedAdmin | null> {
+/**
+ * Admin isteklerini doğrula (Auth + Admin role + 2FA)
+ * NOT: 2FA olmadan sadece auth kontrol etmek için verifyAdminAuth kullanın
+ */
+export async function verifyAdminRequest(req: NextRequest, options?: { skip2FA?: boolean }): Promise<VerifiedAdmin | null> {
   const supabaseAdmin = getSupabaseAdmin()
   if (!supabaseAdmin) return null
 
@@ -75,7 +81,23 @@ export async function verifyAdminRequest(req: NextRequest): Promise<VerifiedAdmi
   const isAllowed = (email && emailAllow.has(email)) || (id && idAllow.has(id))
   if (!isAllowed) return null
 
+  // 2FA kontrolü (skip2FA true değilse)
+  if (!options?.skip2FA) {
+    const twoFAToken = req.headers.get('x-admin-2fa-token')
+    if (!twoFAToken || !verifyAdmin2FAToken(twoFAToken, id)) {
+      return { user: { id, email }, requires2FA: true }
+    }
+  }
+
   return { user: { id, email } }
+}
+
+/**
+ * Sadece admin auth kontrolü (2FA olmadan)
+ * Login, /me ve 2FA endpoint'leri için
+ */
+export async function verifyAdminAuth(req: NextRequest): Promise<VerifiedAdmin | null> {
+  return verifyAdminRequest(req, { skip2FA: true })
 }
 
 

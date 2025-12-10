@@ -15,8 +15,10 @@ import {
   FileText,
   LogOut,
   Menu,
-  X,
-  ChevronRight
+  ChevronRight,
+  KeyRound,
+  Mail,
+  Loader2
 } from 'lucide-react'
 
 const menuItems = [
@@ -31,11 +33,19 @@ const menuItems = [
   { icon: FileText, label: 'Politikalar', href: '/admin/policies' },
 ]
 
+// 2FA Token storage key
+const ADMIN_2FA_TOKEN_KEY = 'admin_2fa_token'
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [allowed, setAllowed] = useState<boolean | null>(null)
+  const [requires2FA, setRequires2FA] = useState(false)
+  const [otpSent, setOtpSent] = useState(false)
+  const [otpCode, setOtpCode] = useState('')
+  const [otpLoading, setOtpLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [accessToken, setAccessToken] = useState<string | null>(null)
   const pathname = usePathname()
 
   useEffect(() => {
@@ -52,23 +62,109 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           setError('Önce giriş yapın')
           return
         }
+        
+        setAccessToken(session.access_token)
+        
+        // Kayıtlı 2FA token'ı kontrol et
+        const saved2FAToken = localStorage.getItem(ADMIN_2FA_TOKEN_KEY)
+        
         const res = await fetch('/api/admin/me', {
-          headers: { Authorization: `Bearer ${session.access_token}` }
+          headers: { 
+            Authorization: `Bearer ${session.access_token}`,
+            ...(saved2FAToken && { 'x-admin-2fa-token': saved2FAToken })
+          }
         })
-        setAllowed(res.ok)
-        if (!res.ok) {
+        
+        if (res.ok) {
+          setAllowed(true)
+        } else {
           const j = await res.json().catch(()=>({}))
-          setError(j?.error || 'Yetkisiz')
+          
+          if (j.requires2FA) {
+            // 2FA gerekli
+            setRequires2FA(true)
+            setAllowed(false)
+            localStorage.removeItem(ADMIN_2FA_TOKEN_KEY)
+          } else {
+            setAllowed(false)
+            setError(j?.error || 'Yetkisiz')
+          }
         }
-      } catch (e: any) {
+      } catch (e: unknown) {
         setAllowed(false)
-        setError(e?.message || 'Hata')
+        setError(e instanceof Error ? e.message : 'Hata')
       }
     }
     run()
   }, [])
 
+  // 2FA kodu talep et
+  const requestOTP = async () => {
+    if (!accessToken) return
+    
+    setOtpLoading(true)
+    setError(null)
+    
+    try {
+      const res = await fetch('/api/admin/2fa/request', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${accessToken}` }
+      })
+      
+      const data = await res.json()
+      
+      if (res.ok) {
+        setOtpSent(true)
+        // Development'ta kodu göster
+        if (data.devCode) {
+          console.log('🔐 Dev OTP:', data.devCode)
+        }
+      } else {
+        setError(data.error || 'Kod gönderilemedi')
+      }
+    } catch {
+      setError('Bağlantı hatası')
+    } finally {
+      setOtpLoading(false)
+    }
+  }
+
+  // 2FA kodunu doğrula
+  const verifyOTP = async () => {
+    if (!accessToken || !otpCode) return
+    
+    setOtpLoading(true)
+    setError(null)
+    
+    try {
+      const res = await fetch('/api/admin/2fa/verify', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}` 
+        },
+        body: JSON.stringify({ code: otpCode })
+      })
+      
+      const data = await res.json()
+      
+      if (res.ok && data.admin2FAToken) {
+        // Token'ı kaydet
+        localStorage.setItem(ADMIN_2FA_TOKEN_KEY, data.admin2FAToken)
+        setRequires2FA(false)
+        setAllowed(true)
+      } else {
+        setError(data.error || 'Doğrulama başarısız')
+      }
+    } catch {
+      setError('Bağlantı hatası')
+    } finally {
+      setOtpLoading(false)
+    }
+  }
+
   const handleLogout = async () => {
+    localStorage.removeItem(ADMIN_2FA_TOKEN_KEY)
     const auth = await import('@supabase/supabase-js')
     const { createClient } = auth
     const supabase = createClient(
@@ -90,6 +186,117 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     )
   }
 
+  // 2FA Doğrulama Ekranı
+  if (requires2FA) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-center p-6">
+        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 max-w-md w-full">
+          <div className="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <KeyRound className="w-8 h-8 text-purple-500" />
+          </div>
+          <h1 className="text-2xl font-bold mb-2 text-white">İki Faktörlü Doğrulama</h1>
+          <p className="text-gray-400 mb-6">
+            Admin paneline erişmek için güvenlik doğrulaması gerekiyor.
+          </p>
+          
+          {!otpSent ? (
+            // Kod talep et
+            <div className="space-y-4">
+              <div className="bg-purple-500/10 rounded-lg p-4 flex items-center gap-3">
+                <Mail className="w-5 h-5 text-purple-400" />
+                <p className="text-sm text-purple-200 text-left">
+                  E-posta adresinize 6 haneli doğrulama kodu gönderilecek.
+                </p>
+              </div>
+              
+              <button
+                onClick={requestOTP}
+                disabled={otpLoading}
+                className="w-full px-6 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-pink-600 text-white font-medium hover:shadow-lg hover:shadow-purple-500/50 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {otpLoading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Gönderiliyor...
+                  </>
+                ) : (
+                  <>
+                    <Mail className="w-5 h-5" />
+                    Doğrulama Kodu Gönder
+                  </>
+                )}
+              </button>
+            </div>
+          ) : (
+            // Kod giriş
+            <div className="space-y-4">
+              <div className="bg-green-500/10 rounded-lg p-4">
+                <p className="text-sm text-green-200">
+                  ✓ Doğrulama kodu e-posta adresinize gönderildi.
+                </p>
+              </div>
+              
+              <div>
+                <label className="block text-sm text-gray-400 mb-2 text-left">
+                  6 Haneli Doğrulama Kodu
+                </label>
+                <input
+                  type="text"
+                  maxLength={6}
+                  value={otpCode}
+                  onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                  placeholder="000000"
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white text-center text-2xl tracking-[0.5em] font-mono focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  autoFocus
+                />
+              </div>
+              
+              <button
+                onClick={verifyOTP}
+                disabled={otpLoading || otpCode.length !== 6}
+                className="w-full px-6 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-pink-600 text-white font-medium hover:shadow-lg hover:shadow-purple-500/50 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {otpLoading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Doğrulanıyor...
+                  </>
+                ) : (
+                  <>
+                    <Shield className="w-5 h-5" />
+                    Doğrula ve Giriş Yap
+                  </>
+                )}
+              </button>
+              
+              <button
+                onClick={() => { setOtpSent(false); setOtpCode(''); }}
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                Yeni kod gönder
+              </button>
+            </div>
+          )}
+          
+          {error && (
+            <div className="mt-4 bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+              <p className="text-sm text-red-400">{error}</p>
+            </div>
+          )}
+          
+          <div className="mt-6 pt-6 border-t border-white/10">
+            <Link 
+              href="/" 
+              className="text-sm text-gray-400 hover:text-white transition-colors"
+            >
+              ← Ana Sayfaya Dön
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   if (!allowed) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-center p-6">
@@ -97,7 +304,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
             <Shield className="w-8 h-8 text-red-500" />
           </div>
-          <h1 className="text-2xl font-bold mb-2">Erişim Reddedildi</h1>
+          <h1 className="text-2xl font-bold mb-2 text-white">Erişim Reddedildi</h1>
           <p className="text-gray-400 mb-6">{error || 'Bu sayfaya erişim yetkiniz yok.'}</p>
           <Link 
             href="/" 

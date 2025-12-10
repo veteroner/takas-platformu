@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { Bell, Settings, Shield, Database, Mail, Smartphone, Globe, Zap } from 'lucide-react'
+import { getAdminHeaders } from '@/lib/admin-fetch'
 
 type KV = { key: string; value: string }
 type TabType = 'general' | 'notifications' | 'security' | 'system' | 'advanced'
@@ -68,7 +69,7 @@ export default function AdminSettingsPage() {
   const getAuthHeaders = async (): Promise<Record<string, string>> => {
     const { data: { session } } = await supabase.auth.getSession()
     const token = session?.access_token
-    return token ? { Authorization: `Bearer ${token}` } : {}
+    return getAdminHeaders(token ? { Authorization: `Bearer ${token}` } : {})
   }
 
   useEffect(() => {

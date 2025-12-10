@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import { MessageCircle, Search, AlertTriangle, Shield, Eye } from 'lucide-react'
+import { getAdminHeaders } from '@/lib/admin-fetch'
 
 type UserMessageStats = {
   user_id: string
@@ -26,12 +27,12 @@ export default function AdminMessagesPage() {
       try {
         setLoading(true)
         
-        // Get user message stats from API
+        // Get user message stats from API with 2FA token
         const { data: { session } } = await supabase.auth.getSession()
         const token = session?.access_token
         
         const res = await fetch('/api/admin/messages/users', {
-          headers: token ? { Authorization: `Bearer ${token}` } : {}
+          headers: getAdminHeaders(token ? { Authorization: `Bearer ${token}` } : {})
         })
         
         if (!res.ok) {

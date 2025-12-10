@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase'
 import { useParams, useRouter } from 'next/navigation'
 import { ArrowLeft, Send, Trash2, AlertTriangle, Shield, User } from 'lucide-react'
 import Link from 'next/link'
+import { getAdminHeaders } from '@/lib/admin-fetch'
 
 type Message = {
   id: string
@@ -38,12 +39,12 @@ export default function UserMessagesPage() {
       try {
         setLoading(true)
 
-        // Get user info and messages from API
+        // Get user info and messages from API with 2FA token
         const { data: { session } } = await supabase.auth.getSession()
         const token = session?.access_token
         
         const res = await fetch(`/api/admin/messages/users/${userId}`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : {}
+          headers: getAdminHeaders(token ? { Authorization: `Bearer ${token}` } : {})
         })
         
         if (!res.ok) {
