@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 // Supabase Edge Function: Admin 2FA OTP E-posta Gönderimi
 // Deploy: supabase functions deploy send-admin-otp
