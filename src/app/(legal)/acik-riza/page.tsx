@@ -7,7 +7,7 @@ export default function ConsentPage() {
       
       <p className="text-sm text-gray-600">Son Güncelleme: {new Date().toLocaleDateString('tr-TR')}</p>
 
-      <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400 my-6">
+      <div className="bg-emerald-50 p-4 rounded-lg border-l-4 border-green-400 my-6">
         <p className="text-sm font-medium">
           <strong>Önemli Bilgi:</strong> Bu rıza metni tamamen isteğe bağlıdır. 
           Rıza vermemeniz Platform'un temel işlevlerini etkilemez.
@@ -20,7 +20,7 @@ export default function ConsentPage() {
         uyarınca açık rızanıza dayalı olarak gerçekleştirilen kişisel veri işleme faaliyetlerini düzenler.
       </p>
 
-      <div className="bg-blue-50 p-4 rounded-lg">
+      <div className="bg-purple-50 p-4 rounded-lg">
         <h3>Açık Rıza Gerektiren Faaliyetler:</h3>
         <ul className="text-sm mt-2">
           <li>• Pazarlama iletileri gönderimi</li>
@@ -36,7 +36,7 @@ export default function ConsentPage() {
       <h2>2. Rıza Konuları ve Detayları</h2>
       
       <h3>2.1 Pazarlama İletişimi</h3>
-      <div className="bg-yellow-50 p-4 rounded-lg">
+      <div className="bg-amber-50 p-4 rounded-lg">
         <h4 className="font-semibold text-yellow-800">Pazarlama İletileri</h4>
         <p className="text-sm mt-2">
           <strong>Kapsam:</strong> E-posta, SMS, push bildirimi ve telefon ile pazarlama iletileri<br/>
@@ -70,8 +70,8 @@ export default function ConsentPage() {
       </div>
 
       <h3>2.3 Konum Tabanlı Hizmetler</h3>
-      <div className="bg-green-50 p-4 rounded-lg">
-        <h4 className="font-semibold text-green-800">Konum Bilgisi Kullanımı</h4>
+      <div className="bg-emerald-50 p-4 rounded-lg">
+        <h4 className="font-semibold text-emerald-700">Konum Bilgisi Kullanımı</h4>
         <p className="text-sm mt-2">
           <strong>Kapsam:</strong> Yaklaşık konum bilginizin (şehir/ilçe) kullanımı<br/>
           <strong>Amaç:</strong> Yakınınızdaki takas fırsatlarının gösterilmesi<br/>
@@ -87,8 +87,8 @@ export default function ConsentPage() {
       </div>
 
       <h3>2.4 Analitik ve Pazarlama Çerezleri</h3>
-      <div className="bg-red-50 p-4 rounded-lg">
-        <h4 className="font-semibold text-red-800">Gelişmiş Çerez Kullanımı</h4>
+      <div className="bg-rose-50 p-4 rounded-lg">
+        <h4 className="font-semibold text-rose-700">Gelişmiş Çerez Kullanımı</h4>
         <p className="text-sm mt-2">
           <strong>Kapsam:</strong> Google Analytics, Facebook Pixel, Hotjar vb. araçlar<br/>
           <strong>Amaç:</strong> Platform kullanımının analizi ve iyileştirmesi<br/>
@@ -107,7 +107,7 @@ export default function ConsentPage() {
       
       <table className="min-w-full border border-gray-300 text-sm">
         <thead>
-          <tr className="bg-gray-100">
+          <tr className="bg-purple-100">
             <th className="border border-gray-300 px-3 py-2">Veri Kategorisi</th>
             <th className="border border-gray-300 px-3 py-2">Veri Türleri</th>
             <th className="border border-gray-300 px-3 py-2">Kullanım Amacı</th>
@@ -176,7 +176,7 @@ export default function ConsentPage() {
 
       <h3>5.1 Rızayı Geri Çekme Yolları</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
-        <div className="bg-blue-50 p-4 rounded-lg">
+        <div className="bg-purple-50 p-4 rounded-lg">
           <h4 className="font-semibold text-blue-800">Platform Üzerinden</h4>
           <ul className="text-sm mt-2">
             <li>• Hesap Ayarları → Gizlilik</li>
@@ -185,8 +185,8 @@ export default function ConsentPage() {
             <li>• Push bildirimi ayarları</li>
           </ul>
         </div>
-        <div className="bg-green-50 p-4 rounded-lg">
-          <h4 className="font-semibold text-green-800">Direkt İletişim</h4>
+        <div className="bg-emerald-50 p-4 rounded-lg">
+          <h4 className="font-semibold text-emerald-700">Direkt İletişim</h4>
           <ul className="text-sm mt-2">
             <li>• E-posta: bilgi@teknovagroup.com</li>
             <li>• Telefon: 0543 509 84 85</li>
@@ -199,7 +199,7 @@ export default function ConsentPage() {
       
       <table className="min-w-full border border-gray-300 text-sm">
         <thead>
-          <tr className="bg-gray-100">
+          <tr className="bg-purple-100">
             <th className="border border-gray-300 px-3 py-2">Rıza Türü</th>
             <th className="border border-gray-300 px-3 py-2">Geri Çekme Süresi</th>
             <th className="border border-gray-300 px-3 py-2">Etki</th>
@@ -231,7 +231,7 @@ export default function ConsentPage() {
 
       <h2>7. Yasal Haklar ve Güvenceler</h2>
       
-      <div className="bg-blue-50 p-4 rounded-lg">
+      <div className="bg-purple-50 p-4 rounded-lg">
         <h3>KVKK Kapsamındaki Haklarınız</h3>
         <ul className="text-sm mt-2">
           <li><strong>Rızayı Geri Çekme:</strong> Herhangi bir gerekçe göstermeden</li>
@@ -245,8 +245,8 @@ export default function ConsentPage() {
 
       <h2>8. Rıza Verme Süreci</h2>
       
-      <div className="bg-green-50 p-6 rounded-lg border border-green-200">
-        <h3 className="text-green-800 font-semibold">Elektronik Rıza Onay Formu</h3>
+      <div className="bg-emerald-50 p-6 rounded-lg border border-green-200">
+        <h3 className="text-emerald-700 font-semibold">Elektronik Rıza Onay Formu</h3>
         
         <div className="mt-4 space-y-4">
           <div className="p-3 bg-white rounded border">
@@ -290,7 +290,7 @@ export default function ConsentPage() {
           </div>
         </div>
         
-        <div className="mt-6 p-4 bg-gray-100 rounded">
+        <div className="mt-6 p-4 bg-purple-100 rounded">
           <label className="flex items-start">
             <input type="checkbox" className="mr-3 mt-1" required />
             <span className="text-sm font-medium">
@@ -307,7 +307,7 @@ export default function ConsentPage() {
 
       <h2>9. İletişim ve Destek</h2>
       
-      <div className="bg-gray-50 p-4 rounded-lg">
+      <div className="bg-purple-50/50 p-4 rounded-lg">
         <h3>Rıza Yönetimi ve Sorularınız İçin</h3>
         <ul className="mt-2">
           <li><strong>E-posta:</strong> bilgi@teknovagroup.com</li>
@@ -318,7 +318,7 @@ export default function ConsentPage() {
         </ul>
       </div>
 
-      <div className="bg-blue-50 p-6 rounded-lg mt-8 border border-blue-200">
+      <div className="bg-purple-50 p-6 rounded-lg mt-8 border border-purple-200">
         <p className="text-sm">
           <strong>Açık Rıza Metni Bilgileri:</strong><br/>
           <strong>Hazırlık Tarihi:</strong> {new Date().toLocaleDateString('tr-TR')}<br/>
@@ -332,7 +332,7 @@ export default function ConsentPage() {
         </p>
         
         <div className="mt-4 p-3 bg-green-100 rounded border-l-4 border-green-400">
-          <p className="text-sm font-medium text-green-800">
+          <p className="text-sm font-medium text-emerald-700">
             <strong>Hatırlatma:</strong> Bu rıza tamamen isteğe bağlıdır ve Platform'un 
             temel işlevlerini kullanmak için gerekli değildir. Rızanızı istediğiniz zaman 
             geri çekebilir ve değiştirebilirsiniz.

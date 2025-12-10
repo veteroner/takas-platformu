@@ -7,7 +7,7 @@ export default function CookiesPage() {
       
       <p className="text-sm text-gray-600">Son Güncelleme: {new Date().toLocaleDateString('tr-TR')}</p>
 
-      <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400 my-6">
+      <div className="bg-emerald-50 p-4 rounded-lg border-l-4 border-green-400 my-6">
         <p className="text-sm font-medium">
           <strong>Çerez Yönetimi:</strong> Çerez tercihlerinizi Platform üzerindeki 
           yönetim panelinden dilediğiniz zaman değiştirebilirsiniz.
@@ -25,13 +25,13 @@ export default function CookiesPage() {
       <h2>2. Çerez Türleri ve Kullanım Amaçları</h2>
       
       <h3>2.1 Zorunlu Çerezler (Her Zaman Aktif)</h3>
-      <div className="bg-blue-50 p-4 rounded-lg">
+      <div className="bg-purple-50 p-4 rounded-lg">
         <p className="text-sm mb-3">
           Bu çerezler Platform'un temel işlevleri için gereklidir ve kapatılamaz.
         </p>
         <table className="min-w-full border border-gray-300 text-sm">
           <thead>
-            <tr className="bg-gray-100">
+            <tr className="bg-purple-100">
               <th className="border border-gray-300 px-3 py-2">Çerez Adı</th>
               <th className="border border-gray-300 px-3 py-2">Amaç</th>
               <th className="border border-gray-300 px-3 py-2">Süre</th>
@@ -63,7 +63,7 @@ export default function CookiesPage() {
       </div>
 
       <h3>2.2 Performans Çerezleri (İsteğe Bağlı)</h3>
-      <div className="bg-yellow-50 p-4 rounded-lg">
+      <div className="bg-amber-50 p-4 rounded-lg">
         <p className="text-sm mb-3">
           Platform performansını ölçmek ve iyileştirmek için kullanılır.
         </p>
@@ -90,7 +90,7 @@ export default function CookiesPage() {
       </div>
 
       <h3>2.4 Pazarlama Çerezleri (Açık Rıza Gerekli)</h3>
-      <div className="bg-red-50 p-4 rounded-lg">
+      <div className="bg-rose-50 p-4 rounded-lg">
         <p className="text-sm mb-3">
           Yalnızca açık rızanızla hedefli reklamlar için kullanılır.
         </p>
@@ -106,7 +106,7 @@ export default function CookiesPage() {
       
       <table className="min-w-full border border-gray-300 text-sm">
         <thead>
-          <tr className="bg-gray-100">
+          <tr className="bg-purple-100">
             <th className="border border-gray-300 px-3 py-2">Sağlayıcı</th>
             <th className="border border-gray-300 px-3 py-2">Hizmet</th>
             <th className="border border-gray-300 px-3 py-2">Gizlilik Politikası</th>
@@ -162,7 +162,7 @@ export default function CookiesPage() {
       <h2>4. Çerez Yönetimi ve Kontrol</h2>
       
       <h3>4.1 Platform Üzerinden Yönetim</h3>
-      <div className="bg-green-50 p-4 rounded-lg">
+      <div className="bg-emerald-50 p-4 rounded-lg">
         <p className="text-sm mb-3">
           <strong>Çerez Tercih Merkezi:</strong> Hesap ayarlarınızdan çerez kategorilerini 
           ayrı ayrı yönetebilirsiniz.
@@ -178,25 +178,25 @@ export default function CookiesPage() {
       <h3>4.2 Tarayıcı Ayarları ile Yönetim</h3>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
-        <div className="bg-gray-50 p-4 rounded-lg">
+        <div className="bg-purple-50/50 p-4 rounded-lg">
           <h4 className="font-semibold">Chrome</h4>
           <p className="text-sm mt-2">
             Ayarlar → Gizlilik ve güvenlik → Çerezler ve diğer site verileri
           </p>
         </div>
-        <div className="bg-gray-50 p-4 rounded-lg">
+        <div className="bg-purple-50/50 p-4 rounded-lg">
           <h4 className="font-semibold">Firefox</h4>
           <p className="text-sm mt-2">
             Ayarlar → Gizlilik ve Güvenlik → Çerezler ve Site Verileri
           </p>
         </div>
-        <div className="bg-gray-50 p-4 rounded-lg">
+        <div className="bg-purple-50/50 p-4 rounded-lg">
           <h4 className="font-semibold">Safari</h4>
           <p className="text-sm mt-2">
             Tercihler → Gizlilik → Çerezleri engelle
           </p>
         </div>
-        <div className="bg-gray-50 p-4 rounded-lg">
+        <div className="bg-purple-50/50 p-4 rounded-lg">
           <h4 className="font-semibold">Edge</h4>
           <p className="text-sm mt-2">
             Ayarlar → Çerezler ve site izinleri → Çerezleri yönet
@@ -215,7 +215,7 @@ export default function CookiesPage() {
       
       <table className="min-w-full border border-gray-300 text-sm">
         <thead>
-          <tr className="bg-gray-100">
+          <tr className="bg-purple-100">
             <th className="border border-gray-300 px-3 py-2">Çerez Türü</th>
             <th className="border border-gray-300 px-3 py-2">Tipik Saklama Süresi</th>
             <th className="border border-gray-300 px-3 py-2">Açıklama</th>
@@ -291,7 +291,7 @@ export default function CookiesPage() {
 
       <h2>9. Çerez Politikası Güncellemeleri</h2>
       
-      <div className="bg-blue-50 p-4 rounded-lg">
+      <div className="bg-purple-50 p-4 rounded-lg">
         <p className="text-sm">
           Bu politika gerektiğinde güncellenebilir. Önemli değişiklikler:
         </p>
@@ -305,7 +305,7 @@ export default function CookiesPage() {
 
       <h2>10. İletişim ve Destek</h2>
       
-      <div className="bg-gray-50 p-4 rounded-lg">
+      <div className="bg-purple-50/50 p-4 rounded-lg">
         <p>Çerezler hakkında sorularınız için:</p>
         <ul className="mt-2">
           <li><strong>E-posta:</strong> cerez@teknovagroup.com</li>
@@ -316,7 +316,7 @@ export default function CookiesPage() {
         </ul>
       </div>
 
-      <div className="bg-blue-50 p-6 rounded-lg mt-8 border border-blue-200">
+      <div className="bg-purple-50 p-6 rounded-lg mt-8 border border-purple-200">
         <p className="text-sm">
           <strong>Çerez Politikası Bilgileri:</strong><br/>
           <strong>Yürürlük Tarihi:</strong> {new Date().toLocaleDateString('tr-TR')}<br/>
@@ -329,7 +329,7 @@ export default function CookiesPage() {
         </p>
         
         <div className="mt-4 p-3 bg-green-100 rounded border-l-4 border-green-400">
-          <p className="text-sm font-medium text-green-800">
+          <p className="text-sm font-medium text-emerald-700">
             Çerez tercihlerinizi Platform'daki yönetim panelinden istediğiniz zaman 
             değiştirebilirsiniz. Teknik destek için yukarıdaki iletişim kanallarını kullanabilirsiniz.
           </p>

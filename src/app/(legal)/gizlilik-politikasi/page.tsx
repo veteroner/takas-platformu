@@ -16,7 +16,7 @@ export default function PrivacyPage() {
         kapsamında kişisel verilerin işlenmesine ilişkin esasları belirler.
       </p>
       
-      <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400 my-6">
+      <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-400 my-6">
         <p className="text-sm font-medium">
           <strong>Önemli Hatırlatma:</strong> Bu Platform 18 yaş altı kullanıcılara yönelik değildir. 
           18 yaş altı bir kişinin verisini işlediğimizi öğrenirsek derhal sileriz.
@@ -64,7 +64,7 @@ export default function PrivacyPage() {
       
       <table className="min-w-full border border-gray-300 text-sm">
         <thead>
-          <tr className="bg-gray-100">
+          <tr className="bg-purple-100">
             <th className="border border-gray-300 px-4 py-2">Amaç</th>
             <th className="border border-gray-300 px-4 py-2">Hukuki Dayanak</th>
             <th className="border border-gray-300 px-4 py-2">KVKK Maddesi</th>
@@ -116,7 +116,7 @@ export default function PrivacyPage() {
         <strong>"yeterlilik kararı"</strong> bulunan ülkeye yapıldığından ek güvence tedbirine ihtiyaç bulunmamaktadır.
       </p>
       
-      <div className="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400 my-6">
+      <div className="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400 my-6">
         <p className="text-sm">
           <strong>Özel Kategorili Veri Uyarısı:</strong> Platform üzerinden özel kategorili 
           (hassas) kişisel veri paylaşımı yapmayınız. Bu tür veriler tespit edildiğinde 
@@ -227,7 +227,7 @@ export default function PrivacyPage() {
       </ul>
 
       <h2>14. İletişim ve Şikayet</h2>
-      <div className="bg-gray-50 p-4 rounded-lg">
+      <div className="bg-purple-50/50 p-4 rounded-lg">
         <p><strong>Veri Koruma Sorumlusu:</strong></p>
         <ul className="mt-2">
           <li><strong>E-posta:</strong> bilgi@teknovagroup.com</li>
@@ -248,7 +248,7 @@ export default function PrivacyPage() {
         </ul>
       </div>
 
-      <div className="bg-blue-50 p-6 rounded-lg mt-8 border border-blue-200">
+      <div className="bg-purple-50 p-6 rounded-lg mt-8 border border-purple-200">
         <p className="text-sm">
           <strong>Yürürlük Tarihi:</strong> {new Date().toLocaleDateString('tr-TR')}<br/>
           <strong>Versiyon:</strong> 2.0<br/>

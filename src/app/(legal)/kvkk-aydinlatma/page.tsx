@@ -7,7 +7,7 @@ export default function KvkkPage() {
       
       <p className="text-sm text-gray-600">Son Güncelleme: {new Date().toLocaleDateString('tr-TR')}</p>
 
-      <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400 my-6">
+      <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-400 my-6">
         <p className="text-sm font-medium">
           <strong>KVKK Aydınlatma Yükümlülüğü:</strong> Bu metin, 6698 sayılı Kişisel Verilerin 
           Korunması Kanunu'nun 10. maddesi uyarınca hazırlanmıştır.
@@ -15,7 +15,7 @@ export default function KvkkPage() {
       </div>
 
       <h2>1. Veri Sorumlusu Kimliği</h2>
-      <div className="bg-gray-50 p-4 rounded-lg">
+      <div className="bg-purple-50/50 p-4 rounded-lg">
         <ul>
           <li><strong>Unvan:</strong> Teknova Tarım Hayvancılık Bilişim Reklam Limited Şirketi</li>
           <li><strong>MERSİS No:</strong> 0836100073000001</li>
@@ -65,7 +65,7 @@ export default function KvkkPage() {
       </ul>
 
       <h3>2.5 Özel Kategorili Veriler</h3>
-      <div className="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400 my-4">
+      <div className="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400 my-4">
         <p className="text-sm">
           <strong>Uyarı:</strong> Platform üzerinden özel kategorili (hassas) kişisel veri 
           paylaşımı yapmayınız. Bu tür veriler tespit edildiğinde derhal silinecektir.
@@ -76,7 +76,7 @@ export default function KvkkPage() {
       
       <table className="min-w-full border border-gray-300 text-sm">
         <thead>
-          <tr className="bg-gray-100">
+          <tr className="bg-purple-100">
             <th className="border border-gray-300 px-4 py-2">Amaç</th>
             <th className="border border-gray-300 px-4 py-2">Veri Kategorisi</th>
             <th className="border border-gray-300 px-4 py-2">Saklama Süresi</th>
@@ -159,7 +159,7 @@ export default function KvkkPage() {
       </ul>
 
       <h3>5.2 Yurtdışı Aktarımlar</h3>
-      <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400 my-4">
+      <div className="bg-emerald-50 p-4 rounded-lg border-l-4 border-green-400 my-4">
         <p className="text-sm">
           <strong>Güvenli Transfer:</strong> Verileriniz yalnızca AB/İsveç (eu-north-1) bölgesinde 
           bulunan Supabase altyapısında işlenmektedir. Bu aktarım GDPR'nin 45. maddesi 
@@ -171,7 +171,7 @@ export default function KvkkPage() {
       
       <table className="min-w-full border border-gray-300 text-sm">
         <thead>
-          <tr className="bg-gray-100">
+          <tr className="bg-purple-100">
             <th className="border border-gray-300 px-4 py-2">Veri Türü</th>
             <th className="border border-gray-300 px-4 py-2">Saklama Süresi</th>
             <th className="border border-gray-300 px-4 py-2">İmha Yöntemi</th>
@@ -209,7 +209,7 @@ export default function KvkkPage() {
       <h2>7. Kişisel Veri Sahibinin Hakları (KVKK m.11)</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
-        <div className="bg-blue-50 p-4 rounded-lg">
+        <div className="bg-purple-50 p-4 rounded-lg">
           <h4 className="font-semibold text-blue-800">Temel Haklar</h4>
           <ul className="text-sm mt-2">
             <li>• Bilgi alma hakkı</li>
@@ -218,8 +218,8 @@ export default function KvkkPage() {
             <li>• Silme hakkı</li>
           </ul>
         </div>
-        <div className="bg-green-50 p-4 rounded-lg">
-          <h4 className="font-semibold text-green-800">İleri Haklar</h4>
+        <div className="bg-emerald-50 p-4 rounded-lg">
+          <h4 className="font-semibold text-emerald-700">İleri Haklar</h4>
           <ul className="text-sm mt-2">
             <li>• İşlemenin durdurulması</li>
             <li>• Aktarım bilgisi alma</li>
@@ -273,8 +273,8 @@ export default function KvkkPage() {
 
       <h2>10. Veri İhlali Bildirim Süreci</h2>
       
-      <div className="bg-red-50 p-4 rounded-lg border-l-4 border-red-400 my-6">
-        <h4 className="font-semibold text-red-800">Veri İhlali Durumunda:</h4>
+      <div className="bg-rose-50 p-4 rounded-lg border-l-4 border-rose-400 my-6">
+        <h4 className="font-semibold text-rose-700">Veri İhlali Durumunda:</h4>
         <ul className="text-sm mt-2">
           <li>• KVKK Kuruluna 72 saat içinde bildirim</li>
           <li>• Yüksek riskli ihlallerde veri sahiplerine bildirim</li>
@@ -300,7 +300,7 @@ export default function KvkkPage() {
 
       <h2>12. İletişim ve Şikayet</h2>
       
-      <div className="bg-gray-50 p-4 rounded-lg">
+      <div className="bg-purple-50/50 p-4 rounded-lg">
         <h3>Veri Koruma Sorumlusu</h3>
         <ul className="mt-2">
           <li><strong>Veri Sorumlusu:</strong> İsa Bozkurt</li>
@@ -319,7 +319,7 @@ export default function KvkkPage() {
         </ul>
       </div>
 
-      <div className="bg-blue-50 p-6 rounded-lg mt-8 border border-blue-200">
+      <div className="bg-purple-50 p-6 rounded-lg mt-8 border border-purple-200">
         <p className="text-sm">
           <strong>Aydınlatma Metni Bilgileri:</strong><br/>
           <strong>Hazırlık Tarihi:</strong> {new Date().toLocaleDateString('tr-TR')}<br/>
@@ -332,7 +332,7 @@ export default function KvkkPage() {
           <strong>Hukuki Dayanak:</strong> KVKK m.10, GDPR m.13-14
         </p>
         
-        <div className="mt-4 p-3 bg-blue-100 rounded border-l-4 border-blue-400">
+        <div className="mt-4 p-3 bg-blue-100 rounded border-l-4 border-purple-400">
           <p className="text-sm font-medium text-blue-800">
             Bu aydınlatma metni KVKK'nın 10. maddesi uyarınca veri sahiplerini bilgilendirmek 
             amacıyla hazırlanmıştır. Sorularınız için yukarıdaki iletişim kanallarını kullanabilirsiniz.

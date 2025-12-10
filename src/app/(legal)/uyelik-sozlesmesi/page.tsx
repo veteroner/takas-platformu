@@ -7,7 +7,7 @@ export default function TermsPage() {
       
       <p className="text-sm text-gray-600">Son Güncelleme: {new Date().toLocaleDateString('tr-TR')}</p>
 
-      <div className="bg-red-50 p-4 rounded-lg border-l-4 border-red-400 my-6">
+      <div className="bg-rose-50 p-4 rounded-lg border-l-4 border-rose-400 my-6">
         <p className="text-sm font-medium">
           <strong>Önemli Uyarı:</strong> Bu sözleşme hukuken bağlayıcıdır. 
           Platformu kullanmadan önce dikkatle okuyunuz ve kabul ettiğinizden emin olunuz.
@@ -42,7 +42,7 @@ export default function TermsPage() {
       <h2>2. Üyelik ve Hesap Yönetimi</h2>
       
       <h3>2.1 Üyelik Şartları</h3>
-      <div className="bg-blue-50 p-4 rounded-lg">
+      <div className="bg-purple-50 p-4 rounded-lg">
         <h4 className="font-semibold text-blue-800">Genel Şartlar</h4>
         <ul className="text-sm mt-2">
           <li>• Minimum 18 yaş veya veli izni (13-18 yaş arası)</li>
@@ -55,7 +55,7 @@ export default function TermsPage() {
       </div>
 
       <h3>2.2 Yasak Durumlar</h3>
-      <div className="bg-red-50 p-4 rounded-lg">
+      <div className="bg-rose-50 p-4 rounded-lg">
         <p className="text-sm"><strong>Aşağıdaki durumda olan kişiler üye olamaz:</strong></p>
         <ul className="text-sm mt-2">
           <li>• Daha önce hesabı kapatılmış kullanıcılar</li>
@@ -78,7 +78,7 @@ export default function TermsPage() {
       <h2>3. Platform Kullanım Kuralları</h2>
       
       <h3>3.1 İzin Verilen Kullanımlar</h3>
-      <div className="bg-green-50 p-4 rounded-lg">
+      <div className="bg-emerald-50 p-4 rounded-lg">
         <ul className="text-sm">
           <li>✅ Kişisel eşyaların takası</li>
           <li>✅ Yasal ürün ve hizmet paylaşımı</li>
@@ -90,7 +90,7 @@ export default function TermsPage() {
       </div>
 
       <h3>3.2 Kesinlikle Yasak Davranışlar</h3>
-      <div className="bg-red-50 p-4 rounded-lg">
+      <div className="bg-rose-50 p-4 rounded-lg">
         <ul className="text-sm">
           <li>❌ Sahte, çalıntı veya kaçak ürün paylaşımı</li>
           <li>❌ Uyuşturucu, silah, patlayıcı madde takası</li>
@@ -109,7 +109,7 @@ export default function TermsPage() {
       
       <table className="min-w-full border border-gray-300 text-sm">
         <thead>
-          <tr className="bg-gray-100">
+          <tr className="bg-purple-100">
             <th className="border border-gray-300 px-3 py-2">Kategori</th>
             <th className="border border-gray-300 px-3 py-2">Yasak Ürünler</th>
             <th className="border border-gray-300 px-3 py-2">Yasal Dayanak</th>
@@ -157,7 +157,7 @@ export default function TermsPage() {
       <h2>5. İşlem Güvenliği ve Sorumluluklar</h2>
       
       <h3>5.1 Platform Sorumluluğu</h3>
-      <div className="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400">
+      <div className="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400">
         <h4 className="font-semibold text-yellow-800">Platform Sağladıkları</h4>
         <ul className="text-sm mt-2">
           <li>• Güvenli altyapı ve şifreleme sistemi</li>
@@ -169,8 +169,8 @@ export default function TermsPage() {
       </div>
 
       <h3>5.2 Platform Sorumluluk Sınırları</h3>
-      <div className="bg-red-50 p-4 rounded-lg border-l-4 border-red-400">
-        <h4 className="font-semibold text-red-800">Platform Sorumlu Değildir</h4>
+      <div className="bg-rose-50 p-4 rounded-lg border-l-4 border-rose-400">
+        <h4 className="font-semibold text-rose-700">Platform Sorumlu Değildir</h4>
         <ul className="text-sm mt-2">
           <li>• Kullanıcılar arası anlaşmazlıklardan</li>
           <li>• Ürün kalitesi, orijinallik, işlevsellikten</li>
@@ -225,7 +225,7 @@ export default function TermsPage() {
       </div>
 
       <h3>7.2 Kalıcı Kapatma Sebepleri</h3>
-      <div className="bg-red-50 p-4 rounded-lg">
+      <div className="bg-rose-50 p-4 rounded-lg">
         <ul className="text-sm">
           <li>• Yasak ürün satışı/paylaşımı</li>
           <li>• Dolandırıcılık, sahte kimlik kullanımı</li>
@@ -270,7 +270,7 @@ export default function TermsPage() {
       <h2>9. Ödeme ve Finansal İşlemler</h2>
       
       <h3>9.1 Platform Ücretsizdir</h3>
-      <div className="bg-green-50 p-4 rounded-lg">
+      <div className="bg-emerald-50 p-4 rounded-lg">
         <p className="text-sm">
           Temel takas hizmetleri tamamen ücretsizdir. Gelecekte eklenen premium 
           özellikler için önceden bilgilendirme yapılacaktır.
@@ -302,7 +302,7 @@ export default function TermsPage() {
       </ol>
 
       <h3>10.2 Yargı Yetkisi</h3>
-      <div className="bg-gray-50 p-4 rounded-lg">
+      <div className="bg-purple-50/50 p-4 rounded-lg">
         <ul>
           <li><strong>Yetkili Mahkeme:</strong> İstanbul Mahkemeleri ve İcra Daireleri</li>
           <li><strong>Uygulanacak Hukuk:</strong> Türkiye Cumhuriyeti Kanunları</li>
@@ -332,7 +332,7 @@ export default function TermsPage() {
 
       <h2>12. İletişim ve Destek</h2>
       
-      <div className="bg-blue-50 p-4 rounded-lg">
+      <div className="bg-purple-50 p-4 rounded-lg">
         <h3>Teknova Group İletişim Bilgileri</h3>
         <ul className="mt-2">
           <li><strong>Genel Destek:</strong> destek@teknovagroup.com</li>
@@ -363,7 +363,7 @@ export default function TermsPage() {
         hizmet kesintilerinden platform sorumlu değildir.
       </p>
 
-      <div className="bg-green-50 p-6 rounded-lg mt-8 border border-green-200">
+      <div className="bg-emerald-50 p-6 rounded-lg mt-8 border border-green-200">
         <h3>Sözleşme Onay Formu</h3>
         <div className="mt-4 space-y-3">
           <label className="flex items-start">
@@ -404,7 +404,7 @@ export default function TermsPage() {
         </button>
       </div>
 
-      <div className="bg-gray-50 p-6 rounded-lg mt-8">
+      <div className="bg-purple-50/50 p-6 rounded-lg mt-8">
         <p className="text-sm">
           <strong>Sözleşme Bilgileri:</strong><br/>
           <strong>Hazırlık Tarihi:</strong> {new Date().toLocaleDateString('tr-TR')}<br/>
