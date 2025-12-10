@@ -233,7 +233,7 @@ export default function PrivacyPage() {
           <li><strong>E-posta:</strong> bilgi@teknovagroup.com</li>
           <li><strong>Telefon:</strong> 0543 509 84 85</li>
           <li><strong>Adres:</strong> Mevlana Mahallesi No:8 Kapı No:23, 06949 Sincan/Ankara</li>
-          <li><strong>Website:</strong> takaszone.com</li>
+          <li><strong>Website:</strong> takazone.com</li>
         </ul>
         
         <p className="mt-4"><strong>Yetkili Kurumlar:</strong></p>

@@ -312,7 +312,7 @@ export default function ConsentPage() {
         <ul className="mt-2">
           <li><strong>E-posta:</strong> bilgi@teknovagroup.com</li>
           <li><strong>Telefon:</strong> 0543 509 84 85</li>
-          <li><strong>Website:</strong> takaszone.com</li>
+          <li><strong>Website:</strong> takazone.com</li>
           <li><strong>Canlı Destek:</strong> Platform üzerinden 7/24</li>
           <li><strong>Çalışma Saatleri:</strong> 09:00-18:00 (Pazartesi-Cuma)</li>
         </ul>

@@ -18,7 +18,7 @@ export default function TermsPage() {
       
       <h3>1.1 Taraflar</h3>
       <ul>
-        <li><strong>Platform:</strong> TakasZone - Çocuk giysi ve oyuncak takas platformu</li>
+        <li><strong>Platform:</strong> TakaZone - Çocuk giysi ve oyuncak takas platformu</li>
         <li><strong>Şirket:</strong> Teknova Tarım Hayvancılık Bilişim Reklam Limited Şirketi</li>
         <li><strong>MERSİS No:</strong> 0836100073000001</li>
         <li><strong>VKN:</strong> 8361000730</li>

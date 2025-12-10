@@ -56,7 +56,7 @@ export default function Footer({ variant = 'transparent', className = '' }: Foot
                 <span className="text-white font-bold text-lg">T</span>
               </div>
               <span className={`text-xl font-bold ${variant === 'light' ? 'text-gray-900' : 'text-white'}`}>
-                TakasZone
+                TakaZone
               </span>
             </Link>
             <p className={`${textClass} text-sm`}>
@@ -140,7 +140,7 @@ export default function Footer({ variant = 'transparent', className = '' }: Foot
           {/* Copyright */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className={`text-sm ${textClass}`}>
-              © {currentYear} TakasZone. Tüm hakları saklıdır.
+              © {currentYear} TakaZone. Tüm hakları saklıdır.
             </p>
             <p className={`text-sm ${textClass} flex items-center gap-1`}>
               Made with <Heart className="w-4 h-4 text-pink-500 fill-pink-500" /> in Türkiye
@@ -187,7 +187,7 @@ export function CompactFooter({ variant = 'transparent' }: { variant?: 'light' |
         ))}
       </div>
       <p className={`text-xs ${textClass}`}>
-        © {new Date().getFullYear()} TakasZone
+        © {new Date().getFullYear()} TakaZone
       </p>
     </div>
   )

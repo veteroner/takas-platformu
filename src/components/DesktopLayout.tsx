@@ -70,7 +70,7 @@ export default function DesktopLayout({
                 <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-orange-400 rounded-xl flex items-center justify-center shadow-lg">
                   <span className="text-white font-bold text-lg">T</span>
                 </div>
-                <span className="text-white font-bold text-xl hidden lg:block">TakasZone</span>
+                <span className="text-white font-bold text-xl hidden lg:block">TakaZone</span>
               </Link>
               
               {title && (
@@ -152,7 +152,7 @@ export function DesktopSidebar() {
         <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-orange-400 rounded-xl flex items-center justify-center shadow-lg">
           <span className="text-white font-bold text-xl">T</span>
         </div>
-        <span className="text-white font-bold text-2xl">TakasZone</span>
+        <span className="text-white font-bold text-2xl">TakaZone</span>
       </Link>
       
       <nav className="flex flex-col gap-2">

@@ -102,7 +102,7 @@ export default function NotificationsPage() {
             id: '5',
             type: 'system',
             title: 'Hoş Geldiniz!',
-            message: 'TakasZone\'a hoş geldiniz! Profilinizi tamamlayarak daha iyi eşleşmeler bulabilirsiniz.',
+            message: 'TakaZone\'a hoş geldiniz! Profilinizi tamamlayarak daha iyi eşleşmeler bulabilirsiniz.',
             read: true,
             createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
           }

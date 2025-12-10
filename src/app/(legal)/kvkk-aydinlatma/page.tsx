@@ -312,7 +312,7 @@ export default function KvkkPage() {
         
         <h3 className="mt-4">Başvuru Kanalları</h3>
         <ul className="mt-2">
-          <li><strong>Online Destek:</strong> takaszone.com/destek</li>
+          <li><strong>Online Destek:</strong> takazone.com/destek</li>
           <li><strong>KVKK Başvuru Sistemi:</strong> kvkk.gov.tr</li>
           <li><strong>Posta:</strong> Yukarıdaki adrese iadeli taahhütlü</li>
           <li><strong>Elden Teslim:</strong> Yukarıdaki adreste alındı belgesi ile</li>
