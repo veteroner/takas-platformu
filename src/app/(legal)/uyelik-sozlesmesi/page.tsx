@@ -1,421 +1,271 @@
 'use client'
 
-export default function TermsPage() {
+export default function MembershipAgreementPage() {
   return (
-    <div className="prose prose-gray max-w-3xl mx-auto px-4 py-10">
-      <h1>Üyelik Sözleşmesi ve Kullanım Şartları</h1>
-      
-      <p className="text-sm text-gray-600">Son Güncelleme: {new Date().toLocaleDateString('tr-TR')}</p>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500 mb-2">
+          Üyelik Sözleşmesi
+        </h1>
+        <p className="text-sm text-gray-500">Son Güncelleme: 10 Aralık 2025</p>
+      </div>
 
-      <div className="bg-rose-50 p-4 rounded-lg border-l-4 border-rose-400 my-6">
-        <p className="text-sm font-medium">
-          <strong>Önemli Uyarı:</strong> Bu sözleşme hukuken bağlayıcıdır. 
-          Platformu kullanmadan önce dikkatle okuyunuz ve kabul ettiğinizden emin olunuz.
+      <div className="bg-gradient-to-r from-purple-100 to-pink-100 p-4 rounded-xl border-l-4 border-purple-500">
+        <p className="text-sm text-gray-700">
+          Bu sözleşme, <strong>TakaZone</strong> platformunu kullanmanız için geçerli olan 
+          şartları ve koşulları belirlemektedir. Platformu kullanarak bu koşulları kabul etmiş sayılırsınız.
         </p>
       </div>
 
-      <h2>1. Tanımlar ve Kapsam</h2>
-      
-      <h3>1.1 Taraflar</h3>
-      <ul>
-        <li><strong>Platform:</strong> TakaZone - Çocuk giysi ve oyuncak takas platformu</li>
-        <li><strong>Şirket:</strong> Teknova Tarım Hayvancılık Bilişim Reklam Limited Şirketi</li>
-        <li><strong>MERSİS No:</strong> 0836100073000001</li>
-        <li><strong>VKN:</strong> 8361000730</li>
-        <li><strong>Vergi Dairesi:</strong> Sincan Vergi Dairesi Müdürlüğü</li>
-        <li><strong>Adres:</strong> Mevlana Mahallesi No:8 Kapı No:23, 06949 Sincan/Ankara</li>
-        <li><strong>Telefon:</strong> 0543 509 84 85</li>
-        <li><strong>E-posta:</strong> bilgi@teknovagroup.com</li>
-        <li><strong>Veri Sorumlusu:</strong> İsa Bozkurt</li>
-        <li><strong>Kullanıcı:</strong> Platforma kayıt olan ve hizmetleri kullanan gerçek/tüzel kişiler</li>
-        <li><strong>Üye:</strong> Kayıt işlemini tamamlamış ve hesap sahibi olan kullanıcılar</li>
-        <li><strong>Hizmet:</strong> Platform üzerinden sunulan tüm özellik ve işlevler</li>
-      </ul>
-
-      <h3>1.2 Sözleşmenin Kapsamı</h3>
-      <p>
-        Bu sözleşme, <strong>6098 sayılı Türk Borçlar Kanunu</strong> ve <strong>6563 sayılı 
-        Elektronik Ticaretin Düzenlenmesi Hakkında Kanun</strong> hükümleri uyarınca hazırlanmıştır. 
-        Platform kullanımı bu şartların kabulü anlamına gelir.
-      </p>
-
-      <h2>2. Üyelik ve Hesap Yönetimi</h2>
-      
-      <h3>2.1 Üyelik Şartları</h3>
-      <div className="bg-purple-50 p-4 rounded-lg">
-        <h4 className="font-semibold text-blue-800">Genel Şartlar</h4>
-        <ul className="text-sm mt-2">
-          <li>• Minimum 18 yaş veya veli izni (13-18 yaş arası)</li>
-          <li>• Türkiye Cumhuriyeti vatandaşı veya ikamet izinli</li>
-          <li>• Doğru ve eksiksiz bilgi verme yükümlülüğü</li>
-          <li>• Tek kişi başına tek hesap kuralı</li>
-          <li>• Geçerli e-posta adresi ve telefon numarası</li>
-          <li>• Kimlik doğrulama belgeleri (gerektiğinde)</li>
-        </ul>
-      </div>
-
-      <h3>2.2 Yasak Durumlar</h3>
-      <div className="bg-rose-50 p-4 rounded-lg">
-        <p className="text-sm"><strong>Aşağıdaki durumda olan kişiler üye olamaz:</strong></p>
-        <ul className="text-sm mt-2">
-          <li>• Daha önce hesabı kapatılmış kullanıcılar</li>
-          <li>• Yasal takibat altında olan kişiler (platformla ilgili)</li>
-          <li>• Sahte bilgi ile daha önce kayıt oluşturanlar</li>
-          <li>• Rekabet yasağı bulunan ticari kuruluşlar</li>
-          <li>• Kara para aklama/terör finansmanı şüphesi bulunanlar</li>
-        </ul>
-      </div>
-
-      <h3>2.3 Hesap Güvenliği ve Sorumluluklar</h3>
-      <ul>
-        <li><strong>Şifre Güvenliği:</strong> Güçlü şifre kullanma ve gizli tutma sorumluluğu</li>
-        <li><strong>Hesap Paylaşımı:</strong> Kesinlikle yasaktır, tüm sorumluluk üyeye aittir</li>
-        <li><strong>Şüpheli Aktivite:</strong> Derhal bildirme yükümlülüğü</li>
-        <li><strong>Güncel Bilgiler:</strong> İletişim bilgilerini güncel tutma sorumluluğu</li>
-        <li><strong>Yasal Sorumluluk:</strong> Hesap üzerinden gerçekleşen tüm işlemlerden sorumlu</li>
-      </ul>
-
-      <h2>3. Platform Kullanım Kuralları</h2>
-      
-      <h3>3.1 İzin Verilen Kullanımlar</h3>
-      <div className="bg-emerald-50 p-4 rounded-lg">
-        <ul className="text-sm">
-          <li>✅ Kişisel eşyaların takası</li>
-          <li>✅ Yasal ürün ve hizmet paylaşımı</li>
-          <li>✅ Temiz ve dürüst iletişim</li>
-          <li>✅ Platform kurallarına uygun davranış</li>
-          <li>✅ Diğer kullanıcılara saygılı yaklaşım</li>
-          <li>✅ Gerçek ve doğru ürün tanıtımları</li>
-        </ul>
-      </div>
-
-      <h3>3.2 Kesinlikle Yasak Davranışlar</h3>
-      <div className="bg-rose-50 p-4 rounded-lg">
-        <ul className="text-sm">
-          <li>❌ Sahte, çalıntı veya kaçak ürün paylaşımı</li>
-          <li>❌ Uyuşturucu, silah, patlayıcı madde takası</li>
-          <li>❌ Müstehcen, pornografik içerik</li>
-          <li>❌ Nefret söylemi, ayrımcılık, hakaret</li>
-          <li>❌ Dolandırıcılık, aldatma, sahte kimlik</li>
-          <li>❌ Spam, reklam, promosyon içeriği</li>
-          <li>❌ Sistemi hackleme, virüs gönderme</li>
-          <li>❌ Başkasının hesabını ele geçirme</li>
-          <li>❌ Telif hakkı ihlali, marka taklidciliği</li>
-          <li>❌ Kişisel veri çalma, gizlilik ihlali</li>
-        </ul>
-      </div>
-
-      <h2>4. Yasak Ürün ve Hizmetler</h2>
-      
-      <table className="min-w-full border border-gray-300 text-sm">
-        <thead>
-          <tr className="bg-purple-100">
-            <th className="border border-gray-300 px-3 py-2">Kategori</th>
-            <th className="border border-gray-300 px-3 py-2">Yasak Ürünler</th>
-            <th className="border border-gray-300 px-3 py-2">Yasal Dayanak</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="border border-gray-300 px-3 py-2">Tehlikeli Maddeler</td>
-            <td className="border border-gray-300 px-3 py-2">Silah, mühimmat, patlayıcı, kimyasal</td>
-            <td className="border border-gray-300 px-3 py-2">Silah Kanunu, TMK</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-3 py-2">Uyuşturucu</td>
-            <td className="border border-gray-300 px-3 py-2">Uyuşturucu, sentetik uyarıcı, esrar</td>
-            <td className="border border-gray-300 px-3 py-2">Uyuşturucu ile Mücadele Kanunu</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-3 py-2">Kültür Varlıkları</td>
-            <td className="border border-gray-300 px-3 py-2">Antika, arkeolojik eser, tarihi obje</td>
-            <td className="border border-gray-300 px-3 py-2">Kültür ve Tabiat Varlıkları Kanunu</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-3 py-2">Hayvan Ürünleri</td>
-            <td className="border border-gray-300 px-3 py-2">Canlı hayvan, nesli tükenmiş türler</td>
-            <td className="border border-gray-300 px-3 py-2">Hayvanları Koruma Kanunu, CITES</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-3 py-2">Tıbbi Ürünler</td>
-            <td className="border border-gray-300 px-3 py-2">Reçeteli ilaç, tıbbi cihaz, protez</td>
-            <td className="border border-gray-300 px-3 py-2">İlaç ve Tıbbi Cihaz Kanunu</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-3 py-2">Telif Hakları</td>
-            <td className="border border-gray-300 px-3 py-2">Korsan film/müzik, sahte marka</td>
-            <td className="border border-gray-300 px-3 py-2">Fikri Mülkiyet Kanunu</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-3 py-2">Finansal</td>
-            <td className="border border-gray-300 px-3 py-2">Para, kredi kartı, casino jetonları</td>
-            <td className="border border-gray-300 px-3 py-2">Bankacılık Kanunu, TCK</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>5. İşlem Güvenliği ve Sorumluluklar</h2>
-      
-      <h3>5.1 Platform Sorumluluğu</h3>
-      <div className="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400">
-        <h4 className="font-semibold text-yellow-800">Platform Sağladıkları</h4>
-        <ul className="text-sm mt-2">
-          <li>• Güvenli altyapı ve şifreleme sistemi</li>
-          <li>• Kullanıcı doğrulama araçları</li>
-          <li>• Şikayet ve anlaşmazlık çözüm kanalları</li>
-          <li>• Güvenlik ihlali durumunda bilgilendirme</li>
-          <li>• Yasal yükümlülüklere uygun veri koruma</li>
-        </ul>
-      </div>
-
-      <h3>5.2 Platform Sorumluluk Sınırları</h3>
-      <div className="bg-rose-50 p-4 rounded-lg border-l-4 border-rose-400">
-        <h4 className="font-semibold text-rose-700">Platform Sorumlu Değildir</h4>
-        <ul className="text-sm mt-2">
-          <li>• Kullanıcılar arası anlaşmazlıklardan</li>
-          <li>• Ürün kalitesi, orijinallik, işlevsellikten</li>
-          <li>• Teslimat sorunları ve gecikmelerden</li>
-          <li>• Kullanıcıların verdiği yanlış bilgilerden</li>
-          <li>• Üçüncü taraf sebepli sistem kesintilerinden</li>
-          <li>• Doğal afet, savaş gibi mücbir sebeplerden</li>
-          <li>• Kullanıcıların hukuka aykırı davranışlarından</li>
-        </ul>
-      </div>
-
-      <h3>5.3 Kullanıcı Sorumlulukları</h3>
-      <ul>
-        <li><strong>Ürün Tanıtımı:</strong> Doğru, eksiksiz ve dürüst bilgi verme</li>
-        <li><strong>Yasal Uyum:</strong> Tüm yasalara uygun davranma sorumluluğu</li>
-        <li><strong>İletişim:</strong> Nazik ve saygılı iletişim kurma</li>
-        <li><strong>Teslimat:</strong> Anlaşma şartlarına uygun teslimat</li>
-        <li><strong>Gizlilik:</strong> Diğer kullanıcıların kişisel verilerini koruma</li>
-        <li><strong>Güvenlik:</strong> Hesap güvenliğini sağlama ve koruma</li>
-      </ul>
-
-      <h2>6. Fikri Mülkiyet Hakları</h2>
-      
-      <h3>6.1 Platform Hakları</h3>
-      <ul>
-        <li>Platform tasarımı, kodları, algoritmaları Teknova Group'a aittir</li>
-        <li>Marka, logo, slogan hakları tamamen korunmaktadır</li>
-        <li>Kullanıcı arayüzü ve deneyim tasarımları tescilli/korumalıdır</li>
-        <li>Veritabanı yapısı ve içeriği fikri mülkiyet kapsamındadır</li>
-      </ul>
-
-      <h3>6.2 Kullanıcı İçerikleri</h3>
-      <ul>
-        <li><strong>Kullanıcı Hakları:</strong> Yüklenen içeriklerin orijinal hakları kullanıcıya aittir</li>
-        <li><strong>Platform Lisansı:</strong> Platform, içerikleri kullanma/görüntüleme hakkına sahiptir</li>
-        <li><strong>Paylaşım İzni:</strong> İçerikler platformda paylaşım amacıyla lisanslanır</li>
-        <li><strong>Kaldırma Hakkı:</strong> İhlal durumunda platform içeriği kaldırabilir</li>
-      </ul>
-
-      <h2>7. Hesap Askıya Alma ve Kapatma</h2>
-      
-      <h3>7.1 Askıya Alma Sebepleri</h3>
-      <div className="bg-orange-50 p-4 rounded-lg">
-        <ul className="text-sm">
-          <li>• Tekrarlayan kural ihlalleri</li>
-          <li>• Şüpheli veya sahte hesap aktivitesi</li>
-          <li>• Diğer kullanıcılardan çoklu şikayet</li>
-          <li>• Güvenlik ihlali şüphesi</li>
-          <li>• Yasal soruşturma süreci</li>
-          <li>• Ödeme/dolandırıcılık şüphesi</li>
-        </ul>
-      </div>
-
-      <h3>7.2 Kalıcı Kapatma Sebepleri</h3>
-      <div className="bg-rose-50 p-4 rounded-lg">
-        <ul className="text-sm">
-          <li>• Yasak ürün satışı/paylaşımı</li>
-          <li>• Dolandırıcılık, sahte kimlik kullanımı</li>
-          <li>• Ciddi güvenlik ihlalleri</li>
-          <li>• Tekrarlanan ciddi kural ihlalleri</li>
-          <li>• Yasal yükümlülük gereği hesap kapatma</li>
-          <li>• Platform imajına zarar verici davranışlar</li>
-        </ul>
-      </div>
-
-      <h3>7.3 İtiraz ve Geri Açma Süreci</h3>
-      <ul>
-        <li><strong>İtiraz Süresi:</strong> Kapatma kararından 15 gün içinde</li>
-        <li><strong>İtiraz Adresi:</strong> itiraz@teknovagroup.com</li>
-        <li><strong>Gerekli Belgeler:</strong> Kimlik, delil belgeleri</li>
-        <li><strong>Değerlendirme Süresi:</strong> 30 iş günü</li>
-        <li><strong>Karar Sonucu:</strong> E-posta ile bildirilir</li>
-      </ul>
-
-      <h2>8. Veri Koruma ve Gizlilik</h2>
-      
-      <h3>8.1 Kişisel Veri İşleme</h3>
-      <p>
-        <strong>6698 sayılı KVKK</strong> ve <strong>GDPR</strong> uyarınca kişisel verileriniz:
-      </p>
-      <ul>
-        <li>Hizmet sunumu için gerekli olan sürece işlenir</li>
-        <li>Yasal yükümlülükler gereği saklanır</li>
-        <li>Güvenlik tedbirleri ile korunur</li>
-        <li>İzniniz olmadan üçüncü taraflarla paylaşılmaz</li>
-        <li>Talep halinde silinir veya düzeltilir</li>
-      </ul>
-
-      <h3>8.2 Çerez ve Takip Teknolojileri</h3>
-      <ul>
-        <li><strong>Zorunlu Çerezler:</strong> Platform işlevselliği için gerekli</li>
-        <li><strong>Analitik Çerezler:</strong> Açık rıza ile kullanılır</li>
-        <li><strong>Pazarlama Çerezleri:</strong> İsteğe bağlı, yönetilebilir</li>
-        <li><strong>Üçüncü Taraf:</strong> Entegre servisler için sınırlı kullanım</li>
-      </ul>
-
-      <h2>9. Ödeme ve Finansal İşlemler</h2>
-      
-      <h3>9.1 Platform Ücretsizdir</h3>
-      <div className="bg-emerald-50 p-4 rounded-lg">
-        <p className="text-sm">
-          Temel takas hizmetleri tamamen ücretsizdir. Gelecekte eklenen premium 
-          özellikler için önceden bilgilendirme yapılacaktır.
-        </p>
-      </div>
-
-      <h3>9.2 Gelecekteki Ücretli Hizmetler</h3>
-      <ul>
-        <li><strong>Premium Üyelik:</strong> Gelişmiş özellikler ve öncelik</li>
-        <li><strong>Reklam Hizmetleri:</strong> Ürün tanıtımı ve görünürlük</li>
-        <li><strong>Doğrulama Hizmetleri:</strong> Hızlı kimlik/ürün doğrulama</li>
-        <li><strong>Lojistik Destek:</strong> Kargo ve teslimat koordinasyonu</li>
-      </ul>
-
-      <h3>9.3 İade ve İptal Politikası</h3>
-      <p>
-        Ücretli hizmetler için 14 günlük cayma hakkı mevcuttur 
-        (6502 sayılı Tüketicinin Korunması Hakkında Kanun).
-      </p>
-
-      <h2>10. Yasal Uyuşmazlıklar ve Çözüm Yolları</h2>
-      
-      <h3>10.1 Öncelikli Çözüm Yolları</h3>
-      <ol>
-        <li><strong>Doğrudan İletişim:</strong> Kullanıcılar arası müzakere</li>
-        <li><strong>Platform Arabuluculuğu:</strong> Çözüm ekibi desteği</li>
-        <li><strong>Online Uyuşmazlık Çözümü:</strong> Dijital arabuluculuk</li>
-        <li><strong>Tüketici Hakem Heyeti:</strong> Tüketici anlaşmazlıkları için</li>
-      </ol>
-
-      <h3>10.2 Yargı Yetkisi</h3>
-      <div className="bg-purple-50/50 p-4 rounded-lg">
-        <ul>
-          <li><strong>Yetkili Mahkeme:</strong> İstanbul Mahkemeleri ve İcra Daireleri</li>
-          <li><strong>Uygulanacak Hukuk:</strong> Türkiye Cumhuriyeti Kanunları</li>
-          <li><strong>Dil:</strong> Türkçe (resmi dil)</li>
-          <li><strong>Tebligat Adresi:</strong> Platform üzerinden kayıtlı adres</li>
-        </ul>
-      </div>
-
-      <h2>11. Sözleşme Değişiklikleri</h2>
-      
-      <h3>11.1 Değişiklik Süreci</h3>
-      <ul>
-        <li><strong>Bildirim:</strong> 30 gün önceden e-posta ile duyuru</li>
-        <li><strong>Platform Duyurusu:</strong> Ana sayfada görünür uyarı</li>
-        <li><strong>Yürürlük:</strong> Belirtilen tarihten itibaren geçerli</li>
-        <li><strong>Kabul:</strong> Platform kullanımı devam etme = kabul</li>
-        <li><strong>Red:</strong> Hesap kapatma hakkı</li>
-      </ul>
-
-      <h3>11.2 Otomatik Güncelleme Durumları</h3>
-      <ul>
-        <li>Yasal değişiklik gerektiren düzenlemeler</li>
-        <li>Güvenlik güncellemeleri</li>
-        <li>Teknik altyapı değişiklikleri</li>
-        <li>Yeni özellik ekleme</li>
-      </ul>
-
-      <h2>12. İletişim ve Destek</h2>
-      
-      <div className="bg-purple-50 p-4 rounded-lg">
-        <h3>Teknova Group İletişim Bilgileri</h3>
-        <ul className="mt-2">
-          <li><strong>Genel Destek:</strong> destek@teknovagroup.com</li>
-          <li><strong>Hukuki İşler:</strong> hukuk@teknovagroup.com</li>
-          <li><strong>KVKK Sorumlusu:</strong> kvkk@teknovagroup.com</li>
-          <li><strong>İtiraz ve Şikayet:</strong> itiraz@teknovagroup.com</li>
-          <li><strong>Telefon:</strong> [Telefon numarası eklenecek]</li>
-          <li><strong>Posta Adresi:</strong> [Fiziksel adres eklenecek]</li>
-          <li><strong>Çalışma Saatleri:</strong> 09:00-18:00 (Pazartesi-Cuma)</li>
-          <li><strong>Acil Destek:</strong> 7/24 online sistem üzerinden</li>
-        </ul>
-      </div>
-
-      <h2>13. Son Hükümler</h2>
-      
-      <h3>13.1 Sözleşmenin Geçerliliği</h3>
-      <ul>
-        <li>Bu sözleşme elektronik ortamda kabul edilmiş sayılır</li>
-        <li>Baskı halinde sağlanacak nüsha geçerlidir</li>
-        <li>Herhangi bir maddenin geçersizliği diğerlerini etkilemez</li>
-        <li>Türkçe metin her durumda esas alınır</li>
-      </ul>
-
-      <h3>13.2 Mücbir Sebepler</h3>
-      <p>
-        Doğal afet, savaş, salgın, internet kesintisi, siber saldırı gibi 
-        kontrolümüz dışındaki durumlar nedeniyle oluşan gecikmeler veya 
-        hizmet kesintilerinden platform sorumlu değildir.
-      </p>
-
-      <div className="bg-emerald-50 p-6 rounded-lg mt-8 border border-green-200">
-        <h3>Sözleşme Onay Formu</h3>
-        <div className="mt-4 space-y-3">
-          <label className="flex items-start">
-            <input type="checkbox" className="mr-3 mt-1" required />
-            <span className="text-sm">
-              <strong>Yaş Onayı:</strong> 18 yaşından büyük olduğumu veya yasal veli iznime 
-              sahip olduğumu beyan ederim.
-            </span>
-          </label>
+      {/* Taraflar */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          1. Taraflar
+        </h2>
+        <div className="space-y-4">
+          <div className="bg-purple-50 rounded-xl p-4">
+            <h3 className="font-semibold text-purple-700 mb-2">Platform Sahibi</h3>
+            <p className="text-sm text-gray-600">Teknova Tarım Hayvancılık Bilişim Reklam Ltd. Şti.</p>
+            <p className="text-sm text-gray-600">MERSİS No: 0836100073000001</p>
+            <p className="text-sm text-gray-600">VKN: 8361000730</p>
+            <p className="text-sm text-gray-600">Adres: Mevlana Mah. No:8 Kapı No:23, 06949 Sincan/Ankara</p>
+          </div>
           
-          <label className="flex items-start">
-            <input type="checkbox" className="mr-3 mt-1" required />
-            <span className="text-sm">
-              <strong>Sözleşme Kabulü:</strong> Bu Üyelik Sözleşmesi'ni tamamen okuduğumu, 
-              anladığımı ve kabul ettiğimi beyan ederim.
-            </span>
-          </label>
-          
-          <label className="flex items-start">
-            <input type="checkbox" className="mr-3 mt-1" required />
-            <span className="text-sm">
-              <strong>Yasal Sorumluluk:</strong> Platform kullanımımda tüm yasal kurallara 
-              uyacağımı ve sorumluluğunu kabul ettiğimi taahhüt ederim.
-            </span>
-          </label>
-          
-          <label className="flex items-start">
-            <input type="checkbox" className="mr-3 mt-1" required />
-            <span className="text-sm">
-              <strong>Gizlilik Politikası:</strong> Gizlilik Politikası ve KVKK Aydınlatma 
-              Metni'ni okuduğumu ve kabul ettiğimi beyan ederim.
-            </span>
-          </label>
+          <div className="bg-gray-50 rounded-xl p-4">
+            <h3 className="font-semibold text-gray-700 mb-2">Üye</h3>
+            <p className="text-sm text-gray-600">Platformda hesap oluşturan gerçek veya tüzel kişi</p>
+          </div>
         </div>
-        
-        <button className="mt-6 bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition-colors">
-          Sözleşmeyi Kabul Ediyorum ve Üyeliğimi Tamamlıyorum
-        </button>
-      </div>
+      </section>
 
-      <div className="bg-purple-50/50 p-6 rounded-lg mt-8">
-        <p className="text-sm">
-          <strong>Sözleşme Bilgileri:</strong><br/>
-          <strong>Hazırlık Tarihi:</strong> {new Date().toLocaleDateString('tr-TR')}<br/>
-          <strong>Yürürlük Tarihi:</strong> {new Date().toLocaleDateString('tr-TR')}<br/>
-          <strong>Versiyon:</strong> 2.0<br/>
-          <strong>Son Güncelleme:</strong> {new Date().toLocaleDateString('tr-TR')}<br/>
-          <strong>Hukuki Dayanak:</strong> TBK, ETK, KVKK, TKHK<br/>
-          <strong>Hazırlayan:</strong> Hukuk İşleri Departmanı<br/>
-          <strong>Onaylayan:</strong> Genel Müdür<br/>
-          <strong>Denetim:</strong> Bağımsız hukuk firması
+      {/* Tanımlar */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          2. Tanımlar
+        </h2>
+        <div className="bg-gray-50 rounded-xl p-4 space-y-2 text-sm text-gray-700">
+          <p>■ <strong>Platform:</strong> TakaZone mobil uygulaması ve takazone.com web sitesi</p>
+          <p>■ <strong>Takas:</strong> Üyeler arasında para karşılığı olmadan ürün değişimi</p>
+          <p>■ <strong>Eşleşme:</strong> İki üyenin birbirinin ürününü beğenmesi sonucu oluşan durum</p>
+          <p>■ <strong>İçerik:</strong> Üyelerin yüklediği fotoğraf, açıklama ve diğer materyaller</p>
+        </div>
+      </section>
+
+      {/* Üyelik Şartları */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          3. Üyelik Şartları
+        </h2>
+        <div className="space-y-3">
+          <div className="bg-green-50 rounded-xl p-4 border-l-4 border-green-400">
+            <h3 className="font-semibold text-green-700 mb-2">✓ Kabul Edilen</h3>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li>• 18 yaşını doldurmuş gerçek kişiler</li>
+              <li>• Türkiye'de yerleşik kişiler</li>
+              <li>• Geçerli iletişim bilgilerine sahip kişiler</li>
+            </ul>
+          </div>
+          
+          <div className="bg-red-50 rounded-xl p-4 border-l-4 border-red-400">
+            <h3 className="font-semibold text-red-700 mb-2">✗ Kabul Edilmeyen</h3>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li>• 18 yaşından küçükler (veli izni olmadan)</li>
+              <li>• Daha önce hesabı kalıcı olarak askıya alınanlar</li>
+              <li>• Sahte veya yanıltıcı bilgi verenler</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Üyenin Yükümlülükleri */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          4. Üyenin Yükümlülükleri
+        </h2>
+        <div className="space-y-4">
+          <div className="bg-purple-50 rounded-xl p-4">
+            <h3 className="font-semibold text-purple-700 mb-2">📝 İçerik Kuralları</h3>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li>• Gerçek ve doğru ürün bilgisi paylaşmalısınız</li>
+              <li>• Ürün fotoğrafları gerçeği yansıtmalıdır</li>
+              <li>• Yasadışı ürün ilan edemezsiniz</li>
+              <li>• Telif hakkı ihlali yapan içerik paylaşamazsınız</li>
+            </ul>
+          </div>
+          
+          <div className="bg-pink-50 rounded-xl p-4">
+            <h3 className="font-semibold text-pink-700 mb-2">🤝 Takas Kuralları</h3>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li>• Eşleşilen kullanıcıyla iyi niyetli iletişim kurmalısınız</li>
+              <li>• Anlaşılan takası tamamlamalısınız</li>
+              <li>• Ürünü tanıtıldığı şekilde teslim etmelisiniz</li>
+              <li>• Takas tamamlandıktan sonra değerlendirme yapmalısınız</li>
+            </ul>
+          </div>
+          
+          <div className="bg-orange-50 rounded-xl p-4">
+            <h3 className="font-semibold text-orange-700 mb-2">🚫 Yasaklar</h3>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li>• Spam veya rahatsız edici mesaj gönderemezsiniz</li>
+              <li>• Başkalarının hesaplarına erişemezsiniz</li>
+              <li>• Platform güvenliğini tehlikeye atacak işlem yapamazsınız</li>
+              <li>• Platform dışında ödeme talep edemezsiniz</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Yasak Ürünler */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          5. Yasak Ürünler
+        </h2>
+        <p className="text-gray-600 mb-4">
+          Aşağıdaki ürünlerin ilanı kesinlikle yasaktır:
         </p>
+        <div className="bg-red-50 rounded-xl p-4 space-y-2 text-sm text-gray-700">
+          <p>■ Yasa dışı ürünler (silah, uyuşturucu vb.)</p>
+          <p>■ Çalıntı veya kaçak ürünler</p>
+          <p>■ Reçeteli ilaçlar ve tıbbi cihazlar</p>
+          <p>■ Canlı hayvanlar (tehlikeli türler)</p>
+          <p>■ Müstehcen içerikli ürünler</p>
+          <p>■ Sahte veya kopya ürünler</p>
+          <p>■ Patlayıcı ve yanıcı maddeler</p>
+        </div>
+      </section>
+
+      {/* Platformun Hakları */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          6. Platformun Hakları
+        </h2>
+        <ul className="space-y-2 text-gray-700">
+          <li className="flex items-start gap-2">
+            <span className="text-purple-500 mt-1">●</span>
+            <span>Kurallara uymayan ilanları kaldırma hakkı</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-purple-500 mt-1">●</span>
+            <span>Hesapları geçici veya kalıcı olarak askıya alma hakkı</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-purple-500 mt-1">●</span>
+            <span>Platform kurallarını güncelleme hakkı</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-purple-500 mt-1">●</span>
+            <span>Gerektiğinde yetkili makamlara bilgi verme hakkı</span>
+          </li>
+        </ul>
+      </section>
+
+      {/* Sorumluluk Sınırı */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          7. Sorumluluk Sınırı
+        </h2>
+        <div className="bg-yellow-50 rounded-xl p-4 border-l-4 border-yellow-400">
+          <p className="text-sm text-gray-700 mb-3">
+            <strong>Önemli:</strong> TakaZone yalnızca bir aracı platformdur.
+          </p>
+          <ul className="text-sm text-gray-600 space-y-1">
+            <li>• Üyeler arasındaki takasların tarafı değiliz</li>
+            <li>• Ürünlerin kalitesi veya durumu konusunda garanti vermiyoruz</li>
+            <li>• Takas sonrası yaşanan anlaşmazlıklarda taraf değiliz</li>
+            <li>• Platform kesintileri nedeniyle oluşan zararlardan sorumlu değiliz</li>
+          </ul>
+        </div>
+      </section>
+
+      {/* Fikri Mülkiyet */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          8. Fikri Mülkiyet
+        </h2>
+        <p className="text-gray-600 mb-4">
+          Platform üzerindeki tüm marka, logo, tasarım ve içerikler Teknova'ya aittir.
+        </p>
+        <div className="bg-gray-50 rounded-xl p-4 text-sm text-gray-700">
+          <p>Üye olarak yüklediğiniz içeriklerin fikri mülkiyet hakkı size aittir. Ancak platform üzerinde 
+          yayınlanması için bize sınırsız, dünya çapında, telifsiz kullanım lisansı vermiş olursunuz.</p>
+        </div>
+      </section>
+
+      {/* Hesap Sonlandırma */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          9. Üyelik İptali
+        </h2>
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-xl p-4">
+            <h3 className="font-semibold text-gray-700 mb-2">Üye Tarafından</h3>
+            <p className="text-sm text-gray-600">
+              Hesabınızı istediğiniz zaman Ayarlar → Hesap → Hesabı Sil bölümünden silebilirsiniz.
+            </p>
+          </div>
+          
+          <div className="bg-gray-50 rounded-xl p-4">
+            <h3 className="font-semibold text-gray-700 mb-2">Platform Tarafından</h3>
+            <p className="text-sm text-gray-600">
+              Sözleşme ihlallerinde hesabınızı önceden bildirmeksizin askıya alabiliriz.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Uyuşmazlık */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          10. Uyuşmazlık Çözümü
+        </h2>
+        <div className="bg-gray-50 rounded-xl p-4 space-y-2 text-sm text-gray-700">
+          <p>■ <strong>Uygulanacak Hukuk:</strong> Türkiye Cumhuriyeti kanunları</p>
+          <p>■ <strong>Yetkili Mahkeme:</strong> Ankara Mahkemeleri ve İcra Daireleri</p>
+          <p>■ <strong>Arabuluculuk:</strong> Zorunlu arabuluculuk kapsamındaki uyuşmazlıklar için öncelikle arabuluculuğa başvurulur</p>
+        </div>
+      </section>
+
+      {/* İletişim */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          11. İletişim
+        </h2>
+        <p className="text-gray-600 mb-4">
+          Sorularınız için bize ulaşın:
+        </p>
+        
+        <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 space-y-2">
+          <p className="flex items-center gap-2">
+            <span className="text-purple-500">📧</span>
+            <strong>E-posta:</strong> bilgi@teknovagroup.com
+          </p>
+          <p className="flex items-center gap-2">
+            <span className="text-purple-500">📞</span>
+            <strong>Telefon:</strong> 0543 509 84 85
+          </p>
+          <p className="flex items-center gap-2">
+            <span className="text-purple-500">🌐</span>
+            <strong>Website:</strong> takazone.com
+          </p>
+        </div>
+      </section>
+
+      {/* Değişiklikler */}
+      <section>
+        <h2 className="text-lg font-semibold text-purple-700 border-b-2 border-purple-200 pb-2 mb-4">
+          12. Sözleşme Değişiklikleri
+        </h2>
+        <p className="text-gray-600">
+          Bu sözleşmeyi önceden bildirimde bulunarak değiştirebiliriz. Önemli değişiklikler 
+          için e-posta veya uygulama içi bildirim ile bilgilendirileceksiniz. Değişiklik sonrası 
+          platformu kullanmaya devam etmeniz, yeni koşulları kabul ettiğiniz anlamına gelir.
+        </p>
+      </section>
+
+      {/* Footer */}
+      <div className="bg-gray-100 rounded-xl p-4 text-center text-sm text-gray-600">
+        <p><strong>Teknova Tarım Hayvancılık Bilişim Reklam Ltd. Şti.</strong></p>
+        <p className="mt-1">Bu üyelik sözleşmesi 10.12.2025 tarihinde güncellenmiştir.</p>
       </div>
     </div>
   )
