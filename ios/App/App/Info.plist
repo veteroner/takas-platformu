@@ -20,8 +20,6 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-3940256099942544~1458002511</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -35,8 +33,6 @@
 	<string>Çektiğiniz fotoğrafları galerinize kaydetmek için izin gerekiyor.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Ürün fotoğraflarını seçmek için fotoğraf galerinize erişmemiz gerekiyor.</string>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>Kişiselleştirilmiş reklamlar için izleme izninize ihtiyacımız var.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
