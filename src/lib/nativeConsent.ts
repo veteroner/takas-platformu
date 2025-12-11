@@ -33,7 +33,7 @@ export async function requestTrackingPermission(): Promise<TrackingPermission> {
 
   if (platform === 'android') {
     try {
-      console.log('Android tracking permission handled via AdMob consent');
+      console.log('Android tracking permission granted');
       return { granted: true, status: 'authorized' };
     } catch (error) {
       console.error('Android consent error:', error);

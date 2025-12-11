@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TakaZone - Feature Graphic Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: white;
+        }
+        
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .info {
+            background: rgba(255,255,255,0.1);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .canvas-container {
+            border: 3px solid #EC4899;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(236, 72, 153, 0.3);
+        }
+        
+        canvas {
+            display: block;
+        }
+        
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        
+        button {
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-png {
+            background: linear-gradient(135deg, #EC4899, #8B5CF6);
+            color: white;
+        }
+        
+        .btn-jpg {
+            background: linear-gradient(135deg, #8B5CF6, #06B6D4);
+            color: white;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(236, 72, 153, 0.4);
+        }
+        
+        .specs {
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 TakaZone Feature Graphic Generator</h1>
+    
+    <div class="info">
+        <strong>Google Play Store Özellik Grafiği</strong><br>
+        Boyut: 1024 x 500 piksel | Format: PNG/JPEG | Max: 15 MB
+    </div>
+    
+    <div class="canvas-container">
+        <canvas id="canvas" width="1024" height="500"></canvas>
+    </div>
+    
+    <div class="buttons">
+        <button class="btn-png" onclick="downloadPNG()">📥 PNG İndir</button>
+        <button class="btn-jpg" onclick="downloadJPG()">📥 JPEG İndir</button>
+    </div>
+    
+    <p class="specs">✅ 1024 x 500 px | PNG veya JPEG formatı</p>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function drawFeatureGraphic() {
+            // Gradient arka plan
+            const gradient = ctx.createLinearGradient(0, 0, 1024, 500);
+            gradient.addColorStop(0, '#1a1a2e');
+            gradient.addColorStop(0.3, '#16213e');
+            gradient.addColorStop(0.7, '#0f3460');
+            gradient.addColorStop(1, '#1a1a2e');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 1024, 500);
+            
+            // Dekoratif daireler
+            ctx.globalAlpha = 0.1;
+            
+            // Sol üst daire
+            const grad1 = ctx.createRadialGradient(150, 100, 0, 150, 100, 200);
+            grad1.addColorStop(0, '#EC4899');
+            grad1.addColorStop(1, 'transparent');
+            ctx.fillStyle = grad1;
+            ctx.beginPath();
+            ctx.arc(150, 100, 200, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Sağ alt daire
+            const grad2 = ctx.createRadialGradient(874, 400, 0, 874, 400, 250);
+            grad2.addColorStop(0, '#8B5CF6');
+            grad2.addColorStop(1, 'transparent');
+            ctx.fillStyle = grad2;
+            ctx.beginPath();
+            ctx.arc(874, 400, 250, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Orta daire
+            const grad3 = ctx.createRadialGradient(512, 250, 0, 512, 250, 300);
+            grad3.addColorStop(0, '#06B6D4');
+            grad3.addColorStop(1, 'transparent');
+            ctx.fillStyle = grad3;
+            ctx.beginPath();
+            ctx.arc(512, 250, 300, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.globalAlpha = 1;
+            
+            // Logo/Icon alanı (sol taraf)
+            drawAppIcon(120, 150);
+            
+            // Ana başlık
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 72px "Segoe UI", system-ui, sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText('TakaZone', 320, 220);
+            
+            // Gradient alt çizgi
+            const underlineGrad = ctx.createLinearGradient(320, 235, 680, 235);
+            underlineGrad.addColorStop(0, '#EC4899');
+            underlineGrad.addColorStop(1, '#8B5CF6');
+            ctx.fillStyle = underlineGrad;
+            ctx.fillRect(320, 235, 360, 4);
+            
+            // Slogan
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '32px "Segoe UI", system-ui, sans-serif';
+            ctx.fillText('Beğen, Eşleş, Takas Yap!', 320, 290);
+            
+            // Alt açıklama
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.font = '22px "Segoe UI", system-ui, sans-serif';
+            ctx.fillText('Türkiye\'nin Modern Takas Platformu', 320, 340);
+            
+            // Feature ikonları
+            drawFeatureIcons();
+            
+            // Alt banner
+            const bannerGrad = ctx.createLinearGradient(0, 450, 1024, 450);
+            bannerGrad.addColorStop(0, 'rgba(236, 72, 153, 0.3)');
+            bannerGrad.addColorStop(0.5, 'rgba(139, 92, 246, 0.3)');
+            bannerGrad.addColorStop(1, 'rgba(6, 182, 212, 0.3)');
+            ctx.fillStyle = bannerGrad;
+            ctx.fillRect(0, 450, 1024, 50);
+            
+            // Alt banner text
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 18px "Segoe UI", system-ui, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('📱 Ücretsiz İndir • 🔒 Güvenli Takas • 🌍 Türkiye Geneli', 512, 480);
+        }
+        
+        function drawAppIcon(x, y) {
+            // Dış çerçeve glow
+            ctx.shadowColor = '#EC4899';
+            ctx.shadowBlur = 30;
+            
+            // Ana ikon kutusu
+            const iconGrad = ctx.createLinearGradient(x, y, x + 160, y + 160);
+            iconGrad.addColorStop(0, '#EC4899');
+            iconGrad.addColorStop(1, '#8B5CF6');
+            
+            ctx.fillStyle = iconGrad;
+            roundRect(ctx, x, y, 160, 160, 35);
+            ctx.fill();
+            
+            ctx.shadowBlur = 0;
+            
+            // İç beyaz alan
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+            roundRect(ctx, x + 15, y + 15, 130, 130, 25);
+            ctx.fill();
+            
+            // TZ harfleri
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 80px "Segoe UI", system-ui, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('TZ', x + 80, y + 85);
+            
+            ctx.textBaseline = 'alphabetic';
+        }
+        
+        function drawFeatureIcons() {
+            const features = [
+                { icon: '👕', text: 'Kıyafet' },
+                { icon: '🧸', text: 'Oyuncak' },
+                { icon: '📚', text: 'Kitap' },
+                { icon: '🎮', text: 'Elektronik' }
+            ];
+            
+            const startX = 320;
+            const y = 390;
+            
+            features.forEach((feature, i) => {
+                const x = startX + (i * 160);
+                
+                // İkon arka planı
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+                roundRect(ctx, x, y, 130, 50, 25);
+                ctx.fill();
+                
+                // İkon ve text
+                ctx.font = '24px "Segoe UI", system-ui, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#ffffff';
+                ctx.fillText(feature.icon + ' ' + feature.text, x + 65, y + 33);
+            });
+        }
+        
+        function roundRect(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        }
+        
+        function downloadPNG() {
+            const link = document.createElement('a');
+            link.download = 'takazone-feature-graphic.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        function downloadJPG() {
+            const link = document.createElement('a');
+            link.download = 'takazone-feature-graphic.jpg';
+            link.href = canvas.toDataURL('image/jpeg', 0.95);
+            link.click();
+        }
+        
+        // Sayfa yüklendiğinde çiz
+        drawFeatureGraphic();
+    </script>
+</body>
+</html>

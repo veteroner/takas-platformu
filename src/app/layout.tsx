@@ -5,7 +5,6 @@ import CookieBanner from "@/components/CookieBanner";
 import ConsentGuard from "@/components/ConsentGuard";
 import AnalyticsLoader from "@/components/AnalyticsLoader";
 import OneSignalCapacitorInit from "@/components/OneSignalCapacitorInit";
-import AdsInit from "@/components/AdsInit";
 import NativeConsentInit from "@/components/NativeConsentInit";
 import VersionGate from "@/components/VersionGate";
 import NetworkProvider from "@/components/NetworkProvider";
@@ -113,7 +112,6 @@ export default function RootLayout({
           <AnalyticsLoader />
           <OneSignalCapacitorInit />
           <NativeConsentInit />
-          <AdsInit />
         </NetworkProvider>
       </body>
     </html>

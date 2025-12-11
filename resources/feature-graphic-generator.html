@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, height=500">
+    <title>TakaZone Feature Graphic Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #1a1a2e;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .canvas-container {
+            border: 2px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        
+        #featureGraphic {
+            display: block;
+        }
+        
+        .instructions {
+            color: #888;
+            margin-top: 20px;
+            text-align: center;
+            max-width: 600px;
+        }
+        
+        .download-btn {
+            margin-top: 20px;
+            padding: 15px 40px;
+            font-size: 18px;
+            background: linear-gradient(135deg, #EC4899, #8B5CF6);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(236, 72, 153, 0.4);
+        }
+        
+        .specs {
+            color: #666;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 TakaZone Feature Graphic</h1>
+    
+    <div class="canvas-container">
+        <canvas id="featureGraphic" width="1024" height="500"></canvas>
+    </div>
+    
+    <button class="download-btn" onclick="downloadImage()">📥 PNG İndir (1024x500)</button>
+    
+    <p class="specs">Google Play Store için: 1024 x 500 piksel, PNG formatı</p>
+    
+    <div class="instructions">
+        <p>Bu grafik Google Play Store'da uygulamanızın tanıtım görseli olarak kullanılacak.</p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('featureGraphic');
+        const ctx = canvas.getContext('2d');
+        
+        function drawFeatureGraphic() {
+            // Gradient Background
+            const gradient = ctx.createLinearGradient(0, 0, 1024, 500);
+            gradient.addColorStop(0, '#1a1a2e');
+            gradient.addColorStop(0.5, '#16213e');
+            gradient.addColorStop(1, '#0f0f23');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 1024, 500);
+            
+            // Decorative circles
+            ctx.globalAlpha = 0.1;
+            
+            // Pink circle
+            const pinkGradient = ctx.createRadialGradient(150, 400, 0, 150, 400, 300);
+            pinkGradient.addColorStop(0, '#EC4899');
+            pinkGradient.addColorStop(1, 'transparent');
+            ctx.fillStyle = pinkGradient;
+            ctx.beginPath();
+            ctx.arc(150, 400, 300, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Purple circle
+            const purpleGradient = ctx.createRadialGradient(900, 100, 0, 900, 100, 350);
+            purpleGradient.addColorStop(0, '#8B5CF6');
+            purpleGradient.addColorStop(1, 'transparent');
+            ctx.fillStyle = purpleGradient;
+            ctx.beginPath();
+            ctx.arc(900, 100, 350, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Cyan circle
+            const cyanGradient = ctx.createRadialGradient(512, 500, 0, 512, 500, 250);
+            cyanGradient.addColorStop(0, '#06B6D4');
+            cyanGradient.addColorStop(1, 'transparent');
+            ctx.fillStyle = cyanGradient;
+            ctx.beginPath();
+            ctx.arc(512, 500, 250, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.globalAlpha = 1;
+            
+            // Draw App Icon (rounded square)
+            drawAppIcon(100, 150, 200);
+            
+            // App Name - TakaZone
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 72px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('TakaZone', 340, 200);
+            
+            // Tagline
+            const tagGradient = ctx.createLinearGradient(340, 260, 800, 260);
+            tagGradient.addColorStop(0, '#EC4899');
+            tagGradient.addColorStop(1, '#8B5CF6');
+            ctx.fillStyle = tagGradient;
+            ctx.font = 'bold 32px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.fillText('Beğen • Eşleş • Takas Yap!', 340, 280);
+            
+            // Features
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.font = '24px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            
+            const features = [
+                '✨ Tinder tarzı kaydırma arayüzü',
+                '🔄 Kolay ve güvenli takas sistemi',
+                '📍 Yakınındaki fırsatları keşfet'
+            ];
+            
+            features.forEach((feature, index) => {
+                ctx.fillText(feature, 340, 350 + (index * 40));
+            });
+            
+            // Swipe cards illustration
+            drawSwipeCards(820, 280);
+        }
+        
+        function drawAppIcon(x, y, size) {
+            const radius = size * 0.22;
+            
+            // Shadow
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+            ctx.shadowBlur = 20;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 10;
+            
+            // Icon background gradient
+            const iconGradient = ctx.createLinearGradient(x, y, x + size, y + size);
+            iconGradient.addColorStop(0, '#EC4899');
+            iconGradient.addColorStop(1, '#8B5CF6');
+            
+            ctx.fillStyle = iconGradient;
+            ctx.beginPath();
+            ctx.roundRect(x, y, size, size, radius);
+            ctx.fill();
+            
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+            
+            // Draw "TZ" text inside icon
+            ctx.fillStyle = 'white';
+            ctx.font = `bold ${size * 0.5}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('TZ', x + size/2, y + size/2);
+            ctx.textAlign = 'left';
+        }
+        
+        function drawSwipeCards(centerX, centerY) {
+            // Back card (green/like)
+            ctx.save();
+            ctx.translate(centerX + 30, centerY);
+            ctx.rotate(0.15);
+            drawCard(-60, -80, 120, 160, '#10B981', '👍');
+            ctx.restore();
+            
+            // Back card (red/pass)
+            ctx.save();
+            ctx.translate(centerX - 30, centerY);
+            ctx.rotate(-0.15);
+            drawCard(-60, -80, 120, 160, '#EF4444', '👎');
+            ctx.restore();
+            
+            // Front card
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            drawCard(-60, -80, 120, 160, '#FFFFFF', '👕');
+            ctx.restore();
+        }
+        
+        function drawCard(x, y, w, h, color, emoji) {
+            const radius = 12;
+            
+            // Shadow
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
+            ctx.shadowBlur = 15;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 5;
+            
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.roundRect(x, y, w, h, radius);
+            ctx.fill();
+            
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            
+            // Emoji
+            ctx.font = '40px serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(emoji, x + w/2, y + h/2);
+            ctx.textAlign = 'left';
+        }
+        
+        function downloadImage() {
+            const link = document.createElement('a');
+            link.download = 'takazone-feature-graphic-1024x500.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        // Draw on load
+        drawFeatureGraphic();
+    </script>
+</body>
+</html>

@@ -7,7 +7,7 @@ import { requestTrackingPermission } from '@/lib/nativeConsent';
 /**
  * Native Platform İzin Başlatıcısı
  * iOS: ATT (App Tracking Transparency) diyalogu gösterir
- * Android: AdMob consent form kullanır (zaten mevcut)
+ * Android: Gerekli izinleri yönetir
  */
 export default function NativeConsentInit() {
   const [requested, setRequested] = useState(false);
@@ -33,9 +33,8 @@ export default function NativeConsentInit() {
         }
         
         if (platform === 'android') {
-          // Android için AdMob consent form zaten var
-          // Ek bir şey yapmaya gerek yok
-          console.log('Android consent handled by AdMob');
+          // Android için gerekli izinler manifest'te tanımlı
+          console.log('Android consent initialized');
         }
         
         setRequested(true);
