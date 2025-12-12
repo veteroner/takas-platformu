@@ -29,6 +29,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Ürün fotoğrafı çekmek için kameranıza erişmemiz gerekiyor.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Yakınındaki takas fırsatlarını göstermek için konumunuza erişmemiz gerekiyor.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Yakınındaki takas fırsatlarını göstermek için konumunuza erişmemiz gerekiyor.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

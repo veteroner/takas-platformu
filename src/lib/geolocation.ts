@@ -260,9 +260,6 @@ export function setCachedLocation(location: UserLocation): void {
 
 // Konum al (önce cache'den, yoksa GPS'den)
 export async function getLocation(): Promise<UserLocation | LocationError> {
-  // Web'de ve native'de çalışır
-  const isNative = Capacitor.isNativePlatform()
-  
   // Önce cache kontrol et
   const cached = getCachedLocation()
   if (cached) {
