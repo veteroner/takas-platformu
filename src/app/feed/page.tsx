@@ -14,8 +14,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getFeedItems, recordSwipe, checkForMatch, getUserLikedItems, getUserPassedItems } from '@/lib/api'
 import { getCurrentUser } from '@/lib/auth'
-import { useAds } from '@/hooks/useAds'
-import { AdSwipeCounter } from '@/lib/adManager'
 
 // Kategori tanımları
 const CATEGORIES = [
@@ -49,16 +47,6 @@ export default function HomePage() {
   // Match toast state
   const [showMatchToast, setShowMatchToast] = useState(false)
   const [matchedUser, setMatchedUser] = useState<{ name: string; avatar?: string; matchId: string } | null>(null)
-  
-  // Unified Ads hook'u (Unity Ads öncelikli, yoksa AdMob)
-  const ads = useAds()
-  
-  // Swipe sayacı - Her 5 swipe'da bir reklam göster
-  const [swipeCounter] = useState(() => new AdSwipeCounter(5, () => {
-    if (ads.isReady) {
-      ads.show()
-    }
-  }))
 
   const loadUser = useCallback(async () => {
     try {
@@ -232,9 +220,6 @@ export default function HomePage() {
 
   const handleSwipe = async (direction: 'left' | 'right', item: Item) => {
     try {
-      // Swipe sayacını artır - her 5 swipe'da interstitial reklam gösterir
-      swipeCounter.increment()
-      
       // Record swipe in database
       if (user) {
         await recordSwipe(
