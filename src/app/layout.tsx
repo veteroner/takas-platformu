@@ -10,6 +10,7 @@ import VersionGate from "@/components/VersionGate";
 import NetworkProvider from "@/components/NetworkProvider";
 import SplashScreenManager from "@/components/SplashScreenManager";
 import I18nProvider from "@/components/I18nProvider";
+import LanguageGuard from "@/components/LanguageGuard";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -109,7 +110,9 @@ export default function RootLayout({
             <SplashScreenManager />
             <ConsentGuard />
             <VersionGate />
-            {children}
+            <LanguageGuard>
+              {children}
+            </LanguageGuard>
             <CookieBanner />
             <AnalyticsLoader />
             <OneSignalCapacitorInit />
