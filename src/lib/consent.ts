@@ -1,14 +1,6 @@
-import { createClient } from '@/lib/supabase/client'
+import { supabase } from '@/lib/supabase'
 
 export type ConsentType = 'cookies' | 'privacy' | 'terms'
-
-interface ConsentData {
-  policy_key: string
-  version: string
-  accepted_at?: Date
-  ip?: string
-  user_agent?: string
-}
 
 /**
  * Save user consent to database
@@ -19,8 +11,6 @@ export async function saveConsent(
   version: string = '1.0'
 ): Promise<boolean> {
   try {
-    const supabase = createClient()
-    
     // Get user's IP and user agent
     const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : null
     
@@ -54,8 +44,6 @@ export async function hasConsent(
   minVersion: string = '1.0'
 ): Promise<boolean> {
   try {
-    const supabase = createClient()
-    
     const { data, error } = await supabase
       .from('consents')
       .select('version, accepted_at')
@@ -81,8 +69,6 @@ export async function hasConsent(
  */
 export async function getUserConsents(userId: string) {
   try {
-    const supabase = createClient()
-    
     const { data, error } = await supabase
       .from('consents')
       .select('*')

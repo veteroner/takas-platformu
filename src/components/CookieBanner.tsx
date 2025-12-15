@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Capacitor } from '@capacitor/core'
-import { createClient } from '@/lib/supabase/client'
+import { supabase } from '@/lib/supabase'
 import { saveConsent } from '@/lib/consent'
 
 export default function CookieBanner() {
@@ -19,7 +19,6 @@ export default function CookieBanner() {
     }
     
     // Kullanıcı bilgisini al
-    const supabase = createClient()
     supabase.auth.getUser().then(({ data }) => {
       if (data.user) {
         setUserId(data.user.id)

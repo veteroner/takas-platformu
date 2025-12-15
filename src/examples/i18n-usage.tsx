@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 // 1. Basic Usage
 function ExampleComponent() {
-  const { t, i18n } = useTranslation('common')
+  const { t } = useTranslation('common')
   
   return (
     <div>

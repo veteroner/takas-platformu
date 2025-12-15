@@ -74,12 +74,12 @@ export const resources = {
 
 i18n
   .use(LanguageDetector)
-  .use(initReactI18next), 'language-selection'
+  .use(initReactI18next)
   .init({
     resources,
     fallbackLng: 'tr',
     defaultNS: 'common',
-    ns: ['common', 'settings', 'profile', 'home'],
+    ns: ['common', 'settings', 'profile', 'home', 'language-selection'],
     
     interpolation: {
       escapeValue: false, // React already escapes by default
