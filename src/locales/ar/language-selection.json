@@ -1,0 +1,13 @@
+{
+  "title": "اختر اللغة",
+  "subtitle": "بأي لغة تريد استخدام التطبيق؟",
+  "languages": {
+    "tr": "Türkçe",
+    "en": "English",
+    "de": "Deutsch",
+    "ar": "العربية",
+    "da": "Dansk"
+  },
+  "continue": "متابعة",
+  "skip": "تخطي"
+}

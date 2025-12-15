@@ -1,0 +1,15 @@
+{
+  "title": "Profil",
+  "edit": "Rediger profil",
+  "stats": {
+    "shared": "Delt",
+    "received": "Modtaget",
+    "rating": "Vurdering"
+  },
+  "joined": "Tilmeldt",
+  "tabs": {
+    "items": "Genstande",
+    "ratings": "Vurderinger",
+    "settings": "Indstillinger"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "title": "Profil",
+  "edit": "Profil bearbeiten",
+  "stats": {
+    "shared": "Geteilt",
+    "received": "Erhalten",
+    "rating": "Bewertung"
+  },
+  "joined": "Beigetreten",
+  "tabs": {
+    "items": "Artikel",
+    "ratings": "Bewertungen",
+    "settings": "Einstellungen"
+  }
+}

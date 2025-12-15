@@ -1,0 +1,40 @@
+{
+  "title": "Einstellungen",
+  "notifications": {
+    "title": "Benachrichtigungen",
+    "push": "Push-Benachrichtigungen",
+    "pushDesc": "Benachrichtigungen über neue Nachrichten und Übereinstimmungen erhalten"
+  },
+  "privacy": {
+    "title": "Datenschutz",
+    "visibility": "Profil-Sichtbarkeit",
+    "public": "Öffentlich",
+    "private": "Privat",
+    "publicDesc": "Ihr Profil ist für alle Benutzer sichtbar",
+    "privateDesc": "Ihr Profil ist nur für Personen sichtbar, mit denen Sie interagiert haben"
+  },
+  "language": {
+    "title": "Sprache",
+    "appLanguage": "App-Sprache",
+    "turkish": "Türkisch",
+    "english": "Englisch",
+    "german": "Deutsch",
+    "arabic": "Arabisch",
+    "danish": "Dänisch"
+  },
+  "theme": {
+    "title": "Thema",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System"
+  },
+  "account": {
+    "title": "Kontoaktionen",
+    "dataPrivacy": "Datenschutz und Sicherheit",
+    "logout": "Abmelden",
+    "deleteAccount": "Konto löschen",
+    "deleteConfirm": "Diese Aktion kann nicht rückgängig gemacht werden. Alle Ihre Daten werden dauerhaft gelöscht. Sind Sie sicher?"
+  },
+  "success": "Einstellungen gespeichert!",
+  "error": "Beim Speichern der Einstellungen ist ein Fehler aufgetreten"
+}

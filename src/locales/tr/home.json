@@ -1,0 +1,11 @@
+{
+  "welcome": "Hoş Geldin",
+  "discover": "Keşfet",
+  "likes": "Beğeniler",
+  "messages": "Mesajlar",
+  "profile": "Profil",
+  "swipeLeft": "Sol kaydır = Beğenmedim",
+  "swipeRight": "Sağ kaydır = Beğendim",
+  "match": "Eşleşme!",
+  "noMoreItems": "Daha fazla ürün yok"
+}

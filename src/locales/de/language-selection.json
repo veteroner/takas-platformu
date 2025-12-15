@@ -1,0 +1,13 @@
+{
+  "title": "Sprache wählen",
+  "subtitle": "In welcher Sprache möchten Sie die App verwenden?",
+  "languages": {
+    "tr": "Türkçe",
+    "en": "English",
+    "de": "Deutsch",
+    "ar": "العربية",
+    "da": "Dansk"
+  },
+  "continue": "Weiter",
+  "skip": "Überspringen"
+}

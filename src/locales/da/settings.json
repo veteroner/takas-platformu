@@ -1,0 +1,40 @@
+{
+  "title": "Indstillinger",
+  "notifications": {
+    "title": "Notifikationer",
+    "push": "Push-notifikationer",
+    "pushDesc": "Modtag notifikationer om nye beskeder og matches"
+  },
+  "privacy": {
+    "title": "Privatliv",
+    "visibility": "Profil synlighed",
+    "public": "Offentlig",
+    "private": "Privat",
+    "publicDesc": "Din profil er synlig for alle brugere",
+    "privateDesc": "Din profil er kun synlig for personer, du har interageret med"
+  },
+  "language": {
+    "title": "Sprog",
+    "appLanguage": "App-sprog",
+    "turkish": "Tyrkisk",
+    "english": "Engelsk",
+    "german": "Tysk",
+    "arabic": "Arabisk",
+    "danish": "Dansk"
+  },
+  "theme": {
+    "title": "Tema",
+    "light": "Lys",
+    "dark": "Mørk",
+    "system": "System"
+  },
+  "account": {
+    "title": "Kontohandlinger",
+    "dataPrivacy": "Databeskyttelse og sikkerhed",
+    "logout": "Log ud",
+    "deleteAccount": "Slet konto",
+    "deleteConfirm": "Denne handling kan ikke fortrydes. Alle dine data vil blive permanent slettet. Er du sikker?"
+  },
+  "success": "Indstillinger gemt!",
+  "error": "Der opstod en fejl under lagring af indstillinger"
+}

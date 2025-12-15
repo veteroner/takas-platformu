@@ -1,0 +1,15 @@
+{
+  "title": "Profil",
+  "edit": "Profili Düzenle",
+  "stats": {
+    "shared": "Paylaşılan",
+    "received": "Alınan",
+    "rating": "Puan"
+  },
+  "joined": "Katılım",
+  "tabs": {
+    "items": "Ürünler",
+    "ratings": "Değerlendirmeler",
+    "settings": "Ayarlar"
+  }
+}

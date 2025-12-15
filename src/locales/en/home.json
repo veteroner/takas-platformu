@@ -1,0 +1,11 @@
+{
+  "welcome": "Welcome",
+  "discover": "Discover",
+  "likes": "Likes",
+  "messages": "Messages",
+  "profile": "Profile",
+  "swipeLeft": "Swipe left = Dislike",
+  "swipeRight": "Swipe right = Like",
+  "match": "It's a Match!",
+  "noMoreItems": "No more items"
+}

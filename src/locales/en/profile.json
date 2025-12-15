@@ -1,0 +1,15 @@
+{
+  "title": "Profile",
+  "edit": "Edit Profile",
+  "stats": {
+    "shared": "Shared",
+    "received": "Received",
+    "rating": "Rating"
+  },
+  "joined": "Joined",
+  "tabs": {
+    "items": "Items",
+    "ratings": "Ratings",
+    "settings": "Settings"
+  }
+}

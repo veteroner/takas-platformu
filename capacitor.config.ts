@@ -5,7 +5,13 @@ const config: CapacitorConfig = {
   appName: 'TakaZone',
   webDir: 'out',
   server: {
-    url: 'https://takazone.com'
+    url: 'https://takazone.com',
+    cleartext: false // HTTP trafiği engelle
+  },
+  ios: {
+    contentInset: 'always',
+    // iOS 10+ uyumluluk için minimum SDK
+    minVersion: '13.0'
   },
   plugins: {
     SplashScreen: {

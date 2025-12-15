@@ -1,0 +1,40 @@
+{
+  "title": "Settings",
+  "notifications": {
+    "title": "Notifications",
+    "push": "Push Notifications",
+    "pushDesc": "Get notified about new messages and matches"
+  },
+  "privacy": {
+    "title": "Privacy",
+    "visibility": "Profile Visibility",
+    "public": "Public",
+    "private": "Private",
+    "publicDesc": "Your profile is visible to all users",
+    "privateDesc": "Your profile is only visible to people you've interacted with"
+  },
+  "language": {
+    "title": "Language",
+    "appLanguage": "App Language",
+    "turkish": "Turkish",
+    "english": "English",
+    "german": "German",
+    "arabic": "Arabic",
+    "danish": "Danish"
+  },
+  "theme": {
+    "title": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "account": {
+    "title": "Account Actions",
+    "dataPrivacy": "Data Privacy and Security",
+    "logout": "Logout",
+    "deleteAccount": "Delete Account",
+    "deleteConfirm": "This action cannot be undone. All your data will be permanently deleted. Are you sure?"
+  },
+  "success": "Settings saved!",
+  "error": "An error occurred while saving settings"
+}

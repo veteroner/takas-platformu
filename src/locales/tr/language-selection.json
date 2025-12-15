@@ -1,0 +1,13 @@
+{
+  "title": "Dil Seçin",
+  "subtitle": "Uygulamayı hangi dilde kullanmak istersiniz?",
+  "languages": {
+    "tr": "Türkçe",
+    "en": "English",
+    "de": "Deutsch",
+    "ar": "العربية",
+    "da": "Dansk"
+  },
+  "continue": "Devam Et",
+  "skip": "Atla"
+}

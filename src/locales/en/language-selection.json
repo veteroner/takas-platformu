@@ -1,0 +1,13 @@
+{
+  "title": "Select Language",
+  "subtitle": "Which language would you like to use the app in?",
+  "languages": {
+    "tr": "Türkçe",
+    "en": "English",
+    "de": "Deutsch",
+    "ar": "العربية",
+    "da": "Dansk"
+  },
+  "continue": "Continue",
+  "skip": "Skip"
+}

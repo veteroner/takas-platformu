@@ -25,14 +25,16 @@
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
-		<true/>
+		<false/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Ürün fotoğrafı çekmek için kameranıza erişmemiz gerekiyor.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Konumunuz sadece uygulama aktifken kullanılır. Yakınındaki takas fırsatlarını gösterir ve size en uygun eşleşmeleri sunar. Konumunuz hiçbir zaman 3. taraflarla paylaşılmaz.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Yakınındaki takas fırsatlarını göstermek için konumunuza erişmemiz gerekiyor.</string>
+	<string>Konumunuz sadece uygulama aktifken kullanılır. Yakınındaki takas fırsatlarını gösterir, size en uygun eşleşmeleri sunar ve mesafe bazlı sıralama yapar. Arka plan konum erişimi kullanılmaz. Konumunuz hiçbir zaman üçüncü taraflarla paylaşılmaz.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Yakınındaki takas fırsatlarını göstermek için konumunuza erişmemiz gerekiyor.</string>
+	<string>Konumunuz sadece uygulama aktifken kullanılır. Yakınındaki takas fırsatlarını gösterir, size en uygun eşleşmeleri sunar ve mesafe bazlı sıralama yapar. Konumunuz hiçbir zaman üçüncü taraflarla paylaşılmaz.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Çektiğiniz fotoğrafları galerinize kaydetmek için izin gerekiyor.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

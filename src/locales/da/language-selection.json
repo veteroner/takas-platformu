@@ -1,0 +1,13 @@
+{
+  "title": "Vælg sprog",
+  "subtitle": "Hvilket sprog vil du bruge appen på?",
+  "languages": {
+    "tr": "Türkçe",
+    "en": "English",
+    "de": "Deutsch",
+    "ar": "العربية",
+    "da": "Dansk"
+  },
+  "continue": "Fortsæt",
+  "skip": "Spring over"
+}

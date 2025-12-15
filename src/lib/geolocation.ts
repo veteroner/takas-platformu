@@ -114,9 +114,9 @@ export async function getCurrentLocation(): Promise<UserLocation | LocationError
     }
 
     const position: Position = await Geolocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 300000 // 5 dakika cache
+      enableHighAccuracy: false, // Şehir seviyesi yeterli, batarya dostu
+      timeout: 5000, // 5 saniye yeterli
+      maximumAge: 60000 // 1 dakika cache
     })
 
     const location: UserLocation = {

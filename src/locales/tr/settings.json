@@ -1,0 +1,40 @@
+{
+  "title": "Ayarlar",
+  "notifications": {
+    "title": "Bildirimler",
+    "push": "Push Bildirimleri",
+    "pushDesc": "Yeni mesajlar ve eşleşmeler için bildirim al"
+  },
+  "privacy": {
+    "title": "Gizlilik",
+    "visibility": "Profil Görünürlüğü",
+    "public": "Herkese Açık",
+    "private": "Gizli",
+    "publicDesc": "Profilin tüm kullanıcılar tarafından görülebilir",
+    "privateDesc": "Profilin sadece etkileşimde bulunduğun kişiler tarafından görülebilir"
+  },
+  "language": {
+    "title": "Dil",
+    "appLanguage": "Uygulama Dili",
+    "turkish": "Türkçe",
+    "english": "İngilizce",
+    "german": "Almanca",
+    "arabic": "Arapça",
+    "danish": "Danca"
+  },
+  "theme": {
+    "title": "Tema",
+    "light": "Açık",
+    "dark": "Koyu",
+    "system": "Sistem"
+  },
+  "account": {
+    "title": "Hesap İşlemleri",
+    "dataPrivacy": "Veri Gizliliği ve Güvenlik",
+    "logout": "Çıkış Yap",
+    "deleteAccount": "Hesabı Sil",
+    "deleteConfirm": "Bu işlem geri alınamaz. Tüm verileriniz kalıcı olarak silinecek. Emin misiniz?"
+  },
+  "success": "Ayarlar kaydedildi!",
+  "error": "Ayarlar kaydedilirken bir hata oluştu"
+}
