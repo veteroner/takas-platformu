@@ -227,7 +227,12 @@ export default function SettingsPage() {
             <label className="block text-white font-medium mb-2">{t('settings:language.appLanguage')}</label>
             <select
               value={settings.language}
-              onChange={(e) => setSettings({...settings, language: e.target.value as 'tr' | 'en' | 'de' | 'ar' | 'da'})}
+              onChange={async (e) => {
+                const newLang = e.target.value as 'tr' | 'en' | 'de' | 'ar' | 'da'
+                setSettings({...settings, language: newLang})
+                await i18n.changeLanguage(newLang)
+                localStorage.setItem('i18nextLng', newLang)
+              }}
               className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white/50"
             >
               <option value="tr" className="bg-purple-600">{t('settings:language.turkish')}</option>
@@ -257,7 +262,12 @@ export default function SettingsPage() {
             return (
               <button
                 key={theme.value}
-                onClick={() => setSettings({...settings, theme: theme.value as any})}
+                onClick={() => {
+                  const newTheme = theme.value as 'light' | 'dark' | 'system'
+                  setSettings({...settings, theme: newTheme})
+                  applyTheme(newTheme)
+                  localStorage.setItem('userPreferences', JSON.stringify({...settings, theme: newTheme}))
+                }}
                 className={`p-4 rounded-2xl border-2 transition-all duration-200 ${
                   settings.theme === theme.value
                     ? 'border-white bg-white/20'
