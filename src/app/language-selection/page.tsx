@@ -20,6 +20,9 @@ export default function LanguageSelectionPage() {
   const [isFirstTime, setIsFirstTime] = useState(false)
 
   useEffect(() => {
+    // i18n'in hazır olmasını bekle
+    if (!i18n.isInitialized) return
+
     // İlk açılış kontrolü
     const hasSelectedLanguage = localStorage.getItem('language-selected')
     
@@ -37,15 +40,18 @@ export default function LanguageSelectionPage() {
     }
   }, [router, i18n])
 
-  const handleLanguageSelect = (langCode: string) => {
+  const handleLanguageSelect = async (langCode: string) => {
     setSelectedLanguage(langCode)
-    i18n.changeLanguage(langCode)
+    await i18n.changeLanguage(langCode)
+    // localStorage'a hemen kaydet
+    localStorage.setItem('i18nextLng', langCode)
   }
 
   const handleContinue = () => {
     // Seçimi kaydet
     localStorage.setItem('language-selected', 'true')
     localStorage.setItem('userLanguage', selectedLanguage)
+    localStorage.setItem('i18nextLng', selectedLanguage)
     
     // Ana sayfaya yönlendir
     router.push('/')
