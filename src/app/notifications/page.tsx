@@ -269,7 +269,7 @@ export default function NotificationsPage() {
                       {notification.title}
                     </h3>
                     {!notification.read && (
-                      <span className="w-2 h-2 bg-pink-500 rounded-full flex-shrink-0 mt-2"></span>
+                      <span className="w-2 h-2 bg-pink-500 rounded-full shrink-0 mt-2"></span>
                     )}
                   </div>
                   <p className={`text-sm mt-1 ${
@@ -315,7 +315,7 @@ export default function NotificationsPage() {
 
   // Mobile Layout
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400">
+    <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-black/20 backdrop-blur-lg border-b border-white/10">
         <div className="flex items-center justify-between px-4 py-4">

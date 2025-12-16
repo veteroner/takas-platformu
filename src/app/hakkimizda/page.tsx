@@ -21,7 +21,7 @@ export default function AboutPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400">
+    <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400">
       <div className="sticky top-0 z-10 bg-black/20 backdrop-blur-lg border-b border-white/10">
         <div className="flex items-center gap-3 px-4 py-4">
           <button onClick={() => router.back()} className="p-2 hover:bg-white/10 rounded-full">
@@ -75,7 +75,7 @@ export default function AboutPage() {
           <ol className="space-y-3">
             {['Kayıt ol ve profil oluştur', 'Ürünlerini yükle', 'Kaydır ve eşleş', 'Mesajlaş ve takas yap'].map((s, i) => (
               <li key={i} className="flex items-center gap-3 text-white/90">
-                <span className="w-7 h-7 bg-gradient-to-r from-pink-500 to-orange-400 rounded-full flex items-center justify-center text-sm font-bold">{i+1}</span>
+                <span className="w-7 h-7 bg-linear-to-r from-pink-500 to-orange-400 rounded-full flex items-center justify-center text-sm font-bold">{i+1}</span>
                 {s}
               </li>
             ))}
@@ -98,7 +98,7 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <Link href="/destek" className="block bg-gradient-to-r from-pink-500 to-orange-400 text-white font-semibold py-4 rounded-2xl text-center">
+        <Link href="/destek" className="block bg-linear-to-r from-pink-500 to-orange-400 text-white font-semibold py-4 rounded-2xl text-center">
           Destek ile İletişime Geç
         </Link>
 

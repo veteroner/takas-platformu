@@ -115,7 +115,7 @@ export default function ProfilePage() {
 
   if (isLoading || !user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center">
         <div className="text-white text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
           <p>Yükleniyor...</p>
@@ -186,7 +186,7 @@ export default function ProfilePage() {
             </div>
             
             {isEditing && (
-              <button className="absolute bottom-0 right-0 bg-gradient-to-r from-pink-500 to-purple-600 text-white p-2 rounded-full shadow-lg hover:shadow-xl transition-shadow">
+              <button className="absolute bottom-0 right-0 bg-linear-to-r from-pink-500 to-purple-600 text-white p-2 rounded-full shadow-lg hover:shadow-xl transition-shadow">
                 <Camera size={16} />
               </button>
             )}
@@ -274,7 +274,7 @@ export default function ProfilePage() {
         {isEditing && (
           <button
             onClick={handleSave}
-            className="w-full py-3 bg-gradient-to-r from-green-500 to-blue-600 text-white font-semibold rounded-xl hover:from-green-600 hover:to-blue-700 transition-all duration-200 shadow-lg"
+            className="w-full py-3 bg-linear-to-r from-green-500 to-blue-600 text-white font-semibold rounded-xl hover:from-green-600 hover:to-blue-700 transition-all duration-200 shadow-lg"
           >
             Değişiklikleri Kaydet
           </button>
@@ -284,7 +284,7 @@ export default function ProfilePage() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 text-center border border-white/20">
-          <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mx-auto mb-3">
+          <div className="flex items-center justify-center w-12 h-12 bg-linear-to-r from-blue-500 to-purple-600 rounded-full mx-auto mb-3">
             <Package size={24} className="text-white" />
           </div>
           <div className="text-2xl font-bold text-white">{stats.sharedItems}</div>
@@ -292,7 +292,7 @@ export default function ProfilePage() {
         </div>
 
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 text-center border border-white/20">
-          <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-green-500 to-teal-600 rounded-full mx-auto mb-3">
+          <div className="flex items-center justify-center w-12 h-12 bg-linear-to-r from-green-500 to-teal-600 rounded-full mx-auto mb-3">
             <Gift size={24} className="text-white" />
           </div>
           <div className="text-2xl font-bold text-white">{stats.receivedItems}</div>
@@ -300,7 +300,7 @@ export default function ProfilePage() {
         </div>
 
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 text-center border border-white/20">
-          <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-full mx-auto mb-3">
+          <div className="flex items-center justify-center w-12 h-12 bg-linear-to-r from-yellow-500 to-orange-600 rounded-full mx-auto mb-3">
             <Star size={24} className="text-white" />
           </div>
           <div className="text-2xl font-bold text-white">{stats.rating.toFixed(1)}</div>
@@ -401,7 +401,7 @@ export default function ProfilePage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Link
           href="/preferences"
-          className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 backdrop-blur-lg rounded-2xl p-6 hover:from-yellow-500/30 hover:to-orange-500/30 transition-colors border border-yellow-500/30 text-center"
+          className="bg-linear-to-br from-yellow-500/20 to-orange-500/20 backdrop-blur-lg rounded-2xl p-6 hover:from-yellow-500/30 hover:to-orange-500/30 transition-colors border border-yellow-500/30 text-center"
         >
           <Sparkles className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
           <div className="text-white font-semibold">Akıllı Eşleştirme</div>
@@ -453,7 +453,7 @@ export default function ProfilePage() {
               <div className="space-y-3">
                 <Link
                   href="/upload"
-                  className="flex items-center gap-3 p-3 bg-gradient-to-r from-pink-500/20 to-purple-600/20 hover:from-pink-500/30 hover:to-purple-600/30 rounded-xl text-white transition-colors"
+                  className="flex items-center gap-3 p-3 bg-linear-to-r from-pink-500/20 to-purple-600/20 hover:from-pink-500/30 hover:to-purple-600/30 rounded-xl text-white transition-colors"
                 >
                   <Package className="w-5 h-5" />
                   <span>Yeni Ürün Ekle</span>
@@ -474,7 +474,7 @@ export default function ProfilePage() {
                 </Link>
                 <Link
                   href="/preferences"
-                  className="flex items-center gap-3 p-3 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 hover:from-yellow-500/30 hover:to-orange-500/30 rounded-xl text-white transition-colors"
+                  className="flex items-center gap-3 p-3 bg-linear-to-r from-yellow-500/20 to-orange-500/20 hover:from-yellow-500/30 hover:to-orange-500/30 rounded-xl text-white transition-colors"
                 >
                   <Sparkles className="w-5 h-5 text-yellow-400" />
                   <span>Eşleştirme Tercihlerim</span>
@@ -523,7 +523,7 @@ export default function ProfilePage() {
   // Mobil görünüm
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400">
+    <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">

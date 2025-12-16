@@ -138,7 +138,7 @@ export default function DesktopGridView({
                   )}
 
                   {/* Hover Actions */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4 gap-3">
+                  <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4 gap-3">
                     <button
                       onClick={(e) => {
                         e.stopPropagation()
@@ -153,7 +153,7 @@ export default function DesktopGridView({
                         e.stopPropagation()
                         onLike(item)
                       }}
-                      className="p-3 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full shadow-lg hover:from-pink-600 hover:to-rose-600 transition-colors"
+                      className="p-3 bg-linear-to-r from-pink-500 to-rose-500 rounded-full shadow-lg hover:from-pink-600 hover:to-rose-600 transition-colors"
                     >
                       <Heart className="w-5 h-5 text-white" fill="white" />
                     </button>
@@ -183,7 +183,7 @@ export default function DesktopGridView({
 
                   {/* Kullanıcı Bilgisi */}
                   <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-r from-pink-400 to-purple-400 flex items-center justify-center text-white text-xs font-medium">
+                    <div className="w-6 h-6 rounded-full bg-linear-to-r from-pink-400 to-purple-400 flex items-center justify-center text-white text-xs font-medium">
                       {item.owner?.name?.[0]?.toUpperCase() || '?'}
                     </div>
                     <span className="text-xs text-gray-600 truncate flex-1">{item.owner?.name || 'Anonim'}</span>
@@ -283,7 +283,7 @@ export default function DesktopGridView({
               {/* Kullanıcı Kartı */}
               <div className="bg-gray-50 rounded-xl p-4 mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-pink-400 to-purple-400 flex items-center justify-center text-white text-lg font-bold">
+                  <div className="w-12 h-12 rounded-full bg-linear-to-r from-pink-400 to-purple-400 flex items-center justify-center text-white text-lg font-bold">
                     {selectedItem.owner?.name?.[0]?.toUpperCase() || '?'}
                   </div>
                   <div className="flex-1">
@@ -331,7 +331,7 @@ export default function DesktopGridView({
               </button>
               <button
                 onClick={handleLikeSelected}
-                className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl font-medium hover:from-pink-600 hover:to-rose-600 transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-linear-to-r from-pink-500 to-rose-500 text-white rounded-xl font-medium hover:from-pink-600 hover:to-rose-600 transition-colors"
               >
                 <Heart className="w-5 h-5" />
                 Beğen

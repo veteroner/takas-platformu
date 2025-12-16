@@ -148,7 +148,7 @@ export default function MatchingPreferencesPage() {
   const Content = () => (
     <div className="space-y-6">
       {/* Başlık */}
-      <div className="bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl p-6 text-white">
+      <div className="bg-linear-to-r from-pink-500 to-purple-600 rounded-2xl p-6 text-white">
         <h1 className="text-2xl font-bold mb-2">🎯 Akıllı Eşleştirme</h1>
         <p className="text-white/80">Tercihlerini belirle, sana uygun ürünleri öncelikli gör!</p>
       </div>
@@ -301,7 +301,7 @@ export default function MatchingPreferencesPage() {
               onClick={() => toggleCategory(cat.value)}
               className={`py-3 px-4 rounded-xl font-medium transition-all ${
                 preferences.preferredCategories.includes(cat.value)
-                  ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white'
+                  ? 'bg-linear-to-r from-pink-500 to-purple-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -372,7 +372,7 @@ export default function MatchingPreferencesPage() {
         className={`w-full py-4 rounded-xl font-bold text-white transition-all flex items-center justify-center gap-2 ${
           saved 
             ? 'bg-green-500' 
-            : 'bg-gradient-to-r from-pink-500 to-purple-600 hover:opacity-90'
+            : 'bg-linear-to-r from-pink-500 to-purple-600 hover:opacity-90'
         }`}
       >
         {saving ? (

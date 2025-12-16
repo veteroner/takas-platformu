@@ -17,7 +17,7 @@ export function UnreadBadge({ userId, className = '' }: UnreadBadgeProps) {
   }
 
   return (
-    <span className={`absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1.5 ${className}`}>
+    <span className={`absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-5 h-5 flex items-center justify-center px-1.5 ${className}`}>
       {unreadCount > 99 ? '99+' : unreadCount}
     </span>
   )
@@ -44,7 +44,7 @@ export function MatchUnreadBadge({ matchId, userId, className = '' }: MatchUnrea
   }
 
   return (
-    <span className={`bg-red-500 text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1.5 ${className}`}>
+    <span className={`bg-red-500 text-white text-xs font-bold rounded-full min-w-5 h-5 flex items-center justify-center px-1.5 ${className}`}>
       {count > 99 ? '99+' : count}
     </span>
   )

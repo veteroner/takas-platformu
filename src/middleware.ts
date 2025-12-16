@@ -51,6 +51,27 @@ function getRouteLimit(pathname: string): { max: number; windowMs: number } {
   return ROUTE_LIMITS['default']
 }
 
+function getClientIp(req: NextRequest): string {
+  const headerCandidates = [
+    'x-forwarded-for',
+    'x-real-ip',
+    'cf-connecting-ip',
+    'x-client-ip',
+    'fastly-client-ip'
+  ]
+
+  for (const headerName of headerCandidates) {
+    const value = req.headers.get(headerName)
+    if (!value) continue
+
+    // x-forwarded-for can be a comma-separated list; first is original client
+    const first = value.split(',')[0]?.trim()
+    if (first) return first
+  }
+
+  return 'unknown'
+}
+
 export function middleware(req: NextRequest) {
   // Only apply to API routes
   if (!req.nextUrl.pathname.startsWith('/api')) return NextResponse.next()
@@ -59,7 +80,7 @@ export function middleware(req: NextRequest) {
   const { max, windowMs } = getRouteLimit(pathname)
 
   // Create unique key: IP + User + Route category
-  const ip = req.ip || req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+  const ip = getClientIp(req)
   const user = req.headers.get('x-user-id') || 'anon'
   const routeKey = Object.keys(ROUTE_LIMITS).find(r => r !== 'default' && pathname.startsWith(r)) || 'default'
   const key = `${ip}:${user}:${routeKey}`

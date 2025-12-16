@@ -128,7 +128,7 @@ export function BlockReportModal({
             <div className="space-y-4">
               <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
                 <div className="flex items-start gap-3">
-                  <AlertTriangle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
+                  <AlertTriangle className="w-5 h-5 text-orange-600 shrink-0 mt-0.5" />
                   <div className="text-sm text-orange-800">
                     <p className="font-semibold mb-1">Engelleme sonuçları:</p>
                     <ul className="list-disc list-inside space-y-1">
@@ -175,7 +175,7 @@ export function BlockReportModal({
             <div className="space-y-4">
               <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                 <div className="flex items-start gap-3">
-                  <Shield className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                  <Shield className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
                   <p className="text-sm text-red-800">
                     Şikayetiniz gizli kalacak ve ekibimiz tarafından incelenecek.
                     Ciddi ihlallerde kullanıcı hesabı askıya alınabilir.

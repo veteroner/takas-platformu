@@ -278,14 +278,14 @@ export default function HomePage() {
   }, [handleSwipe])
 
   return (
-    <div className="min-h-[100dvh] bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex flex-col">
+    <div className="min-h-dvh bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 flex flex-col">
       {/* Header - Desktop için genişletilmiş, Mobil için kompakt */}
-      <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe flex-shrink-0 sticky top-0 z-50">
+      <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe shrink-0 sticky top-0 z-50">
         <div className={`mx-auto px-4 py-3 pt-10 md:pt-3 flex items-center justify-between ${isDesktop ? 'max-w-7xl' : 'max-w-md'}`}>
           {/* Logo */}
           <div className="flex items-center gap-2">
             <TakaIcon className="w-7 h-7 text-purple-600" />
-            <h1 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-lg font-bold bg-linear-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
               TakaZone
             </h1>
           </div>
@@ -325,7 +325,7 @@ export default function HomePage() {
                   </>
                 )}
                 
-                <Link href="/upload" className={`${isDesktop ? 'flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all shadow-md' : 'p-2 hover:bg-gray-100 rounded-full transition-colors'}`}>
+                <Link href="/upload" className={`${isDesktop ? 'flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all shadow-md' : 'p-2 hover:bg-gray-100 rounded-full transition-colors'}`}>
                   <Plus className={`${isDesktop ? 'w-5 h-5' : 'w-5 h-5 text-gray-600'}`} />
                   {isDesktop && <span>Ürün Ekle</span>}
                 </Link>
@@ -370,7 +370,7 @@ export default function HomePage() {
             ) : (
               <Link 
                 href="/login"
-                className="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg text-sm"
+                className="flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg text-sm"
               >
                 <LogIn size={16} />
                 Giriş Yap
@@ -391,7 +391,7 @@ export default function HomePage() {
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                     isSelected
-                      ? `bg-gradient-to-r ${cat.color} text-white shadow-md scale-105`
+                      ? `bg-linear-to-r ${cat.color} text-white shadow-md scale-105`
                       : 'bg-white/70 text-gray-700 hover:bg-white hover:shadow-sm border border-gray-100'
                   }`}
                 >
@@ -410,8 +410,8 @@ export default function HomePage() {
         <main className="flex-1 overflow-auto">
           <DesktopGridView
             items={filteredItems}
-            likedItems={likedItems}
-            passedItems={passedItems}
+            likedItems={likedItems.map(i => i.id)}
+            passedItems={passedItems.map(i => i.id)}
             onLike={handleDesktopLike}
             onPass={handleDesktopPass}
             isLoading={isLoading}
@@ -420,7 +420,7 @@ export default function HomePage() {
           {/* Login CTA for Desktop */}
           {!user && (
             <div className="max-w-7xl mx-auto px-6 py-8">
-              <div className="text-center bg-gradient-to-r from-pink-50 to-purple-50 border border-purple-100 rounded-2xl p-8">
+              <div className="text-center bg-linear-to-r from-pink-50 to-purple-50 border border-purple-100 rounded-2xl p-8">
                 <h2 className="text-2xl font-bold text-gray-800 mb-3">Takas Yapmaya Hazır mısın? 🔄</h2>
                 <p className="text-gray-600 mb-6 max-w-md mx-auto">
                   Giriş yap ve binlerce ürün arasından sana uygun olanları bul. 
@@ -428,7 +428,7 @@ export default function HomePage() {
                 </p>
                 <Link 
                   href="/login"
-                  className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg font-medium"
+                  className="inline-flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-8 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg font-medium"
                 >
                   <LogIn size={20} />
                   Ücretsiz Kayıt Ol
@@ -452,7 +452,7 @@ export default function HomePage() {
           </div>
 
           {/* Stats - Kompakt */}
-          <div className="flex gap-3 py-3 flex-shrink-0">
+          <div className="flex gap-3 py-3 shrink-0">
           <button 
             onClick={() => setShowLikedItems(!showLikedItems)}
             className="flex-1 bg-white/70 backdrop-blur-sm rounded-xl py-2.5 px-4 text-center border border-white/20 hover:bg-white/90 transition-all flex items-center justify-center gap-2"
@@ -532,11 +532,11 @@ export default function HomePage() {
 
           {/* Login CTA (sadece giriş yapmamış kullanıcılar için) */}
           {!user && (
-            <div className="text-center bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 flex-shrink-0">
+            <div className="text-center bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 shrink-0">
               <p className="text-gray-600 mb-3 text-sm">Takas yapmak için giriş yap</p>
               <Link 
                 href="/login"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-5 py-2 rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg text-sm"
+                className="inline-flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-5 py-2 rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg text-sm"
               >
                 <LogIn size={16} />
                 Giriş Yap
@@ -548,7 +548,7 @@ export default function HomePage() {
 
       {/* Bottom Navigation - Sadece Mobil */}
       {isMobile && (
-        <nav className="bg-white/95 backdrop-blur-md border-t border-gray-200 px-2 py-1.5 pb-safe flex-shrink-0">
+        <nav className="bg-white/95 backdrop-blur-md border-t border-gray-200 px-2 py-1.5 pb-safe shrink-0">
           <div className="max-w-md mx-auto flex justify-around items-center pb-2">
             <button className="flex flex-col items-center py-1 px-3 text-purple-600">
               <Heart className="w-5 h-5 fill-current" />
@@ -561,7 +561,7 @@ export default function HomePage() {
                   <span className="text-[10px] mt-0.5">Ürünlerim</span>
                 </Link>
                 <Link href="/upload" className="flex flex-col items-center py-1 px-3 text-gray-400">
-                  <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-2 rounded-full -mt-4 shadow-lg">
+                  <div className="bg-linear-to-r from-pink-500 to-purple-600 p-2 rounded-full -mt-4 shadow-lg">
                     <Plus className="w-5 h-5 text-white" />
                   </div>
                   <span className="text-[10px] mt-0.5">Yükle</span>

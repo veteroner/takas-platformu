@@ -72,7 +72,7 @@ export default function UserRatingsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center">
         <div className="text-white text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
           <p>Yükleniyor...</p>
@@ -82,7 +82,7 @@ export default function UserRatingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 pb-20">
+    <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 pb-20">
       {/* Header */}
       <div className="bg-white/10 backdrop-blur-lg border-b border-white/20 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-3">
@@ -209,7 +209,7 @@ export default function UserRatingsPage() {
                 {rating.comment && (
                   <div className="bg-white/10 rounded-xl p-3 mt-3">
                     <div className="flex items-start gap-2">
-                      <MessageSquare className="w-4 h-4 text-white/60 flex-shrink-0 mt-0.5" />
+                      <MessageSquare className="w-4 h-4 text-white/60 shrink-0 mt-0.5" />
                       <p className="text-white/90 text-sm leading-relaxed">
                         {rating.comment}
                       </p>

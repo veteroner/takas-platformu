@@ -64,6 +64,7 @@ export default function UploadPage() {
     description: '',
     category: '',
     condition: '',
+    ageGroup: '',
     estimatedValue: '',
     city: '' // Ürünün bulunduğu şehir
   })
@@ -643,7 +644,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
       </h3>
       <div className="space-y-4">
         <div className="flex gap-3">
-          <div className="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center shrink-0">
             <Camera className="w-4 h-4 text-pink-600" />
           </div>
           <div>
@@ -652,7 +653,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
           </div>
         </div>
         <div className="flex gap-3">
-          <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center shrink-0">
             <Info className="w-4 h-4 text-purple-600" />
           </div>
           <div>
@@ -661,7 +662,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
           </div>
         </div>
         <div className="flex gap-3">
-          <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center shrink-0">
             <Package className="w-4 h-4 text-indigo-600" />
           </div>
           <div>
@@ -670,7 +671,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
           </div>
         </div>
         <div className="flex gap-3">
-          <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center shrink-0">
             <Sparkles className="w-4 h-4 text-green-600" />
           </div>
           <div>
@@ -681,7 +682,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
       </div>
       
       <div className="mt-6 pt-4 border-t border-gray-100">
-        <div className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-4">
+        <div className="bg-linear-to-r from-pink-50 to-purple-50 rounded-xl p-4">
           <p className="text-xs text-gray-600 mb-2">
             <strong>📌 Hatırlatma:</strong> Yasadışı, tehlikeli veya uygunsuz içerikler yasaktır.
           </p>
@@ -695,7 +696,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
 
   if (uploadSuccess) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
             <Check className="w-10 h-10 text-white" />
@@ -716,7 +717,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
           <div className="col-span-2">
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-8">
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center">
+                <div className="w-10 h-10 bg-linear-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center">
                   <Upload className="w-5 h-5 text-white" />
                 </div>
                 Yeni Ürün Ekle
@@ -878,7 +879,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                 </div>
 
                 {/* Seek Preferences */}
-                <div className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-6">
+                <div className="bg-linear-to-r from-pink-50 to-purple-50 rounded-xl p-6">
                   <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
                     <Sparkles className="w-5 h-5 text-purple-500" />
                     Ne ile takas etmek istersiniz?
@@ -900,7 +901,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                           onClick={() => toggleSeekCategory(cat)}
                           className={`p-3 rounded-xl border-2 transition-all text-center ${
                             seekCategories.includes(cat)
-                              ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white border-transparent'
+                              ? 'bg-linear-to-r from-pink-500 to-purple-600 text-white border-transparent'
                               : 'bg-white border-gray-200 hover:border-pink-300'
                           }`}
                         >
@@ -917,7 +918,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                 <button
                   type="submit"
                   disabled={isUploading || images.length === 0 || (lastResult !== null && !lastResult.isClean)}
-                  className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-4 rounded-xl font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-lg"
+                  className="w-full bg-linear-to-r from-pink-500 to-purple-600 text-white py-4 rounded-xl font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-lg"
                 >
                   {isUploading ? (
                     <>
@@ -958,14 +959,14 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
 
   // Mobile Layout
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
+    <div className="min-h-screen bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
         <div className="max-w-md mx-auto px-4 py-4 pt-12 md:pt-4 flex items-center gap-3">
           <Link href="/" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
             <ArrowLeft className="w-6 h-6 text-gray-600" />
           </Link>
-          <h1 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-xl font-bold bg-linear-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
             Ürün Yükle
           </h1>
         </div>
@@ -1073,7 +1074,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                     type="button"
                     onClick={handleCameraCapture}
                     disabled={isOptimizing}
-                    className="flex-1 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg flex flex-col items-center justify-center text-xs font-semibold hover:shadow-lg transition-all disabled:opacity-50"
+                    className="flex-1 bg-linear-to-r from-pink-500 to-purple-600 text-white rounded-lg flex flex-col items-center justify-center text-xs font-semibold hover:shadow-lg transition-all disabled:opacity-50"
                   >
                     <Camera className="w-5 h-5 mb-1" />
                     Kamera
@@ -1353,7 +1354,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
           <button
             type="submit"
             disabled={isUploading || images.length === 0 || (lastResult !== null && !lastResult.isClean)}
-            className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-4 rounded-xl font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full bg-linear-to-r from-pink-500 to-purple-600 text-white py-4 rounded-xl font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {isUploading ? (
               <>

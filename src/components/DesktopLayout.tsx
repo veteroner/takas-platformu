@@ -12,7 +12,7 @@ interface DesktopLayoutProps {
   title?: string
   showBackButton?: boolean
   showSearch?: boolean
-  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '4xl' | '7xl'
+  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '4xl' | '6xl' | '7xl'
   centerContent?: boolean
 }
 
@@ -42,6 +42,7 @@ export default function DesktopLayout({
     xl: 'max-w-xl',
     '2xl': 'max-w-2xl',
     '4xl': 'max-w-4xl',
+    '6xl': 'max-w-6xl',
     '7xl': 'max-w-7xl'
   }
 
@@ -51,7 +52,7 @@ export default function DesktopLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400">
+    <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400">
       {/* Desktop/Tablet Header */}
       <header className="bg-white/10 backdrop-blur-md border-b border-white/20 sticky top-0 z-50">
         <div className={`${maxWidthClasses[maxWidth]} mx-auto px-4 lg:px-8`}>
@@ -67,7 +68,7 @@ export default function DesktopLayout({
                 </button>
               )}
               <Link href="/feed" className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-orange-400 rounded-xl flex items-center justify-center shadow-lg">
+                <div className="w-10 h-10 bg-linear-to-br from-pink-500 to-orange-400 rounded-xl flex items-center justify-center shadow-lg">
                   <span className="text-white font-bold text-lg">T</span>
                 </div>
                 <span className="text-white font-bold text-xl hidden lg:block">TakaZone</span>
@@ -149,7 +150,7 @@ export function DesktopSidebar() {
   return (
     <aside className="hidden lg:flex flex-col w-64 bg-white/10 backdrop-blur-md border-r border-white/20 min-h-screen p-4">
       <Link href="/feed" className="flex items-center gap-3 mb-8">
-        <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-orange-400 rounded-xl flex items-center justify-center shadow-lg">
+        <div className="w-12 h-12 bg-linear-to-br from-pink-500 to-orange-400 rounded-xl flex items-center justify-center shadow-lg">
           <span className="text-white font-bold text-xl">T</span>
         </div>
         <span className="text-white font-bold text-2xl">TakaZone</span>
@@ -178,7 +179,7 @@ export function DesktopSidebar() {
       <div className="mt-auto">
         <Link 
           href="/upload"
-          className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gradient-to-r from-pink-500 to-orange-400 text-white rounded-xl font-semibold hover:opacity-90 transition-opacity shadow-lg"
+          className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-linear-to-r from-pink-500 to-orange-400 text-white rounded-xl font-semibold hover:opacity-90 transition-opacity shadow-lg"
         >
           <Upload className="w-5 h-5" />
           <span>Ürün Ekle</span>

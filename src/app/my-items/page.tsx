@@ -171,7 +171,7 @@ export default function MyItemsPage() {
       return (
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all group">
           {/* Image */}
-          <div className="relative aspect-square bg-gradient-to-br from-pink-100 to-purple-100">
+          <div className="relative aspect-square bg-linear-to-br from-pink-100 to-purple-100">
             {item.images && item.images.length > 0 ? (
               <Image
                 src={item.images[0]}
@@ -236,7 +236,7 @@ export default function MyItemsPage() {
       <div className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-all">
         <div className="flex gap-4">
           {/* Image */}
-          <div className="relative w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-gradient-to-br from-pink-100 to-purple-100">
+          <div className="relative w-24 h-24 rounded-lg overflow-hidden shrink-0 bg-linear-to-br from-pink-100 to-purple-100">
             {item.images && item.images.length > 0 ? (
               <Image
                 src={item.images[0]}
@@ -383,7 +383,7 @@ export default function MyItemsPage() {
               </button>
               <button
                 onClick={handleSaveEdit}
-                className="flex-1 px-4 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg font-semibold hover:from-pink-600 hover:to-purple-700 transition-all shadow-md"
+                className="flex-1 px-4 py-3 bg-linear-to-r from-pink-500 to-purple-600 text-white rounded-lg font-semibold hover:from-pink-600 hover:to-purple-700 transition-all shadow-md"
               >
                 Kaydet
               </button>
@@ -430,7 +430,7 @@ export default function MyItemsPage() {
             
             <Link
               href="/upload"
-              className="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-5 py-3 rounded-xl font-semibold hover:from-pink-600 hover:to-purple-700 transition-all shadow-lg"
+              className="flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-5 py-3 rounded-xl font-semibold hover:from-pink-600 hover:to-purple-700 transition-all shadow-lg"
             >
               <Plus className="w-5 h-5" />
               Yeni Ürün Ekle
@@ -445,7 +445,7 @@ export default function MyItemsPage() {
             <p className="text-gray-600 mb-6">İlk ürününüzü ekleyerek takas yapmaya başlayın!</p>
             <Link
               href="/upload"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg"
+              className="inline-flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg"
             >
               <Plus className="w-5 h-5" /> Ürün Ekle
             </Link>
@@ -469,7 +469,7 @@ export default function MyItemsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Ürünler yükleniyor...</p>
@@ -481,7 +481,7 @@ export default function MyItemsPage() {
   // Mobil görünüm
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
+    <div className="min-h-screen bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
         <div className="max-w-4xl mx-auto px-4 py-4 pt-12 md:pt-4 flex items-center justify-between">
@@ -489,13 +489,13 @@ export default function MyItemsPage() {
             <Link href="/" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
               <ArrowLeft className="w-6 h-6 text-gray-600" />
             </Link>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-xl font-bold bg-linear-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
               Ürünlerim
             </h1>
           </div>
           <Link
             href="/upload"
-            className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:from-pink-600 hover:to-purple-700 transition-all"
+            className="bg-linear-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:from-pink-600 hover:to-purple-700 transition-all"
           >
             + Yeni Ürün
           </Link>
@@ -510,7 +510,7 @@ export default function MyItemsPage() {
             <p className="text-gray-600 mb-6">İlk ürününüzü ekleyerek takas yapmaya başlayın!</p>
             <Link
               href="/upload"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg"
+              className="inline-flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg"
             >
               Ürün Ekle
             </Link>

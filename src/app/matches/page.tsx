@@ -176,7 +176,7 @@ export default function MatchesPage() {
     } as any)
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50">
     <div className="text-center">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
       <p className="text-gray-600">Yükleniyor...</p>
@@ -185,7 +185,7 @@ export default function MatchesPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50">
         <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-8 text-center">
           <h2 className="text-xl font-semibold mb-2">Eşleşmeleri görmek için giriş yap</h2>
           <Link href="/login" className="inline-block mt-2 bg-purple-600 text-white px-4 py-2 rounded-lg">Giriş</Link>
@@ -341,14 +341,14 @@ export default function MatchesPage() {
   // Mobil görünüm
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
+    <div className="min-h-screen bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50">
       <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
         <div className="max-w-md mx-auto px-4 py-4 pt-12 md:pt-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
               <ArrowLeft className="w-6 h-6 text-gray-600" />
             </Link>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Eşleşmeler</h1>
+            <h1 className="text-xl font-bold bg-linear-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Eşleşmeler</h1>
           </div>
         </div>
       </header>

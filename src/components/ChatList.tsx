@@ -134,7 +134,7 @@ export default function ChatList() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Yükleniyor...</p>
@@ -173,8 +173,8 @@ export default function ChatList() {
         className="block bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 hover:bg-white/90 hover:shadow-md transition-all"
       >
         <div className="flex items-center gap-3">
-          <div className="relative flex-shrink-0">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold">
+          <div className="relative shrink-0">
+            <div className="w-12 h-12 rounded-full bg-linear-to-r from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold">
               {otherUser?.name?.charAt(0).toUpperCase() || '?'}
             </div>
             <MatchUnreadBadge
@@ -187,7 +187,7 @@ export default function ChatList() {
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between gap-2 mb-1">
               <h3 className="font-semibold text-gray-900 truncate">{otherUser?.name || 'Kullanıcı'}</h3>
-              <span className="text-xs text-gray-500 flex-shrink-0">
+              <span className="text-xs text-gray-500 shrink-0">
                 {new Date(lastMessageTime).toLocaleDateString('tr-TR', { 
                   day: 'numeric', 
                   month: 'short',
@@ -252,7 +252,7 @@ export default function ChatList() {
           {/* Sağ panel - Hoş geldin mesajı */}
           <div className="hidden lg:flex lg:col-span-2 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-white/20 items-center justify-center">
             <div className="text-center p-8">
-              <div className="w-24 h-24 bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="w-24 h-24 bg-linear-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <MessageCircle className="w-12 h-12 text-purple-500" />
               </div>
               <h2 className="text-2xl font-bold text-gray-800 mb-2">Mesajlarınız</h2>
@@ -262,7 +262,7 @@ export default function ChatList() {
               </p>
               <Link
                 href="/feed"
-                className="inline-block mt-6 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg"
+                className="inline-block mt-6 bg-linear-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg"
               >
                 Yeni Ürün Keşfet
               </Link>
@@ -276,7 +276,7 @@ export default function ChatList() {
   // Mobil görünüm (mevcut tasarım)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:to-black">
+    <div className="min-h-screen bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:to-black">
       <div className="w-full max-w-md lg:max-w-lg xl:max-w-xl mx-auto">
         {/* Header */}
         <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
@@ -284,7 +284,7 @@ export default function ChatList() {
             <Link href="/" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
               <ArrowLeft className="w-6 h-6 text-gray-600" />
             </Link>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-xl font-bold bg-linear-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
               Mesajlar
             </h1>
           </div>
@@ -313,8 +313,8 @@ export default function ChatList() {
                     className="block bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 hover:bg-white/80 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="relative flex-shrink-0">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                      <div className="relative shrink-0">
+                        <div className="w-12 h-12 rounded-full bg-linear-to-r from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold">
                           {otherUser?.name?.charAt(0).toUpperCase() || '?'}
                         </div>
                         {/* Okunmamış mesaj badge'i */}
@@ -328,7 +328,7 @@ export default function ChatList() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2 mb-1">
                           <h3 className="font-semibold text-gray-900 truncate">{otherUser?.name || 'Kullanıcı'}</h3>
-                          <span className="text-xs text-gray-500 flex-shrink-0">
+                          <span className="text-xs text-gray-500 shrink-0">
                             {new Date(lastMessageTime).toLocaleDateString('tr-TR', { 
                               day: 'numeric', 
                               month: 'short',
@@ -363,7 +363,7 @@ export default function ChatList() {
               </p>
               <Link
                 href="/"
-                className="inline-block mt-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg"
+                className="inline-block mt-4 bg-linear-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg"
               >
                 Keşfetmeye Başla
               </Link>

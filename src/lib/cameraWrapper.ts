@@ -7,7 +7,12 @@ import { Capacitor } from '@capacitor/core'
 import { logger } from './logger'
 
 // Type imports only (won't be included in bundle)
-import type { CameraResultType as CameraResultTypeEnum, CameraSource as CameraSourceEnum, Photo } from '@capacitor/camera'
+import type {
+  CameraResultType as CameraResultTypeEnum,
+  CameraSource as CameraSourceEnum,
+  ImageOptions,
+  Photo
+} from '@capacitor/camera'
 
 const CATEGORY = 'CAMERA'
 
@@ -37,16 +42,7 @@ async function getCameraModule() {
   }
 }
 
-export interface CameraOptions {
-  quality?: number
-  allowEditing?: boolean
-  resultType?: typeof CameraResultTypeEnum
-  source?: typeof CameraSourceEnum
-  saveToGallery?: boolean
-  correctOrientation?: boolean
-  width?: number
-  height?: number
-}
+export interface CameraOptions extends Partial<ImageOptions> {}
 
 /**
  * Check camera permissions
@@ -176,7 +172,7 @@ export async function takePhoto(options?: CameraOptions): Promise<Photo | null> 
     logger.info(CATEGORY, 'Step 2: Permissions OK, opening camera...')
     
     // Default options
-    const defaultOptions = {
+    const defaultOptions: ImageOptions = {
       quality: 90,
       allowEditing: false,
       resultType: cameraModule.CameraResultType.DataUrl, // DataUrl ensures webPath is always available
@@ -267,7 +263,7 @@ export async function pickImage(options?: CameraOptions): Promise<Photo | null> 
     logger.info(CATEGORY, 'Step 2: Permissions OK, opening gallery...')
     
     // Default options
-    const defaultOptions = {
+    const defaultOptions: ImageOptions = {
       quality: 90,
       allowEditing: false,
       resultType: cameraModule.CameraResultType.DataUrl, // DataUrl ensures webPath is always available
