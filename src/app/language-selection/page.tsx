@@ -3,9 +3,22 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
+import type { i18n as I18nInstance } from 'i18next'
 import { Globe, Check } from 'lucide-react'
 import { getClientStorageItem, setClientStorageItem } from '@/lib/clientStorage'
 import { clearAuthTokens } from '@/lib/auth'
+
+async function waitForI18nReady(instance: I18nInstance): Promise<void> {
+  if (instance.isInitialized) return
+
+  await new Promise<void>((resolve) => {
+    const handleInitialized = () => {
+      instance.off('initialized', handleInitialized)
+      resolve()
+    }
+    instance.on('initialized', handleInitialized)
+  })
+}
 
 const LANGUAGES = [
   { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
@@ -20,7 +33,29 @@ export default function LanguageSelectionPage() {
   const { t, i18n } = useTranslation('language-selection')
   const [selectedLanguage, setSelectedLanguage] = useState<string>('tr')
   const [isFirstTime, setIsFirstTime] = useState(false)
-  const [isI18nReady, setIsI18nReady] = useState(false)
+  const [isI18nReady, setIsI18nReady] = useState<boolean>(i18n.isInitialized)
+  const [, forceRender] = useState(0)
+
+  useEffect(() => {
+    const handleInitialized = () => {
+      setIsI18nReady(true)
+      forceRender(v => v + 1)
+    }
+
+    const handleLanguageChanged = () => {
+      forceRender(v => v + 1)
+    }
+
+    if (i18n.isInitialized) setIsI18nReady(true)
+
+    i18n.on('initialized', handleInitialized)
+    i18n.on('languageChanged', handleLanguageChanged)
+
+    return () => {
+      i18n.off('initialized', handleInitialized)
+      i18n.off('languageChanged', handleLanguageChanged)
+    }
+  }, [i18n])
 
   useEffect(() => {
     // Auth token'larını temizle (refresh token hatalarını önlemek için)
@@ -38,13 +73,14 @@ export default function LanguageSelectionPage() {
       const browserLang = navigator.language.split('-')[0]
       if (LANGUAGES.some(lang => lang.code === browserLang)) {
         setSelectedLanguage(browserLang)
-        if (i18n.isInitialized) {
-          i18n.changeLanguage(browserLang).then(() => setIsI18nReady(true)).catch(() => setIsI18nReady(true))
-        } else {
-          setIsI18nReady(true)
-        }
-      } else {
-        setIsI18nReady(true)
+        void (async () => {
+          try {
+            await waitForI18nReady(i18n)
+            await i18n.changeLanguage(browserLang)
+          } catch {
+            // ignore
+          }
+        })()
       }
     }
   }, [router, i18n])
@@ -53,12 +89,10 @@ export default function LanguageSelectionPage() {
     setSelectedLanguage(langCode)
     // i18n dil değişikliğini yap ve localStorage'a kaydet
     try {
+      await waitForI18nReady(i18n)
       await i18n.changeLanguage(langCode)
       setClientStorageItem('i18nextLng', langCode)
       setClientStorageItem('userLanguage', langCode)
-      // Force re-render to update UI
-      setIsI18nReady(false)
-      setTimeout(() => setIsI18nReady(true), 50)
     } catch (error) {
       console.error('Language change error:', error)
     }
@@ -114,7 +148,7 @@ export default function LanguageSelectionPage() {
           {LANGUAGES.map((lang) => (
             <button
               key={lang.code}
-              onClick={() => handleLanguageSelect(lang.code)}
+              onClick={() => void handleLanguageSelect(lang.code)}
               className={`w-full flex items-center justify-between p-4 rounded-xl transition-all ${
                 selectedLanguage === lang.code
                   ? 'bg-linear-to-r from-pink-500 to-purple-600 text-white shadow-lg scale-105'
@@ -124,7 +158,7 @@ export default function LanguageSelectionPage() {
               <div className="flex items-center gap-3">
                 <span className="text-3xl">{lang.flag}</span>
                 <span className={`font-medium ${lang.rtl ? 'text-right' : ''}`}>
-                  {lang.name}
+                  {t(`languages.${lang.code}`, { defaultValue: lang.name })}
                 </span>
               </div>
               
