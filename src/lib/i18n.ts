@@ -1,6 +1,5 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import LanguageDetector from 'i18next-browser-languagedetector'
 
 // Import translation files
 import commonTR from '@/locales/tr/common.json'
@@ -72,23 +71,73 @@ export const resources = {
   },
 } as const
 
+type SupportedLanguage = keyof typeof resources
+
+const SUPPORTED_LANGUAGES: SupportedLanguage[] = ['tr', 'en', 'de', 'ar', 'da']
+
+function safeGetCookieValue(key: string): string | null {
+  if (typeof document === 'undefined') return null
+
+  const cookies = document.cookie ? document.cookie.split('; ') : []
+  for (const cookie of cookies) {
+    const eqIdx = cookie.indexOf('=')
+    const k = eqIdx >= 0 ? cookie.slice(0, eqIdx) : cookie
+    if (k === key) {
+      const v = eqIdx >= 0 ? cookie.slice(eqIdx + 1) : ''
+      try {
+        return decodeURIComponent(v)
+      } catch {
+        return v
+      }
+    }
+  }
+  return null
+}
+
+function safeGetLocalStorageItem(key: string): string | null {
+  if (typeof window === 'undefined') return null
+  try {
+    return window.localStorage.getItem(key)
+  } catch {
+    return null
+  }
+}
+
+function normalizeLanguage(input: string | null | undefined): SupportedLanguage | null {
+  if (!input) return null
+  const normalized = input.toLowerCase().split('-')[0] as SupportedLanguage
+  return SUPPORTED_LANGUAGES.includes(normalized) ? normalized : null
+}
+
+function detectInitialLanguage(): SupportedLanguage {
+  // 1) localStorage (may throw on iOS Safari / Private mode)
+  const fromLocalStorage = normalizeLanguage(safeGetLocalStorageItem('i18nextLng'))
+  if (fromLocalStorage) return fromLocalStorage
+
+  // 2) cookie fallback (works when localStorage is blocked)
+  const fromCookie = normalizeLanguage(safeGetCookieValue('i18nextLng'))
+  if (fromCookie) return fromCookie
+
+  // 3) browser language
+  if (typeof navigator !== 'undefined') {
+    const fromNavigator = normalizeLanguage(navigator.language)
+    if (fromNavigator) return fromNavigator
+  }
+
+  return 'tr'
+}
+
 i18n
-  .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources,
+    lng: detectInitialLanguage(),
     fallbackLng: 'tr',
     defaultNS: 'common',
     ns: ['common', 'settings', 'profile', 'home', 'language-selection'],
     
     interpolation: {
       escapeValue: false, // React already escapes by default
-    },
-    
-    detection: {
-      order: ['localStorage', 'navigator'],
-      caches: ['localStorage'],
-      lookupLocalStorage: 'i18nextLng',
     },
     
     react: {
