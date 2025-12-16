@@ -20,6 +20,7 @@ export default function LanguageSelectionPage() {
   const { t, i18n } = useTranslation('language-selection')
   const [selectedLanguage, setSelectedLanguage] = useState<string>('tr')
   const [isFirstTime, setIsFirstTime] = useState(false)
+  const [isI18nReady, setIsI18nReady] = useState(false)
 
   useEffect(() => {
     // Auth token'larını temizle (refresh token hatalarını önlemek için)
@@ -38,18 +39,29 @@ export default function LanguageSelectionPage() {
       if (LANGUAGES.some(lang => lang.code === browserLang)) {
         setSelectedLanguage(browserLang)
         if (i18n.isInitialized) {
-          void i18n.changeLanguage(browserLang)
+          i18n.changeLanguage(browserLang).then(() => setIsI18nReady(true)).catch(() => setIsI18nReady(true))
+        } else {
+          setIsI18nReady(true)
         }
+      } else {
+        setIsI18nReady(true)
       }
     }
   }, [router, i18n])
 
-  const handleLanguageSelect = (langCode: string) => {
+  const handleLanguageSelect = async (langCode: string) => {
     setSelectedLanguage(langCode)
-    // i18n dil değişikliğini yap (async ama beklemiyoruz)
-    i18n.changeLanguage(langCode).catch(() => {
-      // ignore errors
-    })
+    // i18n dil değişikliğini yap ve localStorage'a kaydet
+    try {
+      await i18n.changeLanguage(langCode)
+      setClientStorageItem('i18nextLng', langCode)
+      setClientStorageItem('userLanguage', langCode)
+      // Force re-render to update UI
+      setIsI18nReady(false)
+      setTimeout(() => setIsI18nReady(true), 50)
+    } catch (error) {
+      console.error('Language change error:', error)
+    }
   }
 
   const handleContinue = () => {
@@ -70,7 +82,7 @@ export default function LanguageSelectionPage() {
     router.push('/')
   }
 
-  if (!isFirstTime) {
+  if (!isFirstTime || !isI18nReady) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-pink-500 to-purple-600">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
