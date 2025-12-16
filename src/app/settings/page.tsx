@@ -98,7 +98,7 @@ export default function SettingsPage() {
 
   if (isLoading || !user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center">
         <div className="text-white text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
           <p>{t('common:loading')}</p>
@@ -181,7 +181,7 @@ export default function SettingsPage() {
                 onChange={(e) => setSettings({...settings, notifications: e.target.checked})}
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-green-500 peer-checked:to-blue-600"></div>
+              <div className="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-linear-to-r peer-checked:from-green-500 peer-checked:to-blue-600"></div>
             </label>
           </div>
         </div>
@@ -352,7 +352,7 @@ export default function SettingsPage() {
             <h1 className="text-3xl font-bold text-white">{t('settings:title')}</h1>
             <button
               onClick={handleSave}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl transition-all duration-200 shadow-lg"
+              className="inline-flex items-center gap-2 bg-linear-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl transition-all duration-200 shadow-lg"
             >
               <Save size={20} />
               {t('common:save')}
@@ -368,7 +368,7 @@ export default function SettingsPage() {
   // Mobil görünüm
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400">
+    <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -382,7 +382,7 @@ export default function SettingsPage() {
           
           <button
             onClick={handleSave}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-4 py-2 rounded-xl transition-all duration-200 shadow-lg"
+            className="inline-flex items-center gap-2 bg-linear-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-4 py-2 rounded-xl transition-all duration-200 shadow-lg"
           >
             <Save size={16} />
             {t('common:save')}

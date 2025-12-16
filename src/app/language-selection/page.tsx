@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { Globe, Check } from 'lucide-react'
+import { getClientStorageItem, setClientStorageItem } from '@/lib/clientStorage'
 
 const LANGUAGES = [
   { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
@@ -20,11 +21,8 @@ export default function LanguageSelectionPage() {
   const [isFirstTime, setIsFirstTime] = useState(false)
 
   useEffect(() => {
-    // i18n'in hazır olmasını bekle
-    if (!i18n.isInitialized) return
-
     // İlk açılış kontrolü
-    const hasSelectedLanguage = localStorage.getItem('language-selected')
+    const hasSelectedLanguage = getClientStorageItem('language-selected')
     
     if (hasSelectedLanguage) {
       // Daha önce seçim yapılmış, ana sayfaya yönlendir
@@ -35,23 +33,29 @@ export default function LanguageSelectionPage() {
       const browserLang = navigator.language.split('-')[0]
       if (LANGUAGES.some(lang => lang.code === browserLang)) {
         setSelectedLanguage(browserLang)
-        i18n.changeLanguage(browserLang)
+        if (i18n.isInitialized) {
+          void i18n.changeLanguage(browserLang)
+        }
       }
     }
   }, [router, i18n])
 
   const handleLanguageSelect = async (langCode: string) => {
     setSelectedLanguage(langCode)
-    await i18n.changeLanguage(langCode)
-    // localStorage'a hemen kaydet
-    localStorage.setItem('i18nextLng', langCode)
+    try {
+      await i18n.changeLanguage(langCode)
+    } catch {
+      // ignore
+    }
+    // Hemen kaydet (localStorage yoksa cookie)
+    setClientStorageItem('i18nextLng', langCode)
   }
 
   const handleContinue = () => {
     // Seçimi kaydet
-    localStorage.setItem('language-selected', 'true')
-    localStorage.setItem('userLanguage', selectedLanguage)
-    localStorage.setItem('i18nextLng', selectedLanguage)
+    setClientStorageItem('language-selected', 'true')
+    setClientStorageItem('userLanguage', selectedLanguage)
+    setClientStorageItem('i18nextLng', selectedLanguage)
     
     // Ana sayfaya yönlendir
     router.push('/')
@@ -59,25 +63,26 @@ export default function LanguageSelectionPage() {
 
   const handleSkip = () => {
     // Varsayılan dil ile devam et
-    localStorage.setItem('language-selected', 'true')
-    localStorage.setItem('userLanguage', 'tr')
+    setClientStorageItem('language-selected', 'true')
+    setClientStorageItem('userLanguage', 'tr')
+    setClientStorageItem('i18nextLng', 'tr')
     router.push('/')
   }
 
   if (!isFirstTime) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-500 to-purple-600">
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-pink-500 to-purple-600">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-pink-500 to-purple-600 flex items-center justify-center p-4">
       <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl w-full max-w-md p-8">
         {/* Icon */}
         <div className="flex justify-center mb-6">
-          <div className="w-20 h-20 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
+          <div className="w-20 h-20 bg-linear-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
             <Globe className="w-10 h-10 text-white" />
           </div>
         </div>
@@ -99,7 +104,7 @@ export default function LanguageSelectionPage() {
               onClick={() => handleLanguageSelect(lang.code)}
               className={`w-full flex items-center justify-between p-4 rounded-xl transition-all ${
                 selectedLanguage === lang.code
-                  ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg scale-105'
+                  ? 'bg-linear-to-r from-pink-500 to-purple-600 text-white shadow-lg scale-105'
                   : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700'
               }`}
             >
@@ -121,7 +126,7 @@ export default function LanguageSelectionPage() {
         <div className="space-y-3">
           <button
             onClick={handleContinue}
-            className="w-full py-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
+            className="w-full py-4 bg-linear-to-r from-pink-500 to-purple-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
           >
             {t('continue')}
           </button>

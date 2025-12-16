@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
+import { getClientStorageItem } from '@/lib/clientStorage'
 
 /**
  * İlk açılışta kullanıcıyı dil seçim sayfasına yönlendir
@@ -26,7 +27,7 @@ export default function LanguageGuard({ children }: { children: React.ReactNode 
     }
 
     // Daha önce dil seçimi yapılmış mı kontrol et
-    const hasSelectedLanguage = localStorage.getItem('language-selected')
+    const hasSelectedLanguage = getClientStorageItem('language-selected')
     
     if (!hasSelectedLanguage) {
       // İlk açılış - dil seçimine yönlendir
@@ -39,7 +40,7 @@ export default function LanguageGuard({ children }: { children: React.ReactNode 
   // Yönlendirme sırasında boş ekran göster
   if (!isReady) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-pink-500 to-purple-600 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
       </div>
     )
