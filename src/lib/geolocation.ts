@@ -1,4 +1,6 @@
-import { Geolocation, Position } from '@capacitor/geolocation'
+import { Geolocation } from '@capacitor/geolocation'
+
+type CapacitorPosition = Awaited<ReturnType<typeof Geolocation.getCurrentPosition>>
 
 export interface UserLocation {
   latitude: number
@@ -112,7 +114,7 @@ export async function getCurrentLocation(): Promise<UserLocation | LocationError
       }
     }
 
-    const position: Position = await Geolocation.getCurrentPosition({
+    const position: CapacitorPosition = await Geolocation.getCurrentPosition({
       enableHighAccuracy: false, // Şehir seviyesi yeterli, batarya dostu
       timeout: 5000, // 5 saniye yeterli
       maximumAge: 60000 // 1 dakika cache
