@@ -93,8 +93,19 @@ export default function LanguageSelectionPage() {
       await i18n.changeLanguage(langCode)
       setClientStorageItem('i18nextLng', langCode)
       setClientStorageItem('userLanguage', langCode)
+
+      // Robust fallback: if i18n didn't actually switch, reload to re-init from storage.
+      const current = (i18n.language || '').toLowerCase().split('-')[0]
+      if (current !== langCode) {
+        window.location.reload()
+        return
+      }
     } catch (error) {
       console.error('Language change error:', error)
+      // If changeLanguage fails for any reason, reload after persisting selection.
+      setClientStorageItem('i18nextLng', langCode)
+      setClientStorageItem('userLanguage', langCode)
+      window.location.reload()
     }
   }
 
