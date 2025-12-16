@@ -28,5 +28,18 @@
   "add": "Add",
   "submit": "Submit",
   "retry": "Retry",
-  "continue": "Continue"
+  "continue": "Continue",
+  "welcomePage": {
+    "subtitle1": "Swap the items you no longer need",
+    "subtitle2": "Swap, discover new things! 🎁",
+    "features": {
+      "fastMatch": { "title": "Quick Matches", "desc": "Swipe, like, and swap!" },
+      "safePlatform": { "title": "Safe Platform", "desc": "Verified users" },
+      "community": { "title": "Community", "desc": "Thousands of active users" }
+    },
+    "ctaPrimary": "Start Exploring",
+    "login": "Log In",
+    "signup": "Sign Up",
+    "footerNote": "Free, easy, and fun! 🚀"
+  }
 }

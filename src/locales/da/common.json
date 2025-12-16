@@ -28,5 +28,18 @@
   "add": "Tilføj",
   "submit": "Indsend",
   "retry": "Prøv igen",
-  "continue": "Fortsæt"
+  "continue": "Fortsæt",
+  "welcomePage": {
+    "subtitle1": "Byt ting, du ikke længere har brug for",
+    "subtitle2": "Byt og opdag nye ting! 🎁",
+    "features": {
+      "fastMatch": { "title": "Hurtigt match", "desc": "Swipe, like og byt!" },
+      "safePlatform": { "title": "Sikker platform", "desc": "Verificerede brugere" },
+      "community": { "title": "Fællesskab", "desc": "Tusindvis af aktive brugere" }
+    },
+    "ctaPrimary": "Kom i gang",
+    "login": "Log ind",
+    "signup": "Opret konto",
+    "footerNote": "Gratis, nemt og sjovt! 🚀"
+  }
 }

@@ -1,6 +1,36 @@
 import { supabase } from './supabase'
 import type { User } from './supabase'
 
+/**
+ * Clear all Supabase auth tokens to prevent refresh token errors
+ */
+export function clearAuthTokens(): void {
+  try {
+    // Clear localStorage tokens
+    if (typeof window !== 'undefined') {
+      const keysToRemove = []
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i)
+        if (key && (key.includes('sb-') || key.includes('supabase'))) {
+          keysToRemove.push(key)
+        }
+      }
+      keysToRemove.forEach(key => localStorage.removeItem(key))
+      
+      // Clear cookies
+      document.cookie.split(";").forEach(cookie => {
+        const eqPos = cookie.indexOf("=")
+        const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie
+        if (name.trim().includes('sb-') || name.trim().includes('supabase')) {
+          document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/"
+        }
+      })
+    }
+  } catch (error) {
+    console.log('Could not clear auth tokens:', error)
+  }
+}
+
 export interface AuthUser {
   id: string
   email: string
@@ -54,33 +84,43 @@ export async function signOut() {
  * Get current user
  */
 export async function getCurrentUser(): Promise<AuthUser | null> {
-  const { data: { user } } = await supabase.auth.getUser()
-  
-  if (!user) return null
-
-  // Get user profile from database
-  const { data: profile, error } = await supabase
-    .from('users')
-    .select('*')
-    .eq('id', user.id)
-    .single()
-
-  if (error) {
-    console.error('Error fetching user profile:', error)
-    return {
-      id: user.id,
-      email: user.email!,
-      name: user.user_metadata.name || 'User',
-      created_at: user.created_at
+  try {
+    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    
+    // Auth hatası varsa null döndür (invalid token vs.)
+    if (userError || !user) {
+      return null
     }
-  }
 
-  return {
-    id: profile.id,
-    email: profile.email,
-    name: profile.name,
-    avatar: profile.avatar_url,
-    created_at: profile.created_at
+    // Get user profile from database
+    const { data: profile, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', user.id)
+      .single()
+
+    if (error) {
+      console.error('Error fetching user profile:', error)
+      // Profile bulunamazsa temel user bilgilerini döndür
+      return {
+        id: user.id,
+        email: user.email!,
+        name: user.user_metadata.name || 'User',
+        created_at: user.created_at
+      }
+    }
+
+    return {
+      id: profile.id,
+      email: profile.email,
+      name: profile.name,
+      avatar: profile.avatar_url,
+      created_at: profile.created_at
+    }
+  } catch (error) {
+    // Tüm auth hatalarını yakala ve null döndür
+    console.error('Auth error in getCurrentUser:', error)
+    return null
   }
 }
 
@@ -119,8 +159,20 @@ export async function getUserItems(userId: string) {
  * Check if user is authenticated
  */
 export async function isAuthenticated(): Promise<boolean> {
-  const { data: { session } } = await supabase.auth.getSession()
-  return !!session
+  try {
+    const { data: { session }, error } = await supabase.auth.getSession()
+    
+    // Token geçersizse false döndür
+    if (error) {
+      console.error('Auth session error:', error)
+      return false
+    }
+    
+    return !!session
+  } catch (error) {
+    console.error('Auth check error:', error)
+    return false
+  }
 }
 
 /**

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import CookieBanner from "@/components/CookieBanner";
@@ -11,6 +11,7 @@ import NetworkProvider from "@/components/NetworkProvider";
 import SplashScreenManager from "@/components/SplashScreenManager";
 import I18nProvider from "@/components/I18nProvider";
 import LanguageGuard from "@/components/LanguageGuard";
+import HtmlLangDir from "@/components/HtmlLangDir";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -66,22 +67,23 @@ export const metadata: Metadata = {
     ]
   },
   manifest: '/manifest.json',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-    viewportFit: 'cover'
-  },
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#EC4899' },
-    { media: '(prefers-color-scheme: dark)', color: '#8B5CF6' }
-  ],
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
     title: 'TakaZone'
   }
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#EC4899' },
+    { media: '(prefers-color-scheme: dark)', color: '#8B5CF6' }
+  ]
 };
 
 export default function RootLayout({
@@ -107,6 +109,7 @@ export default function RootLayout({
       >
         <I18nProvider>
           <NetworkProvider>
+            <HtmlLangDir />
             <SplashScreenManager />
             <ConsentGuard />
             <VersionGate />

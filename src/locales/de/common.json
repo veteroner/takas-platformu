@@ -28,5 +28,18 @@
   "add": "Hinzufügen",
   "submit": "Absenden",
   "retry": "Wiederholen",
-  "continue": "Fortfahren"
+  "continue": "Fortfahren",
+  "welcomePage": {
+    "subtitle1": "Tausche Dinge, die du nicht mehr brauchst",
+    "subtitle2": "Tauschen, Neues entdecken! 🎁",
+    "features": {
+      "fastMatch": { "title": "Schnelles Match", "desc": "Wischen, liken, tauschen!" },
+      "safePlatform": { "title": "Sichere Plattform", "desc": "Verifizierte Nutzer" },
+      "community": { "title": "Community", "desc": "Tausende aktive Nutzer" }
+    },
+    "ctaPrimary": "Jetzt entdecken",
+    "login": "Anmelden",
+    "signup": "Registrieren",
+    "footerNote": "Kostenlos, einfach und macht Spaß! 🚀"
+  }
 }

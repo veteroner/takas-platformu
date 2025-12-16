@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { Globe, Check } from 'lucide-react'
 import { getClientStorageItem, setClientStorageItem } from '@/lib/clientStorage'
+import { clearAuthTokens } from '@/lib/auth'
 
 const LANGUAGES = [
   { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
@@ -21,6 +22,9 @@ export default function LanguageSelectionPage() {
   const [isFirstTime, setIsFirstTime] = useState(false)
 
   useEffect(() => {
+    // Auth token'larını temizle (refresh token hatalarını önlemek için)
+    clearAuthTokens()
+
     // İlk açılış kontrolü
     const hasSelectedLanguage = getClientStorageItem('language-selected')
     
@@ -40,15 +44,12 @@ export default function LanguageSelectionPage() {
     }
   }, [router, i18n])
 
-  const handleLanguageSelect = async (langCode: string) => {
+  const handleLanguageSelect = (langCode: string) => {
     setSelectedLanguage(langCode)
-    try {
-      await i18n.changeLanguage(langCode)
-    } catch {
-      // ignore
-    }
-    // Hemen kaydet (localStorage yoksa cookie)
-    setClientStorageItem('i18nextLng', langCode)
+    // i18n dil değişikliğini yap (async ama beklemiyoruz)
+    i18n.changeLanguage(langCode).catch(() => {
+      // ignore errors
+    })
   }
 
   const handleContinue = () => {

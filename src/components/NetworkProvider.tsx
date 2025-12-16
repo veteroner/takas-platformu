@@ -103,7 +103,7 @@ function FullOfflineScreen({ onRetry }: { onRetry: () => Promise<boolean> }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="fixed inset-0 z-100 flex items-center justify-center bg-linear-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Background effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl animate-pulse" />
@@ -112,7 +112,7 @@ function FullOfflineScreen({ onRetry }: { onRetry: () => Promise<boolean> }) {
 
       <div className="relative z-10 max-w-md mx-4 text-center">
         {/* Icon */}
-        <div className="mb-8 inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-red-500/20 to-orange-500/20 backdrop-blur-sm border border-red-500/30 animate-pulse">
+        <div className="mb-8 inline-flex items-center justify-center w-24 h-24 rounded-full bg-linear-to-br from-red-500/20 to-orange-500/20 backdrop-blur-sm border border-red-500/30 animate-pulse">
           <svg className="w-12 h-12 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636a9 9 0 010 12.728m0 0l-12.728-12.728m12.728 12.728L5.636 5.636m12.728 0a9 9 0 010 12.728M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01" />
           </svg>
@@ -134,7 +134,7 @@ function FullOfflineScreen({ onRetry }: { onRetry: () => Promise<boolean> }) {
         <button
           onClick={handleRetry}
           disabled={isRetrying}
-          className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          className="group inline-flex items-center gap-3 px-8 py-4 bg-linear-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
         >
           <svg 
             className={`w-5 h-5 transition-transform duration-500 ${isRetrying ? 'animate-spin' : 'group-hover:rotate-180'}`}

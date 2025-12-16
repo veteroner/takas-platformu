@@ -79,7 +79,10 @@ export default function OneSignalCapacitorInit() {
           
           console.log('🎉 OneSignal başarıyla başlatıldı!')
         } else {
-          console.log('⚠️ OneSignal plugin bulunamadı')
+          // OneSignal plugin not available - silent in development
+          if (process.env.NODE_ENV !== 'development') {
+            console.log('⚠️ OneSignal plugin bulunamadı')
+          }
         }
       } catch (error) {
         console.error('❌ OneSignal hatası:', error)

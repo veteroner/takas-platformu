@@ -28,5 +28,18 @@
   "add": "Ekle",
   "submit": "Gönder",
   "retry": "Tekrar Dene",
-  "continue": "Devam Et"
+  "continue": "Devam Et",
+  "welcomePage": {
+    "subtitle1": "İhtiyacın Olmayan Eşyalarını",
+    "subtitle2": "Takas Et, Yeni Şeyler Keşfet! 🎁",
+    "features": {
+      "fastMatch": { "title": "Hızlı Eşleşme", "desc": "Kaydır, beğen, takas yap!" },
+      "safePlatform": { "title": "Güvenli Platform", "desc": "Doğrulanmış kullanıcılar" },
+      "community": { "title": "Topluluk", "desc": "Binlerce aktif kullanıcı" }
+    },
+    "ctaPrimary": "Keşfetmeye Başla",
+    "login": "Giriş Yap",
+    "signup": "Kayıt Ol",
+    "footerNote": "Ücretsiz, kolay ve eğlenceli! 🚀"
+  }
 }

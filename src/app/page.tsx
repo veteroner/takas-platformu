@@ -7,8 +7,10 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { getCurrentUser } from '@/lib/auth'
 import { CompactFooter } from '@/components/Footer'
+import { useTranslation } from 'react-i18next'
 
 export default function WelcomePage() {
+  const { t } = useTranslation('common')
   
   const [isVisible, setIsVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -37,7 +39,7 @@ export default function WelcomePage() {
       <div className="min-h-screen bg-linear-to-br from-pink-500 via-purple-500 to-indigo-600 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-white animate-spin mx-auto mb-4" />
-          <p className="text-white/80">Yükleniyor...</p>
+          <p className="text-white/80">{t('loading')}</p>
         </div>
       </div>
     )
@@ -69,10 +71,10 @@ export default function WelcomePage() {
           TakaZone
         </h1>
         <p className="text-xl text-white/90 mb-2 font-medium">
-          İhtiyacın Olmayan Eşyalarını
+          {t('welcomePage.subtitle1')}
         </p>
         <p className="text-2xl text-white font-bold mb-8">
-          Takas Et, Yeni Şeyler Keşfet! 🎁
+          {t('welcomePage.subtitle2')}
         </p>
 
         <div className="space-y-4 mb-10 text-left">
@@ -81,8 +83,8 @@ export default function WelcomePage() {
               <Heart className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-white font-semibold">Hızlı Eşleşme</p>
-              <p className="text-white/80 text-sm">Kaydır, beğen, takas yap!</p>
+              <p className="text-white font-semibold">{t('welcomePage.features.fastMatch.title')}</p>
+              <p className="text-white/80 text-sm">{t('welcomePage.features.fastMatch.desc')}</p>
             </div>
           </div>
 
@@ -91,8 +93,8 @@ export default function WelcomePage() {
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-white font-semibold">Güvenli Platform</p>
-              <p className="text-white/80 text-sm">Doğrulanmış kullanıcılar</p>
+              <p className="text-white font-semibold">{t('welcomePage.features.safePlatform.title')}</p>
+              <p className="text-white/80 text-sm">{t('welcomePage.features.safePlatform.desc')}</p>
             </div>
           </div>
 
@@ -101,8 +103,8 @@ export default function WelcomePage() {
               <Users className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-white font-semibold">Topluluk</p>
-              <p className="text-white/80 text-sm">Binlerce aktif kullanıcı</p>
+              <p className="text-white font-semibold">{t('welcomePage.features.community.title')}</p>
+              <p className="text-white/80 text-sm">{t('welcomePage.features.community.desc')}</p>
             </div>
           </div>
         </div>
@@ -111,22 +113,22 @@ export default function WelcomePage() {
           href="/feed"
           className="group w-full bg-white text-purple-600 font-bold text-lg py-5 rounded-2xl shadow-2xl hover:shadow-white/50 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 mb-6"
         >
-          <span>Keşfetmeye Başla</span>
+          <span>{t('welcomePage.ctaPrimary')}</span>
           <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
         </Link>
         
         <div className="flex items-center justify-center gap-4 text-white/90">
           <Link href="/login" className="hover:text-white transition-colors font-medium">
-            Giriş Yap
+            {t('welcomePage.login')}
           </Link>
           <span className="text-white/50">•</span>
           <Link href="/login" className="hover:text-white transition-colors font-medium">
-            Kayıt Ol
+            {t('welcomePage.signup')}
           </Link>
         </div>
 
         <p className="mt-8 text-white/60 text-sm">
-          Ücretsiz, kolay ve eğlenceli! 🚀
+          {t('welcomePage.footerNote')}
         </p>
 
         {/* Footer */}
