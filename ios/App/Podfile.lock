@@ -93,16 +93,16 @@ EXTERNAL SOURCES:
     :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
-  Capacitor: b4741ca7affb32c1b70debd03df92cbf522d8a80
-  CapacitorApp: 846d4b4a1dbb19dd1e9029c08ba6f028aa7be862
-  CapacitorCamera: 6e18d54c8ab30d7dc7b8cd93d96f9b4f57e9202a
+  Capacitor: 28d6c01026a9a3f7156529498ec1f389a2a28dbc
+  CapacitorApp: 26587c2ce485d88ddb39adb21cac64f8e481afe3
+  CapacitorCamera: f9e54db0a18bb218a8dc360907d63aaefe9209ff
   CapacitorCordova: 435121e81a2df4d0034f0fb11fcefab5104cfdb5
-  CapacitorGeolocation: 0f143aec09027ee55ff5b0aa2e9e7fe9a180f01b
-  CapacitorSplashScreen: d06ae8804808e9f649a08e7bb7f283c77b688084
-  CordovaPluginsStatic: f522a8ad00f2c511cb933e08f8cc399667bef222
+  CapacitorGeolocation: a65213fef581c7b8c5d486abbd5a6d00192a179e
+  CapacitorSplashScreen: e388b8e0ed0e982a9d3a40417f478e7a018a8763
+  CordovaPluginsStatic: e1d03a74c8a31ac3ac8e39ebeee5ce33f0e5e941
   IONGeolocationLib: 20f9d0248a0b5264511fb57a37e25dd2badf797a
   OneSignalXCFramework: 7112f3e89563e41ebc23fe807788f11985ac541c
 
-PODFILE CHECKSUM: dea1d7b61a785aea371556087d3187c810c5e124
+PODFILE CHECKSUM: a3d78db75090efac243792b7d09bca330cbf1836
 
 COCOAPODS: 1.16.2
