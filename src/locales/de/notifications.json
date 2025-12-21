@@ -1,0 +1,19 @@
+{
+  "title": "Benachrichtigungen",
+  "noNotifications": "Noch keine Benachrichtigungen",
+  "noNotificationsDesc": "Ihre neuen Benachrichtigungen werden hier angezeigt",
+  "markAllRead": "Alle als Gelesen Markieren",
+  "newMatch": "Neues Match!",
+  "newMessage": "Neue Nachricht",
+  "offerReceived": "Angebot erhalten",
+  "offerAccepted": "Ihr Angebot wurde angenommen",
+  "offerRejected": "Ihr Angebot wurde abgelehnt",
+  "itemLiked": "Ihr Artikel wurde geliked",
+  "tradeCompleted": "Tausch abgeschlossen",
+  "today": "Heute",
+  "yesterday": "Gestern",
+  "thisWeek": "Diese Woche",
+  "older": "Älter",
+  "deleteAll": "Alle Löschen",
+  "settings": "Benachrichtigungseinstellungen"
+}

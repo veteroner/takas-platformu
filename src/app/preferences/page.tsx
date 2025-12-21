@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { ArrowLeft, Save, Baby, Ruler, MapPin, Check } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { saveUserMatchingPreferences, getUserMatchingPreferences } from '@/lib/matchingService'
 import DesktopLayout from '@/components/DesktopLayout'
@@ -25,6 +26,7 @@ const cities = [
 ]
 
 export default function MatchingPreferencesPage() {
+  const { t } = useTranslation('preferences')
   const router = useRouter()
   const { isMobile } = useDeviceType()
   const [userId, setUserId] = useState<string | null>(null)
@@ -150,19 +152,19 @@ export default function MatchingPreferencesPage() {
       {/* Başlık */}
       <div className="bg-linear-to-r from-pink-500 to-purple-600 rounded-2xl p-6 text-white">
         <h1 className="text-2xl font-bold mb-2">🎯 Akıllı Eşleştirme</h1>
-        <p className="text-white/80">Tercihlerini belirle, sana uygun ürünleri öncelikli gör!</p>
+        <p className="text-white/80">{t('subtitle')}</p>
       </div>
 
       {/* Kendi Beden Bilgilerin */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
           <Ruler className="w-5 h-5 text-pink-500" />
-          Kıyafet Bedenim
+          {t('mySize')}
         </h2>
         
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm text-gray-600 mb-2">Beden</label>
+            <label className="block text-sm text-gray-600 mb-2">{t('size')}</label>
             <div className="flex flex-wrap gap-2">
               {sizes.map(size => (
                 <button
@@ -234,7 +236,7 @@ export default function MatchingPreferencesPage() {
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
           <Baby className="w-5 h-5 text-purple-500" />
-          Çocuk Bilgileri (Oyuncak eşleştirmesi için)
+          {t('childInfo')}
         </h2>
         
         <label className="flex items-center gap-3 mb-4">
@@ -244,7 +246,7 @@ export default function MatchingPreferencesPage() {
             onChange={(e) => setPreferences(prev => ({ ...prev, hasChildren: e.target.checked }))}
             className="w-5 h-5 text-purple-500 rounded"
           />
-          <span className="text-gray-700">Çocuğum var</span>
+            <span className="text-gray-700">{t('hasChildren')}</span>
         </label>
 
         {preferences.hasChildren && (
@@ -282,7 +284,7 @@ export default function MatchingPreferencesPage() {
               onClick={addChild}
               className="w-full py-2 border-2 border-dashed border-purple-300 text-purple-600 rounded-xl hover:bg-purple-50"
             >
-              + Çocuk Ekle
+              {t('addChild')}
             </button>
           </div>
         )}
@@ -291,7 +293,7 @@ export default function MatchingPreferencesPage() {
       {/* Tercih Edilen Kategoriler */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <h2 className="text-lg font-semibold text-gray-800 mb-4">
-          🏷️ İlgilendiğim Kategoriler
+          {t('preferredCategories')}
         </h2>
         <div className="grid grid-cols-2 gap-2">
           {categories.map(cat => (
@@ -315,12 +317,12 @@ export default function MatchingPreferencesPage() {
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
           <MapPin className="w-5 h-5 text-green-500" />
-          Lokasyon Tercihi
+          {t('locationPreference')}
         </h2>
         
         <div className="space-y-4">
           <div>
-            <label className="block text-sm text-gray-600 mb-2">Tercih Edilen Şehir</label>
+            <label className="block text-sm text-gray-600 mb-2">{t('preferredCity')}</label>
             <select
               value={preferences.preferredCity}
               onChange={(e) => setPreferences(prev => ({ ...prev, preferredCity: e.target.value }))}
@@ -340,7 +342,7 @@ export default function MatchingPreferencesPage() {
               onChange={(e) => setPreferences(prev => ({ ...prev, acceptShipping: e.target.checked }))}
               className="w-5 h-5 text-green-500 rounded"
             />
-            <span className="text-gray-700">Kargo ile gönderim kabul ediyorum</span>
+            <span className="text-gray-700">{t('acceptShipping')}</span>
           </label>
         </div>
       </div>
@@ -348,7 +350,7 @@ export default function MatchingPreferencesPage() {
       {/* Minimum Durum */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <h2 className="text-lg font-semibold text-gray-800 mb-4">
-          ⭐ Minimum Ürün Durumu
+          {t('minCondition')}
         </h2>
         <input
           type="range"
@@ -394,7 +396,7 @@ export default function MatchingPreferencesPage() {
 
   if (!isMobile) {
     return (
-      <DesktopLayout title="Eşleştirme Tercihleri" maxWidth="2xl">
+      <DesktopLayout title={t('title')} maxWidth="2xl">
         <Content />
       </DesktopLayout>
     )
@@ -407,7 +409,7 @@ export default function MatchingPreferencesPage() {
         <button onClick={() => router.back()} className="p-2 hover:bg-gray-100 rounded-full">
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-lg font-semibold">Eşleştirme Tercihleri</h1>
+        <h1 className="text-lg font-semibold">{t('title')}</h1>
       </div>
 
       <div className="p-4 pb-24">

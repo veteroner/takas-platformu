@@ -1,0 +1,39 @@
+{
+  "title": "Hakkımızda",
+  "subtitle": "Çocuk Giysi ve Oyuncak Takas Platformu",
+  "description": "TakaZone, ailelerin kullanılmış çocuk kıyafetleri ve oyuncaklarını güvenli bir şekilde takas etmelerini sağlar. Tinder tarzı kaydırma arayüzü ile hızlı eşleşme ve sürdürülebilir tüketimi destekliyoruz.",
+  "features": {
+    "smartSwap": {
+      "title": "Akıllı Takas",
+      "description": "Tinder tarzı kaydırma ile hızlı eşleşme"
+    },
+    "secureTransaction": {
+      "title": "Güvenli İşlem",
+      "description": "Doğrulanmış profiller, güvenli mesajlaşma"
+    },
+    "smartMatching": {
+      "title": "Akıllı Eşleştirme",
+      "description": "Beden ve yaş grubu tercihleri"
+    },
+    "sustainable": {
+      "title": "Sürdürülebilir",
+      "description": "Çevreye duyarlı takas sistemi"
+    }
+  },
+  "stats": {
+    "title": "Rakamlarla TakaZone",
+    "users": "Kullanıcı",
+    "products": "Ürün",
+    "successfulSwaps": "Başarılı Takas"
+  },
+  "howItWorks": {
+    "title": "Nasıl Çalışır?",
+    "step1": "Kayıt ol ve profil oluştur",
+    "step2": "Ürünlerini yükle",
+    "step3": "Kaydır ve eşleş",
+    "step4": "Mesajlaş ve takas yap"
+  },
+  "companyInfo": {
+    "title": "Şirket Bilgileri"
+  }
+}

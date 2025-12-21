@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { MessageCircle, ArrowLeft, Search } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from 'react-i18next';
 
 import { getCurrentUser } from "@/lib/auth";
 import { getUserMatches } from "@/lib/api";
@@ -46,6 +47,7 @@ interface Match {
 }
 
 export default function ChatList() {
+  const { t } = useTranslation('messages');
   const router = useRouter();
   const { isMobile, isDesktop } = useDeviceType();
   const [user, setUser] = useState<{id: string; name: string; email: string; avatar?: string} | null>(null);
@@ -137,7 +139,7 @@ export default function ChatList() {
       <div className="min-h-screen bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Yükleniyor...</p>
+          <p className="text-gray-600">{t('loading')}</p>
         </div>
       </div>
     );
@@ -163,7 +165,7 @@ export default function ChatList() {
     const myItem = match.user1_id === user?.id ? match.item1 : match.item2;
     const theirItem = match.user1_id === user?.id ? match.item2 : match.item1;
     const lastMessage = match.messages?.[0];
-    const lastMessageText = lastMessage?.content || 'Henüz mesaj yok';
+    const lastMessageText = lastMessage?.content || t('noMessages');
     const lastMessageTime = lastMessage?.created_at || match.created_at;
     const isMyMessage = lastMessage?.sender_id === user?.id;
 
@@ -198,7 +200,7 @@ export default function ChatList() {
             </div>
             
             <p className="text-sm text-gray-600 truncate">
-              {isMyMessage && <span className="text-gray-500">Sen: </span>}
+              {isMyMessage && <span className="text-gray-500">{t('you')}: </span>}
               {lastMessageText}
             </p>
             
@@ -214,7 +216,7 @@ export default function ChatList() {
   // Desktop görünüm
   if (!isMobile) {
     return (
-      <DesktopLayout title="Mesajlar" maxWidth="4xl">
+      <DesktopLayout title={t('title')} maxWidth="4xl">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Sol panel - Chat listesi */}
           <div className="lg:col-span-1 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-white/20 overflow-hidden">
@@ -223,7 +225,7 @@ export default function ChatList() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Sohbet ara..."
+                  placeholder={t('searchMessages')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
@@ -242,7 +244,7 @@ export default function ChatList() {
                 <div className="text-center py-12 px-4">
                   <MessageCircle className="w-12 h-12 text-gray-300 mx-auto mb-3" />
                   <p className="text-gray-500 text-sm">
-                    {searchQuery ? 'Sonuç bulunamadı' : 'Henüz mesaj yok'}
+                    {searchQuery ? t('noResults') : t('noMessages')}
                   </p>
                 </div>
               )}
@@ -255,16 +257,15 @@ export default function ChatList() {
               <div className="w-24 h-24 bg-linear-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <MessageCircle className="w-12 h-12 text-purple-500" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Mesajlarınız</h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('title')}</h2>
               <p className="text-gray-500 max-w-sm">
-                Soldaki listeden bir sohbet seçerek mesajlaşmaya başlayabilirsiniz. 
-                Takas tekliflerinizi burada görüşün!
+                {t('welcomeMessage')}
               </p>
               <Link
                 href="/feed"
                 className="inline-block mt-6 bg-linear-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg"
               >
-                Yeni Ürün Keşfet
+                {t('discoverButton')}
               </Link>
             </div>
           </div>
@@ -285,7 +286,7 @@ export default function ChatList() {
               <ArrowLeft className="w-6 h-6 text-gray-600" />
             </Link>
             <h1 className="text-xl font-bold bg-linear-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
-              Mesajlar
+              {t('title')}
             </h1>
           </div>
         </header>
@@ -302,7 +303,7 @@ export default function ChatList() {
                 
                 // Son mesajı al
                 const lastMessage = match.messages?.[0];
-                const lastMessageText = lastMessage?.content || 'Henüz mesaj yok';
+                const lastMessageText = lastMessage?.content || t('noMessages');
                 const lastMessageTime = lastMessage?.created_at || match.created_at;
                 const isMyMessage = lastMessage?.sender_id === user?.id;
 
@@ -340,7 +341,7 @@ export default function ChatList() {
                         
                         {/* Son mesaj preview */}
                         <p className="text-sm text-gray-600 truncate">
-                          {isMyMessage && <span className="text-gray-500">Sen: </span>}
+                          {isMyMessage && <span className="text-gray-500">{t('you')}: </span>}
                           {lastMessageText}
                         </p>
                         
@@ -357,15 +358,15 @@ export default function ChatList() {
           ) : (
             <div className="text-center py-16">
               <MessageCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-600 mb-2">Henüz eşleşme yok</h3>
+              <h3 className="text-lg font-semibold text-gray-600 mb-2">{t('noMatchesYet')}</h3>
               <p className="text-gray-500">
-                Takas yapmaya başla ve ilk eşleşmeni al!
+                {t('startTrading')}
               </p>
               <Link
                 href="/"
                 className="inline-block mt-4 bg-linear-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg"
               >
-                Keşfetmeye Başla
+                {t('startExploring')}
               </Link>
             </div>
           )}

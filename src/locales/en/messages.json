@@ -1,0 +1,21 @@
+{
+  "title": "Messages",
+  "noMessages": "No messages yet",
+  "noMessagesDesc": "Start a conversation with a match",
+  "typeMessage": "Type a message...",
+  "send": "Send",
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "online": "Online",
+  "offline": "Offline",
+  "typing": "typing...",
+  "seen": "Seen",
+  "delivered": "Delivered",
+  "sent": "Sent",
+  "searchMessages": "Search messages...",
+  "newMessage": "New Message",
+  "blockUser": "Block User",
+  "reportUser": "Report User",
+  "deleteChat": "Delete Chat",
+  "confirmDelete": "Are you sure you want to delete this chat?"
+}

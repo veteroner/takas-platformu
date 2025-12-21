@@ -1,15 +1,24 @@
 {
   "title": "Profile",
-  "edit": "Edit Profile",
-  "stats": {
-    "shared": "Shared",
-    "received": "Received",
-    "rating": "Rating"
-  },
-  "joined": "Joined",
-  "tabs": {
-    "items": "Items",
-    "ratings": "Ratings",
-    "settings": "Settings"
-  }
+  "loading": "Loading...",
+  "edit": "Edit",
+  "save": "Save",
+  "cancel": "Cancel",
+  "bio": "About Me",
+  "bioPlaceholder": "Tell us about yourself...",
+  "noBio": "No bio added yet.",
+  "location": "Location",
+  "noLocation": "Location not specified",
+  "phone": "Phone",
+  "noPhone": "Phone not specified",
+  "joinedAt": "Joined",
+  "sharedItems": "Shared Items",
+  "receivedItems": "Completed Trades",
+  "rating": "Rating",
+  "myItems": "My Items",
+  "trades": "trades",
+  "ratings": "Ratings",
+  "viewAllRatings": "View All Ratings",
+  "updateSuccess": "✓ Profile successfully updated!",
+  "updateError": "Error updating profile"
 }

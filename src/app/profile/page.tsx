@@ -5,6 +5,7 @@ import { ArrowLeft, Edit3, MapPin, Phone, Calendar, Star, Package, Gift, Camera,
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { useTranslation } from 'react-i18next'
 import { getCurrentUser, updateUserProfile } from '@/lib/auth'
 import { getUserItems } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
@@ -13,6 +14,7 @@ import DesktopLayout from '@/components/DesktopLayout'
 import { useDeviceType } from '@/hooks/useDeviceType'
 
 export default function ProfilePage() {
+  const { t } = useTranslation('profile');
   const router = useRouter()
   const { isMobile } = useDeviceType()
   const [user, setUser] = useState<any>(null)
@@ -118,7 +120,7 @@ export default function ProfilePage() {
       <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center">
         <div className="text-white text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p>Yükleniyor...</p>
+          <p>{t('loading')}</p>
         </div>
       </div>
     )
@@ -147,10 +149,10 @@ export default function ProfilePage() {
       // 3. Local state'i güncelle
       setUser({ ...user, ...editData, metadata })
       setIsEditing(false)
-      alert('Profil başarıyla güncellendi!')
+      alert(t('updateSuccess'))
     } catch (error) {
       console.error('Error updating profile:', error)
-      alert('Profil güncellenirken hata oluştu')
+      alert(t('updateError'))
     }
   }
 
@@ -212,20 +214,20 @@ export default function ProfilePage() {
         <div className="mb-6">
           <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
             <Edit3 size={16} />
-            Hakkımda
+            {t('bio')}
           </h3>
           {isEditing ? (
             <textarea
               name="bio"
               value={editData.bio}
               onChange={handleInputChange}
-              placeholder="Kendinizden bahsedin..."
+              placeholder={t('bioPlaceholder')}
               rows={3}
               className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 resize-none"
             />
           ) : (
             <p className="text-white/80 bg-white/5 rounded-xl p-4">
-              {editData.bio || user.metadata?.bio || 'Henüz bir bio eklenmemiş.'}
+              {editData.bio || user.metadata?.bio || t('noBio')}
             </p>
           )}
         </div>
@@ -240,11 +242,11 @@ export default function ProfilePage() {
                 name="location"
                 value={editData.location}
                 onChange={handleInputChange}
-                placeholder="Konum"
+                placeholder={t('location')}
                 className="flex-1 bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
               />
             ) : (
-              <span className="text-white/80">{editData.location || user.metadata?.location || 'Konum belirtilmemiş'}</span>
+              <span className="text-white/80">{editData.location || user.metadata?.location || t('noLocation')}</span>
             )}
           </div>
 
@@ -256,17 +258,17 @@ export default function ProfilePage() {
                 name="phone"
                 value={editData.phone}
                 onChange={handleInputChange}
-                placeholder="Telefon"
+                placeholder={t('phone')}
                 className="flex-1 bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
               />
             ) : (
-              <span className="text-white/80">{editData.phone || user.metadata?.phone || 'Telefon belirtilmemiş'}</span>
+              <span className="text-white/80">{editData.phone || user.metadata?.phone || t('noPhone')}</span>
             )}
           </div>
 
           <div className="flex items-center gap-3">
             <Calendar className="text-white/60" size={20} />
-            <span className="text-white/80">Katılım: {new Date(user.created_at).toLocaleDateString('tr-TR')}</span>
+            <span className="text-white/80">{t('joinedAt')}: {new Date(user.created_at).toLocaleDateString('tr-TR')}</span>
           </div>
         </div>
 
@@ -276,7 +278,7 @@ export default function ProfilePage() {
             onClick={handleSave}
             className="w-full py-3 bg-linear-to-r from-green-500 to-blue-600 text-white font-semibold rounded-xl hover:from-green-600 hover:to-blue-700 transition-all duration-200 shadow-lg"
           >
-            Değişiklikleri Kaydet
+            {t('save')}
           </button>
         )}
       </div>
@@ -288,7 +290,7 @@ export default function ProfilePage() {
             <Package size={24} className="text-white" />
           </div>
           <div className="text-2xl font-bold text-white">{stats.sharedItems}</div>
-          <div className="text-white/70 text-sm">Paylaşılan Eşya</div>
+          <div className="text-white/70 text-sm">{t('sharedItems')}</div>
         </div>
 
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 text-center border border-white/20">
@@ -296,7 +298,7 @@ export default function ProfilePage() {
             <Gift size={24} className="text-white" />
           </div>
           <div className="text-2xl font-bold text-white">{stats.receivedItems}</div>
-          <div className="text-white/70 text-sm">Tamamlanan Takas</div>
+          <div className="text-white/70 text-sm">{t('receivedItems')}</div>
         </div>
 
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 text-center border border-white/20">
@@ -304,14 +306,14 @@ export default function ProfilePage() {
             <Star size={24} className="text-white" />
           </div>
           <div className="text-2xl font-bold text-white">{stats.rating.toFixed(1)}</div>
-          <div className="text-white/70 text-sm">Değerlendirme</div>
+          <div className="text-white/70 text-sm">{t('rating')}</div>
         </div>
       </div>
 
       {/* User's Items Grid */}
       {userItems.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-white text-xl font-bold mb-4">Eşyalarım ({userItems.length})</h2>
+          <h2 className="text-white text-xl font-bold mb-4">{t('myItems')} ({userItems.length})</h2>
           <div className={`grid gap-4 ${isMobile ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'}`}>
             {userItems.map((item) => (
               <div key={item.id} className="bg-white/10 backdrop-blur-lg rounded-xl overflow-hidden border border-white/20 hover:bg-white/20 transition-colors">
@@ -344,7 +346,7 @@ export default function ProfilePage() {
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
           <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
             <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-            Değerlendirmeler
+            {t('ratings')}
           </h3>
           
           {/* Rating Summary */}
@@ -366,7 +368,7 @@ export default function ProfilePage() {
                 ))}
               </div>
               <div className="text-white/60 text-xs">
-                {stats.receivedItems} takas
+                {stats.receivedItems} {t('trades')}
               </div>
             </div>
             
@@ -391,7 +393,7 @@ export default function ProfilePage() {
               onClick={() => router.push('/profile/ratings')}
               className="w-full py-3 px-4 bg-white/10 hover:bg-white/20 rounded-xl text-white text-sm font-medium transition-colors"
             >
-              Tüm Değerlendirmeleri Gör ({stats.receivedItems})
+              {t('viewAllRatings')} ({stats.receivedItems})
             </button>
           )}
         </div>

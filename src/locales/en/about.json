@@ -1,0 +1,39 @@
+{
+  "title": "About Us",
+  "subtitle": "Children's Clothing and Toy Swap Platform",
+  "description": "TakaZone enables families to safely swap used children's clothes and toys. With a Tinder-style swipe interface, we support quick matching and sustainable consumption.",
+  "features": {
+    "smartSwap": {
+      "title": "Smart Swap",
+      "description": "Quick matching with Tinder-style swiping"
+    },
+    "secureTransaction": {
+      "title": "Secure Transaction",
+      "description": "Verified profiles, secure messaging"
+    },
+    "smartMatching": {
+      "title": "Smart Matching",
+      "description": "Size and age group preferences"
+    },
+    "sustainable": {
+      "title": "Sustainable",
+      "description": "Environmentally conscious swap system"
+    }
+  },
+  "stats": {
+    "title": "TakaZone by the Numbers",
+    "users": "Users",
+    "products": "Products",
+    "successfulSwaps": "Successful Swaps"
+  },
+  "howItWorks": {
+    "title": "How It Works?",
+    "step1": "Register and create a profile",
+    "step2": "Upload your items",
+    "step3": "Swipe and match",
+    "step4": "Message and swap"
+  },
+  "companyInfo": {
+    "title": "Company Information"
+  }
+}

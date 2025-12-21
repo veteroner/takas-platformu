@@ -11,10 +11,12 @@ import { loadSeekingPreferencesAsync, saveSeekingPreferencesAsync } from '@/lib/
 import { filterAndRank, suggestPackages } from '@/lib/matching'
 import DesktopLayout from '@/components/DesktopLayout'
 import { useDeviceType } from '@/hooks/useDeviceType'
+import { useTranslation } from 'react-i18next'
 
 type DbCategory = 'clothing'|'toys'|'electronics'|'books'|'sports'|'home'|'other'
 
 export default function MatchesPage() {
+  const { t } = useTranslation('matches')
   const { isMobile } = useDeviceType()
   const [user, setUser] = useState<any>(null)
   const [feed, setFeed] = useState<Item[]>([])
@@ -51,7 +53,7 @@ export default function MatchesPage() {
           }
         }
       } catch (e:any) {
-        setError(e?.message || 'Bir hata oluştu')
+        setError(e?.message || t('error'))
       } finally {
         setLoading(false)
       }
@@ -124,7 +126,7 @@ export default function MatchesPage() {
           setMyItems([])
         }
       } catch (e:any) {
-        setError(e?.message || 'Yükleme hatası')
+        setError(e?.message || t('loadError'))
       } finally {
         setLoading(false)
       }
@@ -179,7 +181,7 @@ export default function MatchesPage() {
   if (loading) return <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50">
     <div className="text-center">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-      <p className="text-gray-600">Yükleniyor...</p>
+      <p className="text-gray-600">{t('loading')}</p>
     </div>
   </div>
 
@@ -187,8 +189,8 @@ export default function MatchesPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50">
         <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-8 text-center">
-          <h2 className="text-xl font-semibold mb-2">Eşleşmeleri görmek için giriş yap</h2>
-          <Link href="/login" className="inline-block mt-2 bg-purple-600 text-white px-4 py-2 rounded-lg">Giriş</Link>
+          <h2 className="text-xl font-semibold mb-2">{t('loginRequired')}</h2>
+          <Link href="/login" className="inline-block mt-2 bg-purple-600 text-white px-4 py-2 rounded-lg">{t('loginButton')}</Link>
         </div>
       </div>
     )
@@ -199,7 +201,7 @@ export default function MatchesPage() {
     <div className={`bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 ${className}`}>
       <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
         <Filter className="w-5 h-5" />
-        Tercihler
+        {t('preferences')}
       </h3>
       <div className="grid grid-cols-2 gap-2 mb-3">
         {(['clothing','toys','electronics','books','sports','home','other'] as const).map(ct => (
@@ -209,21 +211,21 @@ export default function MatchesPage() {
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-sm mb-1">Min ₺</label>
+          <label className="block text-sm mb-1">{t('minValue')}</label>
           <input value={valueMin} onChange={e=>setValueMin(e.target.value)} type="number" className="w-full px-3 py-2 border rounded-lg" />
         </div>
         <div>
-          <label className="block text-sm mb-1">Max ₺</label>
+          <label className="block text-sm mb-1">{t('maxValue')}</label>
           <input value={valueMax} onChange={e=>setValueMax(e.target.value)} type="number" className="w-full px-3 py-2 border rounded-lg" />
         </div>
       </div>
       <div className="mt-3">
-        <label className="block text-sm mb-1">Şehir</label>
-        <input value={city} onChange={e=>setCity(e.target.value)} className="w-full px-3 py-2 border rounded-lg" placeholder="İstanbul" />
+        <label className="block text-sm mb-1">{t('city')}</label>
+        <input value={city} onChange={e=>setCity(e.target.value)} className="w-full px-3 py-2 border rounded-lg" placeholder={t('cityPlaceholder')} />
       </div>
       <div className="mt-3 grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs mb-1">Giyim Beden</label>
+          <label className="block text-xs mb-1">{t('clothingSize')}</label>
           <select value={clothSize} onChange={e=>setClothSize(e.target.value as any)} className="w-full px-3 py-2 border rounded-lg">
             <option value="">—</option>
             <option value="XS">XS</option>
@@ -235,12 +237,12 @@ export default function MatchesPage() {
           </select>
         </div>
         <div>
-          <label className="block text-xs mb-1">Giyim Renk</label>
-          <input value={clothColor} onChange={e=>setClothColor(e.target.value)} className="w-full px-3 py-2 border rounded-lg" placeholder="Kırmızı, Siyah" />
+          <label className="block text-xs mb-1">{t('clothingColor')}</label>
+          <input value={clothColor} onChange={e=>setClothColor(e.target.value)} className="w-full px-3 py-2 border rounded-lg" placeholder={t('colorPlaceholder')} />
         </div>
       </div>
       <div className="mt-3 text-right">
-        <button onClick={savePrefs} className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">Kaydet</button>
+        <button onClick={savePrefs} className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">{t('savePreferences')}</button>
       </div>
     </div>
   )
@@ -250,7 +252,7 @@ export default function MatchesPage() {
     <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4">
       <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
         <Package className="w-5 h-5" />
-        Eşleşen Ürünler ({ranked.length})
+        {t('matchedItems')} ({ranked.length})
       </h3>
       <div className={`grid gap-3 ${columns === 4 ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' : 'grid-cols-2'}`}>
         {ranked.map(it => (
@@ -270,7 +272,7 @@ export default function MatchesPage() {
         ))}
       </div>
       {!ranked.length && (
-        <p className="text-sm text-gray-600 text-center py-8">Tercihlerine uyan ürün bulunamadı. Kategorileri genişletmeyi dene.</p>
+        <p className="text-sm text-gray-600 text-center py-8">{t('noMatches')}</p>
       )}
     </div>
   )
@@ -280,20 +282,20 @@ export default function MatchesPage() {
     <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4">
       <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
         <RefreshCw className="w-5 h-5" />
-        Çapraz Takas Paket Önerileri
+        {t('crossTradePackages')}
       </h3>
       {myItems.length ? (
         <div className="mb-3">
-          <label className="block text-sm mb-1">Vermek İstediğin Ürün</label>
+          <label className="block text-sm mb-1">{t('selectYourItem')}</label>
           <select value={selectedOfferId} onChange={e=>setSelectedOfferId(e.target.value)} className="w-full px-3 py-2 border rounded-lg">
-            <option value="">Seçiniz</option>
+            <option value="">{t('selectOption')}</option>
             {myItems.map(mi => (
               <option key={mi.id} value={mi.id}>{mi.title} — ₺{mi.estimatedValue || 0}</option>
             ))}
           </select>
         </div>
       ) : (
-        <p className="text-sm text-gray-600 mb-2">Önce bir ürün yükleyerek çapraz takas paketlerini görebilirsin.</p>
+        <p className="text-sm text-gray-600 mb-2">{t('uploadItemFirst')}</p>
       )}
 
       {offer && packages.length > 0 ? (
@@ -301,8 +303,8 @@ export default function MatchesPage() {
           {packages.map((p, idx) => (
             <div key={idx} className="border rounded-lg p-3 bg-white">
               <div className="flex items-center justify-between mb-2">
-                <div className="text-sm font-medium">Paket #{idx+1}</div>
-                <div className="text-xs text-gray-600">Toplam: ₺{p.total} • Fark: ₺{Math.abs((offer?.estimatedValue||0)-p.total)}</div>
+                <div className="text-sm font-medium">{t('packageNumber', { number: idx+1 })}</div>
+                <div className="text-xs text-gray-600">{t('packageTotal', { total: p.total, diff: Math.abs((offer?.estimatedValue||0)-p.total) })}</div>
               </div>
               <ul className="list-disc pl-5 text-sm text-gray-700">
                 {p.items.map(it => (<li key={it.id}>{it.title} — ₺{it.estimatedValue||0}</li>))}
@@ -311,7 +313,7 @@ export default function MatchesPage() {
           ))}
         </div>
       ) : offer ? (
-        <p className="text-sm text-gray-600">Uygun paket önerisi bulunamadı.</p>
+        <p className="text-sm text-gray-600">{t('noPackages')}</p>
       ) : null}
     </div>
   )
@@ -319,7 +321,7 @@ export default function MatchesPage() {
   // Desktop görünüm
   if (!isMobile) {
     return (
-      <DesktopLayout title="Eşleşmeler" maxWidth="7xl">
+      <DesktopLayout title={t('title')} maxWidth="7xl">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sol Panel - Tercihler */}
           <div className="lg:col-span-1 space-y-4">
@@ -348,7 +350,7 @@ export default function MatchesPage() {
             <Link href="/" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
               <ArrowLeft className="w-6 h-6 text-gray-600" />
             </Link>
-            <h1 className="text-xl font-bold bg-linear-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Eşleşmeler</h1>
+            <h1 className="text-xl font-bold bg-linear-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">{t('title')}</h1>
           </div>
         </div>
       </header>

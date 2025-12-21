@@ -1,0 +1,19 @@
+{
+  "title": "Notifications",
+  "noNotifications": "No notifications yet",
+  "noNotificationsDesc": "Your new notifications will appear here",
+  "markAllRead": "Mark All as Read",
+  "newMatch": "New match!",
+  "newMessage": "New message",
+  "offerReceived": "Offer received",
+  "offerAccepted": "Your offer was accepted",
+  "offerRejected": "Your offer was rejected",
+  "itemLiked": "Your item was liked",
+  "tradeCompleted": "Trade completed",
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "thisWeek": "This Week",
+  "older": "Older",
+  "deleteAll": "Delete All",
+  "settings": "Notification Settings"
+}

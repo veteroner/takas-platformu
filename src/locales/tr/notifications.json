@@ -1,0 +1,19 @@
+{
+  "title": "Bildirimler",
+  "noNotifications": "Henüz bildirim yok",
+  "noNotificationsDesc": "Yeni bildirimleriniz burada görünecek",
+  "markAllRead": "Tümünü Okundu İşaretle",
+  "newMatch": "Yeni eşleşme!",
+  "newMessage": "Yeni mesaj",
+  "offerReceived": "Teklif aldınız",
+  "offerAccepted": "Teklifiniz kabul edildi",
+  "offerRejected": "Teklifiniz reddedildi",
+  "itemLiked": "Ürününüz beğenildi",
+  "tradeCompleted": "Takas tamamlandı",
+  "today": "Bugün",
+  "yesterday": "Dün",
+  "thisWeek": "Bu Hafta",
+  "older": "Daha Eski",
+  "deleteAll": "Tümünü Sil",
+  "settings": "Bildirim Ayarları"
+}

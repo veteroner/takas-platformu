@@ -1,15 +1,24 @@
 {
   "title": "Profil",
-  "edit": "Profili Düzenle",
-  "stats": {
-    "shared": "Paylaşılan",
-    "received": "Alınan",
-    "rating": "Puan"
-  },
-  "joined": "Katılım",
-  "tabs": {
-    "items": "Ürünler",
-    "ratings": "Değerlendirmeler",
-    "settings": "Ayarlar"
-  }
+  "loading": "Yükleniyor...",
+  "edit": "Düzenle",
+  "save": "Kaydet",
+  "cancel": "İptal",
+  "bio": "Hakkımda",
+  "bioPlaceholder": "Kendinizden bahsedin...",
+  "noBio": "Henüz bir bio eklenmemiş.",
+  "location": "Konum",
+  "noLocation": "Konum belirtilmemiş",
+  "phone": "Telefon",
+  "noPhone": "Telefon belirtilmemiş",
+  "joinedAt": "Üyelik Tarihi",
+  "sharedItems": "Paylaşılan Eşya",
+  "receivedItems": "Tamamlanan Takas",
+  "rating": "Değerlendirme",
+  "myItems": "Eşyalarım",
+  "trades": "takas",
+  "ratings": "Değerlendirmeler",
+  "viewAllRatings": "Tüm Değerlendirmeleri Gör",
+  "updateSuccess": "✓ Profil başarıyla güncellendi!",
+  "updateError": "Profil güncellenirken hata oluştu"
 }

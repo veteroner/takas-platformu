@@ -1,15 +1,24 @@
 {
   "title": "Profil",
-  "edit": "Rediger profil",
-  "stats": {
-    "shared": "Delt",
-    "received": "Modtaget",
-    "rating": "Vurdering"
-  },
-  "joined": "Tilmeldt",
-  "tabs": {
-    "items": "Genstande",
-    "ratings": "Vurderinger",
-    "settings": "Indstillinger"
-  }
+  "loading": "Indlæser...",
+  "edit": "Rediger",
+  "save": "Gem",
+  "cancel": "Annuller",
+  "bio": "Om Mig",
+  "bioPlaceholder": "Fortæl om dig selv...",
+  "noBio": "Ingen bio tilføjet endnu.",
+  "location": "Placering",
+  "noLocation": "Placering ikke angivet",
+  "phone": "Telefon",
+  "noPhone": "Telefon ikke angivet",
+  "joinedAt": "Tilmeldt",
+  "sharedItems": "Delte Emner",
+  "receivedItems": "Gennemførte Handler",
+  "rating": "Vurdering",
+  "myItems": "Mine Emner",
+  "trades": "handler",
+  "ratings": "Vurderinger",
+  "viewAllRatings": "Vis Alle Vurderinger",
+  "updateSuccess": "✓ Profil opdateret med succes!",
+  "updateError": "Fejl ved opdatering af profil"
 }

@@ -5,6 +5,7 @@ import { ArrowLeft, Bell, Heart, MessageCircle, Package, CheckCircle, Trash2, Ch
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import DesktopLayout from '@/components/DesktopLayout'
 import { useDeviceType } from '@/hooks/useDeviceType'
@@ -30,6 +31,7 @@ interface Notification {
 }
 
 export default function NotificationsPage() {
+  const { t } = useTranslation('notifications');
   const router = useRouter()
   const { isMobile } = useDeviceType()
   const [notifications, setNotifications] = useState<Notification[]>([])
@@ -51,8 +53,8 @@ export default function NotificationsPage() {
           {
             id: '1',
             type: 'match',
-            title: 'Yeni Eşleşme! 🎉',
-            message: 'Ahmet ile eşleştiniz! Nike Spor Ayakkabı için takas başlatabilirsiniz.',
+            title: t('newMatch'),
+            message: t('matchMessage', { name: 'Ahmet', item: 'Nike Spor Ayakkabı' }),
             read: false,
             createdAt: new Date(Date.now() - 1000 * 60 * 30),
             data: {
@@ -64,8 +66,8 @@ export default function NotificationsPage() {
           {
             id: '2',
             type: 'message',
-            title: 'Yeni Mesaj',
-            message: 'Zeynep: "Merhaba, ürün hala mevcut mu?"',
+            title: t('newMessage'),
+            message: t('messagePreview', { name: 'Zeynep', message: 'Merhaba, ürün hala mevcut mu?' }),
             read: false,
             createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
             data: {
@@ -77,8 +79,8 @@ export default function NotificationsPage() {
           {
             id: '3',
             type: 'like',
-            title: 'Ürününüz Beğenildi',
-            message: 'Vintage Deri Ceket ürününüz 5 kişi tarafından beğenildi!',
+            title: t('itemLiked'),
+            message: t('itemLikedMessage', { item: 'Vintage Deri Ceket', count: 5 }),
             read: true,
             createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
             data: {
@@ -89,8 +91,8 @@ export default function NotificationsPage() {
           {
             id: '4',
             type: 'trade_complete',
-            title: 'Takas Tamamlandı ✅',
-            message: 'Mehmet ile takasınız başarıyla tamamlandı! Değerlendirme yapmayı unutmayın.',
+            title: t('tradeCompleted'),
+            message: t('tradeCompletedMessage', { name: 'Mehmet' }),
             read: true,
             createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2),
             data: {
@@ -101,8 +103,8 @@ export default function NotificationsPage() {
           {
             id: '5',
             type: 'system',
-            title: 'Hoş Geldiniz!',
-            message: 'TakaZone\'a hoş geldiniz! Profilinizi tamamlayarak daha iyi eşleşmeler bulabilirsiniz.',
+            title: t('welcome'),
+            message: t('welcomeMessage'),
             read: true,
             createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
           }
@@ -179,7 +181,7 @@ export default function NotificationsPage() {
                 : 'bg-white/10 text-white/70 hover:bg-white/15'
             }`}
           >
-            Tümü ({notifications.length})
+            {t('all')} ({notifications.length})
           </button>
           <button
             onClick={() => setFilter('unread')}
@@ -187,9 +189,9 @@ export default function NotificationsPage() {
               filter === 'unread' 
                 ? 'bg-white/20 text-white' 
                 : 'bg-white/10 text-white/70 hover:bg-white/15'
-            }`}
+            }}
           >
-            Okunmamış ({unreadCount})
+            {t('unread')} ({unreadCount})
           </button>
         </div>
 
@@ -199,7 +201,7 @@ export default function NotificationsPage() {
             className="flex items-center gap-2 px-3 py-2 text-sm text-white/80 hover:text-white transition-colors"
           >
             <Check className="w-4 h-4" />
-            Tümünü Okundu İşaretle
+            {t('markAllRead')}
           </button>
         )}
       </div>
@@ -213,12 +215,12 @@ export default function NotificationsPage() {
         <div className="text-center py-20">
           <Bell className="w-16 h-16 mx-auto text-white/30 mb-4" />
           <h3 className="text-xl font-semibold text-white mb-2">
-            {filter === 'unread' ? 'Okunmamış bildirim yok' : 'Bildirim bulunmuyor'}
+            {filter === 'unread' ? t('noUnread') : t('noNotifications')}
           </h3>
           <p className="text-white/60">
             {filter === 'unread' 
-              ? 'Tüm bildirimlerinizi okudunuz!' 
-              : 'Yeni bildirimler burada görünecek'}
+              ? t('allRead') 
+              : t('newNotificationsWillAppear')}
           </p>
         </div>
       ) : (
@@ -307,7 +309,7 @@ export default function NotificationsPage() {
   // Desktop Layout
   if (!isMobile) {
     return (
-      <DesktopLayout title="Bildirimler" maxWidth="2xl">
+      <DesktopLayout title={t('title')} maxWidth="2xl">
         <NotificationsContent />
       </DesktopLayout>
     )
@@ -328,7 +330,7 @@ export default function NotificationsPage() {
             </button>
             <div className="flex items-center gap-2">
               <Bell className="w-6 h-6 text-white" />
-              <h1 className="text-xl font-bold text-white">Bildirimler</h1>
+              <h1 className="text-xl font-bold text-white">{t('title')}</h1>
               {unreadCount > 0 && (
                 <span className="bg-pink-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
                   {unreadCount}

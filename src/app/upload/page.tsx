@@ -20,24 +20,8 @@ import ItemAttributeFields from '@/components/ItemAttributeFields'
 import { saveItemAttributes } from '@/lib/matchingService'
 import { TOY_AGE_RANGES } from '@/types/matching'
 import type { ClothingSizeText, GenderType, Season, Style, ToyType, ToyGender, BookAgeGroup, DbCategory } from '@/types/matching'
-
-const categories = [
-  { id: 'clothing', name: '👕 Giyim', value: 'clothing' },
-  { id: 'toys', name: '🧸 Oyuncak', value: 'toys' },
-  { id: 'electronics', name: '📱 Elektronik', value: 'electronics' },
-  { id: 'books', name: '📚 Kitap', value: 'books' },
-  { id: 'sports', name: '⚽ Spor', value: 'sports' },
-  { id: 'home', name: '🏠 Ev Eşyası', value: 'home' },
-  { id: 'other', name: '🔧 Diğer', value: 'other' }
-]
-
-const conditions = [
-  { id: 'new', name: 'Sıfır', value: 'new' },
-  { id: 'like-new', name: 'Sıfır Gibi', value: 'like-new' },
-  { id: 'good', name: 'İyi', value: 'good' },
-  { id: 'fair', name: 'Orta', value: 'fair' },
-  { id: 'poor', name: 'Kötü', value: 'poor' }
-]
+import { useTranslation } from 'react-i18next'
+import { useMemo } from 'react'
 
 // Türkiye'nin en popüler 81 ili
 const cities = [
@@ -56,6 +40,26 @@ const cities = [
 export default function UploadPage() {
   const router = useRouter()
   const { isMobile } = useDeviceType()
+  const { t } = useTranslation('upload')
+  
+  const categories = useMemo(() => [
+    { id: 'clothing', name: t('categories.clothing'), value: 'clothing' },
+    { id: 'toys', name: t('categories.toys'), value: 'toys' },
+    { id: 'electronics', name: t('categories.electronics'), value: 'electronics' },
+    { id: 'books', name: t('categories.books'), value: 'books' },
+    { id: 'sports', name: t('categories.sports'), value: 'sports' },
+    { id: 'home', name: t('categories.home'), value: 'home' },
+    { id: 'other', name: t('categories.other'), value: 'other' }
+  ], [t])
+  
+  const conditions = useMemo(() => [
+    { id: 'new', name: t('conditions.new'), value: 'new' },
+    { id: 'like-new', name: t('conditions.like_new'), value: 'like-new' },
+    { id: 'good', name: t('conditions.good'), value: 'good' },
+    { id: 'fair', name: t('conditions.fair'), value: 'fair' },
+    { id: 'poor', name: t('conditions.poor'), value: 'poor' }
+  ], [t])
+  
   const [images, setImages] = useState<string[]>([])
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [userId, setUserId] = useState<string | null>(null)
@@ -701,8 +705,8 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
           <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
             <Check className="w-10 h-10 text-white" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Ürün Yüklendi! 🎉</h2>
-          <p className="text-gray-600">Ana sayfaya yönlendiriliyorsunuz...</p>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('uploadSuccess')}</h2>
+          <p className="text-gray-600">{t('redirecting')}</p>
         </div>
       </div>
     )
@@ -711,7 +715,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
   // Desktop Layout
   if (!isMobile) {
     return (
-      <DesktopLayout title="Ürün Yükle" maxWidth="6xl">
+      <DesktopLayout title={t('uploadProduct')} maxWidth="6xl">
         <div className="grid grid-cols-3 gap-8">
           {/* Main Form - 2 columns */}
           <div className="col-span-2">
@@ -720,7 +724,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                 <div className="w-10 h-10 bg-linear-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center">
                   <Upload className="w-5 h-5 text-white" />
                 </div>
-                Yeni Ürün Ekle
+                {t('addNewProduct')}
               </h2>
 
               {/* Illegal Content Warning */}
@@ -782,13 +786,13 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                 <div className="grid grid-cols-2 gap-6">
                   {/* Title */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Ürün Adı</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('title_field')}</label>
                     <input
                       type="text"
                       name="title"
                       value={formData.title}
                       onChange={handleInputChange}
-                      placeholder="Örn: Kız Çocuk Yazlık Elbise"
+                      placeholder={t('titlePlaceholder')}
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                       required
                     />
@@ -828,7 +832,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
 
                   {/* Condition */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Ürün Durumu</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('productCondition')}</label>
                     <select
                       name="condition"
                       value={formData.condition}
@@ -967,7 +971,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
             <ArrowLeft className="w-6 h-6 text-gray-600" />
           </Link>
           <h1 className="text-xl font-bold bg-linear-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
-            Ürün Yükle
+            {t('uploadProduct')}
           </h1>
         </div>
       </header>
@@ -1119,7 +1123,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
           {/* Title */}
           <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
             <label className="block text-sm font-semibold text-gray-800 mb-2">
-              Ürün Adı *
+              {t('title_field')} *
             </label>
             <input
               type="text"
@@ -1228,7 +1232,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
               placeholder="Örn: 500"
               className="w-full px-4 py-3 border-2 border-gray-300 bg-white rounded-lg text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             />
-            <p className="text-xs text-gray-600 mt-2">Opsiyonel: Ürünün yaklaşık değeri</p>
+            <p className="text-xs text-gray-600 mt-2">{t('estimatedValueHint')}</p>
           </div>
 
           {/* Location/City */}
@@ -1249,7 +1253,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                 <option key={city} value={city}>{city}</option>
               ))}
             </select>
-            <p className="text-xs text-gray-600 mt-2">Ürününüzün bulunduğu şehri seçin</p>
+            <p className="text-xs text-gray-600 mt-2">{t('cityHint')}</p>
           </div>
 
           {/* Seeking Preferences */}

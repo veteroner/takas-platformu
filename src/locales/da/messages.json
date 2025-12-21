@@ -1,0 +1,21 @@
+{
+  "title": "Beskeder",
+  "noMessages": "Ingen beskeder endnu",
+  "noMessagesDesc": "Start en samtale med et match",
+  "typeMessage": "Skriv en besked...",
+  "send": "Send",
+  "today": "I dag",
+  "yesterday": "I går",
+  "online": "Online",
+  "offline": "Offline",
+  "typing": "skriver...",
+  "seen": "Set",
+  "delivered": "Leveret",
+  "sent": "Sendt",
+  "searchMessages": "Søg i beskeder...",
+  "newMessage": "Ny Besked",
+  "blockUser": "Bloker Bruger",
+  "reportUser": "Rapporter Bruger",
+  "deleteChat": "Slet Chat",
+  "confirmDelete": "Er du sikker på, at du vil slette denne chat?"
+}

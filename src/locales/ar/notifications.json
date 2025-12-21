@@ -1,0 +1,19 @@
+{
+  "title": "الإشعارات",
+  "noNotifications": "لا توجد إشعارات بعد",
+  "noNotificationsDesc": "ستظهر إشعاراتك الجديدة هنا",
+  "markAllRead": "تحديد الكل كمقروء",
+  "newMatch": "تطابق جديد!",
+  "newMessage": "رسالة جديدة",
+  "offerReceived": "تم استلام عرض",
+  "offerAccepted": "تم قبول عرضك",
+  "offerRejected": "تم رفض عرضك",
+  "itemLiked": "تم الإعجاب بغرضك",
+  "tradeCompleted": "اكتملت المبادلة",
+  "today": "اليوم",
+  "yesterday": "أمس",
+  "thisWeek": "هذا الأسبوع",
+  "older": "أقدم",
+  "deleteAll": "حذف الكل",
+  "settings": "إعدادات الإشعارات"
+}

@@ -1,0 +1,39 @@
+{
+  "title": "Om Os",
+  "subtitle": "Platform til Børnetøjs- og Legetøjsbytning",
+  "description": "TakaZone gør det muligt for familier at bytte brugt børnetøj og legetøj sikkert. Med en Tinder-lignende swipe-grænseflade understøtter vi hurtig matching og bæredygtigt forbrug.",
+  "features": {
+    "smartSwap": {
+      "title": "Smart Byt",
+      "description": "Hurtig matching med Tinder-lignende swipe"
+    },
+    "secureTransaction": {
+      "title": "Sikker Transaktion",
+      "description": "Verificerede profiler, sikker beskedudveksling"
+    },
+    "smartMatching": {
+      "title": "Smart Matching",
+      "description": "Størrelses- og aldersgruppepræferencer"
+    },
+    "sustainable": {
+      "title": "Bæredygtig",
+      "description": "Miljøbevidst byttesystem"
+    }
+  },
+  "stats": {
+    "title": "TakaZone i Tal",
+    "users": "Brugere",
+    "products": "Produkter",
+    "successfulSwaps": "Vellykkede Byttehandler"
+  },
+  "howItWorks": {
+    "title": "Hvordan Virker Det?",
+    "step1": "Tilmeld dig og opret en profil",
+    "step2": "Upload dine emner",
+    "step3": "Swipe og match",
+    "step4": "Besked og byt"
+  },
+  "companyInfo": {
+    "title": "Virksomhedsoplysninger"
+  }
+}

@@ -1,15 +1,24 @@
 {
   "title": "Profil",
-  "edit": "Profil bearbeiten",
-  "stats": {
-    "shared": "Geteilt",
-    "received": "Erhalten",
-    "rating": "Bewertung"
-  },
-  "joined": "Beigetreten",
-  "tabs": {
-    "items": "Artikel",
-    "ratings": "Bewertungen",
-    "settings": "Einstellungen"
-  }
+  "loading": "Wird geladen...",
+  "edit": "Bearbeiten",
+  "save": "Speichern",
+  "cancel": "Abbrechen",
+  "bio": "Über Mich",
+  "bioPlaceholder": "Erzählen Sie uns über sich...",
+  "noBio": "Noch keine Bio hinzugefügt.",
+  "location": "Standort",
+  "noLocation": "Standort nicht angegeben",
+  "phone": "Telefon",
+  "noPhone": "Telefon nicht angegeben",
+  "joinedAt": "Beigetreten",
+  "sharedItems": "Geteilte Artikel",
+  "receivedItems": "Abgeschlossene Tauschgeschäfte",
+  "rating": "Bewertung",
+  "myItems": "Meine Artikel",
+  "trades": "Tauschgeschäfte",
+  "ratings": "Bewertungen",
+  "viewAllRatings": "Alle Bewertungen anzeigen",
+  "updateSuccess": "✓ Profil erfolgreich aktualisiert!",
+  "updateError": "Fehler beim Aktualisieren des Profils"
 }

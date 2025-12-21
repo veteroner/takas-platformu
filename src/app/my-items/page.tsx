@@ -9,6 +9,7 @@ import { supabase } from '@/lib/supabase'
 import { ItemCondition } from '@/types'
 import DesktopLayout from '@/components/DesktopLayout'
 import { useDeviceType } from '@/hooks/useDeviceType'
+import { useTranslation } from 'react-i18next'
 
 interface UserItem {
   id: string
@@ -25,6 +26,7 @@ interface UserItem {
 export default function MyItemsPage() {
   const router = useRouter()
   const { isMobile } = useDeviceType()
+  const { t } = useTranslation('my-items')
   const [userId, setUserId] = useState<string | null>(null)
   const [items, setItems] = useState<UserItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -72,7 +74,7 @@ export default function MyItemsPage() {
   }
 
   const handleDelete = async (itemId: string) => {
-    if (!confirm('Bu ürünü silmek istediğinize emin misiniz?')) return
+    if (!confirm(t('deleteConfirm'))) return
 
     try {
       const { error } = await supabase
@@ -83,10 +85,10 @@ export default function MyItemsPage() {
       if (error) throw error
 
       setItems(items.filter(item => item.id !== itemId))
-      alert('Ürün başarıyla silindi!')
+      alert(t('deleteSuccess'))
     } catch (error) {
       console.error('Error deleting item:', error)
-      alert('Ürün silinirken bir hata oluştu')
+      alert(t('deleteError'))
     }
   }
 
@@ -106,7 +108,7 @@ export default function MyItemsPage() {
       ))
     } catch (error) {
       console.error('Error toggling status:', error)
-      alert('Durum güncellenirken bir hata oluştu')
+      alert(t('statusUpdateError'))
     }
   }
 
@@ -133,36 +135,20 @@ export default function MyItemsPage() {
       
       setShowEditModal(false)
       setEditingItem(null)
-      alert('Ürün başarıyla güncellendi!')
+      alert(t('updateSuccess'))
     } catch (error) {
       console.error('Error updating item:', error)
-      alert('Ürün güncellenirken bir hata oluştu')
+      alert(t('updateError'))
     }
   }
 
   const getConditionText = (condition: string) => {
-    const map: Record<string, string> = {
-      'new': 'Sıfır',
-      'like-new': 'Sıfır Gibi',
-      'like_new': 'Sıfır Gibi',
-      'good': 'İyi',
-      'fair': 'Orta',
-      'poor': 'Kötü'
-    }
-    return map[condition] || condition
+    const conditionKey = condition.replace('-', '_')
+    return t(`conditions.${conditionKey}`, condition)
   }
 
   const getCategoryText = (category: string) => {
-    const map: Record<string, string> = {
-      'clothing': '👕 Giyim',
-      'toys': '🧸 Oyuncak',
-      'electronics': '📱 Elektronik',
-      'books': '📚 Kitap',
-      'sports': '⚽ Spor',
-      'home': '🏠 Ev Eşyası',
-      'other': '🔧 Diğer'
-    }
-    return map[category] || category
+    return t(`categories.${category}`, category)
   }
 
   // Item Card Component
@@ -192,16 +178,16 @@ export default function MyItemsPage() {
                 ? 'bg-blue-500 text-white'
                 : 'bg-gray-500 text-white'
             }`}>
-              {item.status === 'active' ? '✓ Aktif' : 
-               item.status === 'traded' ? '🤝 Takas' : 
-               '⏸ Pasif'}
+              {item.status === 'active' ? `✓ ${t('statusActive')}` : 
+               item.status === 'traded' ? `🤝 ${t('statusTraded')}` : 
+               `⏸ ${t('statusInactive')}`}
             </span>
             {/* Hover Actions */}
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
               <button
                 onClick={() => handleToggleStatus(item)}
                 className="p-2 bg-white rounded-full hover:bg-gray-100 transition-colors"
-                title={item.status === 'active' ? 'Pasif yap' : 'Aktif yap'}
+                title={item.status === 'active' ? t('makeInactive') : t('makeActive')}
               >
                 {item.status === 'active' ? <EyeOff className="w-5 h-5 text-gray-700" /> : <Eye className="w-5 h-5 text-gray-700" />}
               </button>
@@ -267,9 +253,9 @@ export default function MyItemsPage() {
                   ? 'bg-blue-500 text-white'
                   : 'bg-gray-500 text-white'
               }`}>
-                {item.status === 'active' ? '✓ Aktif' : 
-                 item.status === 'traded' ? '🤝 Takas Edildi' : 
-                 '⏸ Pasif'}
+                {item.status === 'active' ? `✓ ${t('statusActive')}` : 
+                 item.status === 'traded' ? `🤝 ${t('statusTraded')}` : 
+                 `⏸ ${t('statusInactive')}`}
               </span>
             </div>
 
@@ -287,19 +273,19 @@ export default function MyItemsPage() {
                 onClick={() => handleToggleStatus(item)}
                 className="flex items-center gap-1 px-3 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-sm font-medium transition-colors shadow-sm"
               >
-                {item.status === 'active' ? <><EyeOff className="w-4 h-4" /> Pasif Yap</> : <><Eye className="w-4 h-4" /> Aktif Yap</>}
+                {item.status === 'active' ? <><EyeOff className="w-4 h-4" /> {t('makeInactive')}</> : <><Eye className="w-4 h-4" /> {t('makeActive')}</>}
               </button>
               <button
                 onClick={() => handleEdit(item)}
                 className="flex items-center gap-1 px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors shadow-sm"
               >
-                <Edit2 className="w-4 h-4" /> Düzenle
+                <Edit2 className="w-4 h-4" /> {t('edit')}
               </button>
               <button
                 onClick={() => handleDelete(item.id)}
                 className="flex items-center gap-1 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition-colors shadow-sm"
               >
-                <Trash2 className="w-4 h-4" /> Sil
+                <Trash2 className="w-4 h-4" /> {t('delete')}
               </button>
             </div>
           </div>
@@ -314,10 +300,10 @@ export default function MyItemsPage() {
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
           <div className="p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Ürünü Düzenle</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">{t('editItemTitle')}</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-2">Ürün Adı</label>
+                <label className="block text-sm font-semibold text-gray-800 mb-2">{t('itemName')}</label>
                 <input
                   type="text"
                   value={editingItem.title}
@@ -326,7 +312,7 @@ export default function MyItemsPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-2">Açıklama</label>
+                <label className="block text-sm font-semibold text-gray-800 mb-2">{t('description')}</label>
                 <textarea
                   value={editingItem.description}
                   onChange={(e) => setEditingItem({ ...editingItem, description: e.target.value })}
@@ -335,37 +321,37 @@ export default function MyItemsPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-2">Kategori</label>
+                <label className="block text-sm font-semibold text-gray-800 mb-2">{t('category')}</label>
                 <select
                   value={editingItem.category}
                   onChange={(e) => setEditingItem({ ...editingItem, category: e.target.value })}
                   className="w-full px-4 py-3 border-2 border-gray-300 bg-white rounded-lg text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 >
-                  <option value="clothing">👕 Giyim</option>
-                  <option value="toys">🧸 Oyuncak</option>
-                  <option value="electronics">📱 Elektronik</option>
-                  <option value="books">📚 Kitap</option>
-                  <option value="sports">⚽ Spor</option>
-                  <option value="home">🏠 Ev Eşyası</option>
-                  <option value="other">🔧 Diğer</option>
+                  <option value="clothing">{t('categories.clothing')}</option>
+                  <option value="toys">{t('categories.toys')}</option>
+                  <option value="electronics">{t('categories.electronics')}</option>
+                  <option value="books">{t('categories.books')}</option>
+                  <option value="sports">{t('categories.sports')}</option>
+                  <option value="home">{t('categories.home')}</option>
+                  <option value="other">{t('categories.other')}</option>
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-2">Durumu</label>
+                <label className="block text-sm font-semibold text-gray-800 mb-2">{t('condition')}</label>
                 <select
                   value={editingItem.condition}
                   onChange={(e) => setEditingItem({ ...editingItem, condition: e.target.value })}
                   className="w-full px-4 py-3 border-2 border-gray-300 bg-white rounded-lg text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 >
-                  <option value="new">Sıfır</option>
-                  <option value="like-new">Sıfır Gibi</option>
-                  <option value="good">İyi</option>
-                  <option value="fair">Orta</option>
-                  <option value="poor">Kötü</option>
+                  <option value="new">{t('conditions.new')}</option>
+                  <option value="like-new">{t('conditions.like_new')}</option>
+                  <option value="good">{t('conditions.good')}</option>
+                  <option value="fair">{t('conditions.fair')}</option>
+                  <option value="poor">{t('conditions.poor')}</option>
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-2">Tahmini Değer (₺)</label>
+                <label className="block text-sm font-semibold text-gray-800 mb-2">{t('estimatedValue')}</label>
                 <input
                   type="number"
                   value={editingItem.estimated_value}
@@ -379,13 +365,13 @@ export default function MyItemsPage() {
                 onClick={() => { setShowEditModal(false); setEditingItem(null); }}
                 className="flex-1 px-4 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors shadow-sm"
               >
-                İptal
+                {t('cancel')}
               </button>
               <button
                 onClick={handleSaveEdit}
                 className="flex-1 px-4 py-3 bg-linear-to-r from-pink-500 to-purple-600 text-white rounded-lg font-semibold hover:from-pink-600 hover:to-purple-700 transition-all shadow-md"
               >
-                Kaydet
+                {t('save')}
               </button>
             </div>
           </div>
@@ -397,7 +383,7 @@ export default function MyItemsPage() {
   // Desktop görünüm
   if (!isMobile) {
     return (
-      <DesktopLayout title="Ürünlerim" maxWidth="7xl">
+      <DesktopLayout title={t('title')} maxWidth="7xl">
         {/* Desktop Stats & Actions Bar */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
@@ -406,7 +392,7 @@ export default function MyItemsPage() {
               <span className="ml-2 font-bold text-purple-600">{items.length} ürün</span>
             </div>
             <div className="bg-white/80 backdrop-blur-md rounded-xl px-4 py-2 border border-white/20">
-              <span className="text-gray-600">Aktif:</span>
+              <span className="text-gray-600">{t('statusActive')}:</span>
               <span className="ml-2 font-bold text-green-600">{items.filter(i => i.status === 'active').length}</span>
             </div>
           </div>
@@ -433,7 +419,7 @@ export default function MyItemsPage() {
               className="flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-5 py-3 rounded-xl font-semibold hover:from-pink-600 hover:to-purple-700 transition-all shadow-lg"
             >
               <Plus className="w-5 h-5" />
-              Yeni Ürün Ekle
+              {t('addItemButton')}
             </Link>
           </div>
         </div>
@@ -441,13 +427,13 @@ export default function MyItemsPage() {
         {items.length === 0 ? (
           <div className="text-center py-16 bg-white/80 backdrop-blur-md rounded-2xl border border-white/20">
             <Package className="w-24 h-24 text-gray-300 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Henüz ürün eklemediniz</h2>
-            <p className="text-gray-600 mb-6">İlk ürününüzü ekleyerek takas yapmaya başlayın!</p>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('noItems')}</h2>
+            <p className="text-gray-600 mb-6">{t('noItemsDesc')}</p>
             <Link
               href="/upload"
               className="inline-flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg"
             >
-              <Plus className="w-5 h-5" /> Ürün Ekle
+              <Plus className="w-5 h-5" /> {t('addItemButton')}
             </Link>
           </div>
         ) : viewMode === 'grid' ? (
@@ -472,7 +458,7 @@ export default function MyItemsPage() {
       <div className="min-h-screen bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Ürünler yükleniyor...</p>
+          <p className="text-gray-600">{t('loading')}</p>
         </div>
       </div>
     )
@@ -490,14 +476,14 @@ export default function MyItemsPage() {
               <ArrowLeft className="w-6 h-6 text-gray-600" />
             </Link>
             <h1 className="text-xl font-bold bg-linear-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
-              Ürünlerim
+              {t('title')}
             </h1>
           </div>
           <Link
             href="/upload"
             className="bg-linear-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:from-pink-600 hover:to-purple-700 transition-all"
           >
-            + Yeni Ürün
+            + {t('addItemButton')}
           </Link>
         </div>
       </header>
@@ -506,13 +492,13 @@ export default function MyItemsPage() {
         {items.length === 0 ? (
           <div className="text-center py-12">
             <Package className="w-20 h-20 text-gray-300 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Henüz ürün eklemediniz</h2>
-            <p className="text-gray-600 mb-6">İlk ürününüzü ekleyerek takas yapmaya başlayın!</p>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('noItems')}</h2>
+            <p className="text-gray-600 mb-6">{t('noItemsDesc')}</p>
             <Link
               href="/upload"
               className="inline-flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg"
             >
-              Ürün Ekle
+              {t('addItemButton')}
             </Link>
           </div>
         ) : (

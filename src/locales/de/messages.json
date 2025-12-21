@@ -1,0 +1,21 @@
+{
+  "title": "Nachrichten",
+  "noMessages": "Noch keine Nachrichten",
+  "noMessagesDesc": "Beginnen Sie ein Gespräch mit einem Match",
+  "typeMessage": "Nachricht eingeben...",
+  "send": "Senden",
+  "today": "Heute",
+  "yesterday": "Gestern",
+  "online": "Online",
+  "offline": "Offline",
+  "typing": "tippt...",
+  "seen": "Gesehen",
+  "delivered": "Zugestellt",
+  "sent": "Gesendet",
+  "searchMessages": "Nachrichten durchsuchen...",
+  "newMessage": "Neue Nachricht",
+  "blockUser": "Benutzer Blockieren",
+  "reportUser": "Benutzer Melden",
+  "deleteChat": "Chat Löschen",
+  "confirmDelete": "Möchten Sie diesen Chat wirklich löschen?"
+}

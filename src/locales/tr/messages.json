@@ -1,0 +1,21 @@
+{
+  "title": "Mesajlar",
+  "noMessages": "Henüz mesaj yok",
+  "noMessagesDesc": "Bir eşleşme ile konuşmaya başlayın",
+  "typeMessage": "Mesaj yazın...",
+  "send": "Gönder",
+  "today": "Bugün",
+  "yesterday": "Dün",
+  "online": "Çevrimiçi",
+  "offline": "Çevrimdışı",
+  "typing": "yazıyor...",
+  "seen": "Görüldü",
+  "delivered": "İletildi",
+  "sent": "Gönderildi",
+  "searchMessages": "Mesajlarda ara...",
+  "newMessage": "Yeni Mesaj",
+  "blockUser": "Kullanıcıyı Engelle",
+  "reportUser": "Kullanıcıyı Bildir",
+  "deleteChat": "Sohbeti Sil",
+  "confirmDelete": "Bu sohbeti silmek istediğinize emin misiniz?"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Notifikationer",
+  "noNotifications": "Ingen notifikationer endnu",
+  "noNotificationsDesc": "Dine nye notifikationer vil vises her",
+  "markAllRead": "Marker Alle som Læst",
+  "newMatch": "Nyt match!",
+  "newMessage": "Ny besked",
+  "offerReceived": "Tilbud modtaget",
+  "offerAccepted": "Dit tilbud blev accepteret",
+  "offerRejected": "Dit tilbud blev afvist",
+  "itemLiked": "Din ting blev liket",
+  "tradeCompleted": "Bytte gennemført",
+  "today": "I dag",
+  "yesterday": "I går",
+  "thisWeek": "Denne Uge",
+  "older": "Ældre",
+  "deleteAll": "Slet Alle",
+  "settings": "Notifikationsindstillinger"
+}

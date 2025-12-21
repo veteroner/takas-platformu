@@ -4,10 +4,12 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 import { signIn, signUp } from '@/lib/auth'
 import { policyRoutes } from '@/lib/legal'
 
 export default function LoginPage() {
+  const { t } = useTranslation('login')
   const router = useRouter()
   const [isRegister, setIsRegister] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
@@ -30,11 +32,11 @@ export default function LoginPage() {
     try {
       if (isRegister) {
         if (formData.password !== formData.confirmPassword) {
-          setError('Şifreler eşleşmiyor')
+          setError(t('errors.passwordMismatch'))
           return
         }
         if (formData.password.length < 6) {
-          setError('Şifre en az 6 karakter olmalıdır')
+          setError(t('errors.passwordTooShort'))
           return
         }
         
@@ -63,7 +65,7 @@ export default function LoginPage() {
             .concat(emailConsent ? ['email'] : [])
             .forEach(k => localStorage.setItem(`accepted_${k}`, 'v1'))
         }
-        setError('Kayıt başarılı! Email adresinizi kontrol edin.')
+        setError(t('registerSuccess'))
         
         // Auto login after signup
         setTimeout(async () => {
@@ -76,7 +78,7 @@ export default function LoginPage() {
       }
     } catch (err: any) {
       console.error('Auth error:', err)
-      setError(err.message || 'Bir hata oluştu')
+      setError(err.message || t('errors.genericError'))
     } finally {
       setIsLoading(false)
     }
@@ -98,19 +100,19 @@ export default function LoginPage() {
           className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors"
         >
           <ArrowLeft size={20} />
-          Ana Sayfa
+          {t('backToHome')}
         </Link>
 
         {/* Form Container */}
         <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 shadow-xl border border-white/20">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-white mb-2">
-              {isRegister ? 'Hesap Oluştur' : 'Giriş Yap'}
+              {isRegister ? t('createAccount') : t('title')}
             </h1>
             <p className="text-white/70">
               {isRegister 
-                ? 'Değiştir topluluğuna katıl' 
-                : 'Hesabına giriş yap'
+                ? t('registerSubtitle') 
+                : t('loginSubtitle')
               }
             </p>
           </div>
@@ -119,7 +121,7 @@ export default function LoginPage() {
           {!isRegister && (
             <div className="bg-white/10 rounded-xl p-4 mb-6 border border-white/20">
               <h3 className="text-white font-medium mb-2">💡 Bilgi:</h3>
-              <p className="text-white/80 text-sm">Yeni hesap oluşturun veya mevcut hesabınızla giriş yapın</p>
+              <p className="text-white/80 text-sm">{t('loginInfo')}</p>
             </div>
           )}
 
@@ -146,7 +148,7 @@ export default function LoginPage() {
               <input
                 type="email"
                 name="email"
-                placeholder="Email"
+                placeholder={t('email')}
                 value={formData.email}
                 onChange={handleInputChange}
                 required
@@ -160,7 +162,7 @@ export default function LoginPage() {
               <input
                 type={showPassword ? 'text' : 'password'}
                 name="password"
-                placeholder="Şifre"
+                placeholder={t('password')}
                 value={formData.password}
                 onChange={handleInputChange}
                 required
@@ -182,7 +184,7 @@ export default function LoginPage() {
                   href="/forgot-password"
                   className="text-white/70 hover:text-white text-sm transition-colors"
                 >
-                  Şifremi Unuttum
+                  {t('forgotPassword')}
                 </Link>
               </div>
             )}
@@ -194,7 +196,7 @@ export default function LoginPage() {
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
                   name="confirmPassword"
-                  placeholder="Şifre Tekrar"
+                  placeholder={t('confirmPassword')}
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
                   required
@@ -276,8 +278,8 @@ export default function LoginPage() {
                 className="text-white/80 hover:text-white underline transition-colors"
               >
                 {isRegister 
-                  ? 'Zaten hesabın var mı? Giriş yap' 
-                  : 'Hesabın yok mu? Hesap oluştur'
+                  ? t('haveAccount') 
+                  : t('noAccount')
                 }
               </button>
             </div>

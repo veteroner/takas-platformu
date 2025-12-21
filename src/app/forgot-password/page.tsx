@@ -4,8 +4,10 @@ import { useState } from 'react'
 import { Mail, ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 import { resetPassword } from '@/lib/auth'
+import { useTranslation } from 'react-i18next'
 
 export default function ForgotPasswordPage() {
+  const { t } = useTranslation('forgot-password')
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -37,7 +39,7 @@ export default function ForgotPasswordPage() {
           className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors"
         >
           <ArrowLeft size={20} />
-          Giriş Sayfası
+          {t('backToLogin')}
         </Link>
 
         {/* Form Container */}
@@ -47,10 +49,10 @@ export default function ForgotPasswordPage() {
               <Mail className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-white mb-2">
-              Şifremi Unuttum
+              {t('title')}
             </h1>
             <p className="text-white/70">
-              E-posta adresinizi girin, şifre sıfırlama linki gönderelim
+              {t('subtitle')}
             </p>
           </div>
 
@@ -61,21 +63,21 @@ export default function ForgotPasswordPage() {
                 <CheckCircle className="w-10 h-10 text-green-400" />
               </div>
               <h2 className="text-xl font-semibold text-white mb-3">
-                E-posta Gönderildi! 📧
+                {t('successTitle')}
               </h2>
               <p className="text-white/80 mb-6">
-                <span className="font-medium text-white">{email}</span> adresine şifre sıfırlama linki gönderdik.
+                <span className="font-medium text-white">{email}</span> {t('successMessage', { email: '' }).replace(email, '')}
               </p>
               <div className="bg-white/10 rounded-xl p-4 mb-6 text-left">
                 <p className="text-white/80 text-sm">
-                  💡 <strong>İpucu:</strong> E-postayı bulamıyorsanız spam/gereksiz klasörünü kontrol edin. Link 1 saat geçerlidir.
+                  {t('successTip')}
                 </p>
               </div>
               <Link
                 href="/login"
                 className="w-full bg-white text-purple-600 font-semibold py-4 rounded-xl hover:bg-white/90 transition-all flex items-center justify-center gap-2"
               >
-                Giriş Sayfasına Dön
+                {t('backToLoginButton')}
               </Link>
             </div>
           ) : (
