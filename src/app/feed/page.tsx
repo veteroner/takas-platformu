@@ -6,6 +6,7 @@ import SwipeStack from '@/components/SwipeStack'
 import MatchToast from '@/components/MatchToast'
 import TakaIcon from '@/components/TakaIcon'
 import DesktopGridView from '@/components/DesktopGridView'
+import { ProductDetailModal } from '@/components/ProductDetailModal'
 import { useDeviceType } from '@/hooks/useDeviceType'
 import { Item, ItemCondition } from '@/types'
 import { Heart, MessageCircle, User, Settings, LogIn, Plus, Package, Shirt, Gamepad2, Smartphone, BookOpen, Dumbbell, Home, LayoutGrid, Search, Filter, Bell, Sparkles } from 'lucide-react'
@@ -47,6 +48,10 @@ export default function HomePage() {
   // Match toast state
   const [showMatchToast, setShowMatchToast] = useState(false)
   const [matchedUser, setMatchedUser] = useState<{ name: string; avatar?: string; matchId: string } | null>(null)
+  
+  // Product detail modal state
+  const [selectedProduct, setSelectedProduct] = useState<Item | null>(null)
+  const [showProductModal, setShowProductModal] = useState(false)
 
   const loadUser = useCallback(async () => {
     try {
@@ -261,8 +266,8 @@ export default function HomePage() {
   }
 
   const handleItemClick = (item: Item) => {
-    // Ürün detay sayfasına git (ileride)
-    console.log('Item clicked:', item)
+    setSelectedProduct(item)
+    setShowProductModal(true)
   }
 
   // 🎯 Device Type Detection
@@ -598,6 +603,14 @@ export default function HomePage() {
           }}
         />
       )}
+
+      {/* Product Detail Modal */}
+      <ProductDetailModal
+        item={selectedProduct}
+        open={showProductModal}
+        onOpenChange={setShowProductModal}
+        currentUserId={user?.id}
+      />
     </div>
   )
 }
