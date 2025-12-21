@@ -93,6 +93,9 @@ export default function LanguageSelectionPage() {
       await i18n.changeLanguage(langCode)
       setClientStorageItem('i18nextLng', langCode)
       setClientStorageItem('userLanguage', langCode)
+      
+      // Force component re-render to update translations
+      forceRender(v => v + 1)
 
       // Robust fallback: if i18n didn't actually switch, reload to re-init from storage.
       const current = (i18n.language || '').toLowerCase().split('-')[0]
