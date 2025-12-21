@@ -6,6 +6,7 @@ import { useDrag } from '@use-gesture/react'
 import Image from 'next/image'
 import { Heart, X, MapPin } from 'lucide-react'
 import { SwipeCardProps } from '@/types'
+import { useTranslation } from 'react-i18next'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SpringValue = any
@@ -15,6 +16,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
   onSwipe, 
   onCardClick 
 }) => {
+  const { t } = useTranslation('common')
   const cardRef = useRef<HTMLDivElement>(null)
   const [isGone, setIsGone] = useState(false)
   
@@ -181,7 +183,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
           }}
         >
           <Heart className="w-4 h-4 fill-current" />
-          BEĞENDİM
+          {t('like').toUpperCase()}
         </animated.div>
 
         {/* Pass Indicator (Left) */}
@@ -193,7 +195,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
           }}
         >
           <X className="w-4 h-4" />
-          GEÇ
+          {t('pass').toUpperCase()}
         </animated.div>
       </animated.div>
 

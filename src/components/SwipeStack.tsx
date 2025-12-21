@@ -6,6 +6,7 @@ import SwipeCard from './SwipeCard'
 import { Item } from '@/types'
 import { Loader2, RotateCcw, Plus } from 'lucide-react'
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 
 interface SwipeStackProps {
   items: Item[]
@@ -24,6 +25,7 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
   onLoadMore,
   className = ''
 }) => {
+  const { t } = useTranslation('common')
   const [currentIndex, setCurrentIndex] = useState(0)
   const [stack, setStack] = useState<Item[]>([])
 
@@ -75,7 +77,7 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
       <div className={`flex flex-col items-center justify-center h-full ${className}`}>
         <div className="text-center p-8">
           <Loader2 className="w-10 h-10 animate-spin text-purple-500 mx-auto mb-4" />
-          <p className="text-gray-600">Ürünler yükleniyor...</p>
+          <p className="text-gray-600">{t('loadingItems')}</p>
         </div>
       </div>
     )
@@ -94,17 +96,17 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
             <Plus className="w-8 h-8 text-purple-500" />
           </div>
           <h3 className="text-lg font-semibold text-gray-800 mb-2">
-            Henüz ürün yok
+            {t('noItems')}
           </h3>
           <p className="text-gray-600 text-sm mb-4">
-            İlk ürünü ekleyen sen ol!
+            {t('addFirstItem')}
           </p>
           <Link
             href="/upload"
             className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-5 py-2.5 rounded-xl font-medium hover:from-pink-600 hover:to-purple-700 transition-all shadow-lg"
           >
             <Plus size={18} />
-            Ürün Ekle
+            {t('addItem')}
           </Link>
         </motion.div>
       </div>
@@ -124,17 +126,17 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
             <RotateCcw className="w-8 h-8 text-indigo-500" />
           </div>
           <h3 className="text-lg font-semibold text-gray-800 mb-2">
-            Tüm ürünleri gördün! 🎉
+            {t('noMoreItems')} 🎉
           </h3>
           <p className="text-gray-600 text-sm mb-4">
-            Yeni ürünler için daha sonra tekrar dene
+            {t('noMoreItemsDesc')}
           </p>
           <button
             onClick={resetStack}
             className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2.5 rounded-xl font-medium hover:from-blue-600 hover:to-indigo-700 transition-all shadow-lg"
           >
             <RotateCcw size={18} />
-            Baştan Başla
+            {t('retry')}
           </button>
         </motion.div>
       </div>
@@ -209,7 +211,7 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
       {isLoading && stack.length > 0 && (
         <div className="absolute top-2 left-2 bg-purple-500 text-white px-2.5 py-1 rounded-full text-xs flex items-center gap-1.5 z-20">
           <Loader2 className="w-3 h-3 animate-spin" />
-          Yükleniyor...
+          {t('loading')}
         </div>
       )}
     </div>
