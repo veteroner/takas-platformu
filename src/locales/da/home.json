@@ -7,5 +7,23 @@
   "swipeLeft": "Swipe til venstre = Synes ikke om",
   "swipeRight": "Swipe til højre = Synes godt om",
   "match": "Det er et match!",
-  "noMoreItems": "Ikke flere genstande"
+  "noMoreItems": "Ikke flere genstande",
+  "searchPlaceholder": "Søg efter elementer...",
+  "myItems": "Mine elementer",
+  "addItem": "Tilføj element",
+  "login": "Log ind",
+  "loginToSwap": "Log ind for at begynde at bytte",
+  "loginToDiscover": "Log ind og find elementer, der matcher dine interesser.",
+  "noLikes": "Ingen likes endnu",
+  "noLikesDesc": "Begynd at swipe og like elementer! 💚",
+  "close": "Luk",
+  "categories": {
+    "all": "Alle",
+    "clothing": "Tøj",
+    "toys": "Legetøj",
+    "electronics": "Elektronik",
+    "books": "Bøger",
+    "sports": "Sport",
+    "home": "Hjem"
+  }
 }

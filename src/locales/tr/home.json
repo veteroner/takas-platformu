@@ -7,5 +7,23 @@
   "swipeLeft": "Sol kaydır = Beğenmedim",
   "swipeRight": "Sağ kaydır = Beğendim",
   "match": "Eşleşme!",
-  "noMoreItems": "Daha fazla ürün yok"
+  "noMoreItems": "Daha fazla ürün yok",
+  "searchPlaceholder": "Ürün ara...",
+  "myItems": "Ürünlerim",
+  "addItem": "Ürün Ekle",
+  "login": "Giriş Yap",
+  "loginToSwap": "Takas yapmak için giriş yap",
+  "loginToDiscover": "Giriş yap ve binlerce ürün arasından sana uygun olanları bul.",
+  "noLikes": "Henüz beğeni yok",
+  "noLikesDesc": "Ürünleri kaydırıp beğenmeye başla! 💚",
+  "close": "Kapat",
+  "categories": {
+    "all": "Tümü",
+    "clothing": "Giyim",
+    "toys": "Oyuncak",
+    "electronics": "Elektronik",
+    "books": "Kitap",
+    "sports": "Spor",
+    "home": "Ev"
+  }
 }

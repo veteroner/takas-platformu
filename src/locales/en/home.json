@@ -7,5 +7,23 @@
   "swipeLeft": "Swipe left = Dislike",
   "swipeRight": "Swipe right = Like",
   "match": "It's a Match!",
-  "noMoreItems": "No more items"
+  "noMoreItems": "No more items",
+  "searchPlaceholder": "Search items...",
+  "myItems": "My Items",
+  "addItem": "Add Item",
+  "login": "Log In",
+  "loginToSwap": "Log in to start swapping",
+  "loginToDiscover": "Log in and find items that match your interests.",
+  "noLikes": "No likes yet",
+  "noLikesDesc": "Start swiping and liking items! 💚",
+  "close": "Close",
+  "categories": {
+    "all": "All",
+    "clothing": "Clothing",
+    "toys": "Toys",
+    "electronics": "Electronics",
+    "books": "Books",
+    "sports": "Sports",
+    "home": "Home"
+  }
 }

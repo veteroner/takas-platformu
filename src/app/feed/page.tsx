@@ -15,17 +15,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getFeedItems, recordSwipe, checkForMatch, getUserLikedItems, getUserPassedItems } from '@/lib/api'
 import { getCurrentUser } from '@/lib/auth'
-
-// Kategori tanımları
-const CATEGORIES = [
-  { id: null, label: 'Tümü', icon: LayoutGrid, color: 'from-purple-500 to-pink-500' },
-  { id: 'clothing', label: 'Giyim', icon: Shirt, color: 'from-pink-500 to-rose-500' },
-  { id: 'toys', label: 'Oyuncak', icon: Gamepad2, color: 'from-orange-500 to-amber-500' },
-  { id: 'electronics', label: 'Elektronik', icon: Smartphone, color: 'from-blue-500 to-cyan-500' },
-  { id: 'books', label: 'Kitap', icon: BookOpen, color: 'from-green-500 to-emerald-500' },
-  { id: 'sports', label: 'Spor', icon: Dumbbell, color: 'from-red-500 to-orange-500' },
-  { id: 'home', label: 'Ev', icon: Home, color: 'from-violet-500 to-purple-500' },
-]
+import { useTranslation } from 'react-i18next'
 
 interface User {
   id: string
@@ -36,7 +26,20 @@ interface User {
 }
 
 export default function HomePage() {
+  const { t } = useTranslation('home')
   const router = useRouter()
+  
+  // Kategori tanımları - çeviri ile
+  const CATEGORIES = useMemo(() => [
+    { id: null, label: t('categories.all'), icon: LayoutGrid, color: 'from-purple-500 to-pink-500' },
+    { id: 'clothing', label: t('categories.clothing'), icon: Shirt, color: 'from-pink-500 to-rose-500' },
+    { id: 'toys', label: t('categories.toys'), icon: Gamepad2, color: 'from-orange-500 to-amber-500' },
+    { id: 'electronics', label: t('categories.electronics'), icon: Smartphone, color: 'from-blue-500 to-cyan-500' },
+    { id: 'books', label: t('categories.books'), icon: BookOpen, color: 'from-green-500 to-emerald-500' },
+    { id: 'sports', label: t('categories.sports'), icon: Dumbbell, color: 'from-red-500 to-orange-500' },
+    { id: 'home', label: t('categories.home'), icon: Home, color: 'from-violet-500 to-purple-500' },
+  ], [t])
+  
   const [user, setUser] = useState<User | null>(null)
   const [items, setItems] = useState<Item[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -302,7 +305,7 @@ export default function HomePage() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Ürün ara..."
+                  placeholder={t('searchPlaceholder')}
                   className="w-full pl-10 pr-4 py-2.5 rounded-full border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 outline-none transition-all bg-white/70"
                 />
                 <button className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-gray-100 rounded-full">
@@ -321,18 +324,18 @@ export default function HomePage() {
                   <>
                     <Link href="/feed" className="flex items-center gap-2 px-4 py-2 text-purple-600 font-medium hover:bg-purple-50 rounded-lg transition-colors">
                       <LayoutGrid className="w-5 h-5" />
-                      <span>Keşfet</span>
+                      <span>{t('discover')}</span>
                     </Link>
                     <Link href="/my-items" className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
                       <Package className="w-5 h-5" />
-                      <span>Ürünlerim</span>
+                      <span>{t('myItems')}</span>
                     </Link>
                   </>
                 )}
                 
                 <Link href="/upload" className={`${isDesktop ? 'flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all shadow-md' : 'p-2 hover:bg-gray-100 rounded-full transition-colors'}`}>
                   <Plus className={`${isDesktop ? 'w-5 h-5' : 'w-5 h-5 text-gray-600'}`} />
-                  {isDesktop && <span>Ürün Ekle</span>}
+                  {isDesktop && <span>{t('addItem')}</span>}
                 </Link>
                 
                 <Link href="/messages" className="p-2 hover:bg-gray-100 rounded-full transition-colors relative">
@@ -378,7 +381,7 @@ export default function HomePage() {
                 className="flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg text-sm"
               >
                 <LogIn size={16} />
-                Giriş Yap
+                {t('login')}
               </Link>
             )}
           </div>
@@ -426,17 +429,16 @@ export default function HomePage() {
           {!user && (
             <div className="max-w-7xl mx-auto px-6 py-8">
               <div className="text-center bg-linear-to-r from-pink-50 to-purple-50 border border-purple-100 rounded-2xl p-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-3">Takas Yapmaya Hazır mısın? 🔄</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-3">{t('loginToSwap')} 🔄</h2>
                 <p className="text-gray-600 mb-6 max-w-md mx-auto">
-                  Giriş yap ve binlerce ürün arasından sana uygun olanları bul. 
-                  Takas yap, tasarruf et!
+                  {t('loginToDiscover')}
                 </p>
                 <Link 
                   href="/login"
                   className="inline-flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-8 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg font-medium"
                 >
                   <LogIn size={20} />
-                  Ücretsiz Kayıt Ol
+                  {t('login')}
                 </Link>
               </div>
             </div>
@@ -524,13 +526,13 @@ export default function HomePage() {
           {showLikedItems && likedItems.length === 0 && (
             <div className="mb-6 bg-white/70 backdrop-blur-sm rounded-xl p-8 text-center border border-white/20">
               <Heart className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Henüz beğeni yok</h3>
-              <p className="text-sm text-gray-600">Ürünleri kaydırıp beğenmeye başla! 💚</p>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">{t('noLikes')}</h3>
+              <p className="text-sm text-gray-600">{t('noLikesDesc')}</p>
               <button 
                 onClick={() => setShowLikedItems(false)}
                 className="mt-4 text-sm text-purple-600 hover:text-purple-800 font-medium"
               >
-                Kapat
+                {t('close')}
               </button>
             </div>
           )}
@@ -538,13 +540,13 @@ export default function HomePage() {
           {/* Login CTA (sadece giriş yapmamış kullanıcılar için) */}
           {!user && (
             <div className="text-center bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 shrink-0">
-              <p className="text-gray-600 mb-3 text-sm">Takas yapmak için giriş yap</p>
+              <p className="text-gray-600 mb-3 text-sm">{t('loginToSwap')}</p>
               <Link 
                 href="/login"
                 className="inline-flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-5 py-2 rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg text-sm"
               >
                 <LogIn size={16} />
-                Giriş Yap
+                {t('login')}
               </Link>
             </div>
           )}
@@ -557,7 +559,7 @@ export default function HomePage() {
           <div className="max-w-md mx-auto flex justify-around items-center pb-2">
             <button className="flex flex-col items-center py-1 px-3 text-purple-600">
               <Heart className="w-5 h-5 fill-current" />
-              <span className="text-[10px] mt-0.5 font-medium">Keşfet</span>
+              <span className="text-[10px] mt-0.5 font-medium">{t('discover')}</span>
             </button>
             {!!user ? (
               <>

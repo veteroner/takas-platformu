@@ -7,5 +7,23 @@
   "swipeLeft": "Nach links wischen = Nicht mögen",
   "swipeRight": "Nach rechts wischen = Mögen",
   "match": "Es ist ein Match!",
-  "noMoreItems": "Keine weiteren Artikel"
+  "noMoreItems": "Keine weiteren Artikel",
+  "searchPlaceholder": "Artikel suchen...",
+  "myItems": "Meine Artikel",
+  "addItem": "Artikel hinzufügen",
+  "login": "Anmelden",
+  "loginToSwap": "Anmelden, um mit dem Tauschen zu beginnen",
+  "loginToDiscover": "Melden Sie sich an und finden Sie Artikel, die Ihren Interessen entsprechen.",
+  "noLikes": "Noch keine Likes",
+  "noLikesDesc": "Fangen Sie an zu wischen und Artikel zu liken! 💚",
+  "close": "Schließen",
+  "categories": {
+    "all": "Alle",
+    "clothing": "Kleidung",
+    "toys": "Spielzeug",
+    "electronics": "Elektronik",
+    "books": "Bücher",
+    "sports": "Sport",
+    "home": "Zuhause"
+  }
 }
