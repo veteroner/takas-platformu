@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import type { i18n as I18nInstance } from 'i18next'
 import { Globe, Check } from 'lucide-react'
-import { getClientStorageItem, setClientStorageItem } from '@/lib/clientStorage'
 import { clearAuthTokens } from '@/lib/auth'
 
 async function waitForI18nReady(instance: I18nInstance): Promise<void> {
@@ -61,8 +60,8 @@ export default function LanguageSelectionPage() {
     // Auth token'larını temizle (refresh token hatalarını önlemek için)
     clearAuthTokens()
 
-    // İlk açılış kontrolü
-    const hasSelectedLanguage = getClientStorageItem('language-selected')
+    // İlk açılış kontrolü - CRITICAL: localStorage kullan!
+    const hasSelectedLanguage = localStorage.getItem('language-selected')
     
     if (hasSelectedLanguage) {
       // Daha önce seçim yapılmış, ana sayfaya yönlendir
@@ -90,43 +89,44 @@ export default function LanguageSelectionPage() {
     // i18n dil değişikliğini yap ve localStorage'a kaydet
     try {
       await waitForI18nReady(i18n)
+      
+      // CRITICAL: localStorage kullan (clientStorage DEĞİL!)
+      localStorage.setItem('i18nextLng', langCode)
+      localStorage.setItem('userLanguage', langCode)
+      
+      // Dil değiştir
       await i18n.changeLanguage(langCode)
-      setClientStorageItem('i18nextLng', langCode)
-      setClientStorageItem('userLanguage', langCode)
+      
+      // Force reload namespace for new language
+      await i18n.reloadResources(langCode, 'language-selection')
       
       // Force component re-render to update translations
       forceRender(v => v + 1)
 
-      // Robust fallback: if i18n didn't actually switch, reload to re-init from storage.
-      const current = (i18n.language || '').toLowerCase().split('-')[0]
-      if (current !== langCode) {
-        window.location.reload()
-        return
-      }
     } catch (error) {
       console.error('Language change error:', error)
       // If changeLanguage fails for any reason, reload after persisting selection.
-      setClientStorageItem('i18nextLng', langCode)
-      setClientStorageItem('userLanguage', langCode)
+      localStorage.setItem('i18nextLng', langCode)
+      localStorage.setItem('userLanguage', langCode)
       window.location.reload()
     }
   }
 
   const handleContinue = () => {
-    // Seçimi kaydet
-    setClientStorageItem('language-selected', 'true')
-    setClientStorageItem('userLanguage', selectedLanguage)
-    setClientStorageItem('i18nextLng', selectedLanguage)
+    // Seçimi kaydet - CRITICAL: localStorage kullan!
+    localStorage.setItem('language-selected', 'true')
+    localStorage.setItem('userLanguage', selectedLanguage)
+    localStorage.setItem('i18nextLng', selectedLanguage)
     
     // Ana sayfaya yönlendir
     router.push('/')
   }
 
   const handleSkip = () => {
-    // Varsayılan dil ile devam et
-    setClientStorageItem('language-selected', 'true')
-    setClientStorageItem('userLanguage', 'tr')
-    setClientStorageItem('i18nextLng', 'tr')
+    // Varsayılan dil ile devam et - CRITICAL: localStorage kullan!
+    localStorage.setItem('language-selected', 'true')
+    localStorage.setItem('userLanguage', 'tr')
+    localStorage.setItem('i18nextLng', 'tr')
     router.push('/')
   }
 
