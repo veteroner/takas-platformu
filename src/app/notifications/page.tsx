@@ -218,29 +218,30 @@ export default function NotificationsPage() {
             {filter === 'unread' ? t('noUnread') : t('noNotifications')}
           </h3>
           <p className="text-white/60">
-            {filter === 'unread' 
-              ? t('allRead') 
-              : t('newNotificationsWillAppear')}
+            {filter === 'unread' ? t('allRead') : t('newNotificationsWillAppear')}
           </p>
         </div>
       ) : (
         <div className="space-y-3">
-          {filteredNotifications.map((notification) => (
+          {filteredNotifications.map((notification) => {
+            const baseClass = 'block bg-white/10 backdrop-blur-lg rounded-2xl p-4 border transition-all hover:bg-white/15';
+            const borderClass = notification.read ? 'border-white/10' : 'border-pink-500/50 bg-white/15';
+            const linkClass = baseClass + ' ' + borderClass;
+            
+            const iconBaseClass = 'p-3 rounded-xl';
+            const iconBgClass = notification.read ? 'bg-white/10' : 'bg-white/20';
+            const iconClass = iconBaseClass + ' ' + iconBgClass;
+            
+            return (
             <Link
               key={notification.id}
               href={getLink(notification)}
               onClick={() => markAsRead(notification.id)}
-              className={`block bg-white/10 backdrop-blur-lg rounded-2xl p-4 border transition-all hover:bg-white/15 ${
-                notification.read 
-                  ? 'border-white/10' 
-                  : 'border-pink-500/50 bg-white/15'
-              }`}
+              className={linkClass}
             >
               <div className="flex items-start gap-4">
                 {/* Icon or Avatar */}
-                <div className={`p-3 rounded-xl ${
-                  notification.read ? 'bg-white/10' : 'bg-white/20'
-                }`}>
+                <div className={iconClass}>
                   {notification.data?.userAvatar ? (
                     <Image
                       src={notification.data.userAvatar}
@@ -300,7 +301,8 @@ export default function NotificationsPage() {
                 </button>
               </div>
             </Link>
-          ))}
+            );
+          })}
         </div>
       )}
     </>

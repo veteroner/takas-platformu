@@ -1,0 +1,53 @@
+ ⚠ Attempted to load @next/swc-darwin-arm64, but an error occurred: dlopen(/Volumes/LaCie/Takas-platform/node_modules/@next/swc-darwin-arm64/next-swc.darwin-arm64.node, 0x0001): tried: '/Volumes/LaCie/Takas-platform/node_modules/@next/swc-darwin-arm64/next-swc.darwin-arm64.node' (segment '__TEXT' load command content extends beyond end of file), '/System/Volumes/Preboot/Cryptexes/OS/Volumes/LaCie/Takas-platform/node_modules/@next/swc-darwin-arm64/next-swc.darwin-arm64.node' (no such file), '/Volumes/LaCie/Takas-platform/node_modules/@next/swc-darwin-arm64/next-swc.darwin-arm64.node' (segment '__TEXT' load command content extends beyond end of file)
+   ▲ Next.js 15.5.9
+   - Experiments (use with caution):
+     · clientTraceMetadata
+
+   Creating an optimized production build ...
+[@sentry/nextjs] It appears you've configured a `sentry.server.config.ts` file. Please ensure to put this file's content into the `register()` function of a Next.js instrumentation file instead. To ensure correct functionality of the SDK, `Sentry.init` must be called inside of an instrumentation file. Learn more about setting up an instrumentation file in Next.js: https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation. You can safely delete the `sentry.server.config.ts` file afterward.
+[@sentry/nextjs] Could not find a Next.js instrumentation file. This indicates an incomplete configuration of the Sentry SDK. An instrumentation file is required for the Sentry SDK to be initialized on the server: https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#create-initialization-config-files (you can suppress this warning by setting SENTRY_SUPPRESS_INSTRUMENTATION_FILE_WARNING=1 as environment variable)
+[@sentry/nextjs] It seems like you don't have a global error handler set up. It is recommended that you add a 'global-error.js' file with Sentry instrumentation so that React rendering errors are reported to Sentry. Read more: https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#react-render-errors-in-app-router (you can suppress this warning by setting SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING=1 as environment variable)
+[@sentry/nextjs] It appears you've configured a `sentry.edge.config.ts` file. Please ensure to put this file's content into the `register()` function of a Next.js instrumentation file instead. To ensure correct functionality of the SDK, `Sentry.init` must be called inside of an instrumentation file. Learn more about setting up an instrumentation file in Next.js: https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation. You can safely delete the `sentry.edge.config.ts` file afterward.
+[@sentry/nextjs] DEPRECATION WARNING: It is recommended renaming your `sentry.client.config.ts` file, or moving its content to `instrumentation-client.ts`. When using Turbopack `sentry.client.config.ts` will no longer work. Read more about the `instrumentation-client.ts` file: https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation-client
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (139kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (188kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+Failed to compile.
+
+./src/app/notifications/page.tsx
+Error:   x Expected '</', got 'block'
+     ,-[/Volumes/LaCie/Takas-platform/src/app/notifications/page.tsx:231:1]
+ 228 |               key={notification.id}
+ 229 |               href={getLink(notification)}
+ 230 |               onClick={() => markAsRead(notification.id)}
+ 231 |               className={`block bg-white/10 backdrop-blur-lg rounded-2xl p-4 border transition-all hover:bg-white/15 ${notification.read ? 'border-white/10' : 'border-pink-500/50 bg-white/15'}`}
+     :                           ^^^^^
+ 232 |             >
+ 233 |               <div className="flex items-start gap-4">
+ 234 |                 {/* Icon or Avatar */}
+     `----
+
+Caused by:
+    0: failed to process js file
+    1: Syntax Error
+    at module.exports.__wbindgen_error_new (/Volumes/LaCie/Takas-platform/node_modules/next/wasm/@next/swc-wasm-nodejs/wasm.js:647:17)
+    at wasm.wasm.__wbindgen_error_new externref shim (wasm://wasm/wasm.wasm-06c8cba6:wasm-function[22169]:0x14dae26)
+    at wasm.wasm.wasm::transform_sync::h853606eb67eb903b (wasm://wasm/wasm.wasm-06c8cba6:wasm-function[2061]:0xb46b0f)
+    at wasm.wasm.wasm_bindgen_futures::future_to_promise::{{closure}}::{{closure}}::he6d9058065a921fb (wasm://wasm/wasm.wasm-06c8cba6:wasm-function[10536]:0x12ed2a3)
+    at wasm.wasm.wasm_bindgen_futures::queue::QueueState::run_all::hc42d8332a12422d4 (wasm://wasm/wasm.wasm-06c8cba6:wasm-function[8897]:0x123b19f)
+    at wasm.wasm.wasm_bindgen_futures::queue::Queue::new::{{closure}}::hec499be7695f83fd (wasm://wasm/wasm.wasm-06c8cba6:wasm-function[21842]:0x14d886b)
+    at wasm.wasm.<dyn core::ops::function::FnMut<(A,)>+Output = R as wasm_bindgen::closure::WasmClosure>::describe::invoke::h7cc0545dfcf63eed (wasm://wasm/wasm.wasm-06c8cba6:wasm-function[21840]:0x14d883b)
+    at wasm.wasm.closure1130 externref shim (wasm://wasm/wasm.wasm-06c8cba6:wasm-function[22694]:0x14de1ac)
+    at __wbg_adapter_50 (/Volumes/LaCie/Takas-platform/node_modules/next/wasm/@next/swc-wasm-nodejs/wasm.js:349:10)
+    at real (/Volumes/LaCie/Takas-platform/node_modules/next/wasm/@next/swc-wasm-nodejs/wasm.js:140:20)
+    at node:internal/process/task_queues:149:7
+    at AsyncResource.runInAsyncScope (node:async_hooks:213:14)
+    at AsyncResource.runMicrotask (node:internal/process/task_queues:146:8)
+    at processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at runNextTicks (node:internal/process/task_queues:68:3)
+    at process.processImmediate (node:internal/timers:472:9)
+
+Import trace for requested module:
+./src/app/notifications/page.tsx
+
+
+> Build failed because of webpack errors

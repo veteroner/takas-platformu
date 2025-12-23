@@ -267,7 +267,18 @@ export default function AdminDashboardPage() {
             <StatusItem label="Veritabanı" status="Çalışıyor" positive />
             <StatusItem label="Bildirimler" status="Aktif" positive />
           </div>
-        </div>Kullanıcı Şikayetleri" 
+        </div>
+
+        <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-red-500 to-orange-600 flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5 text-white" />
+            </div>
+            <h2 className="text-lg font-semibold text-white">Dikkat Gerektiren</h2>
+          </div>
+          <div className="space-y-3">
+            <AlertItem 
+              label="Bekleyen Kullanıcı Şikayetleri" 
               count={metrics!.reports || 0}
               href="/admin/reports"
             />
@@ -279,13 +290,7 @@ export default function AdminDashboardPage() {
             <AlertItem 
               label="Kaldırılan Ürünler" 
               count={metrics!.removedProducts || 0}
-              href="/admin/removed-productlg font-semibold text-white">Dikkat Gerektiren</h2>
-          </div>
-          <div className="space-y-3">
-            <AlertItem 
-              label="Bekleyen Şikayetler" 
-              count={metrics!.reports || 0}
-              href="/admin/reports"
+              href="/admin/removed-products"
             />
             <AlertItem 
               label="Yeni Engellemeler" 
