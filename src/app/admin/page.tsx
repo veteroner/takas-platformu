@@ -10,7 +10,10 @@ import {
   Shield,
   TrendingUp,
   TrendingDown,
-  Activity
+  Activity,
+  Flag,
+  Trash2,
+  XOctagon
 } from 'lucide-react'
 import { getAdminHeaders } from '@/lib/admin-fetch'
 
@@ -21,6 +24,11 @@ type Metrics = {
   messages: number
   reports?: number
   blocks?: number
+  // Moderasyon metrikleri
+  productReports?: number
+  pendingProductReports?: number
+  removedProducts?: number
+  illegalContentAttempts?: number
 }
 
 export default function AdminDashboardPage() {
@@ -50,15 +58,23 @@ export default function AdminDashboardPage() {
         const baseMetrics = j.data
 
         // Get additional metrics from Supabase
-        const [reportsRes, blocksRes] = await Promise.all([
+        const [reportsRes, blocksRes, productReportsRes, pendingProductReportsRes, removedProductsRes, illegalAttemptsRes] = await Promise.all([
           supabase.from('user_reports').select('id', { count: 'exact', head: true }),
-          supabase.from('user_blocks').select('id', { count: 'exact', head: true })
+          supabase.from('user_blocks').select('id', { count: 'exact', head: true }),
+          supabase.from('product_reports').select('id', { count: 'exact', head: true }),
+          supabase.from('product_reports').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
+          supabase.from('removed_products_log').select('id', { count: 'exact', head: true }).is('restored_at', null),
+          supabase.from('illegal_product_attempts').select('id', { count: 'exact', head: true })
         ])
 
         setMetrics({
           ...baseMetrics,
           reports: reportsRes.count || 0,
-          blocks: blocksRes.count || 0
+          blocks: blocksRes.count || 0,
+          productReports: productReportsRes.count || 0,
+          pendingProductReports: pendingProductReportsRes.count || 0,
+          removedProducts: removedProductsRes.count || 0,
+          illegalContentAttempts: illegalAttemptsRes.count || 0
         })
       } catch (e: any) {
         setError(e?.message || 'Hata')
@@ -126,7 +142,7 @@ export default function AdminDashboardPage() {
       trendUp: true
     },
     {
-      title: 'Şikayetler',
+      title: 'Kullanıcı Şikayetleri',
       value: metrics!.reports || 0,
       icon: AlertTriangle,
       color: 'from-orange-500 to-red-500',
@@ -139,6 +155,32 @@ export default function AdminDashboardPage() {
       icon: Shield,
       color: 'from-gray-500 to-slate-500',
       trend: '-2%',
+      trendUp: false
+    },
+    {
+      title: 'Bekleyen Ürün Şikayetleri',
+      value: metrics!.pendingProductReports || 0,
+      icon: Flag,
+      color: 'from-yellow-500 to-orange-500',
+      trend: '',
+      trendUp: true,
+      href: '/admin/moderation'
+    },
+    {
+      title: 'Kaldırılan Ürünler',
+      value: metrics!.removedProducts || 0,
+      icon: Trash2,
+      color: 'from-red-500 to-pink-500',
+      trend: '',
+      trendUp: false,
+      href: '/admin/removed-products'
+    },
+    {
+      title: 'Yasadışı İçerik Engelleme',
+      value: metrics!.illegalContentAttempts || 0,
+      icon: XOctagon,
+      color: 'from-red-600 to-rose-600',
+      trend: '',
       trendUp: false
     }
   ]
@@ -161,9 +203,8 @@ export default function AdminDashboardPage() {
           const Icon = card.icon
           const TrendIcon = card.trendUp ? TrendingUp : TrendingDown
           
-          return (
+          const CardContent = (
             <div
-              key={idx}
               className="relative group bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6 hover:border-white/20 transition-all hover:shadow-2xl hover:shadow-pink-500/10"
             >
               {/* Gradient Background */}
@@ -187,14 +228,26 @@ export default function AdminDashboardPage() {
                   </p>
                   
                   {/* Trend */}
-                  <div className={`flex items-center gap-1 text-xs font-medium ${
-                    card.trendUp ? 'text-green-400' : 'text-red-400'
-                  }`}>
-                    <TrendIcon className="w-4 h-4" />
-                    <span>{card.trend}</span>
-                  </div>
+                  {card.trend && (
+                    <div className={`flex items-center gap-1 text-xs font-medium ${
+                      card.trendUp ? 'text-green-400' : 'text-red-400'
+                    }`}>
+                      <TrendIcon className="w-4 h-4" />
+                      <span>{card.trend}</span>
+                    </div>
+                  )}
                 </div>
               </div>
+            </div>
+          )
+          
+          return (
+            <div key={idx}>
+              {card.href ? (
+                <a href={card.href} className="block">
+                  {CardContent}
+                </a>
+              ) : CardContent}
             </div>
           )
         })}
@@ -214,14 +267,19 @@ export default function AdminDashboardPage() {
             <StatusItem label="Veritabanı" status="Çalışıyor" positive />
             <StatusItem label="Bildirimler" status="Aktif" positive />
           </div>
-        </div>
-
-        <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
-              <AlertTriangle className="w-5 h-5 text-white" />
-            </div>
-            <h2 className="text-lg font-semibold text-white">Dikkat Gerektiren</h2>
+        </div>Kullanıcı Şikayetleri" 
+              count={metrics!.reports || 0}
+              href="/admin/reports"
+            />
+            <AlertItem 
+              label="Bekleyen Ürün Şikayetleri" 
+              count={metrics!.pendingProductReports || 0}
+              href="/admin/moderation"
+            />
+            <AlertItem 
+              label="Kaldırılan Ürünler" 
+              count={metrics!.removedProducts || 0}
+              href="/admin/removed-productlg font-semibold text-white">Dikkat Gerektiren</h2>
           </div>
           <div className="space-y-3">
             <AlertItem 

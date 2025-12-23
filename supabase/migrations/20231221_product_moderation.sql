@@ -128,11 +128,20 @@ CREATE OR REPLACE FUNCTION check_product_reports_threshold()
 RETURNS TRIGGER AS $$
 DECLARE
   report_count INTEGER;
-  threshold INTEGER := 3;  -- 3 farklı kullanıcı şikayet ederse otomatik kaldır
+  threshold INTEGER;
   product_owner_id UUID;
   product_title TEXT;
   product_snapshot JSONB;
 BEGIN
+  -- Threshold değerini app_settings tablosundan al, yoksa default 3 kullan
+  SELECT value::integer INTO threshold
+  FROM app_settings
+  WHERE key = 'auto_moderation_threshold'
+  LIMIT 1;
+  
+  -- Eğer ayar bulunamazsa default değer kullan
+  threshold := COALESCE(threshold, 3);
+  
   -- Ürün için bekleyen toplam UNIQUE şikayet sayısını al
   SELECT COUNT(DISTINCT reporter_id) INTO report_count
   FROM product_reports
@@ -142,8 +151,11 @@ BEGIN
   -- Threshold aşıldıysa
   IF report_count >= threshold THEN
     -- Ürün bilgilerini al
-    SELECT user_id, title, row_to_json(products.*) 
-    INTO product_owner_id, product_title, product_snapshot
+    SELECT 
+      COALESCE(user_id, owner_id) as owner_id, 
+      title, 
+      row_to_json(products.*) 
+    INus, product_snapshot
     FROM products
     WHERE id = NEW.product_id;
     

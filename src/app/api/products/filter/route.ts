@@ -8,6 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { detectIllegalProduct } from '@/lib/illegal-product-filter'
 import { supabase } from '@/lib/supabase'
+import { getSupabaseAdmin, verifyAdminRequest } from '@/lib/admin'
 
 /**
  * POST: Ürün içeriğini kontrol et
@@ -67,9 +68,14 @@ export async function POST(req: NextRequest) {
  */
 export async function GET(req: NextRequest) {
   try {
-    // TODO: Admin authentication kontrolü ekleyin
+    const verified = await verifyAdminRequest(req)
+    if (!verified) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (verified.requires2FA) return NextResponse.json({ error: '2FA required', requires2FA: true }, { status: 403 })
+
+    const supabaseAdmin = getSupabaseAdmin()
+    if (!supabaseAdmin) return NextResponse.json({ error: 'Database not configured' }, { status: 503 })
     
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('illegal_product_attempts')
       .select('*')
       .order('created_at', { ascending: false })

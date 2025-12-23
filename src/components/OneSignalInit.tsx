@@ -10,7 +10,7 @@ declare global {
   }
 }
 
-const ONESIGNAL_APP_ID = 'f26d64d9-c8c9-48ee-a472-f12cc5c8b629'
+const ONESIGNAL_APP_ID = process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID || 'f26d64d9-c8c9-48ee-a472-f12cc5c8b629'
 
 export default function OneSignalInit() {
   useEffect(() => {
