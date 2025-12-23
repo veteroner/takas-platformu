@@ -175,21 +175,13 @@ export default function NotificationsPage() {
         <div className="flex gap-2">
           <button
             onClick={() => setFilter('all')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              filter === 'all' 
-                ? 'bg-white/20 text-white' 
-                : 'bg-white/10 text-white/70 hover:bg-white/15'
-            }`}
+            className={'px-4 py-2 rounded-full text-sm font-medium transition-colors ' + (filter === 'all' ? 'bg-white/20 text-white' : 'bg-white/10 text-white/70 hover:bg-white/15')}
           >
             {t('all')} ({notifications.length})
           </button>
           <button
             onClick={() => setFilter('unread')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              filter === 'unread' 
-                ? 'bg-white/20 text-white' 
-                : 'bg-white/10 text-white/70 hover:bg-white/15'
-            }}
+            className={'px-4 py-2 rounded-full text-sm font-medium transition-colors ' + (filter === 'unread' ? 'bg-white/20 text-white' : 'bg-white/10 text-white/70 hover:bg-white/15')}
           >
             {t('unread')} ({unreadCount})
           </button>
@@ -266,18 +258,14 @@ export default function NotificationsPage() {
                 {/* Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className={`font-semibold ${
-                      notification.read ? 'text-white/80' : 'text-white'
-                    }`}>
+                    <h3 className={'font-semibold ' + (notification.read ? 'text-white/80' : 'text-white')}>
                       {notification.title}
                     </h3>
                     {!notification.read && (
                       <span className="w-2 h-2 bg-pink-500 rounded-full shrink-0 mt-2"></span>
                     )}
                   </div>
-                  <p className={`text-sm mt-1 ${
-                    notification.read ? 'text-white/50' : 'text-white/70'
-                  }`}>
+                  <p className={'text-sm mt-1 ' + (notification.read ? 'text-white/50' : 'text-white/70')}>
                     {notification.message}
                   </p>
                   <p className="text-xs text-white/40 mt-2">
