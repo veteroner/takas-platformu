@@ -5,7 +5,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://www.takazone.com/sitemap.xml
+Sitemap: https://takazone.com/sitemap.xml
 
 # Disallow admin and API routes
 Disallow: /api/

@@ -43,17 +43,17 @@ export const metadata: Metadata = {
     "online takas",
     "ücretsiz takas"
   ],
-  authors: [{ name: "TakaZone", url: "https://www.takazone.com" }],
+  authors: [{ name: "TakaZone", url: "https://takazone.com" }],
   creator: "TakaZone",
   publisher: "TakaZone",
-  metadataBase: new URL('https://www.takazone.com'),
+  metadataBase: new URL('https://takazone.com'),
   alternates: {
-    canonical: 'https://www.takazone.com',
+    canonical: 'https://takazone.com',
   },
   openGraph: {
     title: "TakaZone - Ürün Takas Uygulaması",
     description: "Beğen, eşleş, takas yap! Modern ürün takas platformu ile istediğin ürünleri bul ve takas et.",
-    url: 'https://www.takazone.com',
+    url: 'https://takazone.com',
     siteName: 'TakaZone',
     images: [
       {

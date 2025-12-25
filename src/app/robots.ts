@@ -14,6 +14,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api/', '/admin/'],
       },
     ],
-    sitemap: 'https://www.takazone.com/sitemap.xml',
+    sitemap: 'https://takazone.com/sitemap.xml',
   }
 }
