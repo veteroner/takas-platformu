@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TakaZone - Open Graph Görsel Oluşturucu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a1a;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+        h1 {
+            color: white;
+            margin-bottom: 10px;
+        }
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        #downloadBtn {
+            background: linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%);
+            color: white;
+            font-weight: 600;
+        }
+        #canvas {
+            border: 2px solid #333;
+            border-radius: 12px;
+            max-width: 100%;
+            height: auto;
+        }
+        .info {
+            color: #888;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 TakaZone Open Graph Görsel (1200x630)</h1>
+    <div class="controls">
+        <button id="downloadBtn">📥 PNG İndir (og-image.png)</button>
+    </div>
+    <canvas id="canvas" width="1200" height="630"></canvas>
+    <div class="info">
+        ✅ Google ve sosyal medya için optimize edilmiş 1200x630 boyutunda<br>
+        İndirdikten sonra /public klasörüne og-image.png olarak kaydedin
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        function drawOGImage() {
+            // Modern gradient background
+            const gradient = ctx.createLinearGradient(0, 0, 1200, 630);
+            gradient.addColorStop(0, '#EC4899');
+            gradient.addColorStop(0.5, '#8B5CF6');
+            gradient.addColorStop(1, '#6366F1');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 1200, 630);
+
+            // Decorative circles
+            ctx.globalAlpha = 0.1;
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(200, 150, 150, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(1000, 500, 200, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = 1;
+
+            // Logo/Icon area (centered top)
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.beginPath();
+            ctx.arc(600, 180, 80, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Main heart icon
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 80px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('❤️', 600, 200);
+
+            // Main title
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 72px -apple-system, BlinkMacSystemFont, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('TakaZone', 600, 320);
+
+            // Subtitle
+            ctx.font = '38px -apple-system, sans-serif';
+            ctx.fillText('Beğen, Eşleş, Takas Yap!', 600, 380);
+
+            // Description
+            ctx.font = '28px -apple-system, sans-serif';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.fillText('Modern Ürün Takas Platformu', 600, 440);
+
+            // Features
+            ctx.font = 'bold 24px -apple-system, sans-serif';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            const features = ['👗 Kıyafet', '🧸 Oyuncak', '📱 Güvenli', '🔄 Ücretsiz'];
+            const startX = 300;
+            const gap = 230;
+            features.forEach((feature, i) => {
+                ctx.fillText(feature, startX + (i * gap), 530);
+            });
+
+            // Bottom badge
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+            ctx.fillRect(0, 580, 1200, 50);
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 22px -apple-system, sans-serif';
+            ctx.fillText('takazone.com', 600, 613);
+        }
+
+        drawOGImage();
+
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'og-image.png';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        });
+    </script>
+</body>
+</html>

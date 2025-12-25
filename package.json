@@ -13,7 +13,10 @@
     "test:coverage": "jest --coverage",
     "launch": "./launch.sh",
     "quick-start": "./start.sh",
-    "setup": "npm install && npm run dev"
+    "setup": "npm install && npm run dev",
+    "seo:check": "./check-seo.sh",
+    "seo:report": "open public/seo-report.html",
+    "seo:og-generator": "open public/og-image-generator.html"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",

@@ -9,6 +9,31 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+# Redirects - www ekle ve trailing slash kaldır
+[[redirects]]
+  from = "https://takazone.com/*"
+  to = "https://www.takazone.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://takazone.com/*"
+  to = "https://www.takazone.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.takazone.com/*"
+  to = "https://www.takazone.com/:splat"
+  status = 301
+  force = true
+
+# Trailing slash kaldır
+[[redirects]]
+  from = "/*/"
+  to = "/:splat"
+  status = 301
+
 [[headers]]
   for = "/*"
   [headers.values]
