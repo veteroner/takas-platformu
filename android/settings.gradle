@@ -1,3 +1,9 @@
+// Root settings for the Android Gradle build.
+// Capacitor regenerates `capacitor.settings.gradle` on `npx cap sync/update`.
+
 include ':app'
+include ':capacitor-cordova-android-plugins'
+project(':capacitor-cordova-android-plugins').projectDir = new File('capacitor-cordova-android-plugins')
 
 apply from: 'capacitor.settings.gradle'
+

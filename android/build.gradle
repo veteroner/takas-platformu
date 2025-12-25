@@ -1,7 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    
     repositories {
         google()
         mavenCentral()
@@ -9,18 +8,66 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:8.13.2'
         classpath 'com.google.gms:google-services:4.4.2'
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.21"
     }
 }
-
-apply from: "variables.gradle"
 
 allprojects {
     repositories {
         google()
         mavenCentral()
+    }
+}
+
+// Build outputs on some external/exFAT volumes can accumulate macOS AppleDouble
+// sidecar files ("._*") and cause AGP resource tasks to fail.
+// Writing build outputs to the user's home directory avoids those filesystem quirks.
+def takasBuildRoot = new File(System.getProperty('user.home'), '.takas-gradle-build/android')
+allprojects { p ->
+    def dirName = (p.path == ':') ? 'root' : p.path.substring(1).replace(':', '/')
+    p.buildDir = new File(takasBuildRoot, dirName)
+}
+
+apply from: "variables.gradle"
+
+// Android Studio sync compatibility: some IDE versions still request this task.
+// Newer Kotlin/Gradle combinations may not create it automatically.
+subprojects { proj ->
+    if (proj.tasks.findByName("prepareKotlinBuildScriptModel") == null) {
+        proj.tasks.register("prepareKotlinBuildScriptModel") {
+            group = "build setup"
+            description = "Compatibility task for Android Studio Gradle sync."
+        }
+    }
+}
+
+// macOS/external-drive safeguard: AppleDouble files ("._*") can appear inside
+// Gradle/AGP intermediate resource folders and break resource parsing.
+tasks.register("cleanupMacResourceForks", Delete) {
+    def capacitorDir = new File(rootDir, "../node_modules/@capacitor")
+    delete(
+        fileTree(capacitorDir).matching { include "**/._*", "**/.DS_Store" },
+        fileTree(rootDir).matching { include "**/._*", "**/.DS_Store" }
+    )
+}
+
+subprojects { proj ->
+    proj.tasks.matching { it.name == "preBuild" }.configureEach {
+        dependsOn(rootProject.tasks.named("cleanupMacResourceForks"))
+    }
+
+    // Resource tasks can run without a hard dependency on `preBuild`.
+    // Make sure cleanup runs before any task that touches Android resources.
+    proj.tasks.configureEach { t ->
+        if (
+            t.name == "preBuild" ||
+            t.name.endsWith("LocalResources") ||
+            t.name.contains("package") && t.name.contains("Resources") ||
+            t.name.contains("merge") && t.name.contains("Resources") ||
+            t.name.contains("process") && t.name.contains("Resources")
+        ) {
+            t.dependsOn(rootProject.tasks.named("cleanupMacResourceForks"))
+        }
     }
 }
 

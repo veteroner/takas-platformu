@@ -25,23 +25,31 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "TakaZone - Ürün Takas Uygulaması | Beğen, Eşleş, Takas Yap",
-    template: "%s | TakaZone"
+    default: "Takas Platformu - TakaZone | Ücretsiz Ürün Takası, Beğen ve Eşleş",
+    template: "%s | TakaZone - Takas Platformu"
   },
-  description: "Beğen, eşleş, takas yap! Modern ürün takas platformu ile istediğin ürünleri bul ve takas et. Kıyafet, oyuncak ve daha fazlası için güvenli takas platformu.",
+  description: "Türkiye'nin en güvenli takas platformu TakaZone ile ücretsiz ürün takası yapın! Kıyafet, oyuncak, elektronik takası. Beğen, eşleş, takas et. Bedava alışveriş keyfi yaşa!",
   keywords: [
+    "takas platformu",
     "takazone",
     "takas",
+    "takas et",
     "ürün takası",
+    "ücretsiz takas",
+    "bedava takas",
     "ürün değişimi",
     "alışveriş",
     "ikinci el",
     "eşya takası",
     "kıyafet takası",
     "oyuncak takası",
+    "elektronik takası",
     "güvenli takas",
     "online takas",
-    "ücretsiz takas"
+    "takas uygulaması",
+    "takas sitesi",
+    "takas yap",
+    "ücretsiz alışveriş"
   ],
   authors: [{ name: "TakaZone", url: "https://takazone.com" }],
   creator: "TakaZone",
@@ -137,10 +145,45 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <head>
+        {/* Favicon'ları explicit olarak tanımla - Google indexlemesi için */}
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="48x48" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="mask-icon" href="/icons/icon-512.png" color="#EC4899" />
+        
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="TakaZone" />
         <meta name="mobile-web-app-capable" content="yes" />
+        
+        {/* Organization Schema - Google için */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'TakaZone',
+              alternateName: 'Takas Platformu',
+              url: 'https://takazone.com',
+              logo: 'https://takazone.com/icons/icon-512.png',
+              description: 'Türkiye\'nin en güvenli takas platformu',
+              contactPoint: {
+                '@type': 'ContactPoint',
+                contactType: 'customer service',
+                availableLanguage: ['Turkish']
+              },
+              sameAs: [
+                'https://twitter.com/takazone',
+                'https://instagram.com/takazone'
+              ]
+            })
+          }}
+        />
+        
+        {/* WebApplication Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -148,7 +191,7 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'WebApplication',
               name: 'TakaZone',
-              description: 'Modern ürün takas platformu ile istediğin ürünleri bul ve takas et.',
+              description: 'Türkiye\'nin en güvenli takas platformu ile ücretsiz ürün takası yapın.',
               url: 'https://takazone.com',
               applicationCategory: 'Shopping',
               operatingSystem: 'Web, iOS, Android',
@@ -165,6 +208,7 @@ export default function RootLayout({
             })
           }}
         />
+        
         <meta name="msapplication-TileColor" content="#EC4899" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
         {/* DNS prefetch & preconnect to speed up first load, helpful for WebView */}
