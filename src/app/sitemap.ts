@@ -5,7 +5,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const currentDate = new Date().toISOString()
 
   return [
-    // Public sayfalar - Herkesin erişebileceği sayfalar
+    // PUBLIC SAYFALAR - Herkesin erişebileceği sayfalar
     {
       url: baseUrl,
       lastModified: currentDate,
@@ -13,40 +13,74 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/kesfet`,
+      url: `${baseUrl}/feed`,
       lastModified: currentDate,
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/giris`,
+      url: `${baseUrl}/login`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/kayit`,
+      url: `${baseUrl}/hakkimizda`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
-      priority: 0.7,
+      priority: 0.6,
     },
     {
-      url: `${baseUrl}/gizlilik`,
+      url: `${baseUrl}/destek`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/data-privacy`,
       lastModified: currentDate,
       changeFrequency: 'yearly',
       priority: 0.4,
     },
     {
-      url: `${baseUrl}/kullanim-kosullari`,
+      url: `${baseUrl}/gizlilik-politikasi`,
       lastModified: currentDate,
       changeFrequency: 'yearly',
       priority: 0.4,
     },
-    // NOT: Authentication gerektiren sayfalar sitemap'e eklenmez:
-    // - /eslesmeler (giriş gerekli)
-    // - /mesajlar (giriş gerekli)
-    // - /profil (giriş gerekli)
-    // - /ayarlar (giriş gerekli)
-    // Google bot bu sayfalara erişemez, indexlenemez
+    {
+      url: `${baseUrl}/kvkk-aydinlatma`,
+      lastModified: currentDate,
+      changeFrequency: 'yearly',
+      priority: 0.4,
+    },
+    {
+      url: `${baseUrl}/cerez-politikasi`,
+      lastModified: currentDate,
+      changeFrequency: 'yearly',
+      priority: 0.4,
+    },
+    {
+      url: `${baseUrl}/uyelik-sozlesmesi`,
+      lastModified: currentDate,
+      changeFrequency: 'yearly',
+      priority: 0.4,
+    },
+    {
+      url: `${baseUrl}/acik-riza`,
+      lastModified: currentDate,
+      changeFrequency: 'yearly',
+      priority: 0.4,
+    },
+    // PRIVATE SAYFALAR - Authentication gerektiren (sitemap'e EKLENMEMELİ):
+    // - /matches (eşleşmeler - giriş gerekli)
+    // - /messages (mesajlar - giriş gerekli)
+    // - /profile (profil - giriş gerekli)
+    // - /settings (ayarlar - giriş gerekli)
+    // - /my-items (ürünlerim - giriş gerekli)
+    // - /upload (ürün ekle - giriş gerekli)
+    // - /notifications (bildirimler - giriş gerekli)
+    // - /preferences (tercihler - giriş gerekli)
+    // - /admin/** (admin panel - giriş gerekli)
   ]
 }
