@@ -526,7 +526,7 @@ export default function ProfilePage() {
   // Mobil görünüm
 
   return (
-    <div className="min-h-dvh bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex flex-col">
+    <div className="min-h-svh bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex flex-col">
       <div className="container mx-auto px-4 py-8 pb-24">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
