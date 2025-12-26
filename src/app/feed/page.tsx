@@ -446,7 +446,7 @@ export default function HomePage() {
         </main>
       ) : (
         /* ========== MOBILE SWIPE VIEW ========== */
-        <main className="flex-1 flex flex-col max-w-md mx-auto w-full px-3 py-3 overflow-hidden">
+        <main className="flex-1 flex flex-col max-w-md mx-auto w-full px-3 py-3 pb-24 overflow-hidden">
           {/* Swipe Stack - Ana alan */}
           <div className="flex-1 relative">
             <SwipeStack
@@ -555,7 +555,7 @@ export default function HomePage() {
 
       {/* Bottom Navigation - Sadece Mobil */}
       {isMobile && (
-        <nav className="bg-white/95 backdrop-blur-md border-t border-gray-200 px-2 py-1.5 pb-safe shrink-0">
+        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-200 px-2 py-1.5 pb-safe">
           <div className="max-w-md mx-auto flex justify-around items-center pb-2">
             <button className="flex flex-col items-center py-1 px-3 text-purple-600">
               <Heart className="w-5 h-5 fill-current" />

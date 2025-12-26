@@ -526,37 +526,35 @@ export default function ProfilePage() {
   // Mobil görünüm
 
   return (
-    <div className="h-screen overflow-hidden flex flex-col bg-linear-to-br from-purple-600 via-pink-500 to-orange-400">
-      <div className="flex-1 overflow-y-auto overscroll-contain">
-        <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <Link 
-            href="/"
-            className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors"
-          >
-            <ArrowLeft size={20} />
-            Ana Sayfa
-          </Link>
-          
-          <button
-            onClick={() => setIsEditing(!isEditing)}
-            className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl transition-colors backdrop-blur-sm border border-white/20"
-          >
-            <Edit3 size={16} />
-            {isEditing ? 'İptal' : 'Düzenle'}
-          </button>
-        </div>
+    <div className="min-h-dvh bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex flex-col">
+      <div className="container mx-auto px-4 py-8 pb-24">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <Link 
+          href="/"
+          className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors"
+        >
+          <ArrowLeft size={20} />
+          Ana Sayfa
+        </Link>
+        
+        <button
+          onClick={() => setIsEditing(!isEditing)}
+          className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl transition-colors backdrop-blur-sm border border-white/20"
+        >
+          <Edit3 size={16} />
+          {isEditing ? 'İptal' : 'Düzenle'}
+        </button>
+      </div>
 
-          <div className="max-w-2xl mx-auto">
-            <ProfileContent />
-          </div>
+        <div className="max-w-2xl mx-auto">
+          <ProfileContent />
         </div>
       </div>
 
       {/* Bottom Navigation - Sadece Mobil */}
       {isMobile && (
-        <nav className="bg-white/95 backdrop-blur-md border-t border-gray-200 px-2 py-1.5 pb-safe shrink-0">
+        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-200 px-2 py-1.5 pb-safe">
           <div className="max-w-md mx-auto flex justify-around items-center pb-2">
             <Link href="/feed" className="flex flex-col items-center py-1 px-3 text-gray-400">
               <Heart className="w-5 h-5" />
