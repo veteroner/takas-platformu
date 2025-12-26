@@ -17,5 +17,12 @@
   "blockUser": "Block User",
   "reportUser": "Report User",
   "deleteChat": "Delete Chat",
-  "confirmDelete": "Are you sure you want to delete this chat?"
+  "confirmDelete": "Are you sure you want to delete this chat?",
+  "noMatchesYet": "No matches yet",
+  "startTrading": "Start trading now!",
+  "startExploring": "Start Exploring",
+  "you": "You",
+  "welcomeMessage": "Chat with your matches and complete your trades",
+  "discoverButton": "Discover",
+  "loading": "Loading..."
 }

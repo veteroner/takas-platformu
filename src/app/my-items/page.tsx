@@ -470,7 +470,7 @@ export default function MyItemsPage() {
     <div className="min-h-screen bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
-        <div className="max-w-4xl mx-auto px-4 py-4 pt-12 md:pt-4 flex items-center justify-between">
+        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
               <ArrowLeft className="w-6 h-6 text-gray-600" />

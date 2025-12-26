@@ -17,5 +17,12 @@
   "blockUser": "Kullanıcıyı Engelle",
   "reportUser": "Kullanıcıyı Bildir",
   "deleteChat": "Sohbeti Sil",
-  "confirmDelete": "Bu sohbeti silmek istediğinize emin misiniz?"
+  "confirmDelete": "Bu sohbeti silmek istediğinize emin misiniz?",
+  "noMatchesYet": "Henüz eşleşme yok",
+  "startTrading": "Takas yapmaya başlayın!",
+  "startExploring": "Keşfetmeye Başla",
+  "you": "Siz",
+  "welcomeMessage": "Eşleşmelerinizle sohbet edin ve takaslarınızı gerçekleştirin",
+  "discoverButton": "Keşfet",
+  "loading": "Yükleniyor..."
 }

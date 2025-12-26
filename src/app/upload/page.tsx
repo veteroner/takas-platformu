@@ -966,12 +966,12 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
     <div className="min-h-screen bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
-        <div className="max-w-md mx-auto px-4 py-4 pt-12 md:pt-4 flex items-center gap-3">
+        <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
           <Link href="/" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
             <ArrowLeft className="w-6 h-6 text-gray-600" />
           </Link>
           <h1 className="text-xl font-bold bg-linear-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
-            {t('uploadProduct')}
+            {t('title')}
           </h1>
         </div>
       </header>

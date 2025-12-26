@@ -281,7 +281,7 @@ export default function ChatList() {
       <div className="w-full max-w-md lg:max-w-lg xl:max-w-xl mx-auto">
         {/* Header */}
         <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
-          <div className="px-4 py-4 pt-12 md:pt-4 flex items-center gap-3">
+          <div className="px-4 py-4 flex items-center gap-3">
             <Link href="/" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
               <ArrowLeft className="w-6 h-6 text-gray-600" />
             </Link>
@@ -358,7 +358,7 @@ export default function ChatList() {
           ) : (
             <div className="text-center py-16">
               <MessageCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-600 mb-2">{t('noMatchesYet')}</h3>
+              <h3 className="text-xl font-semibold text-gray-600 mb-2">{t('noMatchesYet')}</h3>
               <p className="text-gray-500">
                 {t('startTrading')}
               </p>
