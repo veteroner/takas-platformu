@@ -963,9 +963,9 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
 
   // Mobile Layout
   return (
-    <div className="min-h-screen bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50">
+    <div className="h-screen overflow-hidden bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 flex flex-col">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
+      <header className="shrink-0 bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
           <Link href="/" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
             <ArrowLeft className="w-6 h-6 text-gray-600" />
@@ -976,7 +976,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
         </div>
       </header>
 
-      <main className="max-w-md mx-auto p-4 pb-24">
+      <main className="flex-1 overflow-y-auto overscroll-contain max-w-md mx-auto p-4 pb-24">
         {/* Illegal Content Warning */}
         {lastResult && !lastResult.isClean && (
           <ProductFilterWarning result={lastResult} className="mb-4" />

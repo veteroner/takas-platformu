@@ -277,10 +277,10 @@ export default function ChatList() {
   // Mobil görünüm (mevcut tasarım)
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:to-black">
-      <div className="w-full max-w-md lg:max-w-lg xl:max-w-xl mx-auto">
+    <div className="h-screen overflow-hidden bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:to-black flex flex-col">
+      <div className="flex-1 flex flex-col w-full max-w-md lg:max-w-lg xl:max-w-xl mx-auto overflow-hidden">
         {/* Header */}
-        <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
+        <header className="shrink-0 bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
           <div className="px-4 py-4 flex items-center gap-3">
             <Link href="/" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
               <ArrowLeft className="w-6 h-6 text-gray-600" />
@@ -292,7 +292,7 @@ export default function ChatList() {
         </header>
 
         {/* Chat List */}
-        <div className="p-4">
+        <div className="flex-1 overflow-y-auto overscroll-contain p-4">
           {matches.length > 0 ? (
             <div className="space-y-2">
               {matches.map((match) => {

@@ -467,9 +467,9 @@ export default function MyItemsPage() {
   // Mobil görünüm
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50">
+    <div className="h-screen overflow-hidden bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 flex flex-col">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
+      <header className="shrink-0 bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
@@ -488,7 +488,7 @@ export default function MyItemsPage() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto p-4 pb-24">
+      <main className="flex-1 overflow-y-auto overscroll-contain max-w-4xl mx-auto p-4 pb-24">
         {items.length === 0 ? (
           <div className="text-center py-12">
             <Package className="w-20 h-20 text-gray-300 mx-auto mb-4" />
