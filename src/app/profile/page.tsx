@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ArrowLeft, Edit3, MapPin, Phone, Calendar, Star, Package, Gift, Camera, Sparkles } from 'lucide-react'
+import { ArrowLeft, Edit3, MapPin, Phone, Calendar, Star, Package, Gift, Camera, Sparkles, Heart, MessageCircle, User, Plus, LogIn } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { getCurrentUser, updateUserProfile } from '@/lib/auth'
 import { getUserItems } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
+import { UnreadBadge } from '@/components/UnreadBadge'
 import type { Item } from '@/types'
 import DesktopLayout from '@/components/DesktopLayout'
 import { useDeviceType } from '@/hooks/useDeviceType'
@@ -525,16 +526,16 @@ export default function ProfilePage() {
   // Mobil görünüm
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+    <div className="h-screen overflow-hidden flex flex-col bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400">
+      {/* Header */}
+      <div className="shrink-0 px-4 pt-4 pb-3">
+        <div className="flex items-center justify-between">
           <Link 
-            href="/"
-            className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors"
+            href="/feed"
+            className="inline-flex items-center gap-2 text-white/90 hover:text-white transition-colors"
           >
             <ArrowLeft size={20} />
-            Ana Sayfa
+            Geri
           </Link>
           
           <button
@@ -545,11 +546,54 @@ export default function ProfilePage() {
             {isEditing ? 'İptal' : 'Düzenle'}
           </button>
         </div>
+      </div>
 
+      {/* Scrollable Content */}
+      <main className="flex-1 overflow-y-auto overscroll-contain px-4 pb-20">
         <div className="max-w-2xl mx-auto">
           <ProfileContent />
         </div>
-      </div>
+      </main>
+
+      {/* Bottom Navigation - Mobil */}
+      {isMobile && (
+        <nav className="bg-white/95 backdrop-blur-md border-t border-gray-200 shrink-0 fixed bottom-0 left-0 right-0 pb-safe z-50">
+          <div className="flex justify-around items-center px-4 py-2">
+            <Link href="/feed" className="flex flex-col items-center py-2 px-4 text-gray-500 hover:text-gray-700">
+              <Heart className="w-6 h-6" />
+              <span className="text-xs mt-1">Keşfet</span>
+            </Link>
+            {!!user ? (
+              <>
+                <Link href="/my-items" className="flex flex-col items-center py-2 px-4 text-gray-500 hover:text-gray-700">
+                  <Package className="w-6 h-6" />
+                  <span className="text-xs mt-1">Ürünlerim</span>
+                </Link>
+                <Link href="/upload" className="flex flex-col items-center -mt-4">
+                  <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-3.5 rounded-full shadow-lg">
+                    <Plus className="w-6 h-6 text-white" />
+                  </div>
+                  <span className="text-xs mt-1 text-gray-600">Yükle</span>
+                </Link>
+                <Link href="/messages" className="flex flex-col items-center py-2 px-4 text-gray-500 hover:text-gray-700 relative">
+                  <MessageCircle className="w-6 h-6" />
+                  <span className="text-xs mt-1">Mesajlar</span>
+                  <UnreadBadge userId={user?.id || null} />
+                </Link>
+                <Link href="/profile" className="flex flex-col items-center py-2 px-4 text-purple-600">
+                  <User className="w-6 h-6 fill-current" />
+                  <span className="text-xs mt-1 font-medium">Profil</span>
+                </Link>
+              </>
+            ) : (
+              <Link href="/login" className="flex flex-col items-center py-2 px-4 text-gray-500 hover:text-gray-700">
+                <LogIn className="w-6 h-6" />
+                <span className="text-xs mt-1">Giriş</span>
+              </Link>
+            )}
+          </div>
+        </nav>
+      )}
     </div>
   )
 }

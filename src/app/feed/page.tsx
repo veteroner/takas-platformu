@@ -9,10 +9,9 @@ import DesktopGridView from '@/components/DesktopGridView'
 import { ProductDetailModal } from '@/components/ProductDetailModal'
 import { useDeviceType } from '@/hooks/useDeviceType'
 import { Item, ItemCondition } from '@/types'
-import { Heart, MessageCircle, User, Settings, LogIn, Plus, Package, Shirt, Gamepad2, Smartphone, BookOpen, Dumbbell, Home, LayoutGrid, Search, Filter, Bell, Sparkles } from 'lucide-react'
+import { Heart, MessageCircle, User, LogIn, Plus, Package } from 'lucide-react'
 import { UnreadBadge } from '@/components/UnreadBadge'
 import Link from 'next/link'
-import Image from 'next/image'
 import { getFeedItems, recordSwipe, checkForMatch, getUserLikedItems, getUserPassedItems } from '@/lib/api'
 import { getCurrentUser } from '@/lib/auth'
 import { useTranslation } from 'react-i18next'
@@ -555,38 +554,38 @@ export default function HomePage() {
 
       {/* Bottom Navigation - Sadece Mobil */}
       {isMobile && (
-        <nav className="bg-white/95 backdrop-blur-md border-t border-gray-200 px-2 py-1.5 pb-safe shrink-0">
-          <div className="max-w-md mx-auto flex justify-around items-center pb-2">
-            <button className="flex flex-col items-center py-1 px-3 text-purple-600">
-              <Heart className="w-5 h-5 fill-current" />
-              <span className="text-[10px] mt-0.5 font-medium">{t('discover')}</span>
-            </button>
+        <nav className="bg-white/95 backdrop-blur-md border-t border-gray-200 shrink-0 fixed bottom-0 left-0 right-0 pb-safe z-50">
+          <div className="flex justify-around items-center px-4 py-2">
+            <Link href="/feed" className="flex flex-col items-center py-2 px-4 text-purple-600">
+              <Heart className="w-6 h-6 fill-current" />
+              <span className="text-xs mt-1 font-medium">Keşfet</span>
+            </Link>
             {!!user ? (
               <>
-                <Link href="/my-items" className="flex flex-col items-center py-1 px-3 text-gray-400">
-                  <Package className="w-5 h-5" />
-                  <span className="text-[10px] mt-0.5">Ürünlerim</span>
+                <Link href="/my-items" className="flex flex-col items-center py-2 px-4 text-gray-500 hover:text-gray-700">
+                  <Package className="w-6 h-6" />
+                  <span className="text-xs mt-1">Ürünlerim</span>
                 </Link>
-                <Link href="/upload" className="flex flex-col items-center py-1 px-3 text-gray-400">
-                  <div className="bg-linear-to-r from-pink-500 to-purple-600 p-2 rounded-full -mt-4 shadow-lg">
-                    <Plus className="w-5 h-5 text-white" />
+                <Link href="/upload" className="flex flex-col items-center -mt-4">
+                  <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-3.5 rounded-full shadow-lg">
+                    <Plus className="w-6 h-6 text-white" />
                   </div>
-                  <span className="text-[10px] mt-0.5">Yükle</span>
+                  <span className="text-xs mt-1 text-gray-600">Yükle</span>
                 </Link>
-                <Link href="/messages" className="flex flex-col items-center py-1 px-3 text-gray-400 relative">
-                  <MessageCircle className="w-5 h-5" />
-                  <span className="text-[10px] mt-0.5">Mesajlar</span>
+                <Link href="/messages" className="flex flex-col items-center py-2 px-4 text-gray-500 hover:text-gray-700 relative">
+                  <MessageCircle className="w-6 h-6" />
+                  <span className="text-xs mt-1">Mesajlar</span>
                   <UnreadBadge userId={user?.id || null} />
                 </Link>
-                <Link href="/profile" className="flex flex-col items-center py-1 px-3 text-gray-400">
-                  <User className="w-5 h-5" />
-                  <span className="text-[10px] mt-0.5">Profil</span>
+                <Link href="/profile" className="flex flex-col items-center py-2 px-4 text-gray-500 hover:text-gray-700">
+                  <User className="w-6 h-6" />
+                  <span className="text-xs mt-1">Profil</span>
                 </Link>
               </>
             ) : (
-              <Link href="/login" className="flex flex-col items-center py-1 px-3 text-gray-400">
-                <LogIn className="w-5 h-5" />
-                <span className="text-[10px] mt-0.5">Giriş</span>
+              <Link href="/login" className="flex flex-col items-center py-2 px-4 text-gray-500 hover:text-gray-700">
+                <LogIn className="w-6 h-6" />
+                <span className="text-xs mt-1">Giriş</span>
               </Link>
             )}
           </div>
