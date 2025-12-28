@@ -63,9 +63,10 @@ export default function DesktopLayout({
 
   return (
     <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400">
-      {/* Desktop/Tablet Header (match feed page header styles) */}
-      <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe shrink-0 sticky top-0 z-50">
-        <div className={`${maxWidthClasses[maxWidth]} mx-auto px-4 py-3 flex items-center justify-between`}>
+      {/* Desktop/Tablet Header */}
+      <header className="bg-white/10 backdrop-blur-md border-b border-white/20 sticky top-0 z-50">
+        <div className={`${maxWidthClasses[maxWidth]} mx-auto px-4 lg:px-8`}>
+          <div className="flex items-center justify-between h-16">
             {/* Sol: Logo ve Back Button */}
             <div className="flex items-center gap-4">
               {showBackButton && (
@@ -138,6 +139,7 @@ export default function DesktopLayout({
               </Link>
             </div>
           </div>
+        </div>
       </header>
 
       {/* Content Area */}
