@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { ArrowLeft, Edit3, MapPin, Phone, Calendar, Star, Package, Gift, Camera, Sparkles, Heart, MessageCircle, User, Plus, LogIn } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -9,17 +9,30 @@ import { useTranslation } from 'react-i18next'
 import { getCurrentUser, updateUserProfile } from '@/lib/auth'
 import { getUserItems } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
-import type { Item } from '@/types'
+import type { Item } from '@/lib/supabase'
 import DesktopLayout from '@/components/DesktopLayout'
 import { useDeviceType } from '@/hooks/useDeviceType'
 import { UnreadBadge } from '@/components/UnreadBadge'
+
+interface ProfileUser {
+  id: string
+  email: string
+  name: string
+  avatar?: string
+  created_at: string
+  metadata?: {
+    bio?: string
+    location?: string
+    phone?: string
+  }
+}
 
 export default function ProfilePage() {
   const { t } = useTranslation(['profile','common','home','preferences','settings']);
   const router = useRouter()
   const { isMobile } = useDeviceType()
-  const [user, setUser] = useState<any>(null)
-  const [userItems, setUserItems] = useState<any[]>([])
+  const [user, setUser] = useState<ProfileUser | null>(null)
+  const [userItems, setUserItems] = useState<Item[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
   const [editData, setEditData] = useState({
@@ -34,53 +47,7 @@ export default function ProfilePage() {
     rating: 0
   })
 
-  useEffect(() => {
-    loadUserData()
-  }, [])
-
-  const loadUserData = async () => {
-    try {
-      setIsLoading(true)
-      const currentUser = await getCurrentUser()
-      
-      if (!currentUser) {
-        router.push('/login')
-        return
-      }
-
-      setUser(currentUser)
-      
-      // Load metadata from Supabase
-      const { data: userData } = await supabase
-        .from('users')
-        .select('metadata')
-        .eq('id', currentUser.id)
-        .single()
-      
-      const metadata = userData?.metadata || {}
-      
-      setEditData({
-        name: currentUser.name || '',
-        bio: metadata.bio || '',
-        location: metadata.location || '',
-        phone: metadata.phone || ''
-      })
-
-      // Load user's items
-      const items = await getUserItems(currentUser.id)
-      setUserItems(items)
-      
-      // Load stats from database
-      await loadUserStats(currentUser.id)
-    } catch (error) {
-      console.error('Error loading user data:', error)
-      router.push('/login')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const loadUserStats = async (userId: string) => {
+  const loadUserStats = useCallback(async (userId: string) => {
     try {
       // 1. Count shared items (items table)
       const { count: sharedCount } = await supabase
@@ -114,7 +81,53 @@ export default function ProfilePage() {
         rating: 5.0
       })
     }
-  }
+  }, [])
+
+  const loadUserData = useCallback(async () => {
+    try {
+      setIsLoading(true)
+      const currentUser = await getCurrentUser()
+      
+      if (!currentUser) {
+        router.push('/login')
+        return
+      }
+
+      setUser(currentUser)
+      
+      // Load metadata from Supabase
+      const { data: userData } = await supabase
+        .from('users')
+        .select('metadata')
+        .eq('id', currentUser.id)
+        .single()
+      
+      const metadata = userData?.metadata || {}
+      
+      setEditData({
+        name: currentUser.name || '',
+        bio: metadata.bio || '',
+        location: metadata.location || '',
+        phone: metadata.phone || ''
+      })
+
+      // Load user's items
+      const items = await getUserItems(currentUser.id)
+      setUserItems(items as Item[])
+      
+      // Load stats from database
+      await loadUserStats(currentUser.id)
+    } catch (error) {
+      console.error('Error loading user data:', error)
+      router.push('/login')
+    } finally {
+      setIsLoading(false)
+    }
+  }, [router, loadUserStats])
+
+  useEffect(() => {
+    loadUserData()
+  }, [loadUserData])
 
   if (isLoading || !user) {
     return (

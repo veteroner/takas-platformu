@@ -12,7 +12,7 @@ interface LogEntry {
   level: LogLevel
   category: string
   message: string
-  data?: any
+  data?: unknown
   stack?: string
 }
 
@@ -46,7 +46,7 @@ class Logger {
   /**
    * Ana log fonksiyonu - Xcode Console'a yazılır
    */
-  private writeLog(level: LogLevel, category: string, message: string, data?: any, error?: Error): void {
+  private writeLog(level: LogLevel, category: string, message: string, data?: unknown, error?: Error): void {
     const timestamp = this.getTimestamp()
     const emoji = this.getLevelEmoji(level)
     
@@ -120,42 +120,42 @@ ${fullMessage}
   /**
    * Debug log
    */
-  debug(category: string, message: string, data?: any): void {
+  debug(category: string, message: string, data?: unknown): void {
     this.writeLog('debug', category, message, data)
   }
 
   /**
    * Info log
    */
-  info(category: string, message: string, data?: any): void {
+  info(category: string, message: string, data?: unknown): void {
     this.writeLog('info', category, message, data)
   }
 
   /**
    * Warning log
    */
-  warn(category: string, message: string, data?: any): void {
+  warn(category: string, message: string, data?: unknown): void {
     this.writeLog('warn', category, message, data)
   }
 
   /**
    * Error log
    */
-  error(category: string, message: string, error?: Error, data?: any): void {
+  error(category: string, message: string, error?: Error, data?: unknown): void {
     this.writeLog('error', category, message, data, error)
   }
 
   /**
    * Fatal error log
    */
-  fatal(category: string, message: string, error?: Error, data?: any): void {
+  fatal(category: string, message: string, error?: Error, data?: unknown): void {
     this.writeLog('fatal', category, message, data, error)
   }
 
   /**
    * Fonksiyon execution tracker
    */
-  track(category: string, functionName: string, params?: any): () => void {
+  track(category: string, functionName: string, params?: unknown): () => void {
     const startTime = performance.now()
     this.debug(category, `▶️ STARTED: ${functionName}`, params)
     
@@ -168,14 +168,14 @@ ${fullMessage}
   /**
    * User action tracker
    */
-  userAction(action: string, component: string, data?: any): void {
+  userAction(action: string, component: string, data?: unknown): void {
     this.info('USER_ACTION', `👤 ${component} - ${action}`, data)
   }
 
   /**
    * API call tracker
    */
-  apiCall(method: string, url: string, params?: any): () => void {
+  apiCall(method: string, url: string, params?: unknown): () => void {
     const startTime = performance.now()
     this.info('API', `🌐 ${method} ${url}`, params)
     
@@ -241,11 +241,11 @@ if (typeof window !== 'undefined') {
 }
 
 // Export helper functions
-export const logDebug = (category: string, message: string, data?: any) => logger.debug(category, message, data)
-export const logInfo = (category: string, message: string, data?: any) => logger.info(category, message, data)
-export const logWarn = (category: string, message: string, data?: any) => logger.warn(category, message, data)
-export const logError = (category: string, message: string, error?: Error, data?: any) => logger.error(category, message, error, data)
-export const logFatal = (category: string, message: string, error?: Error, data?: any) => logger.fatal(category, message, error, data)
-export const trackFunction = (category: string, functionName: string, params?: any) => logger.track(category, functionName, params)
-export const trackUserAction = (action: string, component: string, data?: any) => logger.userAction(action, component, data)
-export const trackApiCall = (method: string, url: string, params?: any) => logger.apiCall(method, url, params)
+export const logDebug = (category: string, message: string, data?: unknown) => logger.debug(category, message, data)
+export const logInfo = (category: string, message: string, data?: unknown) => logger.info(category, message, data)
+export const logWarn = (category: string, message: string, data?: unknown) => logger.warn(category, message, data)
+export const logError = (category: string, message: string, error?: Error, data?: unknown) => logger.error(category, message, error, data)
+export const logFatal = (category: string, message: string, error?: Error, data?: unknown) => logger.fatal(category, message, error, data)
+export const trackFunction = (category: string, functionName: string, params?: unknown) => logger.track(category, functionName, params)
+export const trackUserAction = (action: string, component: string, data?: unknown) => logger.userAction(action, component, data)
+export const trackApiCall = (method: string, url: string, params?: unknown) => logger.apiCall(method, url, params)

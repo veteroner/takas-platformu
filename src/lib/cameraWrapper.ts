@@ -8,8 +8,6 @@ import { logger } from './logger'
 
 // Type imports only (won't be included in bundle)
 import type {
-  CameraResultType as CameraResultTypeEnum,
-  CameraSource as CameraSourceEnum,
   ImageOptions,
   Photo
 } from '@capacitor/camera'
@@ -21,8 +19,6 @@ export type { Photo }
 
 // Camera plugin'i ve sabitleri dinamik olarak yükle
 let CameraModule: typeof import('@capacitor/camera') | null = null
-let CameraResultType: typeof CameraResultTypeEnum
-let CameraSource: typeof CameraSourceEnum
 
 async function getCameraModule() {
   if (CameraModule) return CameraModule
@@ -33,8 +29,6 @@ async function getCameraModule() {
   
   try {
     CameraModule = await import('@capacitor/camera')
-    CameraResultType = CameraModule.CameraResultType
-    CameraSource = CameraModule.CameraSource
     return CameraModule
   } catch (error) {
     logger.warn(CATEGORY, 'Camera plugin yüklenemedi', error as Error)
@@ -42,7 +36,7 @@ async function getCameraModule() {
   }
 }
 
-export interface CameraOptions extends Partial<ImageOptions> {}
+export type CameraOptions = Partial<ImageOptions>
 
 /**
  * Check camera permissions

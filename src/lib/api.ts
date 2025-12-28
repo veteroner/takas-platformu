@@ -1,11 +1,11 @@
 import { supabase } from './supabase'
 import { logger, trackApiCall } from './logger'
 import type { Item } from './supabase'
-import type { SeekingPreferences } from '@/types'
+import type { SeekingPreferences, DbCategory } from '@/types'
 
 // Get items for feed (excluding user's own items)
 // NOT excluding swiped items - user can see them again
-export async function getFeedItems(userId?: string, limit: number = 20): Promise<any[]> {
+export async function getFeedItems(userId?: string, limit: number = 20): Promise<Item[]> {
   try {
     // Validate UUID (to avoid passing non-uuid like 'guest' to neq filter)
     const isValidUuid = (v?: string) => !!v && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(v)
@@ -100,7 +100,7 @@ export async function uploadImage(file: File, userId: string): Promise<string | 
       })
 
     if (error) {
-      const errorObj = error as any
+      const errorObj = error as { code?: string; details?: string }
       logger.error('API', '❌ Supabase Storage upload error', error as Error, {
         fileName,
         bucket: 'item-images',
@@ -110,7 +110,9 @@ export async function uploadImage(file: File, userId: string): Promise<string | 
       })
       
       // Show detailed alert on native platform
-      if (typeof window !== 'undefined' && (window as any).Capacitor?.isNativePlatform?.()) {
+      if (typeof window !== 'undefined') {
+        const w = (window as unknown) as { Capacitor?: { isNativePlatform?: () => boolean } }
+        if (w.Capacitor?.isNativePlatform?.()) {
         const errorDetails = `
 ☁️ SUPABASE UPLOAD HATASI
 
@@ -136,7 +138,8 @@ Dashboard: app.supabase.com
         
         alert(errorDetails)
       }
-      
+      }
+
       throw error
     }
 
@@ -154,13 +157,15 @@ Dashboard: app.supabase.com
     
     end()
     return publicUrl
-  } catch (error: any) {
-    logger.error('API', '❌ Upload image failed', error, {
+  } catch (error: unknown) {
+    const err = error as { message?: string; code?: string }
+    const errForLog = new Error(err?.message ?? 'Unknown upload error')
+    logger.error('API', '❌ Upload image failed', errForLog, {
       fileName: file.name,
       fileSize: file.size,
       userId,
-      errorMessage: error?.message,
-      errorCode: error?.code
+      errorMessage: err?.message,
+      errorCode: err?.code
     })
     end()
     return null
@@ -196,12 +201,12 @@ export async function getSeekingPreferences(userId: string): Promise<SeekingPref
     if (error && error.code !== 'PGRST116') throw error // not found code varies
     if (!data) return null
     return {
-      categories: (data.categories || []).map((c: string) => c as any),
+      categories: (data.categories || []).map((c: string) => c as DbCategory),
       valueMin: data.value_min ?? undefined,
       valueMax: data.value_max ?? undefined,
       locationCity: data.location_city ?? undefined,
       filters: data.filters ?? undefined,
-    } as any
+    }
   } catch (error) {
     console.error('Error fetching seeking preferences:', error)
     return null
@@ -288,18 +293,19 @@ export async function recordSwipe(
     }
     
     return true
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as { code?: string; message?: string }
     // Silently ignore duplicate swipes
-    if (error?.code === '23505' || error?.message?.includes('duplicate')) {
+    if (err?.code === '23505' || (err?.message && err.message.includes('duplicate'))) {
       return true
     }
-    console.error('Error recording swipe:', error)
+    console.error('Error recording swipe:', err)
     return false
   }
 }
 
 // Get user's liked items from database
-export async function getUserLikedItems(userId: string): Promise<any[]> {
+export async function getUserLikedItems(userId: string): Promise<Item[]> {
   try {
     // Get user's liked swipes with item details via JOIN
     const { data, error } = await supabase
@@ -332,9 +338,10 @@ export async function getUserLikedItems(userId: string): Promise<any[]> {
     
     // Filter out deleted/inactive items and flatten structure
     return (data || [])
-      .filter(swipe => swipe.items && (swipe.items as any).status === 'active')
+      .filter(swipe => swipe.items && (swipe.items as unknown as { status: string }).status === 'active')
       .map(swipe => ({
-        ...(swipe.items as any),
+        ...(swipe.items as unknown as Omit<Item, 'isActive'> & { status: string }),
+        isActive: (swipe.items as unknown as { status: string }).status === 'active',
         swipedAt: swipe.created_at
       }))
   } catch (error) {
@@ -365,7 +372,7 @@ export async function getUserPassedItems(userId: string): Promise<string[]> {
 }
 
 // Check if swipe created a match
-export async function checkForMatch(userId: string, itemId: string): Promise<any | null> {
+export async function checkForMatch(userId: string, itemId: string): Promise<Record<string, unknown> | null> {
   try {
     // Get the item owner
     const { data: item } = await supabase
@@ -383,8 +390,8 @@ export async function checkForMatch(userId: string, itemId: string): Promise<any
       .from('matches')
       .select(`
         *,
-        user1:users!matches_user1_id_fkey(id, name, email),
-        user2:users!matches_user2_id_fkey(id, name, email),
+        user1:users!matches_user1_id_fkey(id, name, avatar),
+        user2:users!matches_user2_id_fkey(id, name, avatar),
         item1:items!matches_item1_id_fkey(id, title, images),
         item2:items!matches_item2_id_fkey(id, title, images)
       `)
@@ -429,7 +436,7 @@ export async function getUserMatches(userId: string) {
     const matchesWithLastMessage = (data || []).map(match => {
       const messages = match.messages || []
       // Mesajları tarihe göre sırala (en yeni en üstte)
-      const sortedMessages = messages.sort((a: any, b: any) => 
+      const sortedMessages = messages.sort((a: { created_at: string }, b: { created_at: string }) => 
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       )
       return {
@@ -675,7 +682,7 @@ export async function hasMatchBeenFullyRated(matchId: string): Promise<boolean> 
 }
 
 // Kullanıcıya verilen puanları al (yorumlarla birlikte)
-export async function getUserRatings(userId: string): Promise<any[]> {
+export async function getUserRatings(userId: string): Promise<Record<string, unknown>[]> {
   try {
     const { data, error } = await supabase
       .from('user_ratings')

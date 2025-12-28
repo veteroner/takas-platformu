@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { ArrowLeft, Bell, Shield, Globe, Moon, Sun, Monitor, LogOut, Trash2, Save } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { getCurrentUser } from '@/lib/auth'
+import { getCurrentUser, type AuthUser } from '@/lib/auth'
 import DesktopLayout from '@/components/DesktopLayout'
 import { useDeviceType } from '@/hooks/useDeviceType'
 import { useTranslation } from 'react-i18next'
@@ -22,7 +22,7 @@ export default function SettingsPage() {
   const router = useRouter()
   const { isMobile } = useDeviceType()
   const { t, i18n } = useTranslation(['settings', 'common'])
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<AuthUser | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [settings, setSettings] = useState({
     notifications: true,
@@ -32,14 +32,7 @@ export default function SettingsPage() {
   })
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
-  useEffect(() => {
-    loadUser()
-  }, [])
-
-  // Tema değişikliklerini dinle
-  useThemeListener(settings.theme)
-
-  const loadUser = async () => {
+  const loadUser = useCallback(async () => {
     try {
       setIsLoading(true)
       const currentUser = await getCurrentUser()
@@ -83,7 +76,7 @@ export default function SettingsPage() {
             setSettings(prefs)
             await i18n.changeLanguage(prefs.language)
             applyTheme(prefs.theme)
-          } catch (e) {
+          } catch {
             // Use default settings
           }
         }
@@ -94,7 +87,14 @@ export default function SettingsPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [router, i18n])
+
+  useEffect(() => {
+    loadUser()
+  }, [loadUser])
+
+  // Tema değişikliklerini dinle
+  useThemeListener(settings.theme)
 
   if (isLoading || !user) {
     return (

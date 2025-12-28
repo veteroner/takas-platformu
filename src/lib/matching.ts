@@ -27,7 +27,7 @@ const cityPenalty = (itemCity?: string, prefCity?: string) => {
 
 type DbCategory = 'clothing' | 'toys' | 'electronics' | 'books' | 'sports' | 'home' | 'other'
 
-function toDbCategory(cat: any): DbCategory | undefined {
+function toDbCategory(cat: unknown): DbCategory | undefined {
   if (!cat) return undefined
   const s = String(cat).toLowerCase()
   const dbs = ['clothing','toys','electronics','books','sports','home','other'] as const
@@ -40,7 +40,7 @@ function toDbCategory(cat: any): DbCategory | undefined {
 }
 
 export function scoreItem(item: Item, pref: SeekingPreferences): number {
-  const dbCat = toDbCategory((item as any).category)
+  const dbCat = toDbCategory(item.category)
   if (!dbCat || !pref.categories.includes(dbCat)) return 0
 
   // Value window check using estimatedValue
@@ -148,7 +148,7 @@ export function suggestPackages(
 
   for (let i = 0; i < sorted.length; i++) {
     for (let j = i + 1; j < sorted.length; j++) {
-      let base = (sorted[i].estimatedValue ?? 0) + (sorted[j].estimatedValue ?? 0)
+      const base = (sorted[i].estimatedValue ?? 0) + (sorted[j].estimatedValue ?? 0)
       if (base > targetMax) break
       let bestK = -1
       let bestDelta = Number.POSITIVE_INFINITY

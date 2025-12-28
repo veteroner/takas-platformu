@@ -17,6 +17,14 @@ import { getFeedItems, recordSwipe, checkForMatch, getUserLikedItems, getUserPas
 import { getCurrentUser } from '@/lib/auth'
 import { useTranslation } from 'react-i18next'
 
+type MatchData = {
+  id: string
+  user1_id: string
+  user2_id: string
+  user1: { id: string; name: string; avatar?: string }
+  user2: { id: string; name: string; avatar?: string }
+}
+
 interface User {
   id: string
   name: string
@@ -205,7 +213,7 @@ export default function HomePage() {
   useEffect(() => {
     console.log('🔄 useEffect triggered - loading items...')
     loadInitialItems()
-  }, []) // Sadece mount'ta çalış
+  }, [loadInitialItems]) // Sadece mount'ta çalış
   
   // User değiştiğinde tekrar yükle
   useEffect(() => {
@@ -214,7 +222,7 @@ export default function HomePage() {
       loadInitialItems()
       loadUserSwipes()
     }
-  }, [user?.id])
+  }, [user?.id, loadInitialItems, loadUserSwipes])
 
   // Filtrelenmiş ürünler - useMemo ile optimize
   const filteredItems = useMemo(() => {
@@ -226,7 +234,7 @@ export default function HomePage() {
     })
   }, [items, selectedCategory])
 
-  const handleSwipe = async (direction: 'left' | 'right', item: Item) => {
+  const handleSwipe = useCallback(async (direction: 'left' | 'right', item: Item) => {
     try {
       // Record swipe in database
       if (user) {
@@ -241,7 +249,7 @@ export default function HomePage() {
           setLikedItems(prev => [...prev, item])
           
           // Check if this created a match
-          const match = await checkForMatch(user.id, item.id)
+          const match = await checkForMatch(user.id, item.id) as MatchData | null
           
           if (match) {
             const otherUser = match.user1_id === user.id ? match.user2 : match.user1
@@ -249,7 +257,7 @@ export default function HomePage() {
             // 🎉 MATCH! Show toast and redirect directly to chat with that user
             setMatchedUser({
               name: otherUser.name,
-              avatar: otherUser.avatar_url,
+              avatar: otherUser.avatar,
               matchId: match.id
             })
             setShowMatchToast(true)
@@ -266,7 +274,7 @@ export default function HomePage() {
     } catch (error) {
       console.error('Error recording swipe:', error)
     }
-  }
+  }, [user, setLikedItems, setPassedItems, setMatchedUser, setShowMatchToast, router])
 
   const handleItemClick = (item: Item) => {
     setSelectedProduct(item)

@@ -848,7 +848,7 @@ export default function UploadPage() {
                         className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                       >
                         <option value="">{t('ageGroupPlaceholder') || 'Seçiniz (opsiyonel)'}</option>
-                        {(t('ageGroupOptions', { returnObjects: true }) || []).map((opt: string, idx: number) => {
+                        {((t('ageGroupOptions', { returnObjects: true }) as string[]) || []).map((opt: string, idx: number) => {
                           // value will be the index-based key to keep backwards compatibility
                           const val = ['0-1','1-3','3-6','6-9','9-12','12+'][idx] || String(idx)
                           return (
@@ -1044,7 +1044,7 @@ export default function UploadPage() {
                       // Web fallback: trigger hidden file input
                       try {
                         fileInputRef.current?.click()
-                      } catch (err) {
+                      } catch {
                         // Fallback: show camera options (shouldn't happen on web)
                         setShowCameraOptions(true)
                       }
@@ -1059,7 +1059,7 @@ export default function UploadPage() {
                   {/* Hidden file input for web fallback */}
                   {!Capacitor.isNativePlatform() && (
                     <input
-                      ref={(el) => (fileInputRef.current = el)}
+                      ref={fileInputRef}
                       type="file"
                       accept="image/*"
                       multiple
@@ -1112,7 +1112,7 @@ export default function UploadPage() {
             <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-lg">
               <p className="text-[11px] text-green-700 font-medium">{t('optimizingHeader')}</p>
               <ul className="text-[10px] text-green-600 mt-1 ml-4 list-disc space-y-0.5">
-                {t('optimizingFeatures', { returnObjects: true }).map((f: string, idx: number) => (
+                {((t('optimizingFeatures', { returnObjects: true }) as string[]) || []).map((f: string, idx: number) => (
                   <li key={idx}>{f}</li>
                 ))}
               </ul>

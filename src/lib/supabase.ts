@@ -23,7 +23,7 @@ if (supabaseUrl && supabaseAnonKey) {
 } else {
   // During build or tests the env vars may be missing; export a proxy that throws
   // only when used to avoid breaking static build-time module evaluation.
-  const handler: ProxyHandler<any> = {
+  const handler: ProxyHandler<object> = {
     get() {
       throw new Error('Supabase not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in environment.')
     }

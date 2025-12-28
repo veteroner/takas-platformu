@@ -7,7 +7,6 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
   useEffect(() => {
     // Report to Sentry
     Sentry.captureException(error)
-    // eslint-disable-next-line no-console
     console.error('App error boundary:', error)
   }, [error])
 
