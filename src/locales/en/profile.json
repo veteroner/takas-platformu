@@ -21,4 +21,6 @@
   "viewAllRatings": "View All Ratings",
   "updateSuccess": "✓ Profile successfully updated!",
   "updateError": "Error updating profile"
+  ,
+  "quickActions": "Quick Actions"
 }

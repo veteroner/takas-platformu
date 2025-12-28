@@ -26,7 +26,7 @@ interface User {
 }
 
 export default function HomePage() {
-  const { t } = useTranslation('home')
+  const { t } = useTranslation(['home','common','profile','preferences'])
   const router = useRouter()
   
   // Kategori tanımları - çeviri ile
@@ -565,22 +565,22 @@ export default function HomePage() {
               <>
                 <Link href="/my-items" className="flex flex-col items-center py-1 px-3 text-gray-400">
                   <Package className="w-5 h-5" />
-                  <span className="text-[10px] mt-0.5">Ürünlerim</span>
+                  <span className="text-[10px] mt-0.5">{t('myItems') || 'Ürünlerim'}</span>
                 </Link>
                 <Link href="/upload" className="flex flex-col items-center py-1 px-3 text-gray-400">
                   <div className="bg-linear-to-r from-pink-500 to-purple-600 p-2 rounded-full -mt-4 shadow-lg">
                     <Plus className="w-5 h-5 text-white" />
                   </div>
-                  <span className="text-[10px] mt-0.5">Yükle</span>
+                  <span className="text-[10px] mt-0.5">{t('addItem') || 'Yükle'}</span>
                 </Link>
                 <Link href="/messages" className="flex flex-col items-center py-1 px-3 text-gray-400 relative">
                   <MessageCircle className="w-5 h-5" />
-                  <span className="text-[10px] mt-0.5">Mesajlar</span>
+                  <span className="text-[10px] mt-0.5">{t('messages') || 'Mesajlar'}</span>
                   <UnreadBadge userId={user?.id || null} />
                 </Link>
                 <Link href="/profile" className="flex flex-col items-center py-1 px-3 text-gray-400">
                   <User className="w-5 h-5" />
-                  <span className="text-[10px] mt-0.5">Profil</span>
+                  <span className="text-[10px] mt-0.5">{t('profile') || 'Profil'}</span>
                 </Link>
               </>
             ) : (

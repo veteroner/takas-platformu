@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { Heart } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 interface FooterProps {
   variant?: 'light' | 'dark' | 'transparent'
@@ -10,6 +11,8 @@ interface FooterProps {
 
 export default function Footer({ variant = 'transparent', className = '' }: FooterProps) {
   const currentYear = new Date().getFullYear()
+
+  const { t } = useTranslation(['common', 'home', 'about'])
 
   const bgClass = {
     light: 'bg-white border-t border-gray-200',
@@ -30,18 +33,18 @@ export default function Footer({ variant = 'transparent', className = '' }: Foot
   }[variant]
 
   const legalLinks = [
-    { href: '/gizlilik-politikasi', label: 'Gizlilik Politikası' },
-    { href: '/kvkk-aydinlatma', label: 'KVKK Aydınlatma' },
-    { href: '/cerez-politikasi', label: 'Çerez Politikası' },
-    { href: '/uyelik-sozlesmesi', label: 'Üyelik Sözleşmesi' },
-    { href: '/acik-riza', label: 'Açık Rıza Metni' },
+    { href: '/gizlilik-politikasi', label: t('privacy') || 'Gizlilik Politikası' },
+    { href: '/kvkk-aydinlatma', label: t('kvkk') || 'KVKK Aydınlatma' },
+    { href: '/cerez-politikasi', label: t('cookies') || 'Çerez Politikası' },
+    { href: '/uyelik-sozlesmesi', label: t('tos') || 'Üyelik Sözleşmesi' },
+    { href: '/acik-riza', label: t('consent') || 'Açık Rıza Metni' },
   ]
 
   const quickLinks = [
-    { href: '/feed', label: 'Keşfet' },
-    { href: '/upload', label: 'Ürün Ekle' },
-    { href: '/matches', label: 'Eşleşmeler' },
-    { href: '/messages', label: 'Mesajlar' },
+    { href: '/feed', label: t('discover') || 'Keşfet' },
+    { href: '/upload', label: t('addItem') || 'Ürün Ekle' },
+    { href: '/matches', label: t('matches') || 'Eşleşmeler' },
+    { href: '/messages', label: t('messages') || 'Mesajlar' },
   ]
 
   return (
@@ -59,15 +62,13 @@ export default function Footer({ variant = 'transparent', className = '' }: Foot
                 TakaZone
               </span>
             </Link>
-            <p className={`${textClass} text-sm`}>
-              İkinci el eşyalarını takas et, hem tasarruf et hem de sürdürülebilir bir dünyaya katkıda bulun.
-            </p>
+            <p className={`${textClass} text-sm`}>{t('footer.description') || 'İkinci el eşyalarını takas et, hem tasarruf et hem de sürdürülebilir bir dünyaya katkıda bulun.'}</p>
           </div>
 
           {/* Quick Links */}
           <div>
             <h3 className={`font-semibold mb-4 ${variant === 'light' ? 'text-gray-900' : 'text-white'}`}>
-              Hızlı Linkler
+              {t('footer.quickLinks') || 'Hızlı Linkler'}
             </h3>
             <ul className="space-y-2">
               {quickLinks.map((link) => (
@@ -83,7 +84,7 @@ export default function Footer({ variant = 'transparent', className = '' }: Foot
           {/* Legal Links */}
           <div>
             <h3 className={`font-semibold mb-4 ${variant === 'light' ? 'text-gray-900' : 'text-white'}`}>
-              Yasal
+              {t('footer.legal') || 'Yasal'}
             </h3>
             <ul className="space-y-2">
               {legalLinks.slice(0, 4).map((link) => (
@@ -99,7 +100,7 @@ export default function Footer({ variant = 'transparent', className = '' }: Foot
           {/* Contact */}
           <div>
             <h3 className={`font-semibold mb-4 ${variant === 'light' ? 'text-gray-900' : 'text-white'}`}>
-              İletişim
+              {t('footer.contact') || 'İletişim'}
             </h3>
             <ul className="space-y-2">
               <li>
@@ -109,12 +110,12 @@ export default function Footer({ variant = 'transparent', className = '' }: Foot
               </li>
               <li>
                 <Link href="/data-privacy" className={`text-sm ${linkClass} transition-colors`}>
-                  Verilerim
+                  {t('footer.data') || 'Verilerim'}
                 </Link>
               </li>
               <li>
                 <Link href="/preferences" className={`text-sm ${linkClass} transition-colors`}>
-                  Eşleştirme Tercihlerim
+                  {t('preferences.title') || 'Eşleştirme Tercihlerim'}
                 </Link>
               </li>
             </ul>

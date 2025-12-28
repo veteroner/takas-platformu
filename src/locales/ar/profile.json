@@ -20,5 +20,6 @@
   "ratings": "التقييمات",
   "viewAllRatings": "عرض جميع التقييمات",
   "updateSuccess": "✓ تم تحديث الملف الشخصي بنجاح!",
-  "updateError": "خطأ في تحديث الملف الشخصي"
+  "updateError": "خطأ في تحديث الملف الشخصي",
+  "quickActions": "إجراءات سريعة"
 }

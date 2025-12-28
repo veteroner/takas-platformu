@@ -15,7 +15,7 @@ import { useDeviceType } from '@/hooks/useDeviceType'
 import { UnreadBadge } from '@/components/UnreadBadge'
 
 export default function ProfilePage() {
-  const { t } = useTranslation('profile');
+  const { t } = useTranslation(['profile','common','home','preferences','settings']);
   const router = useRouter()
   const { isMobile } = useDeviceType()
   const [user, setUser] = useState<any>(null)
@@ -443,7 +443,7 @@ export default function ProfilePage() {
                 className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-xl transition-colors backdrop-blur-sm border border-white/20"
               >
                 <Edit3 size={16} />
-                {isEditing ? 'İptal' : 'Düzenle'}
+                {isEditing ? t('cancel') : t('edit')}
               </button>
             </div>
             <ProfileContent />
@@ -452,42 +452,42 @@ export default function ProfilePage() {
           {/* Sağ Panel - Hızlı Eylemler */}
           <div className="lg:col-span-1 space-y-4">
             <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-              <h3 className="text-white font-semibold mb-4">Hızlı Eylemler</h3>
+              <h3 className="text-white font-semibold mb-4">{t('quickActions') || 'Hızlı Eylemler'}</h3>
               <div className="space-y-3">
                 <Link
                   href="/upload"
                   className="flex items-center gap-3 p-3 bg-linear-to-r from-pink-500/20 to-purple-600/20 hover:from-pink-500/30 hover:to-purple-600/30 rounded-xl text-white transition-colors"
                 >
                   <Package className="w-5 h-5" />
-                  <span>Yeni Ürün Ekle</span>
+                  <span>{t('addItem') || 'Yeni Ürün Ekle'}</span>
                 </Link>
                 <Link
                   href="/my-items"
                   className="flex items-center gap-3 p-3 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-colors"
                 >
                   <Package className="w-5 h-5" />
-                  <span>Ürünlerimi Yönet</span>
+                  <span>{t('myItems')}</span>
                 </Link>
                 <Link
                   href="/matches"
                   className="flex items-center gap-3 p-3 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-colors"
                 >
                   <Gift className="w-5 h-5" />
-                  <span>Eşleşmelerim</span>
+                  <span>{t('matches') || 'Eşleşmelerim'}</span>
                 </Link>
                 <Link
                   href="/preferences"
                   className="flex items-center gap-3 p-3 bg-linear-to-r from-yellow-500/20 to-orange-500/20 hover:from-yellow-500/30 hover:to-orange-500/30 rounded-xl text-white transition-colors"
                 >
                   <Sparkles className="w-5 h-5 text-yellow-400" />
-                  <span>Eşleştirme Tercihlerim</span>
+                  <span>{t('preferences.title') || 'Eşleştirme Tercihlerim'}</span>
                 </Link>
                 <Link
                   href="/settings"
                   className="flex items-center gap-3 p-3 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-colors"
                 >
                   <Edit3 className="w-5 h-5" />
-                  <span>Ayarlar</span>
+                  <span>{t('settings.title') || 'Ayarlar'}</span>
                 </Link>
               </div>
             </div>

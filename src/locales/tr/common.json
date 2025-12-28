@@ -38,6 +38,20 @@
   "noMoreItems": "Tüm ürünleri gördünüz",
   "noMoreItemsDesc": "Yeni ürünler için tekrar bekleyin",
   "addItem": "Ürün Ekle",
+  "matches": "Eşleşmeler",
+  "messages": "Mesajlar",
+  "privacy": "Gizlilik Politikası",
+  "kvkk": "KVKK Aydınlatma",
+  "cookies": "Çerez Politikası",
+  "tos": "Üyelik Sözleşmesi",
+  "consent": "Açık Rıza Metni",
+  "footer": {
+    "description": "İkinci el eşyalarını takas et, hem tasarruf et hem de sürdürülebilir bir dünyaya katkıda bulun.",
+    "quickLinks": "Hızlı Linkler",
+    "legal": "Yasal",
+    "contact": "İletişim",
+    "data": "Verilerim"
+  },
   "welcomePage": {
     "subtitle1": "İhtiyacın Olmayan Eşyalarını",
     "subtitle2": "Takas Et, Yeni Şeyler Keşfet! 🎁",

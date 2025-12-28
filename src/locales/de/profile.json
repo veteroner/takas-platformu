@@ -21,4 +21,6 @@
   "viewAllRatings": "Alle Bewertungen anzeigen",
   "updateSuccess": "✓ Profil erfolgreich aktualisiert!",
   "updateError": "Fehler beim Aktualisieren des Profils"
+  ,
+  "quickActions": "Schnellaktionen"
 }

@@ -38,6 +38,20 @@
   "noMoreItems": "You've seen all items",
   "noMoreItemsDesc": "Check back later for new items",
   "addItem": "Add Item",
+  "matches": "Matches",
+  "messages": "Messages",
+  "privacy": "Privacy Policy",
+  "kvkk": "Data Protection",
+  "cookies": "Cookies",
+  "tos": "Terms of Service",
+  "consent": "Consent",
+  "footer": {
+    "description": "Swap your used items, save money and help build a sustainable world.",
+    "quickLinks": "Quick Links",
+    "legal": "Legal",
+    "contact": "Contact",
+    "data": "My Data"
+  },
   "welcomePage": {
     "subtitle1": "Swap the items you no longer need",
     "subtitle2": "Swap, discover new things! 🎁",

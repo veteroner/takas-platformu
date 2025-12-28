@@ -38,6 +38,20 @@
   "noMoreItems": "Sie haben alle Artikel gesehen",
   "noMoreItemsDesc": "Schauen Sie später für neue Artikel vorbei",
   "addItem": "Artikel hinzufügen",
+  "matches": "Matches",
+  "messages": "Messages",
+  "privacy": "Datenschutz",
+  "kvkk": "Datenschutz (KVKK)",
+  "cookies": "Cookies",
+  "tos": "Nutzungsbedingungen",
+  "consent": "Einwilligung",
+  "footer": {
+    "description": "Tausche deine gebrauchten Gegenstände, spare Geld und hilf dabei, eine nachhaltige Welt aufzubauen.",
+    "quickLinks": "Schnellzugriff",
+    "legal": "Rechtliches",
+    "contact": "Kontakt",
+    "data": "Meine Daten"
+  },
   "welcomePage": {
     "subtitle1": "Tausche Dinge, die du nicht mehr brauchst",
     "subtitle2": "Tauschen, Neues entdecken! 🎁",
