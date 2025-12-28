@@ -66,4 +66,53 @@
     "contact": "Kontakt",
     "data": "Mine data"
   }
+  ,
+  "categories": {
+    "clothing": "👕 Tøj",
+    "toys": "🧸 Legetøj",
+    "electronics": "📱 Elektronik",
+    "books": "📚 Bøger",
+    "sports": "⚽ Sport",
+    "home": "🏠 Hjem & Have",
+    "other": "🔧 Andet"
+  },
+  "conditions": {
+    "new": "Ny",
+    "like_new": "Som Ny",
+    "good": "God",
+    "fair": "Acceptabel",
+    "poor": "Dårlig"
+  },
+  "noDescription": "Ingen beskrivelse tilgængelig for dette element.",
+  "productFilter": {
+    "criticalTitle": "🚨 Kritisk advarsel!",
+    "warningTitle": "⚠️ Advarsel!",
+    "legalNoticeTitle": "📋 Juridisk meddelelse:",
+    "legalNoticeBody": "Salg af sådant indhold kan være strafbart under gældende lovgivning og medføre juridiske konsekvenser. Alle handlinger optages af sikkerhedsårsager.",
+    "detectedWordsTitle": "Registrerede ord:",
+    "more": "mere"
+  },
+  "ratings": {
+    "pleaseSelect": "Vælg venligst en vurdering",
+    "submitError": "Der opstod en fejl, prøv igen",
+    "prompt": "Hvordan var din bytteoplevelse?",
+    "labels": { "5": "🌟 Fremragende!", "4": "😊 Meget Godt!", "3": "👍 Godt", "2": "😐 Okay", "1": "😞 Dårligt" },
+    "commentLabel": "Tilføj en kommentar (valgfrit)",
+    "placeholder": "Del din oplevelse...",
+    "submitting": "Sender...",
+    "submitButton": "Send bedømmelse",
+    "shareNote": "Din vurdering deles med den anden part og vises på din profil"
+  },
+  "messageFilter": {
+    "defaultReason": "Din besked kunne ikke sendes på grund af upassende indhold",
+    "banExpired": "Udelukkelse udløbet",
+    "remaining": "Tilbage",
+    "days": "dage",
+    "hours": "timer",
+    "minutes": "minutter",
+    "violationCount": "Antal overtrædelser",
+    "respectfulNote": "Brug venligst respektfuldt sprog på vores platform. Gentagne overtrædelser kan medføre begrænsninger.",
+    "bannedTitle": "Dine beskedrettigheder er blevet suspenderet",
+    "bannedDescription": "Du kan midlertidigt ikke sende beskeder på grund af gentagne overtrædelser."
+  }
 }

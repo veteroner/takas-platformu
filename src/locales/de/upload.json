@@ -61,6 +61,11 @@
     "poor": "Schlecht"
   }
   ,
+  "cities": [
+    "Istanbul", "Ankara", "Izmir", "Bursa", "Antalya", "Adana", "Konya", "Gaziantep",
+    "Mersin", "Diyarbakir", "Kayseri", "Eskisehir", "Samsun", "Denizli", "Sanliurfa"
+  ],
+  ,
   "photosHeader": "Fotos (max. 5)",
   "firstPhotoCover": "Das erste Foto wird das Titelbild sein",
   "tips": {

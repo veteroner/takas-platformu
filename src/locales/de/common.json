@@ -66,4 +66,53 @@
     "signup": "Registrieren",
     "footerNote": "Kostenlos, einfach und macht Spaß! 🚀"
   }
+  ,
+  "categories": {
+    "clothing": "👕 Kleidung",
+    "toys": "🧸 Spielzeug",
+    "electronics": "📱 Elektronik",
+    "books": "📚 Bücher",
+    "sports": "⚽ Sport",
+    "home": "🏠 Haus & Garten",
+    "other": "🔧 Sonstiges"
+  },
+  "conditions": {
+    "new": "Neu",
+    "like_new": "Wie Neu",
+    "good": "Gut",
+    "fair": "Befriedigend",
+    "poor": "Schlecht"
+  },
+  "noDescription": "Keine Beschreibung für diesen Artikel verfügbar.",
+  "productFilter": {
+    "criticalTitle": "🚨 Kritische Warnung!",
+    "warningTitle": "⚠️ Warnung!",
+    "legalNoticeTitle": "📋 Rechtlicher Hinweis:",
+    "legalNoticeBody": "Der Verkauf solcher Inhalte kann nach geltendem Recht eine Straftat darstellen und zu rechtlichen Konsequenzen führen. Alle Vorgänge werden aus Sicherheitsgründen protokolliert.",
+    "detectedWordsTitle": "Erkannte Wörter:",
+    "more": "mehr"
+  },
+  "ratings": {
+    "pleaseSelect": "Bitte wählen Sie eine Bewertung",
+    "submitError": "Beim Absenden ist ein Fehler aufgetreten, bitte versuchen Sie es erneut",
+    "prompt": "Wie war Ihr Tausch-Erlebnis?",
+    "labels": { "5": "🌟 Ausgezeichnet!", "4": "😊 Sehr Gut!", "3": "👍 Gut", "2": "😐 Ok", "1": "😞 Schlecht" },
+    "commentLabel": "Kommentar hinzufügen (optional)",
+    "placeholder": "Teilen Sie Ihre Erfahrungen...",
+    "submitting": "Wird gesendet...",
+    "submitButton": "Bewertung absenden",
+    "shareNote": "Ihre Bewertung wird mit der anderen Partei geteilt und in Ihrem Profil angezeigt"
+  },
+  "messageFilter": {
+    "defaultReason": "Ihre Nachricht konnte aufgrund unangemessener Inhalte nicht gesendet werden",
+    "banExpired": "Sperre abgelaufen",
+    "remaining": "Verbleibend",
+    "days": "Tage",
+    "hours": "Stunden",
+    "minutes": "Minuten",
+    "violationCount": "Anzahl Verstöße",
+    "respectfulNote": "Bitte verwenden Sie respektvolle Sprache auf unserer Plattform. Wiederholte Verstöße können zu Einschränkungen führen.",
+    "bannedTitle": "Ihre Nachrichtenrechte wurden ausgesetzt",
+    "bannedDescription": "Sie können vorübergehend keine Nachrichten senden aufgrund wiederholter Verstöße."
+  }
 }

@@ -24,4 +24,28 @@
   "saving": "Wird gespeichert...",
   "saveSuccess": "✓ Einstellungen gespeichert!",
   "loading": "Laden..."
+  ,
+  "categories": {
+    "clothing": "👕 Kleidung",
+    "toys": "🧸 Spielzeug",
+    "electronics": "📱 Elektronik",
+    "books": "📚 Bücher",
+    "sports": "⚽ Sport",
+    "home": "🏠 Haus & Garten"
+  },
+  "cities": [
+    "Istanbul", "Ankara", "Izmir", "Bursa", "Antalya", "Adana", "Konya", "Gaziantep",
+    "Mersin", "Diyarbakir", "Kayseri", "Eskisehir", "Samsun", "Denizli", "Sanliurfa"
+  ],
+  "sizeOptions": {
+    "onlyExact": "Only exact",
+    "plus1": "±1 size",
+    "plus2": "±2 sizes"
+  },
+  "childGender": {
+    "boy": "👦 Boy",
+    "girl": "👧 Girl"
+  },
+  "all": "All",
+  "perfectCondition": "Only perfect"
 }
