@@ -59,14 +59,12 @@
     "good": "جيد",
     "fair": "متوسط",
     "poor": "سيئ"
-  }
-    ,
-    "cities": [
-      "Istanbul", "Ankara", "Izmir", "Bursa", "Antalya", "Adana", "Konya", "Gaziantep",
-      "Mersin", "Diyarbakir", "Kayseri", "Eskisehir", "Samsun", "Denizli", "Sanliurfa"
-    ],
-    ,
-    "photosHeader": "الصور (حتى 5)",
+  },
+  "cities": [
+    "Istanbul", "Ankara", "Izmir", "Bursa", "Antalya", "Adana", "Konya", "Gaziantep",
+    "Mersin", "Diyarbakir", "Kayseri", "Eskisehir", "Samsun", "Denizli", "Sanliurfa"
+  ],
+  "photosHeader": "الصور (حتى 5)",
     "firstPhotoCover": "الصورة الأولى ستكون صورة الغلاف",
     "tips": {
       "title": "نصائح لمقايضة ناجحة",
