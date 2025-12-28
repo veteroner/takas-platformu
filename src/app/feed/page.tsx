@@ -295,7 +295,7 @@ export default function HomePage() {
     <div className="min-h-svh bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 flex flex-col">
       {/* Header - Desktop için genişletilmiş, Mobil için kompakt */}
       <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe shrink-0 sticky top-0 z-50">
-        <div className={`mx-auto px-4 py-3 flex items-center justify-between ${isDesktop ? 'max-w-7xl' : 'max-w-md'}`}>
+        <div className="w-full px-4 py-3 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2">
             <TakaIcon className="w-7 h-7 text-purple-600" />

@@ -12,7 +12,7 @@ export default function LegalLayout({
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-black/20 backdrop-blur-lg border-b border-white/10">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-4">
+        <div className="w-full px-4 py-4 flex items-center gap-4">
           <Link 
             href="/" 
             className="p-2 hover:bg-white/10 rounded-full transition-colors flex items-center gap-2 text-white"
