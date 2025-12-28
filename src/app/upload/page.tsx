@@ -840,21 +840,22 @@ export default function UploadPage() {
 
                   {/* Age Group */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('ageGroup') || 'Yaş Grubu'}</label>
-                    <select
-                      name="ageGroup"
-                      value={formData.ageGroup}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                    >
-                      <option value="">{t('ageGroupPlaceholder') || 'Seçiniz (opsiyonel)'}</option>
-                      <option value="0-1">👶 0-1 {t('years') || 'yaş'}</option>
-                      <option value="1-3">🧒 1-3 {t('years') || 'yaş'}</option>
-                      <option value="3-6">👧 3-6 {t('years') || 'yaş'}</option>
-                      <option value="6-9">🧑 6-9 {t('years') || 'yaş'}</option>
-                      <option value="9-12">👦 9-12 {t('years') || 'yaş'}</option>
-                      <option value="12+">🧑‍🤝‍🧑 12+ {t('years') || 'yaş'}</option>
-                    </select>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">{t('ageGroup') || 'Yaş Grubu'}</label>
+                      <select
+                        name="ageGroup"
+                        value={formData.ageGroup}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      >
+                        <option value="">{t('ageGroupPlaceholder') || 'Seçiniz (opsiyonel)'}</option>
+                        {(t('ageGroupOptions', { returnObjects: true }) || []).map((opt: string, idx: number) => {
+                          // value will be the index-based key to keep backwards compatibility
+                          const val = ['0-1','1-3','3-6','6-9','9-12','12+'][idx] || String(idx)
+                          return (
+                            <option key={val} value={val}>{opt}</option>
+                          )
+                        })}
+                      </select>
                   </div>
                 </div>
 

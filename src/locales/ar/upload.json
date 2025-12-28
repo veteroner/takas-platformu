@@ -65,6 +65,16 @@
     "Mersin", "Diyarbakir", "Kayseri", "Eskisehir", "Samsun", "Denizli", "Sanliurfa"
   ],
   "photosHeader": "الصور (حتى 5)",
+  "ageGroup": "الفئة العمرية",
+  "ageGroupPlaceholder": "اختر (اختياري)",
+  "ageGroupOptions": [
+    "👶 0-1 سنوات",
+    "🧒 1-3 سنوات",
+    "👧 3-6 سنوات",
+    "🧑 6-9 سنوات",
+    "👦 9-12 سنوات",
+    "🧑‍🤝‍🧑 12+ سنوات"
+  ],
     "firstPhotoCover": "الصورة الأولى ستكون صورة الغلاف",
     "tips": {
       "title": "نصائح لمقايضة ناجحة",
