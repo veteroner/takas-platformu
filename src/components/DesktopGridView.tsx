@@ -13,6 +13,7 @@ interface DesktopGridViewProps {
   passedItems: string[]
   onLike: (item: Item) => void
   onPass: (item: Item) => void
+  onRetry?: () => void
   isLoading: boolean
 }
 
@@ -109,7 +110,7 @@ export default function DesktopGridView({
               <p className="text-gray-400 mb-6">{t('noMoreItemsDesc')}</p>
               <div className="flex justify-center">
                 <button
-                  onClick={() => window.location.reload()}
+                  onClick={() => { if (typeof onRetry === 'function') onRetry(); else window.location.reload() }}
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white py-3 px-6 rounded-full shadow-md hover:opacity-95"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12a9 9 0 1 0-3.16 6.18" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M21 12v-4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>

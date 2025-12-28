@@ -285,6 +285,12 @@ export default function HomePage() {
     await handleSwipe('left', item)
   }, [handleSwipe])
 
+  const handleRetry = useCallback(() => {
+    // Re-fetch items and reset passed items to show previously viewed items again (desktop retry behavior)
+    loadInitialItems()
+    setPassedItems([])
+  }, [loadInitialItems])
+
   return (
     <div className="min-h-svh bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 flex flex-col">
       {/* Header - Desktop için genişletilmiş, Mobil için kompakt */}
@@ -422,6 +428,7 @@ export default function HomePage() {
             passedItems={passedItems.map(i => i.id)}
             onLike={handleDesktopLike}
             onPass={handleDesktopPass}
+            onRetry={handleRetry}
             isLoading={isLoading}
           />
           
