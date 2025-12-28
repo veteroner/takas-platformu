@@ -84,4 +84,23 @@
   "cameraErrorLabel": "📸 Kamera Fehler:",
   "galleryErrorFallback": "Fehler beim Öffnen der Galerie",
   "galleryErrorLabel": "🖼️ Galerie Fehler:"
+  ,
+  "errorImageUpload": "Fehler beim Hochladen des Bildes",
+  "errorIllegalContent": "Artikel aufgrund illegaler Inhalte blockiert",
+  "errorNoImages": "Es wurden keine Bilder hochgeladen. Bitte versuche es erneut.",
+  "illegalContentBlocked": "⚠️ Upload aufgrund illegaler Inhalte blockiert",
+  "illegalContentDesc": "Illegale, gefährliche oder unangemessene Inhalte werden abgelehnt (Drogen, Waffen usw.)",
+  "illegalReminder": "📌 Erinnerung: Illegale, gefährliche oder unangemessene Inhalte sind verboten.",
+  "readRules": "Community-Regeln lesen →",
+  "optimizingHeader": "🚀 Bilder werden automatisch optimiert:",
+  "optimizingFeatures": [
+    "300 KB maximalgröße",
+    "Modernes WebP-Format",
+    "90%+ schnellere Uploads"
+  ],
+  "clothingPreferencesTitle": "Kleiderpräferenzen (optional)",
+  "clothingSizeLabel": "Größe (Text)",
+  "clothingColorLabel": "Farbe(n) komma-getrennt",
+  "sizeTip": "Wenn du Größe/Farbe für Abendmode angibst, werden Matches priorisiert.",
+  "noUserSession": "Keine Benutzersitzung gefunden"
 }

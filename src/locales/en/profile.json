@@ -23,4 +23,20 @@
   "updateError": "Error updating profile"
   ,
   "quickActions": "Quick Actions"
+  ,
+  "activitySummary": "Activity Summary",
+  "totalItems": "Total Items",
+  "activeItems": "Active Items",
+  "completedTrades": "Completed Trades",
+  "averageRating": "Average Rating",
+  "ratingMessages": {
+    "none": "No ratings yet. Complete your first trade! 🌟",
+    "excellent": "Excellent! Users love trading with you 🎉",
+    "great": "Great! You're a reliable trading partner 👍",
+    "good": "Good! Keep improving your trading experience 💪",
+    "improve": "Consider feedback to improve your trading experience 📈"
+  }
+  ,
+  "noRatingsTitle": "No Ratings Yet",
+  "noRatingsDesc": "Complete your first trade to receive ratings!"
 }

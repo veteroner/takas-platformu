@@ -37,6 +37,7 @@
   "loadingItems": "Indlæser elementer...",
   "noMoreItems": "Du har set alle elementer",
   "noMoreItemsDesc": "Tjek igen senere for nye elementer",
+  "rateLimit": { "message": "For mange forespørgsler. Vent venligst." },
   "addItem": "Tilføj element",
   "welcomePage": {
     "subtitle1": "Byt ting, du ikke længere har brug for",

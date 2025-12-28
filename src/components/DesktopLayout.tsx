@@ -35,14 +35,14 @@ export default function DesktopLayout({
 }: DesktopLayoutProps) {
   const { isMobile } = useDeviceType()
   const pathname = usePathname()
-  const { t } = useTranslation(['home', 'common', 'settings'])
+  const { t } = useTranslation(['home', 'common', 'settings', 'matches', 'my-items', 'profile'])
 
   const navItems = [
     { href: '/feed', label: t('discover') || 'Keşfet', icon: Home },
     { href: '/messages', label: t('messages') || 'Mesajlar', icon: MessageCircle },
     { href: '/my-items', label: t('myItems') || 'Ürünlerim', icon: Package },
-    { href: '/matches', label: t('matches') || 'Eşleşmeler', icon: Heart },
-    { href: '/profile', label: t('profile') || 'Profil', icon: User },
+    { href: '/matches', label: t('matches.title') || 'Eşleşmeler', icon: Heart },
+    { href: '/profile', label: t('profile.title') || 'Profil', icon: User },
   ]
 
   const maxWidthClasses = {
@@ -156,13 +156,13 @@ export default function DesktopLayout({
 // Tablet/Desktop için sidebar navigation alternatifi
 export function DesktopSidebar() {
   const pathname = usePathname()
-  const { t } = useTranslation(['home','common','settings'])
+  const { t } = useTranslation(['home','common','settings','matches','my-items','profile'])
   const navItems = [
     { href: '/feed', label: t('discover') || 'Keşfet', icon: Home },
     { href: '/messages', label: t('messages') || 'Mesajlar', icon: MessageCircle },
     { href: '/my-items', label: t('myItems') || 'Ürünlerim', icon: Package },
-    { href: '/matches', label: t('matches') || 'Eşleşmeler', icon: Heart },
-    { href: '/profile', label: t('profile') || 'Profil', icon: User },
+    { href: '/matches', label: t('matches.title') || 'Eşleşmeler', icon: Heart },
+    { href: '/profile', label: t('profile.title') || 'Profil', icon: User },
   ]
   
   return (

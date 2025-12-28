@@ -478,7 +478,7 @@ export default function UploadPage() {
     } catch (err: unknown) {
       const error = err as Error
       logger.error('UPLOAD_PAGE', '❌ Image upload error', error)
-      setError(error.message || 'Resim yüklenirken hata oluştu')
+      setError(error.message || t('errorImageUpload'))
     } finally {
       setIsOptimizing(false)
     }
@@ -499,14 +499,14 @@ export default function UploadPage() {
 
     try {
       if (!userId) {
-        throw new Error('Kullanıcı oturumu bulunamadı')
+        throw new Error(t('noUserSession'))
       }
 
       // 1. Yasadışı içerik kontrolü
       const filterResult = checkProduct(formData.title, formData.description)
       
       if (filterResult.shouldBlock) {
-        setError(filterResult.message || 'Ürün yasadışı içerik nedeniyle yüklenemedi')
+        setError(filterResult.message || t('errorIllegalContent'))
         setIsUploading(false)
         window.scrollTo({ top: 0, behavior: 'smooth' })
         return
@@ -557,7 +557,7 @@ export default function UploadPage() {
       logger.info('UPLOAD_PAGE', `Upload complete: ${imageUrls.length}/${imageFiles.length} images uploaded`)
       
       if (imageUrls.length === 0) {
-        throw new Error('Hiçbir resim yüklenemedi. Lütfen tekrar deneyin.')
+        throw new Error(t('errorNoImages'))
       }
 
       // 2. Create item in database
@@ -688,10 +688,10 @@ export default function UploadPage() {
       <div className="mt-6 pt-4 border-t border-gray-100">
         <div className="bg-linear-to-r from-pink-50 to-purple-50 rounded-xl p-4">
           <p className="text-xs text-gray-600 mb-2">
-            <strong>📌 Hatırlatma:</strong> Yasadışı, tehlikeli veya uygunsuz içerikler yasaktır.
+            <strong>{t('illegalReminder').split(' ')[0]}</strong> {t('illegalReminder').replace(/^\S+\s*/, '')}
           </p>
           <Link href="/kurals" className="text-xs text-pink-600 hover:text-pink-700 font-medium">
-            Topluluk kurallarını oku →
+            {t('readRules')}
           </Link>
         </div>
       </div>
@@ -945,7 +945,7 @@ export default function UploadPage() {
 
                 {lastResult && !lastResult.isClean && (
                   <p className="text-center text-sm text-red-600 -mt-4">
-                    ⚠️ Yasadışı içerik nedeniyle yükleme engellendi
+                    {t('illegalContentBlocked')}
                   </p>
                 )}
               </form>
@@ -1109,13 +1109,11 @@ export default function UploadPage() {
               {t('firstPhotoCover')}
             </p>
             <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-lg">
-              <p className="text-[11px] text-green-700 font-medium">
-                🚀 Resimler otomatik optimize ediliyor:
-              </p>
+              <p className="text-[11px] text-green-700 font-medium">{t('optimizingHeader')}</p>
               <ul className="text-[10px] text-green-600 mt-1 ml-4 list-disc space-y-0.5">
-                <li>300 KB maksimum boyut</li>
-                <li>Modern WebP formatı</li>
-                <li>%90+ daha hızlı yükleme</li>
+                {t('optimizingFeatures', { returnObjects: true }).map((f: string, idx: number) => (
+                  <li key={idx}>{f}</li>
+                ))}
               </ul>
             </div>
           </div>
@@ -1158,7 +1156,7 @@ export default function UploadPage() {
               }`}
             />
             <p className="text-xs text-gray-600 mt-2">
-              ⚠️ Yasadışı içerik (uyuşturucu, silah, vs.) tespit edilirse ürün reddedilir
+              {t('illegalContentDesc')}
             </p>
           </div>
 
@@ -1320,10 +1318,10 @@ export default function UploadPage() {
 
             {/* Clothing filters (simple) */}
             <div className="mt-4 rounded-lg border-2 border-gray-300 bg-gray-50 p-4">
-              <div className="text-sm font-semibold text-gray-800 mb-2">Giyim Tercihleri (opsiyonel)</div>
+              <div className="text-sm font-semibold text-gray-800 mb-2">{t('clothingPreferencesTitle')}</div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label htmlFor="clothing-size-select" className="block text-xs font-medium text-gray-700 mb-1">Beden (Text)</label>
+                  <label htmlFor="clothing-size-select" className="block text-xs font-medium text-gray-700 mb-1">{t('clothingSizeLabel')}</label>
                   <select
                     id="clothing-size-select"
                     value={seekClothingSize}
@@ -1340,7 +1338,7 @@ export default function UploadPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-600 mb-1">Renk(ler) virgülle</label>
+                  <label className="block text-xs text-gray-600 mb-1">{t('clothingColorLabel')}</label>
                   <input
                     type="text"
                     value={seekClothingColor}
@@ -1350,7 +1348,7 @@ export default function UploadPage() {
                   />
                 </div>
               </div>
-              <p className="text-[11px] text-gray-500 mt-2">Abiye için uygun beden/renkleri girersen eşleşmeler öne çıkar.</p>
+              <p className="text-[11px] text-gray-500 mt-2">{t('sizeTip')}</p>
             </div>
           </div>
 
@@ -1381,7 +1379,7 @@ export default function UploadPage() {
           
           {lastResult && !lastResult.isClean && (
             <p className="text-center text-sm text-red-600 -mt-2">
-              ⚠️ Yasadışı içerik nedeniyle yükleme engellendi
+              {t('illegalContentBlocked')}
             </p>
           )}
         </form>

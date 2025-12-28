@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { getCurrentUser } from '@/lib/auth'
 import { getUserRatings, getUserAverageRating, getUserRatingCount } from '@/lib/api'
+import { useTranslation } from 'react-i18next'
 
 interface Rating {
   id: string
@@ -24,6 +25,7 @@ interface Rating {
 }
 
 export default function UserRatingsPage() {
+  const { t } = useTranslation(['profile','common'])
   const router = useRouter()
   const [ratings, setRatings] = useState<Rating[]>([])
   const [averageRating, setAverageRating] = useState(0)
@@ -75,7 +77,7 @@ export default function UserRatingsPage() {
       <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center">
         <div className="text-white text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p>Yükleniyor...</p>
+          <p>{t('loading')}</p>
         </div>
       </div>
     )
@@ -85,7 +87,7 @@ export default function UserRatingsPage() {
     <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 pb-20">
       {/* Header */}
       <div className="bg-white/10 backdrop-blur-lg border-b border-white/20 sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-3">
+          <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-3">
           <Link 
             href="/profile"
             className="p-2 hover:bg-white/20 rounded-full transition-colors"
@@ -93,9 +95,9 @@ export default function UserRatingsPage() {
             <ArrowLeft className="w-6 h-6 text-white" />
           </Link>
           <div>
-            <h1 className="text-xl font-bold text-white">Değerlendirmelerim</h1>
+            <h1 className="text-xl font-bold text-white">{t('ratings')}</h1>
             <p className="text-white/80 text-sm">
-              {totalRatings} değerlendirme
+              {totalRatings} {t('ratings')}
             </p>
           </div>
         </div>
@@ -154,10 +156,10 @@ export default function UserRatingsPage() {
           <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-12 border border-white/20 text-center">
             <Star className="w-16 h-16 text-white/40 mx-auto mb-4" />
             <h3 className="text-white text-lg font-semibold mb-2">
-              Henüz Değerlendirme Yok
+              {t('noRatingsTitle')}
             </h3>
             <p className="text-white/70">
-              İlk takasınızı tamamlayın ve değerlendirme almaya başlayın!
+              {t('noRatingsDesc')}
             </p>
           </div>
         ) : (

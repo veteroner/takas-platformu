@@ -85,4 +85,23 @@
   "cameraErrorLabel": "📸 Kamera Hatası:",
   "galleryErrorFallback": "Galeri açılırken hata oluştu",
   "galleryErrorLabel": "🖼️ Galeri Hatası:"
+  ,
+  "errorImageUpload": "Resim yüklenirken hata oluştu",
+  "errorIllegalContent": "Ürün yasadışı içerik nedeniyle yüklenemedi",
+  "errorNoImages": "Hiçbir resim yüklenemedi. Lütfen tekrar deneyin.",
+  "illegalContentBlocked": "⚠️ Yasadışı içerik nedeniyle yükleme engellendi",
+  "illegalContentDesc": "Yasadışı, tehlikeli veya uygunsuz içerikler reddedilir (uyuşturucu, silah vb.)",
+  "illegalReminder": "📌 Hatırlatma: Yasadışı, tehlikeli veya uygunsuz içerikler yasaktır.",
+  "readRules": "Topluluk kurallarını oku →",
+  "optimizingHeader": "🚀 Resimler otomatik optimize ediliyor:",
+  "optimizingFeatures": [
+    "300 KB maksimum boyut",
+    "Modern WebP formatı",
+    "%90+ daha hızlı yükleme"
+  ],
+  "clothingPreferencesTitle": "Giyim Tercihleri (opsiyonel)",
+  "clothingSizeLabel": "Beden (Text)",
+  "clothingColorLabel": "Renk(ler) virgülle",
+  "sizeTip": "Abiye için uygun beden/renkleri girersen eşleşmeler öne çıkar.",
+  "noUserSession": "Kullanıcı oturumu bulunamadı"
 }

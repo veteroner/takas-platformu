@@ -375,15 +375,15 @@ export default function ProfilePage() {
             
             <div className="flex-1 text-white/70 text-sm">
               {stats.receivedItems === 0 ? (
-                <p>Henüz değerlendirme yok. İlk takasınızı tamamlayın! 🌟</p>
+                <p>{t('ratingMessages.none')}</p>
               ) : stats.rating >= 4.5 ? (
-                <p>Mükemmel! Kullanıcılar sizinle takas yapmaktan çok memnun 🎉</p>
+                <p>{t('ratingMessages.excellent')}</p>
               ) : stats.rating >= 4.0 ? (
-                <p>Harika! Güvenilir bir takas partnerisiniz 👍</p>
+                <p>{t('ratingMessages.great')}</p>
               ) : stats.rating >= 3.5 ? (
-                <p>İyi! Takas deneyiminizi geliştirmeye devam edin 💪</p>
+                <p>{t('ratingMessages.good')}</p>
               ) : (
-                <p>Takas deneyiminizi iyileştirmek için geri bildirimleri dikkate alın 📈</p>
+                <p>{t('ratingMessages.improve')}</p>
               )}
             </div>
           </div>
@@ -407,24 +407,24 @@ export default function ProfilePage() {
           className="bg-linear-to-br from-yellow-500/20 to-orange-500/20 backdrop-blur-lg rounded-2xl p-6 hover:from-yellow-500/30 hover:to-orange-500/30 transition-colors border border-yellow-500/30 text-center"
         >
           <Sparkles className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
-          <div className="text-white font-semibold">Akıllı Eşleştirme</div>
-          <div className="text-white/70 text-sm mt-1">Beden ve tercih ayarları</div>
+          <div className="text-white font-semibold">{t('preferences.title')}</div>
+          <div className="text-white/70 text-sm mt-1">{t('preferences.subtitle')}</div>
         </Link>
 
         <Link
           href="/settings"
           className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 hover:bg-white/20 transition-colors border border-white/20 text-center"
         >
-          <div className="text-white font-semibold">Ayarlar</div>
-          <div className="text-white/70 text-sm mt-1">Hesap ve gizlilik ayarları</div>
+          <div className="text-white font-semibold">{t('settings.title')}</div>
+          <div className="text-white/70 text-sm mt-1">{t('settings.account.title')}</div>
         </Link>
 
         <Link
           href="/my-items"
           className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 hover:bg-white/20 transition-colors border border-white/20 text-center"
         >
-          <div className="text-white font-semibold">Eşyalarım</div>
-          <div className="text-white/70 text-sm mt-1">Paylaştığım eşyaları yönet</div>
+          <div className="text-white font-semibold">{t('my-items.title')}</div>
+          <div className="text-white/70 text-sm mt-1">{t('my-items.noItemsDesc')}</div>
         </Link>
       </div>
     </>
@@ -433,7 +433,7 @@ export default function ProfilePage() {
   // Desktop görünüm
   if (!isMobile) {
     return (
-      <DesktopLayout title="Profilim" maxWidth="4xl">
+      <DesktopLayout title={t('title')} maxWidth="4xl">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Sol Panel - Profil Bilgileri */}
           <div className="lg:col-span-2">
@@ -473,7 +473,7 @@ export default function ProfilePage() {
                   className="flex items-center gap-3 p-3 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-colors"
                 >
                   <Gift className="w-5 h-5" />
-                  <span>{t('matches') || 'Eşleşmelerim'}</span>
+                  <span>{t('matches.title') || 'Eşleşmelerim'}</span>
                 </Link>
                 <Link
                   href="/preferences"
@@ -494,22 +494,22 @@ export default function ProfilePage() {
             
             {/* İstatistik Özeti */}
             <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-              <h3 className="text-white font-semibold mb-4">Aktivite Özeti</h3>
+              <h3 className="text-white font-semibold mb-4">{t('activitySummary')}</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center text-white/80">
-                  <span>Toplam Ürün</span>
+                  <span>{t('totalItems')}</span>
                   <span className="font-semibold">{userItems.length}</span>
                 </div>
                 <div className="flex justify-between items-center text-white/80">
-                  <span>Aktif Ürün</span>
+                  <span>{t('activeItems')}</span>
                   <span className="font-semibold">{stats.sharedItems}</span>
                 </div>
                 <div className="flex justify-between items-center text-white/80">
-                  <span>Tamamlanan Takas</span>
+                  <span>{t('completedTrades')}</span>
                   <span className="font-semibold">{stats.receivedItems}</span>
                 </div>
                 <div className="flex justify-between items-center text-white/80">
-                  <span>Ortalama Puan</span>
+                  <span>{t('averageRating')}</span>
                   <span className="font-semibold flex items-center gap-1">
                     <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     {stats.rating.toFixed(1)}
@@ -535,7 +535,7 @@ export default function ProfilePage() {
           className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors"
         >
           <ArrowLeft size={20} />
-          Ana Sayfa
+          {t('home.discover')}
         </Link>
         
         <button
@@ -543,7 +543,7 @@ export default function ProfilePage() {
           className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl transition-colors backdrop-blur-sm border border-white/20"
         >
           <Edit3 size={16} />
-          {isEditing ? 'İptal' : 'Düzenle'}
+          {isEditing ? t('cancel') : t('edit')}
         </button>
       </div>
 
@@ -558,34 +558,34 @@ export default function ProfilePage() {
           <div className="max-w-md mx-auto flex justify-around items-center pb-2">
             <Link href="/feed" className="flex flex-col items-center py-1 px-3 text-gray-400">
               <Heart className="w-5 h-5" />
-              <span className="text-[10px] mt-0.5">Keşfet</span>
+              <span className="text-[10px] mt-0.5">{t('home.discover')}</span>
             </Link>
             {!!user ? (
               <>
                 <Link href="/my-items" className="flex flex-col items-center py-1 px-3 text-gray-400">
                   <Package className="w-5 h-5" />
-                  <span className="text-[10px] mt-0.5">Ürünlerim</span>
+                  <span className="text-[10px] mt-0.5">{t('home.myItems') || t('my-items.title')}</span>
                 </Link>
                 <Link href="/upload" className="flex flex-col items-center py-1 px-3 text-gray-400">
                   <div className="bg-linear-to-r from-pink-500 to-purple-600 p-2 rounded-full -mt-4 shadow-lg">
                     <Plus className="w-5 h-5 text-white" />
                   </div>
-                  <span className="text-[10px] mt-0.5">Yükle</span>
+                  <span className="text-[10px] mt-0.5">{t('upload.title') || t('home.addItem')}</span>
                 </Link>
                 <Link href="/messages" className="flex flex-col items-center py-1 px-3 text-gray-400 relative">
                   <MessageCircle className="w-5 h-5" />
-                  <span className="text-[10px] mt-0.5">Mesajlar</span>
+                  <span className="text-[10px] mt-0.5">{t('home.messages')}</span>
                   <UnreadBadge userId={user?.id || null} />
                 </Link>
                 <button className="flex flex-col items-center py-1 px-3 text-purple-600">
                   <User className="w-5 h-5 fill-current" />
-                  <span className="text-[10px] mt-0.5 font-medium">Profil</span>
+                  <span className="text-[10px] mt-0.5 font-medium">{t('home.profile')}</span>
                 </button>
               </>
             ) : (
               <Link href="/login" className="flex flex-col items-center py-1 px-3 text-gray-400">
                 <LogIn className="w-5 h-5" />
-                <span className="text-[10px] mt-0.5">Giriş</span>
+                <span className="text-[10px] mt-0.5">{t('home.login')}</span>
               </Link>
             )}
           </div>

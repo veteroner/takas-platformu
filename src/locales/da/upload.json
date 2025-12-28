@@ -84,4 +84,23 @@
   "cameraErrorLabel": "📸 Kamera fejl:",
   "galleryErrorFallback": "Fejl ved åbning af galleriet",
   "galleryErrorLabel": "🖼️ Galleri fejl:"
+  ,
+  "errorImageUpload": "Der opstod en fejl under billedupload",
+  "errorIllegalContent": "Vare blokeret på grund af ulovligt indhold",
+  "errorNoImages": "Ingen billeder blev uploadet. Prøv igen.",
+  "illegalContentBlocked": "⚠️ Upload blokeret pga. ulovligt indhold",
+  "illegalContentDesc": "Ulovligt, farligt eller upassende indhold bliver afvist (stoffer, våben osv.)",
+  "illegalReminder": "📌 Påmindelse: Ulovligt, farligt eller upassende indhold er forbudt.",
+  "readRules": "Læs fællesskabsreglerne →",
+  "optimizingHeader": "🚀 Billeder optimeres automatisk:",
+  "optimizingFeatures": [
+    "300 KB maksimal størrelse",
+    "Moderne WebP-format",
+    "90%+ hurtigere uploads"
+  ],
+  "clothingPreferencesTitle": "Tøjpræferencer (valgfrit)",
+  "clothingSizeLabel": "Størrelse (tekst)",
+  "clothingColorLabel": "Farve(r) kommasepareret",
+  "sizeTip": "Indtast størrelse/farve for festtøj for at forbedre matches.",
+  "noUserSession": "Ingen brugersession fundet"
 }

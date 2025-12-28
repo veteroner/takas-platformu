@@ -37,6 +37,7 @@
   "loadingItems": "Loading items...",
   "noMoreItems": "You've seen all items",
   "noMoreItemsDesc": "Check back later for new items",
+  "rateLimit": { "message": "Too many requests. Please wait." },
   "addItem": "Add Item",
   "matches": "Matches",
   "messages": "Messages",

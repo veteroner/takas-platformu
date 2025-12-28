@@ -37,6 +37,7 @@
   "loadingItems": "Ürünler yükleniyor...",
   "noMoreItems": "Tüm ürünleri gördünüz",
   "noMoreItemsDesc": "Yeni ürünler için tekrar bekleyin",
+  "rateLimit": { "message": "Çok fazla istek gönderdiniz. Lütfen bekleyin." },
   "addItem": "Ürün Ekle",
   "matches": "Eşleşmeler",
   "messages": "Mesajlar",

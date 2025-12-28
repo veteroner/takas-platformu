@@ -133,7 +133,7 @@ export default function LoginPage() {
                 <input
                   type="text"
                   name="name"
-                  placeholder="Ad Soyad"
+                  placeholder={t('name')}
                   value={formData.name}
                   onChange={handleInputChange}
                   required
@@ -218,9 +218,9 @@ export default function LoginPage() {
               <label className="flex items-start gap-3">
                 <input required type="checkbox" className="mt-1" />
                 <span>
-                  <Link className="underline" href={policyRoutes.terms}>Üyelik Sözleşmesi</Link>,{' '}
-                  <Link className="underline" href={policyRoutes.kvkk}>KVKK Aydınlatma Metni</Link> ve{' '}
-                  <Link className="underline" href={policyRoutes.privacy}>Gizlilik & Çerez Politikası</Link>'nı okudum, kabul ediyorum.
+                  <Link className="underline" href={policyRoutes.terms}>{t('termsLink')}</Link>,{' '}
+                  <Link className="underline" href={policyRoutes.kvkk}>{t('kvkkLink')}</Link> ve{' '}
+                  <Link className="underline" href={policyRoutes.privacy}>{t('privacyLink')}</Link>'nı okudum, kabul ediyorum.
                 </span>
               </label>
               <label className="flex items-start gap-3">
@@ -254,10 +254,10 @@ export default function LoginPage() {
               {isLoading ? (
                 <div className="flex items-center justify-center gap-2">
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  {isRegister ? 'Hesap Oluşturuluyor...' : 'Giriş Yapılıyor...'}
+                  {isRegister ? t('creatingAccount') : t('loggingIn')}
                 </div>
               ) : (
-                isRegister ? 'Hesap Oluştur' : 'Giriş Yap'
+                isRegister ? t('registerButton') : t('loginButton')
               )}
             </button>
 

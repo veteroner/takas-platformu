@@ -23,4 +23,20 @@
   "updateError": "Fehler beim Aktualisieren des Profils"
   ,
   "quickActions": "Schnellaktionen"
+  ,
+  "activitySummary": "Aktivitätsübersicht",
+  "totalItems": "Gesamtanzahl Artikel",
+  "activeItems": "Aktive Artikel",
+  "completedTrades": "Abgeschlossene Tauschgeschäfte",
+  "averageRating": "Durchschnittsbewertung",
+  "ratingMessages": {
+    "none": "Noch keine Bewertungen. Schließe deinen ersten Tausch ab! 🌟",
+    "excellent": "Ausgezeichnet! Nutzer tauschen sehr gerne mit dir 🎉",
+    "great": "Großartig! Du bist ein verlässlicher Tauschpartner 👍",
+    "good": "Gut! Arbeite weiter an der Verbesserung deiner Tausch-Erfahrung 💪",
+    "improve": "Ziehe Feedback in Betracht, um deine Tausch-Erfahrung zu verbessern 📈"
+  }
+  ,
+  "noRatingsTitle": "Noch keine Bewertungen",
+  "noRatingsDesc": "Schließe deinen ersten Tausch ab, um Bewertungen zu erhalten!"
 }

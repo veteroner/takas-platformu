@@ -84,4 +84,23 @@
   "cameraErrorLabel": "📸 Camera Error:",
   "galleryErrorFallback": "Failed opening gallery",
   "galleryErrorLabel": "🖼️ Gallery Error:"
+  ,
+  "errorImageUpload": "An error occurred while uploading the image",
+  "errorIllegalContent": "Item blocked due to illegal content",
+  "errorNoImages": "No images were uploaded. Please try again.",
+  "illegalContentBlocked": "⚠️ Upload blocked due to illegal content",
+  "illegalContentDesc": "Illegal, dangerous or inappropriate content will be rejected (drugs, weapons, etc.)",
+  "illegalReminder": "📌 Reminder: Illegal, dangerous or inappropriate content is prohibited.",
+  "readRules": "Read community rules →",
+  "optimizingHeader": "🚀 Images are automatically optimized:",
+  "optimizingFeatures": [
+    "300 KB max size",
+    "Modern WebP format",
+    "90%+ faster uploads"
+  ],
+  "clothingPreferencesTitle": "Clothing Preferences (optional)",
+  "clothingSizeLabel": "Size (Text)",
+  "clothingColorLabel": "Color(s) comma separated",
+  "sizeTip": "Entering size/color for formal wear boosts match relevance.",
+  "noUserSession": "No user session found"
 }

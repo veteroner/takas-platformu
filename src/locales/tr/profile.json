@@ -23,4 +23,20 @@
   "updateError": "Profil güncellenirken hata oluştu"
   ,
   "quickActions": "Hızlı Eylemler"
+  ,
+  "activitySummary": "Aktivite Özeti",
+  "totalItems": "Toplam Ürün",
+  "activeItems": "Aktif Ürün",
+  "completedTrades": "Tamamlanan Takas",
+  "averageRating": "Ortalama Puan",
+  "ratingMessages": {
+    "none": "Henüz değerlendirme yok. İlk takasınızı tamamlayın! 🌟",
+    "excellent": "Mükemmel! Kullanıcılar sizinle takas yapmaktan çok memnun 🎉",
+    "great": "Harika! Güvenilir bir takas partnerisiniz 👍",
+    "good": "İyi! Takas deneyiminizi geliştirmeye devam edin 💪",
+    "improve": "Takas deneyiminizi iyileştirmek için geri bildirimleri dikkate alın 📈"
+  }
+  ,
+  "noRatingsTitle": "Henüz Değerlendirme Yok",
+  "noRatingsDesc": "İlk takasınızı tamamlayın ve değerlendirme almaya başlayın!"
 }

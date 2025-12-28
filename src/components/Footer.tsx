@@ -12,7 +12,7 @@ interface FooterProps {
 export default function Footer({ variant = 'transparent', className = '' }: FooterProps) {
   const currentYear = new Date().getFullYear()
 
-  const { t } = useTranslation(['common', 'home', 'about'])
+  const { t } = useTranslation(['common', 'home', 'about', 'matches', 'messages'])
 
   const bgClass = {
     light: 'bg-white border-t border-gray-200',
@@ -43,7 +43,7 @@ export default function Footer({ variant = 'transparent', className = '' }: Foot
   const quickLinks = [
     { href: '/feed', label: t('discover') || 'Keşfet' },
     { href: '/upload', label: t('addItem') || 'Ürün Ekle' },
-    { href: '/matches', label: t('matches') || 'Eşleşmeler' },
+    { href: '/matches', label: t('matches.title') || 'Eşleşmeler' },
     { href: '/messages', label: t('messages') || 'Mesajlar' },
   ]
 

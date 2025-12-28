@@ -23,4 +23,20 @@
   "updateError": "Fejl ved opdatering af profil"
   ,
   "quickActions": "Hurtige handlinger"
+  ,
+  "activitySummary": "Aktivitetsoversigt",
+  "totalItems": "Samlede Emner",
+  "activeItems": "Aktive Emner",
+  "completedTrades": "Gennemførte Handler",
+  "averageRating": "Gennemsnitlig Vurdering",
+  "ratingMessages": {
+    "none": "Ingen vurderinger endnu. Fuldfør din første handel! 🌟",
+    "excellent": "Fremragende! Brugere elsker at handle med dig 🎉",
+    "great": "Fantastisk! Du er en pålidelig handelspartner 👍",
+    "good": "Godt! Fortsæt med at forbedre din handelsoplevelse 💪",
+    "improve": "Overvej feedback for at forbedre din handelsoplevelse 📈"
+  }
+  ,
+  "noRatingsTitle": "Ingen vurderinger endnu",
+  "noRatingsDesc": "Fuldfør din første handel for at modtage vurderinger!"
 }

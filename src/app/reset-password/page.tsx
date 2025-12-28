@@ -5,9 +5,11 @@ import { useRouter } from 'next/navigation'
 import { Lock, Eye, EyeOff, CheckCircle, AlertCircle, ArrowLeft, Shield } from 'lucide-react'
 import Link from 'next/link'
 import { updatePassword } from '@/lib/auth'
+import { useTranslation } from 'react-i18next'
 
 function ResetPasswordContent() {
   const router = useRouter()
+  const { t } = useTranslation(['forgot-password','common'])
   
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -30,7 +32,7 @@ function ResetPasswordContent() {
 
   const passwordStrength = getPasswordStrength(password)
   
-  const strengthLabels = ['Çok Zayıf', 'Zayıf', 'Orta', 'Güçlü', 'Çok Güçlü']
+  const strengthLabels: string[] = t('strengthLabels', { returnObjects: true }) as unknown as string[]
   const strengthColors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-lime-500', 'bg-green-500']
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -39,12 +41,12 @@ function ResetPasswordContent() {
 
     // Validations
     if (password.length < 6) {
-      setError('Şifre en az 6 karakter olmalıdır')
+      setError(t('passwordTooShort'))
       return
     }
 
     if (password !== confirmPassword) {
-      setError('Şifreler eşleşmiyor')
+      setError(t('passwordsNotMatch'))
       return
     }
 
@@ -76,7 +78,7 @@ function ResetPasswordContent() {
           className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors"
         >
           <ArrowLeft size={20} />
-          Giriş Sayfası
+          {t('backToLogin')}
         </Link>
 
         {/* Form Container */}
@@ -86,10 +88,10 @@ function ResetPasswordContent() {
               <Shield className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-white mb-2">
-              Yeni Şifre Belirle
+              {t('resetTitle')}
             </h1>
             <p className="text-white/70">
-              Hesabınız için yeni bir şifre oluşturun
+              {t('resetDesc')}
             </p>
           </div>
 
@@ -100,10 +102,10 @@ function ResetPasswordContent() {
                 <CheckCircle className="w-10 h-10 text-green-400" />
               </div>
               <h2 className="text-xl font-semibold text-white mb-3">
-                Şifreniz Güncellendi! 🎉
+                {t('resetSuccessTitle')}
               </h2>
               <p className="text-white/80 mb-6">
-                Yeni şifrenizle giriş yapabilirsiniz. Giriş sayfasına yönlendiriliyorsunuz...
+                {t('resetSuccessDesc')}
               </p>
               <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin mx-auto" />
             </div>
@@ -124,7 +126,7 @@ function ResetPasswordContent() {
                   <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60" size={20} />
                   <input
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Yeni şifre"
+                    placeholder={t('newPasswordPlaceholder') || t('resetTitle')}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -153,8 +155,8 @@ function ResetPasswordContent() {
                         />
                       ))}
                     </div>
-                    <p className="text-white/60 text-xs">
-                      Şifre gücü: {strengthLabels[passwordStrength - 1] || 'Çok Zayıf'}
+                      <p className="text-white/60 text-xs">
+                      {t('passwordStrengthPrefix', { label: strengthLabels[passwordStrength - 1] || strengthLabels[0] })}
                     </p>
                   </div>
                 )}
@@ -165,7 +167,7 @@ function ResetPasswordContent() {
                 <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60" size={20} />
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
-                  placeholder="Şifre tekrar"
+                  placeholder={t('confirmPasswordPlaceholder') || ''}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
@@ -185,15 +187,15 @@ function ResetPasswordContent() {
                 <div className={`flex items-center gap-2 text-sm ${
                   password === confirmPassword ? 'text-green-400' : 'text-red-400'
                 }`}>
-                  {password === confirmPassword ? (
+                      {password === confirmPassword ? (
                     <>
                       <CheckCircle size={16} />
-                      Şifreler eşleşiyor
+                      {t('passwordsMatch')}
                     </>
                   ) : (
                     <>
                       <AlertCircle size={16} />
-                      Şifreler eşleşmiyor
+                      {t('passwordsNotMatch')}
                     </>
                   )}
                 </div>
@@ -208,17 +210,17 @@ function ResetPasswordContent() {
                 {isLoading ? (
                   <>
                     <div className="w-5 h-5 border-2 border-purple-600/30 border-t-purple-600 rounded-full animate-spin" />
-                    Güncelleniyor...
+                    {t('updating')}
                   </>
                 ) : (
-                  'Şifremi Güncelle'
+                  t('updateButton')
                 )}
               </button>
 
               {/* Security Info */}
               <div className="bg-white/10 rounded-xl p-4">
                 <p className="text-white/70 text-sm text-center">
-                  🔒 Güçlü şifre için: En az 8 karakter, büyük/küçük harf, rakam ve özel karakter kullanın
+                  {t('strongPasswordTip')}
                 </p>
               </div>
             </form>

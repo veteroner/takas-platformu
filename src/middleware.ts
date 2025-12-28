@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+import commonTR from '@/locales/tr/common.json'
+import commonEN from '@/locales/en/common.json'
+import commonDE from '@/locales/de/common.json'
+import commonAR from '@/locales/ar/common.json'
+import commonDA from '@/locales/da/common.json'
+
 // In-memory rate limit buckets
 // Note: On serverless, each instance has separate memory. For production, consider Redis/Upstash.
 const buckets: Map<string, { count: number; reset: number }> = new Map()
@@ -88,9 +94,42 @@ export function middleware(req: NextRequest) {
   const { allowed, remaining } = rateLimit(key, max, windowMs)
 
   if (!allowed) {
+    // Determine preferred language from cookie or Accept-Language
+    const supported = ['tr', 'en', 'de', 'ar', 'da']
+    function parseCookie(header: string | null, key: string): string | null {
+      if (!header) return null
+      const cookies = header.split(';').map(c => c.trim())
+      for (const c of cookies) {
+        const [k, ...v] = c.split('=')
+        if (k === key) return decodeURIComponent(v.join('='))
+      }
+      return null
+    }
+
+    function normalizeLanguage(input: string | null | undefined) {
+      if (!input) return 'tr'
+      const normalized = String(input).toLowerCase().split(',')[0].split('-')[0]
+      return supported.includes(normalized) ? normalized : 'tr'
+    }
+
+    const cookieHeader = req.headers.get('cookie')
+    const cookieLang = parseCookie(cookieHeader, 'i18nextLng')
+    const acceptLang = req.headers.get('accept-language')
+    const lang = normalizeLanguage(cookieLang || acceptLang)
+
+    const commons: Record<string, any> = {
+      tr: commonTR,
+      en: commonEN,
+      de: commonDE,
+      ar: commonAR,
+      da: commonDA,
+    }
+
+    const message = commons[lang]?.rateLimit?.message || commons['tr']?.rateLimit?.message || 'Too many requests'
+
     return new NextResponse(JSON.stringify({ 
       error: 'rate_limited',
-      message: 'Çok fazla istek gönderdiniz. Lütfen bekleyin.',
+      message,
       retryAfter: Math.ceil(windowMs / 1000)
     }), {
       status: 429,
