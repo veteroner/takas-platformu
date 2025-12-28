@@ -66,4 +66,53 @@
     "signup": "Kayıt Ol",
     "footerNote": "Ücretsiz, kolay ve eğlenceli! 🚀"
   }
+  ,
+  "categories": {
+    "clothing": "Giyim",
+    "toys": "Oyuncak",
+    "electronics": "Elektronik",
+    "books": "Kitap",
+    "sports": "Spor",
+    "home": "Ev",
+    "other": "Diğer"
+  },
+  "conditions": {
+    "new": "Yeni",
+    "like_new": "Sıfır Gibi",
+    "good": "İyi",
+    "fair": "Normal",
+    "poor": "Kullanılmış"
+  },
+  "noDescription": "Bu ürün için açıklama bulunmuyor.",
+  "productFilter": {
+    "criticalTitle": "🚨 Kritik Uyarı!",
+    "warningTitle": "⚠️ Uyarı!",
+    "legalNoticeTitle": "📋 Yasal Uyarı:",
+    "legalNoticeBody": "Bu tür içeriklerin satışı Türk Ceza Kanunu kapsamında suçtur ve cezai yaptırımlara tabidir. Tüm işlemler güvenlik amacıyla kaydedilmektedir.",
+    "detectedWordsTitle": "Tespit edilen kelimeler:",
+    "more": "daha"
+  },
+  "ratings": {
+    "pleaseSelect": "Lütfen bir puan seçin",
+    "submitError": "Bir hata oluştu, lütfen tekrar deneyin",
+    "prompt": "Takas deneyiminiz nasıldı?",
+    "labels": { "5": "🌟 Mükemmel!", "4": "😊 Çok İyi!", "3": "👍 İyi", "2": "😐 Orta", "1": "😞 Kötü" },
+    "commentLabel": "Yorum Ekle (İsteğe Bağlı)",
+    "placeholder": "Deneyiminizi paylaşın...",
+    "submitting": "Gönderiliyor...",
+    "submitButton": "Puanı Gönder",
+    "shareNote": "Puanınız karşı tarafla paylaşılacak ve profilinizde görünecektir"
+  },
+  "messageFilter": {
+    "defaultReason": "Mesajınız uygunsuz içerik nedeniyle gönderilemedi",
+    "banExpired": "Ban süresi doldu",
+    "remaining": "Kalan süre",
+    "days": "gün",
+    "hours": "saat",
+    "minutes": "dakika",
+    "violationCount": "İhlal sayısı",
+    "respectfulNote": "Platformumuzda saygılı bir dil kullanmanızı rica ederiz. Devam eden ihlaller hesap kısıtlamasına yol açabilir.",
+    "bannedTitle": "Mesaj gönderme yetkiniz askıya alındı",
+    "bannedDescription": "Tekrarlanan ihlaller nedeniyle geçici olarak mesaj gönderemezsiniz."
+  }
 }

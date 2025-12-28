@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Star, MessageSquare } from 'lucide-react'
 
@@ -23,10 +24,11 @@ export default function RatingModal({
   const [hoveredRating, setHoveredRating] = useState(0)
   const [comment, setComment] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { t } = useTranslation('common')
 
   const handleSubmit = async () => {
     if (rating === 0) {
-      alert('Lütfen bir puan seçin')
+      alert(t('ratings.pleaseSelect'))
       return
     }
 
@@ -39,7 +41,7 @@ export default function RatingModal({
       onClose()
     } catch (error) {
       console.error('Error submitting rating:', error)
-      alert('Bir hata oluştu, lütfen tekrar deneyin')
+      alert(t('ratings.submitError'))
     } finally {
       setIsSubmitting(false)
     }
@@ -97,7 +99,7 @@ export default function RatingModal({
                 {/* Star Rating */}
                 <div className="text-center">
                   <p className="text-gray-600 mb-4">
-                    Takas deneyiminiz nasıldı?
+                    {t('ratings.prompt')}
                   </p>
                   <div className="flex justify-center gap-2">
                     {[1, 2, 3, 4, 5].map((star) => (
@@ -126,11 +128,11 @@ export default function RatingModal({
                       animate={{ opacity: 1, y: 0 }}
                       className="text-sm text-gray-500 mt-2"
                     >
-                      {rating === 5 && '🌟 Mükemmel!'}
-                      {rating === 4 && '😊 Çok İyi!'}
-                      {rating === 3 && '👍 İyi'}
-                      {rating === 2 && '😐 Orta'}
-                      {rating === 1 && '😞 Kötü'}
+                      {rating === 5 && t('ratings.labels.5')}
+                      {rating === 4 && t('ratings.labels.4')}
+                      {rating === 3 && t('ratings.labels.3')}
+                      {rating === 2 && t('ratings.labels.2')}
+                      {rating === 1 && t('ratings.labels.1')}
                     </motion.p>
                   )}
                 </div>
@@ -139,12 +141,12 @@ export default function RatingModal({
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                     <MessageSquare className="w-4 h-4" />
-                    Yorum Ekle (İsteğe Bağlı)
+                    {t('ratings.commentLabel')}
                   </label>
                   <textarea
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
-                    placeholder="Deneyiminizi paylaşın..."
+                    placeholder={t('ratings.placeholder')}
                     maxLength={500}
                     rows={4}
                     className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none text-sm"
@@ -169,15 +171,15 @@ export default function RatingModal({
                   {isSubmitting ? (
                     <span className="flex items-center justify-center gap-2">
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Gönderiliyor...
+                      {t('ratings.submitting')}
                     </span>
                   ) : (
-                    'Puanı Gönder'
+                    t('ratings.submitButton')
                   )}
                 </motion.button>
 
                 <p className="text-xs text-gray-400 text-center">
-                  Puanınız karşı tarafla paylaşılacak ve profilinizde görünecektir
+                  {t('ratings.shareNote')}
                 </p>
               </div>
             </div>

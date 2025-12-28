@@ -5,6 +5,7 @@
  */
 
 import { AlertTriangle, XCircle, Shield } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { type IllegalProductResult, type RiskLevel } from '@/lib/illegal-product-filter'
 
 interface ProductFilterWarningProps {
@@ -27,6 +28,7 @@ const riskIcons: Record<RiskLevel, React.ReactNode> = {
 }
 
 export function ProductFilterWarning({ result, className = '' }: ProductFilterWarningProps) {
+  const { t } = useTranslation('common')
   if (result.isClean || !result.shouldBlock) {
     return null
   }
@@ -40,7 +42,7 @@ export function ProductFilterWarning({ result, className = '' }: ProductFilterWa
         
         <div className="flex-1">
           <h3 className="font-semibold mb-2">
-            {result.riskLevel === 'critical' ? '🚨 Kritik Uyarı!' : '⚠️ Uyarı!'}
+            {result.riskLevel === 'critical' ? t('productFilter.criticalTitle') : t('productFilter.warningTitle')}
           </h3>
           
           <p className="text-sm mb-3">
@@ -49,18 +51,16 @@ export function ProductFilterWarning({ result, className = '' }: ProductFilterWa
           
           {result.riskLevel === 'critical' && (
             <div className="bg-white/50 rounded-lg p-3 text-xs">
-              <p className="font-semibold mb-1">📋 Yasal Uyarı:</p>
+              <p className="font-semibold mb-1">{t('productFilter.legalNoticeTitle')}</p>
               <p>
-                Bu tür içeriklerin satışı Türk Ceza Kanunu kapsamında suçtur ve 
-                cezai yaptırımlara tabidir. Tüm işlemler güvenlik amacıyla 
-                kaydedilmektedir.
+                {t('productFilter.legalNoticeBody')}
               </p>
             </div>
           )}
           
           {result.detectedWords.length > 0 && result.riskLevel !== 'critical' && (
             <div className="mt-2">
-              <p className="text-xs font-medium mb-1">Tespit edilen kelimeler:</p>
+              <p className="text-xs font-medium mb-1">{t('productFilter.detectedWordsTitle')}</p>
               <div className="flex flex-wrap gap-1">
                 {result.detectedWords.slice(0, 5).map((item, idx) => (
                   <span
@@ -72,7 +72,7 @@ export function ProductFilterWarning({ result, className = '' }: ProductFilterWa
                 ))}
                 {result.detectedWords.length > 5 && (
                   <span className="px-2 py-0.5 bg-white/60 rounded text-xs">
-                    +{result.detectedWords.length - 5} daha
+                    +{result.detectedWords.length - 5} {t('productFilter.more')}
                   </span>
                 )}
               </div>

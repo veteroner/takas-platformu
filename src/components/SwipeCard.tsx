@@ -138,13 +138,13 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
   // Kategori Türkçe çevirisi
   const getCategoryLabel = (category: string) => {
     const cat = category.toLowerCase()
-    if (cat.includes('clothing')) return 'Giyim'
-    if (cat.includes('toys')) return 'Oyuncak'
-    if (cat.includes('electronics')) return 'Elektronik'
-    if (cat.includes('books')) return 'Kitap'
-    if (cat.includes('sports')) return 'Spor'
-    if (cat.includes('home')) return 'Ev'
-    return 'Diğer'
+    if (cat.includes('clothing')) return t('categories.clothing')
+    if (cat.includes('toys')) return t('categories.toys')
+    if (cat.includes('electronics')) return t('categories.electronics')
+    if (cat.includes('books')) return t('categories.books')
+    if (cat.includes('sports')) return t('categories.sports')
+    if (cat.includes('home')) return t('categories.home')
+    return t('categories.other')
   }
 
   // Durum badge rengi
@@ -158,11 +158,11 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
 
   const getConditionLabel = (condition: string) => {
     const cond = condition.toLowerCase()
-    if (cond.includes('like_new')) return 'Sıfır Gibi'
-    if (cond.includes('new')) return 'Yeni'
-    if (cond.includes('good')) return 'İyi'
-    if (cond.includes('fair')) return 'Normal'
-    return 'Kullanılmış'
+    if (cond.includes('like_new')) return t('conditions.like_new')
+    if (cond.includes('new')) return t('conditions.new')
+    if (cond.includes('good')) return t('conditions.good')
+    if (cond.includes('fair')) return t('conditions.fair')
+    return t('conditions.poor')
   }
 
   return (
@@ -259,7 +259,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
         <div className="p-3 h-[35%] flex flex-col justify-between">
           <div>
             <p className="text-gray-600 text-sm line-clamp-2 leading-snug">
-              {item.description || 'Bu ürün için açıklama bulunmuyor.'}
+              {item.description || t('noDescription')}
             </p>
           </div>
 

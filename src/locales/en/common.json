@@ -66,4 +66,53 @@
     "signup": "Sign Up",
     "footerNote": "Free, easy, and fun! 🚀"
   }
+  ,
+  "categories": {
+    "clothing": "Clothing",
+    "toys": "Toys",
+    "electronics": "Electronics",
+    "books": "Books",
+    "sports": "Sports",
+    "home": "Home",
+    "other": "Other"
+  },
+  "conditions": {
+    "new": "New",
+    "like_new": "Like New",
+    "good": "Good",
+    "fair": "Fair",
+    "poor": "Used"
+  },
+  "noDescription": "No description available for this item.",
+  "productFilter": {
+    "criticalTitle": "🚨 Critical Warning!",
+    "warningTitle": "⚠️ Warning!",
+    "legalNoticeTitle": "📋 Legal Notice:",
+    "legalNoticeBody": "Selling such content may be a criminal offense under applicable laws and can lead to legal consequences. All operations are recorded for security purposes.",
+    "detectedWordsTitle": "Detected words:",
+    "more": "more"
+  },
+  "ratings": {
+    "pleaseSelect": "Please select a rating",
+    "submitError": "An error occurred, please try again",
+    "prompt": "How was your swap experience?",
+    "labels": { "5": "🌟 Excellent!", "4": "😊 Very Good!", "3": "👍 Good", "2": "😐 Okay", "1": "😞 Bad" },
+    "commentLabel": "Add a comment (optional)",
+    "placeholder": "Share your experience...",
+    "submitting": "Submitting...",
+    "submitButton": "Submit Rating",
+    "shareNote": "Your rating will be shared with the other party and appear on your profile"
+  },
+  "messageFilter": {
+    "defaultReason": "Your message could not be sent due to inappropriate content",
+    "banExpired": "Ban expired",
+    "remaining": "Remaining",
+    "days": "days",
+    "hours": "hours",
+    "minutes": "minutes",
+    "violationCount": "Violation count",
+    "respectfulNote": "Please use respectful language on our platform. Continued violations may result in account restrictions.",
+    "bannedTitle": "Your messaging privileges have been suspended",
+    "bannedDescription": "You cannot send messages temporarily due to repeated violations."
+  }
 }
