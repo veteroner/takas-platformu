@@ -50,19 +50,19 @@
     "login": "Log ind",
     "signup": "Opret konto",
     "footerNote": "Gratis, nemt og sjovt! 🚀"
+  },
+  "matches": "Matches",
+  "messages": "Beskeder",
+  "privacy": "Privatlivspolitik",
+  "kvkk": "Databeskyttelse",
+  "cookies": "Cookies",
+  "tos": "Vilkår",
+  "consent": "Samtykke",
+  "footer": {
+    "description": "Byt dine brugte ting, spar penge og hjælp med at skabe en bæredygtig verden.",
+    "quickLinks": "Hurtige links",
+    "legal": "Juridisk",
+    "contact": "Kontakt",
+    "data": "Mine data"
   }
-    "matches": "Matches",
-    "messages": "Beskeder",
-    "privacy": "Privatlivspolitik",
-    "kvkk": "Databeskyttelse",
-    "cookies": "Cookies",
-    "tos": "Vilkår",
-    "consent": "Samtykke",
-    "footer": {
-      "description": "Byt dine brugte ting, spar penge og hjælp med at skabe en bæredygtig verden.",
-      "quickLinks": "Hurtige links",
-      "legal": "Juridisk",
-      "contact": "Kontakt",
-      "data": "Mine data"
-    },
 }
