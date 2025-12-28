@@ -407,24 +407,24 @@ export default function ProfilePage() {
           className="bg-linear-to-br from-yellow-500/20 to-orange-500/20 backdrop-blur-lg rounded-2xl p-6 hover:from-yellow-500/30 hover:to-orange-500/30 transition-colors border border-yellow-500/30 text-center"
         >
           <Sparkles className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
-          <div className="text-white font-semibold">{t('preferences.title')}</div>
-          <div className="text-white/70 text-sm mt-1">{t('preferences.subtitle')}</div>
+          <div className="text-white font-semibold">{t('preferences:title')}</div>
+          <div className="text-white/70 text-sm mt-1">{t('preferences:subtitle')}</div>
         </Link>
 
         <Link
           href="/settings"
           className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 hover:bg-white/20 transition-colors border border-white/20 text-center"
         >
-          <div className="text-white font-semibold">{t('settings.title')}</div>
-          <div className="text-white/70 text-sm mt-1">{t('settings.account.title')}</div>
+          <div className="text-white font-semibold">{t('settings:title')}</div>
+          <div className="text-white/70 text-sm mt-1">{t('settings:account.title')}</div>
         </Link>
 
         <Link
           href="/my-items"
           className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 hover:bg-white/20 transition-colors border border-white/20 text-center"
         >
-          <div className="text-white font-semibold">{t('my-items.title')}</div>
-          <div className="text-white/70 text-sm mt-1">{t('my-items.noItemsDesc')}</div>
+          <div className="text-white font-semibold">{t('my-items:title')}</div>
+          <div className="text-white/70 text-sm mt-1">{t('my-items:noItemsDesc')}</div>
         </Link>
       </div>
     </>
@@ -473,21 +473,21 @@ export default function ProfilePage() {
                   className="flex items-center gap-3 p-3 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-colors"
                 >
                   <Gift className="w-5 h-5" />
-                  <span>{t('matches.title') || 'Eşleşmelerim'}</span>
+                  <span>{t('matches:title') || 'Eşleşmelerim'}</span>
                 </Link>
                 <Link
                   href="/preferences"
                   className="flex items-center gap-3 p-3 bg-linear-to-r from-yellow-500/20 to-orange-500/20 hover:from-yellow-500/30 hover:to-orange-500/30 rounded-xl text-white transition-colors"
                 >
                   <Sparkles className="w-5 h-5 text-yellow-400" />
-                  <span>{t('preferences.title') || 'Eşleştirme Tercihlerim'}</span>
+                  <span>{t('preferences:title') || 'Eşleştirme Tercihlerim'}</span>
                 </Link>
                 <Link
                   href="/settings"
                   className="flex items-center gap-3 p-3 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-colors"
                 >
                   <Edit3 className="w-5 h-5" />
-                  <span>{t('settings.title') || 'Ayarlar'}</span>
+                  <span>{t('settings:title') || 'Ayarlar'}</span>
                 </Link>
               </div>
             </div>

@@ -38,11 +38,11 @@ export default function DesktopLayout({
   const { t } = useTranslation(['home', 'common', 'settings', 'matches', 'my-items', 'profile'])
 
   const navItems = [
-    { href: '/feed', label: t('discover') || 'Keşfet', icon: Home },
-    { href: '/messages', label: t('messages') || 'Mesajlar', icon: MessageCircle },
-    { href: '/my-items', label: t('myItems') || 'Ürünlerim', icon: Package },
-    { href: '/matches', label: t('matches.title') || 'Eşleşmeler', icon: Heart },
-    { href: '/profile', label: t('profile.title') || 'Profil', icon: User },
+    { href: '/feed', label: t('home:discover') || 'Keşfet', icon: Home },
+    { href: '/messages', label: t('home:messages') || 'Mesajlar', icon: MessageCircle },
+    { href: '/my-items', label: t('home:myItems') || 'Ürünlerim', icon: Package },
+    { href: '/matches', label: t('matches:title') || 'Eşleşmeler', icon: Heart },
+    { href: '/profile', label: t('profile:title') || 'Profil', icon: User },
   ]
 
   const maxWidthClasses = {
@@ -117,7 +117,7 @@ export default function DesktopLayout({
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
                   <input
                     type="text"
-                    placeholder={t('searchPlaceholder') || 'Ürün ara...'}
+                    placeholder={t('home:searchPlaceholder') || 'Ürün ara...'}
                     className="pl-10 pr-4 py-2 bg-white/20 border border-white/30 rounded-full text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 w-64"
                   />
                 </div>
@@ -128,7 +128,7 @@ export default function DesktopLayout({
                 className="flex items-center gap-2 px-4 py-2 bg-white text-purple-600 rounded-full font-semibold hover:bg-white/90 transition-colors shadow-lg"
               >
                 <Upload className="w-5 h-5" />
-                <span className="hidden lg:block">{t('addItem') || 'Ürün Ekle'}</span>
+                <span className="hidden lg:block">{t('common:addItem') || 'Ürün Ekle'}</span>
               </Link>
               
               <Link
@@ -158,11 +158,11 @@ export function DesktopSidebar() {
   const pathname = usePathname()
   const { t } = useTranslation(['home','common','settings','matches','my-items','profile'])
   const navItems = [
-    { href: '/feed', label: t('discover') || 'Keşfet', icon: Home },
-    { href: '/messages', label: t('messages') || 'Mesajlar', icon: MessageCircle },
-    { href: '/my-items', label: t('myItems') || 'Ürünlerim', icon: Package },
-    { href: '/matches', label: t('matches.title') || 'Eşleşmeler', icon: Heart },
-    { href: '/profile', label: t('profile.title') || 'Profil', icon: User },
+    { href: '/feed', label: t('home:discover') || 'Keşfet', icon: Home },
+    { href: '/messages', label: t('home:messages') || 'Mesajlar', icon: MessageCircle },
+    { href: '/my-items', label: t('home:myItems') || 'Ürünlerim', icon: Package },
+    { href: '/matches', label: t('matches:title') || 'Eşleşmeler', icon: Heart },
+    { href: '/profile', label: t('profile:title') || 'Profil', icon: User },
   ]
   
   return (

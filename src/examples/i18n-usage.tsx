@@ -51,8 +51,8 @@ function NestedExample() {
   
   return (
     <div>
-      <h2>{t('notifications.title')}</h2>
-      <p>{t('notifications.pushDesc')}</p>
+      <h2>{t('notifications:title')}</h2>
+      <p>{t('notifications:pushDesc')}</p>
     </div>
   )
 }

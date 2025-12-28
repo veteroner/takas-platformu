@@ -41,10 +41,10 @@ export default function Footer({ variant = 'transparent', className = '' }: Foot
   ]
 
   const quickLinks = [
-    { href: '/feed', label: t('discover') || 'Keşfet' },
-    { href: '/upload', label: t('addItem') || 'Ürün Ekle' },
-    { href: '/matches', label: t('matches.title') || 'Eşleşmeler' },
-    { href: '/messages', label: t('messages') || 'Mesajlar' },
+    { href: '/feed', label: t('home:discover') || 'Keşfet' },
+    { href: '/upload', label: t('common:addItem') || 'Ürün Ekle' },
+    { href: '/matches', label: t('matches:title') || 'Eşleşmeler' },
+    { href: '/messages', label: t('home:messages') || 'Mesajlar' },
   ]
 
   return (
@@ -115,7 +115,7 @@ export default function Footer({ variant = 'transparent', className = '' }: Foot
               </li>
               <li>
                 <Link href="/preferences" className={`text-sm ${linkClass} transition-colors`}>
-                  {t('preferences.title') || 'Eşleştirme Tercihlerim'}
+                  {t('preferences:title') || 'Eşleştirme Tercihlerim'}
                 </Link>
               </li>
             </ul>
