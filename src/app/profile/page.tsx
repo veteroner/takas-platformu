@@ -530,12 +530,12 @@ export default function ProfilePage() {
       <div className="container mx-auto px-4 py-8 pb-24">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
-        <Link 
+          <Link 
           href="/"
           className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors"
         >
           <ArrowLeft size={20} />
-          {t('home.discover')}
+          {t('home:discover')}
         </Link>
         
         <button
@@ -558,34 +558,34 @@ export default function ProfilePage() {
           <div className="max-w-md mx-auto flex justify-around items-center pb-2">
             <Link href="/feed" className="flex flex-col items-center py-1 px-3 text-gray-400">
               <Heart className="w-5 h-5" />
-              <span className="text-[10px] mt-0.5">{t('home.discover')}</span>
+                  <span className="text-[10px] mt-0.5">{t('home:discover')}</span>
             </Link>
             {!!user ? (
               <>
                 <Link href="/my-items" className="flex flex-col items-center py-1 px-3 text-gray-400">
                   <Package className="w-5 h-5" />
-                  <span className="text-[10px] mt-0.5">{t('home.myItems') || t('my-items.title')}</span>
+                  <span className="text-[10px] mt-0.5">{t('home:myItems') || t('my-items:title')}</span>
                 </Link>
                 <Link href="/upload" className="flex flex-col items-center py-1 px-3 text-gray-400">
                   <div className="bg-linear-to-r from-pink-500 to-purple-600 p-2 rounded-full -mt-4 shadow-lg">
                     <Plus className="w-5 h-5 text-white" />
                   </div>
-                  <span className="text-[10px] mt-0.5">{t('upload.title') || t('home.addItem')}</span>
+                  <span className="text-[10px] mt-0.5">{t('upload:title') || t('home:addItem')}</span>
                 </Link>
                 <Link href="/messages" className="flex flex-col items-center py-1 px-3 text-gray-400 relative">
                   <MessageCircle className="w-5 h-5" />
-                  <span className="text-[10px] mt-0.5">{t('home.messages')}</span>
+                  <span className="text-[10px] mt-0.5">{t('home:messages')}</span>
                   <UnreadBadge userId={user?.id || null} />
                 </Link>
                 <button className="flex flex-col items-center py-1 px-3 text-purple-600">
                   <User className="w-5 h-5 fill-current" />
-                  <span className="text-[10px] mt-0.5 font-medium">{t('home.profile')}</span>
+                  <span className="text-[10px] mt-0.5 font-medium">{t('home:profile')}</span>
                 </button>
               </>
             ) : (
               <Link href="/login" className="flex flex-col items-center py-1 px-3 text-gray-400">
                 <LogIn className="w-5 h-5" />
-                <span className="text-[10px] mt-0.5">{t('home.login')}</span>
+                <span className="text-[10px] mt-0.5">{t('home:login')}</span>
               </Link>
             )}
           </div>
