@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Heart, X, MapPin, Star, ChevronLeft, ChevronRight, Eye, Clock } from 'lucide-react'
 import { Item } from '@/types'
+import { useTranslation } from 'react-i18next'
 
 interface DesktopGridViewProps {
   items: Item[]
@@ -84,6 +85,8 @@ export default function DesktopGridView({
     other: 'Diğer'
   }
 
+  const { t } = useTranslation('common')
+
   if (isLoading) {
     return (
       <div className="flex-1 flex items-center justify-center">
@@ -97,10 +100,23 @@ export default function DesktopGridView({
       {/* Sol: Ürün Grid */}
       <div className="flex-1 overflow-y-auto p-6">
         {availableItems.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-gray-500">
-            <div className="text-6xl mb-4">🎉</div>
-            <h3 className="text-xl font-semibold mb-2">Tüm ürünleri gördünüz!</h3>
-            <p className="text-gray-400">Yeni ürünler eklendiğinde burada görünecek.</p>
+          <div className="flex items-center justify-center h-full">
+            <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full text-center">
+              <div className="mx-auto w-20 h-20 rounded-full bg-indigo-50 flex items-center justify-center mb-4">
+                <div className="text-3xl">🔁</div>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">{t('noMoreItems')}</h3>
+              <p className="text-gray-400 mb-6">{t('noMoreItemsDesc')}</p>
+              <div className="flex justify-center">
+                <button
+                  onClick={() => window.location.reload()}
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white py-3 px-6 rounded-full shadow-md hover:opacity-95"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12a9 9 0 1 0-3.16 6.18" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M21 12v-4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  {t('retry')}
+                </button>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
