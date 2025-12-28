@@ -60,6 +60,7 @@
     "fair": "Fair",
     "poor": "Poor"
   }
+  ,
   "photosHeader": "Photos (up to 5)",
   "firstPhotoCover": "First photo will be the cover image",
   "tips": {
