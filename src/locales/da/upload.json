@@ -59,13 +59,11 @@
     "good": "God",
     "fair": "Acceptabel",
     "poor": "Dårlig"
-  }
-  ,
+  },
   "cities": [
     "Istanbul", "Ankara", "Izmir", "Bursa", "Antalya", "Adana", "Konya", "Gaziantep",
     "Mersin", "Diyarbakir", "Kayseri", "Eskisehir", "Samsun", "Denizli", "Sanliurfa"
   ],
-  ,
   "photosHeader": "Billeder (maks 5)",
   "firstPhotoCover": "Det første foto bliver cover-billedet",
   "tips": {
@@ -78,8 +76,7 @@
     "categoryDesc": "Valg af korrekt kategori hjælper dit produkt med at nå de rigtige personer.",
     "preferencesTitle": "Angiv præferencer",
     "preferencesDesc": "Angiv hvad du vil bytte for, så du matcher hurtigere."
-  }
-  ,
+  },
   "optimized": "Optimeret",
   "multipleCategoriesHelp": "Du kan vælge flere kategorier",
   "cancel": "Annuller"
