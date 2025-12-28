@@ -61,7 +61,7 @@ export default function DesktopLayout({
     return <>{children}</>
   }
 
-  return (
+    return (
     <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400">
       {/* Desktop/Tablet Header */}
       <header className="bg-white/10 backdrop-blur-md border-b border-white/20 sticky top-0 z-50">
@@ -143,7 +143,7 @@ export default function DesktopLayout({
       </header>
 
       {/* Content Area */}
-      <main className={`${maxWidthClasses[maxWidth]} mx-auto px-4 lg:px-8 py-6 ${centerContent ? 'flex justify-center' : ''}`}>
+        <main className={`${maxWidthClasses[maxWidth]} mx-auto px-4 lg:px-8 py-6 ${centerContent ? 'flex justify-center' : ''} text-gray-900`}>
         {children}
       </main>
 

@@ -705,16 +705,16 @@ export default function UploadPage() {
   // Desktop Layout
   if (!isMobile) {
     return (
-      <DesktopLayout title={t('uploadProduct')} maxWidth="6xl">
+      <DesktopLayout title={t('title')} maxWidth="6xl">
         <div className="grid grid-cols-3 gap-8">
           {/* Main Form - 2 columns */}
           <div className="col-span-2">
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-8">
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-8 text-gray-900">
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
                 <div className="w-10 h-10 bg-linear-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center">
                   <Upload className="w-5 h-5 text-white" />
                 </div>
-                {t('addNewProduct')}
+                {t('title')}
               </h2>
 
               {/* Illegal Content Warning */}
