@@ -16,6 +16,10 @@
   "loginToDiscover": "Log in and find items that match your interests.",
   "noLikes": "No likes yet",
   "noLikesDesc": "Start swiping and liking items! 💚",
+  "liked": "Liked",
+  "passed": "Passed",
+  "likedSectionTitle": "💚 Liked Items",
+  "hide": "Hide",
   "close": "Close",
   "categories": {
     "all": "All",

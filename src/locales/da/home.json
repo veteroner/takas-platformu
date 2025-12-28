@@ -16,6 +16,10 @@
   "loginToDiscover": "Log ind og find elementer, der matcher dine interesser.",
   "noLikes": "Ingen likes endnu",
   "noLikesDesc": "Begynd at swipe og like elementer! 💚",
+  "liked": "Synes godt om",
+  "passed": "Sprunget over",
+  "likedSectionTitle": "💚 Synes godt om elementer",
+  "hide": "Skjul",
   "close": "Luk",
   "categories": {
     "all": "Alle",

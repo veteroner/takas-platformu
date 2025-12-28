@@ -16,6 +16,10 @@
   "loginToDiscover": "Melden Sie sich an und finden Sie Artikel, die Ihren Interessen entsprechen.",
   "noLikes": "Noch keine Likes",
   "noLikesDesc": "Fangen Sie an zu wischen und Artikel zu liken! 💚",
+  "liked": "Gemocht",
+  "passed": "Übersprungen",
+  "likedSectionTitle": "💚 Gemochte Artikel",
+  "hide": "Verbergen",
   "close": "Schließen",
   "categories": {
     "all": "Alle",

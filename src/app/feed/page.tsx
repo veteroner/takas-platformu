@@ -465,11 +465,11 @@ export default function HomePage() {
             className="flex-1 bg-white/70 backdrop-blur-sm rounded-xl py-2.5 px-4 text-center border border-white/20 hover:bg-white/90 transition-all flex items-center justify-center gap-2"
           >
             <span className="text-lg font-bold text-green-600">{likedItems.length}</span>
-            <span className="text-xs text-gray-600">Beğenilen</span>
+            <span className="text-xs text-gray-600">{t('liked')}</span>
           </button>
           <div className="flex-1 bg-white/70 backdrop-blur-sm rounded-xl py-2.5 px-4 text-center border border-white/20 flex items-center justify-center gap-2">
             <span className="text-lg font-bold text-red-600">{passedItems.length}</span>
-            <span className="text-xs text-gray-600">Geçilen</span>
+            <span className="text-xs text-gray-600">{t('passed')}</span>
           </div>
           </div>
 
@@ -477,12 +477,12 @@ export default function HomePage() {
           {showLikedItems && likedItems.length > 0 && (
             <div className="mb-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-gray-800">💚 Beğendiğin Ürünler</h2>
+                <h2 className="text-xl font-bold text-gray-800">{t('likedSectionTitle')}</h2>
                 <button 
                   onClick={() => setShowLikedItems(false)}
                   className="text-sm text-gray-600 hover:text-gray-800"
                 >
-                  Gizle ✕
+                  {t('hide')}
                 </button>
               </div>
               <div className="grid grid-cols-2 gap-3">

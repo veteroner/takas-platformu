@@ -16,6 +16,10 @@
   "loginToDiscover": "Giriş yap ve binlerce ürün arasından sana uygun olanları bul.",
   "noLikes": "Henüz beğeni yok",
   "noLikesDesc": "Ürünleri kaydırıp beğenmeye başla! 💚",
+  "liked": "Beğenilen",
+  "passed": "Geçilen",
+  "likedSectionTitle": "💚 Beğendiğin Ürünler",
+  "hide": "Gizle ✕",
   "close": "Kapat",
   "categories": {
     "all": "Tümü",
