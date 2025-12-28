@@ -1,23 +1,38 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 // Ensure a single client instance across HMR and multiple imports
 const globalForSupabase = globalThis as unknown as { __supabaseClient?: SupabaseClient }
 
-export const supabase: SupabaseClient =
-  globalForSupabase.__supabaseClient ?? createClient(supabaseUrl, supabaseAnonKey, {
-  realtime: {
-    params: {
-      eventsPerSecond: 10
+let _supabase: SupabaseClient
+
+if (supabaseUrl && supabaseAnonKey) {
+  _supabase = globalForSupabase.__supabaseClient ?? createClient(supabaseUrl, supabaseAnonKey, {
+    realtime: {
+      params: {
+        eventsPerSecond: 10
+      }
+    }
+  })
+
+  if (process.env.NODE_ENV !== 'production') {
+    globalForSupabase.__supabaseClient = _supabase
+  }
+} else {
+  // During build or tests the env vars may be missing; export a proxy that throws
+  // only when used to avoid breaking static build-time module evaluation.
+  const handler: ProxyHandler<any> = {
+    get() {
+      throw new Error('Supabase not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in environment.')
     }
   }
-})
-
-if (process.env.NODE_ENV !== 'production') {
-  globalForSupabase.__supabaseClient = supabase
+  // Cast to SupabaseClient to keep imports working; any runtime access will throw.
+  _supabase = new Proxy({}, handler) as unknown as SupabaseClient
 }
+
+export const supabase: SupabaseClient = _supabase
 
 // Database Types
 export type Item = {
