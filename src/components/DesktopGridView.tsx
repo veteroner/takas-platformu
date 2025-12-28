@@ -23,6 +23,7 @@ export default function DesktopGridView({
   passedItems, 
   onLike, 
   onPass,
+  onRetry,
   isLoading 
 }: DesktopGridViewProps) {
   const [selectedItem, setSelectedItem] = useState<Item | null>(null)
