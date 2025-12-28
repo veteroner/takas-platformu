@@ -138,7 +138,6 @@ export default function DesktopLayout({
               </Link>
             </div>
           </div>
-        </div>
       </header>
 
       {/* Content Area */}
