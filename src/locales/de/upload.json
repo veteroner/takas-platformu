@@ -60,4 +60,27 @@
     "fair": "Befriedigend",
     "poor": "Schlecht"
   }
+  "photosHeader": "Fotos (max. 5)",
+  "firstPhotoCover": "Das erste Foto wird das Titelbild sein",
+  "tips": {
+    "title": "Tipps für einen erfolgreichen Tausch",
+    "photosTitle": "Klare Fotos",
+    "photosDesc": "Machen Sie gut beleuchtete, klare Fotos. 3–5 Fotos aus verschiedenen Winkeln sind ideal.",
+    "descriptionTitle": "Detaillierte Beschreibung",
+    "descriptionDesc": "Geben Sie Zustand, Mängel und Eigenschaften des Produkts deutlich an.",
+    "categoryTitle": "Richtige Kategorie",
+    "categoryDesc": "Die Auswahl der richtigen Kategorie hilft, Ihr Produkt den richtigen Leuten zu zeigen.",
+    "preferencesTitle": "Präferenzen festlegen",
+    "preferencesDesc": "Geben Sie an, womit Sie tauschen möchten, um schneller passende Angebote zu erhalten."
+  }
+  ,
+  "optimized": "Optimiert",
+  "multipleCategoriesHelp": "Sie können mehrere Kategorien auswählen",
+  "cancel": "Abbrechen"
+  ,
+  "galleryOpening": "Galerie wird geöffnet...",
+  "cameraErrorFallback": "Fehler beim Öffnen der Kamera",
+  "cameraErrorLabel": "📸 Kamera Fehler:",
+  "galleryErrorFallback": "Fehler beim Öffnen der Galerie",
+  "galleryErrorLabel": "🖼️ Galerie Fehler:"
 }

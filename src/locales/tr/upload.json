@@ -61,4 +61,28 @@
     "fair": "Orta",
     "poor": "Kötü"
   }
+  ,
+  "photosHeader": "Fotoğraflar (En fazla 5)",
+  "firstPhotoCover": "İlk fotoğraf kapak resmi olacaktır",
+  "tips": {
+    "title": "Başarılı Takas İçin İpuçları",
+    "photosTitle": "Net Fotoğraflar",
+    "photosDesc": "İyi aydınlatılmış, net fotoğraflar çekin. Farklı açılardan 3-5 fotoğraf ideal.",
+    "descriptionTitle": "Detaylı Açıklama",
+    "descriptionDesc": "Ürünün durumunu, kusurlarını ve özelliklerini açıkça belirtin.",
+    "categoryTitle": "Doğru Kategori",
+    "categoryDesc": "Doğru kategori seçimi, ürününüzün doğru kişilere ulaşmasını sağlar.",
+    "preferencesTitle": "Tercihler Belirle",
+    "preferencesDesc": "Ne ile takas yapmak istediğinizi belirtin, daha hızlı eşleşin."
+  }
+  ,
+  "optimized": "Optimize edildi",
+  "multipleCategoriesHelp": "Birden fazla kategori seçebilirsiniz",
+  "cancel": "İptal"
+  ,
+  "galleryOpening": "Galeri açılıyor...",
+  "cameraErrorFallback": "Kamera açılırken hata oluştu",
+  "cameraErrorLabel": "📸 Kamera Hatası:",
+  "galleryErrorFallback": "Galeri açılırken hata oluştu",
+  "galleryErrorLabel": "🖼️ Galeri Hatası:"
 }

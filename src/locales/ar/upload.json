@@ -60,4 +60,28 @@
     "fair": "متوسط",
     "poor": "سيئ"
   }
+    ,
+    "photosHeader": "الصور (حتى 5)",
+    "firstPhotoCover": "الصورة الأولى ستكون صورة الغلاف",
+    "tips": {
+      "title": "نصائح لمقايضة ناجحة",
+      "photosTitle": "صور واضحة",
+      "photosDesc": "التقط صورًا واضحة ومضاءة جيدًا. 3–5 صور من زوايا مختلفة مثالية.",
+      "descriptionTitle": "وصف تفصيلي",
+      "descriptionDesc": "اذكر حالة المنتج وعيوبه وميزاته بوضوح.",
+      "categoryTitle": "الفئة الصحيحة",
+      "categoryDesc": "اختيار الفئة الصحيحة يساعد منتجك في الوصول للأشخاص المناسبين.",
+      "preferencesTitle": "حدد تفضيلاتك",
+      "preferencesDesc": "حدد ما تريد المقايضة به لتطابق بسرعة أكبر."
+    }
+    ,
+    "optimized": "تم تحسينه",
+    "multipleCategoriesHelp": "يمكنك تحديد أكثر من فئة",
+    "cancel": "إلغاء"
+    ,
+    "galleryOpening": "فتح المعرض...",
+    "cameraErrorFallback": "فشل في فتح الكاميرا",
+    "cameraErrorLabel": "📸 خطأ في الكاميرا:",
+    "galleryErrorFallback": "فشل في فتح المعرض",
+    "galleryErrorLabel": "🖼️ خطأ في المعرض:"
 }

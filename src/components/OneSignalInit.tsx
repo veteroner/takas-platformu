@@ -74,28 +74,71 @@ export default function OneSignalInit() {
   const initOneSignalNative = async () => {
     try {
       console.log('Initializing OneSignal Native...')
-      
-      // OneSignal'ı başlat
-      await window.plugins.OneSignal.setAppId({ appId: ONESIGNAL_APP_ID })
-      
-      // Push notification izni iste
-      const response = await window.plugins.OneSignal.promptForPushNotificationsWithUserResponse()
-      console.log('OneSignal permission:', response.accepted)
+
+      // Debug plugin shape
+      try { console.log('OneSignal plugin object (native):', window.plugins.OneSignal) } catch {}
+
+      // OneSignal'ı başlat - try common signatures
+      try {
+        const setAppIdFn = window.plugins.OneSignal.setAppId
+        if (typeof setAppIdFn === 'function') {
+          await setAppIdFn.call(window.plugins.OneSignal, ONESIGNAL_APP_ID)
+        } else if (typeof setAppIdFn === 'object') {
+          // some wrappers expect { appId }
+          // @ts-ignore
+          await window.plugins.OneSignal.setAppId({ appId: ONESIGNAL_APP_ID })
+        } else {
+          console.warn('OneSignal.setAppId unexpected type:', typeof setAppIdFn)
+        }
+        console.log('✅ OneSignal App ID set (native):', ONESIGNAL_APP_ID)
+      } catch (err) {
+        console.error('❌ setAppId failed (native):', err, (err && err.stack) ? err.stack : String(err))
+      }
+
+      // Push notification izni iste (guarded)
+      try {
+        if (typeof window.plugins.OneSignal.promptForPushNotificationsWithUserResponse === 'function') {
+          const response = await window.plugins.OneSignal.promptForPushNotificationsWithUserResponse()
+          console.log('OneSignal permission:', response?.accepted)
+        } else {
+          console.warn('OneSignal.promptForPushNotificationsWithUserResponse not available (native)')
+        }
+      } catch (err) {
+        console.error('❌ promptForPushNotificationsWithUserResponse error:', err)
+      }
 
       // Foreground notification handler
-      window.plugins.OneSignal.setNotificationWillShowInForegroundHandler((notification) => {
-        console.log('Foreground notification:', notification)
-        notification.complete(notification)
-      })
+      try {
+        if (typeof window.plugins.OneSignal.setNotificationWillShowInForegroundHandler === 'function') {
+          window.plugins.OneSignal.setNotificationWillShowInForegroundHandler((notification: any) => {
+            console.log('Foreground notification:', notification)
+            try { notification.complete(notification) } catch (e) { console.warn('complete failed', e) }
+          })
+        }
+      } catch (err) {
+        console.error('❌ setNotificationWillShowInForegroundHandler error:', err)
+      }
 
       // Notification opened handler
-      window.plugins.OneSignal.setNotificationOpenedHandler((notification) => {
-        console.log('Notification opened:', notification)
-      })
+      try {
+        if (typeof window.plugins.OneSignal.setNotificationOpenedHandler === 'function') {
+          window.plugins.OneSignal.setNotificationOpenedHandler((notification: any) => {
+            console.log('Notification opened:', notification)
+          })
+        }
+      } catch (err) {
+        console.error('❌ setNotificationOpenedHandler error:', err)
+      }
 
       // Device state al
-      const deviceState = await window.plugins.OneSignal.getDeviceState()
-      console.log('OneSignal Device State:', deviceState)
+      try {
+        if (typeof window.plugins.OneSignal.getDeviceState === 'function') {
+          const deviceState = await window.plugins.OneSignal.getDeviceState()
+          console.log('OneSignal Device State:', deviceState)
+        }
+      } catch (err) {
+        console.error('❌ getDeviceState error:', err)
+      }
 
     } catch (error) {
       console.error('OneSignal Native initialization error:', error)

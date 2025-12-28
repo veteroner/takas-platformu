@@ -60,4 +60,27 @@
     "fair": "Fair",
     "poor": "Poor"
   }
+  "photosHeader": "Photos (up to 5)",
+  "firstPhotoCover": "First photo will be the cover image",
+  "tips": {
+    "title": "Tips For A Successful Swap",
+    "photosTitle": "Clear Photos",
+    "photosDesc": "Take well-lit, clear photos. 3–5 photos from different angles are ideal.",
+    "descriptionTitle": "Detailed Description",
+    "descriptionDesc": "Clearly state item's condition, flaws and features.",
+    "categoryTitle": "Correct Category",
+    "categoryDesc": "Choosing the correct category helps your item reach the right people.",
+    "preferencesTitle": "Set Preferences",
+    "preferencesDesc": "Specify what you'd like in exchange to match faster."
+  }
+  ,
+  "optimized": "Optimized",
+  "multipleCategoriesHelp": "You can select multiple categories",
+  "cancel": "Cancel"
+  ,
+  "galleryOpening": "Opening gallery...",
+  "cameraErrorFallback": "Failed opening camera",
+  "cameraErrorLabel": "📸 Camera Error:",
+  "galleryErrorFallback": "Failed opening gallery",
+  "galleryErrorLabel": "🖼️ Gallery Error:"
 }

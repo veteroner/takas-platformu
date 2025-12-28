@@ -149,7 +149,7 @@ export default function UploadPage() {
       logger.info('UPLOAD_PAGE', '📸 User clicked camera button')
       setShowCameraOptions(false)
       setIsOptimizing(true)
-      setOptimizationProgress('Kamera açılıyor...')
+      setOptimizationProgress(t('cameraOpening'))
       setError(null)
 
       logger.info('UPLOAD_PAGE', '📸 Taking photo...')
@@ -175,7 +175,7 @@ export default function UploadPage() {
         saved: photo.saved
       })
 
-      setOptimizationProgress('Resim optimize ediliyor...')
+      setOptimizationProgress(t('processing'))
 
       // Convert to File - DataUrl gives us base64 data directly
       logger.debug('UPLOAD_PAGE', 'Converting photo to file...', { 
@@ -254,26 +254,26 @@ export default function UploadPage() {
         code: err?.code
       })
       
-      const userMessage = err?.message || 'Kamera açılırken hata oluştu'
+      const userMessage = err?.message || t('cameraErrorFallback')
       const errorDetails = `
-📸 KAMERA HATASI
+    📸 KAMERA HATASI
 
-Hata: ${err?.message || 'Bilinmeyen hata'}
+    Hata: ${err?.message || 'Bilinmeyen hata'}
 
-Kod: ${err?.code || 'N/A'}
+    Kod: ${err?.code || 'N/A'}
 
-Tip: ${err?.name || 'Error'}
+    Tip: ${err?.name || 'Error'}
 
-Platform: ${Capacitor.getPlatform()}
+    Platform: ${Capacitor.getPlatform()}
 
-Native: ${Capacitor.isNativePlatform() ? 'Evet' : 'Hayır'}
+    Native: ${Capacitor.isNativePlatform() ? 'Evet' : 'Hayır'}
 
-WebPath: ${err?.webPath || 'N/A'}
+    WebPath: ${err?.webPath || 'N/A'}
 
-Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
+    Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
       `.trim()
       
-      setError(`📸 Kamera Hatası: ${userMessage}`)
+      setError(`${t('cameraErrorLabel')} ${userMessage}`)
       
       // Show detailed alert on native
       if (Capacitor.isNativePlatform()) {
@@ -291,7 +291,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
       logger.info('UPLOAD_PAGE', '🖼️ User clicked gallery button')
       setShowCameraOptions(false)
       setIsOptimizing(true)
-      setOptimizationProgress('Galeri açılıyor...')
+      setOptimizationProgress(t('galleryOpening'))
       setError(null)
 
       logger.info('UPLOAD_PAGE', '🖼️ Picking from gallery...')
@@ -315,7 +315,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
         path: photo.path
       })
 
-      setOptimizationProgress('Resim optimize ediliyor...')
+      setOptimizationProgress(t('processing'))
 
       // Convert to File - DataUrl gives us base64 data directly
       logger.debug('UPLOAD_PAGE', 'Converting photo to file...', { 
@@ -394,26 +394,26 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
         code: err?.code
       })
       
-      const userMessage = err?.message || 'Galeri açılırken hata oluştu'
+      const userMessage = err?.message || t('galleryErrorFallback')
       const errorDetails = `
-🖼️ GALERİ HATASI
+    🖼️ GALERİ HATASI
 
-Hata: ${err?.message || 'Bilinmeyen hata'}
+    Hata: ${err?.message || 'Bilinmeyen hata'}
 
-Kod: ${err?.code || 'N/A'}
+    Kod: ${err?.code || 'N/A'}
 
-Tip: ${err?.name || 'Error'}
+    Tip: ${err?.name || 'Error'}
 
-Platform: ${Capacitor.getPlatform()}
+    Platform: ${Capacitor.getPlatform()}
 
-Native: ${Capacitor.isNativePlatform() ? 'Evet' : 'Hayır'}
+    Native: ${Capacitor.isNativePlatform() ? 'Evet' : 'Hayır'}
 
-WebPath: ${err?.webPath || 'N/A'}
+    WebPath: ${err?.webPath || 'N/A'}
 
-Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
+    Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
       `.trim()
       
-      setError(`🖼️ Galeri Hatası: ${userMessage}`)
+      setError(`${t('galleryErrorLabel')} ${userMessage}`)
       
       // Show detailed alert on native
       if (Capacitor.isNativePlatform()) {
@@ -644,7 +644,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
   const UploadTipsPanel = () => (
     <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-6 sticky top-24">
       <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-        💡 Başarılı Takas İçin İpuçları
+        💡 {t('tips.title')}
       </h3>
       <div className="space-y-4">
         <div className="flex gap-3">
@@ -652,8 +652,8 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
             <Camera className="w-4 h-4 text-pink-600" />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-700">Net Fotoğraflar</p>
-            <p className="text-xs text-gray-500">İyi aydınlatılmış, net fotoğraflar çekin. Farklı açılardan 3-5 fotoğraf ideal.</p>
+            <p className="text-sm font-medium text-gray-700">{t('tips.photosTitle')}</p>
+            <p className="text-xs text-gray-500">{t('tips.photosDesc')}</p>
           </div>
         </div>
         <div className="flex gap-3">
@@ -661,8 +661,8 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
             <Info className="w-4 h-4 text-purple-600" />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-700">Detaylı Açıklama</p>
-            <p className="text-xs text-gray-500">Ürünün durumunu, kusurlarını ve özelliklerini açıkça belirtin.</p>
+            <p className="text-sm font-medium text-gray-700">{t('tips.descriptionTitle')}</p>
+            <p className="text-xs text-gray-500">{t('tips.descriptionDesc')}</p>
           </div>
         </div>
         <div className="flex gap-3">
@@ -670,8 +670,8 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
             <Package className="w-4 h-4 text-indigo-600" />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-700">Doğru Kategori</p>
-            <p className="text-xs text-gray-500">Doğru kategori seçimi, ürününüzün doğru kişilere ulaşmasını sağlar.</p>
+            <p className="text-sm font-medium text-gray-700">{t('tips.categoryTitle')}</p>
+            <p className="text-xs text-gray-500">{t('tips.categoryDesc')}</p>
           </div>
         </div>
         <div className="flex gap-3">
@@ -679,8 +679,8 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
             <Sparkles className="w-4 h-4 text-green-600" />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-700">Tercihler Belirle</p>
-            <p className="text-xs text-gray-500">Ne ile takas yapmak istediğinizi belirtin, daha hızlı eşleşin.</p>
+            <p className="text-sm font-medium text-gray-700">{t('tips.preferencesTitle')}</p>
+            <p className="text-xs text-gray-500">{t('tips.preferencesDesc')}</p>
           </div>
         </div>
       </div>
@@ -745,11 +745,11 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
                       <Camera className="w-5 h-5 text-pink-500" />
-                      Fotoğraflar (En fazla 5)
+                      {t('photosHeader')}
                     </h3>
                     {imageFiles.length > 0 && (
                       <span className="text-sm text-green-600 font-medium bg-green-50 px-3 py-1 rounded-full">
-                        ✅ Optimize edildi
+                        ✅ {t('optimized')}
                       </span>
                     )}
                   </div>
@@ -769,7 +769,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                     {images.length < 5 && (
                       <label className="aspect-square border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-pink-400 hover:bg-pink-50/50 transition-all">
                         <Camera className="w-8 h-8 text-gray-400 mb-2" />
-                        <span className="text-sm text-gray-500">Ekle</span>
+                        <span className="text-sm text-gray-500">{t('addMore')}</span>
                         <input
                           type="file"
                           accept="image/*"
@@ -800,7 +800,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
 
                   {/* Category */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('category')}</label>
                     <select
                       name="category"
                       value={formData.category}
@@ -808,14 +808,14 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                       required
                     >
-                      <option value="">Seçiniz</option>
-                      <option value="clothing">👗 Giyim</option>
-                      <option value="toys">🧸 Oyuncak</option>
-                      <option value="electronics">📱 Elektronik</option>
-                      <option value="books">📚 Kitap</option>
-                      <option value="sports">⚽ Spor</option>
-                      <option value="home">🏠 Ev</option>
-                      <option value="other">📦 Diğer</option>
+                      <option value="">{t('selectCategory')}</option>
+                      <option value="clothing">{t('categories.clothing')}</option>
+                      <option value="toys">{t('categories.toys')}</option>
+                      <option value="electronics">{t('categories.electronics')}</option>
+                      <option value="books">{t('categories.books')}</option>
+                      <option value="sports">{t('categories.sports')}</option>
+                      <option value="home">{t('categories.home')}</option>
+                      <option value="other">{t('categories.other')}</option>
                     </select>
                   </div>
 
@@ -832,7 +832,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
 
                   {/* Condition */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('productCondition')}</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('condition')}</label>
                     <select
                       name="condition"
                       value={formData.condition}
@@ -840,42 +840,42 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                       required
                     >
-                      <option value="">Seçiniz</option>
-                      <option value="new">✨ Sıfır - Hiç kullanılmadı</option>
-                      <option value="like-new">🌟 Yeni gibi</option>
-                      <option value="good">👍 İyi durumda</option>
-                      <option value="fair">👌 Orta</option>
+                      <option value="">{t('selectCondition')}</option>
+                      <option value="new">{t('conditions.new')}</option>
+                      <option value="like-new">{t('conditions.like_new')}</option>
+                      <option value="good">{t('conditions.good')}</option>
+                      <option value="fair">{t('conditions.fair')}</option>
                     </select>
                   </div>
 
                   {/* Age Group */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Yaş Grubu</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('ageGroup') || 'Yaş Grubu'}</label>
                     <select
                       name="ageGroup"
                       value={formData.ageGroup}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                     >
-                      <option value="">Seçiniz (opsiyonel)</option>
-                      <option value="0-1">👶 0-1 yaş</option>
-                      <option value="1-3">🧒 1-3 yaş</option>
-                      <option value="3-6">👧 3-6 yaş</option>
-                      <option value="6-9">🧑 6-9 yaş</option>
-                      <option value="9-12">👦 9-12 yaş</option>
-                      <option value="12+">🧑‍🤝‍🧑 12+ yaş</option>
+                      <option value="">{t('ageGroupPlaceholder') || 'Seçiniz (opsiyonel)'}</option>
+                      <option value="0-1">👶 0-1 {t('years') || 'yaş'}</option>
+                      <option value="1-3">🧒 1-3 {t('years') || 'yaş'}</option>
+                      <option value="3-6">👧 3-6 {t('years') || 'yaş'}</option>
+                      <option value="6-9">🧑 6-9 {t('years') || 'yaş'}</option>
+                      <option value="9-12">👦 9-12 {t('years') || 'yaş'}</option>
+                      <option value="12+">🧑‍🤝‍🧑 12+ {t('years') || 'yaş'}</option>
                     </select>
                   </div>
                 </div>
 
                 {/* Description - Full Width */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Açıklama</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('description')}</label>
                   <textarea
                     name="description"
                     value={formData.description}
                     onChange={handleInputChange}
-                    placeholder="Ürün hakkında detaylı bilgi verin..."
+                    placeholder={t('descriptionPlaceholder')}
                     rows={4}
                     className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent resize-none"
                     required
@@ -915,7 +915,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                       )
                     })}
                   </div>
-                  <p className="text-xs text-gray-500 mt-3">Birden fazla kategori seçebilirsiniz</p>
+                  <p className="text-xs text-gray-500 mt-3">{t('multipleCategoriesHelp')}</p>
                 </div>
 
                 {/* Submit Button */}
@@ -924,23 +924,23 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                   disabled={isUploading || images.length === 0 || (lastResult !== null && !lastResult.isClean)}
                   className="w-full bg-linear-to-r from-pink-500 to-purple-600 text-white py-4 rounded-xl font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-lg"
                 >
-                  {isUploading ? (
+                      {isUploading ? (
                     <>
                       <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      Yükleniyor...
+                      {t('submitting')}
                     </>
                   ) : (
                     <>
                       <Upload className="w-6 h-6" />
-                      Ürünü Yükle
+                      {t('submit')}
                     </>
                   )}
                 </button>
 
                 {images.length === 0 && (
                   <p className="text-center text-sm text-gray-500 -mt-4">
-                    Ürün yüklemek için en az 1 fotoğraf eklemelisiniz
-                  </p>
+                      {t('errorSelectPhotos')}
+                    </p>
                 )}
 
                 {lastResult && !lastResult.isClean && (
@@ -993,10 +993,10 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
           {/* Image Upload */}
           <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-gray-800">📸 Fotoğraflar (En fazla 5)</h3>
+              <h3 className="font-semibold text-gray-800">📸 {t('photosHeader')}</h3>
               {imageFiles.length > 0 && (
                 <span className="text-xs text-green-600 font-medium">
-                  ✅ Optimize edildi
+                  ✅ {t('optimized')}
                 </span>
               )}
             </div>
@@ -1050,7 +1050,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                   }`}
                 >
                   <Camera className="w-8 h-8 text-gray-400 mb-1" />
-                  <span className="text-xs text-gray-500">Ekle</span>
+                  <span className="text-xs text-gray-500">{t('addMore')}</span>
                   {/* Hidden file input for web fallback */}
                   {!Capacitor.isNativePlatform() && (
                     <input
@@ -1081,7 +1081,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                     className="flex-1 bg-linear-to-r from-pink-500 to-purple-600 text-white rounded-lg flex flex-col items-center justify-center text-xs font-semibold hover:shadow-lg transition-all disabled:opacity-50"
                   >
                     <Camera className="w-5 h-5 mb-1" />
-                    Kamera
+                    {t('takePhoto')}
                   </button>
                   <button
                     type="button"
@@ -1090,7 +1090,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                     className="flex-1 bg-blue-500 text-white rounded-lg flex flex-col items-center justify-center text-xs font-semibold hover:shadow-lg transition-all disabled:opacity-50"
                   >
                     <Upload className="w-5 h-5 mb-1" />
-                    Galeri
+                    {t('fromGallery')}
                   </button>
                   <button
                     type="button"
@@ -1100,13 +1100,13 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                     }}
                     className="flex-1 bg-gray-300 text-gray-700 rounded-lg flex items-center justify-center text-xs font-semibold"
                   >
-                    İptal
+                    {t('cancel')}
                   </button>
                 </div>
               )}
             </div>
             <p className="text-xs text-gray-500">
-              İlk fotoğraf kapak resmi olacaktır
+              {t('firstPhotoCover')}
             </p>
             <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-lg">
               <p className="text-[11px] text-green-700 font-medium">
@@ -1131,7 +1131,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
               value={formData.title}
               onChange={handleInputChange}
               required
-              placeholder="Örn: Vintage Jean Ceket"
+              placeholder={t('titlePlaceholder')}
               className={`w-full px-4 py-3 border-2 rounded-lg text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 ${
                 lastResult && !lastResult.isClean ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'
               }`}
@@ -1144,7 +1144,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
           {/* Description */}
           <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
             <label className="block text-sm font-semibold text-gray-800 mb-2">
-              Açıklama *
+              {t('description')} *
             </label>
             <textarea
               name="description"
@@ -1152,7 +1152,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
               onChange={handleInputChange}
               required
               rows={4}
-              placeholder="Ürünün detaylarını yazın..."
+              placeholder={t('descriptionPlaceholder')}
               className={`w-full px-4 py-3 border-2 rounded-lg text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none ${
                 lastResult && !lastResult.isClean ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'
               }`}
@@ -1165,7 +1165,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
           {/* Category */}
           <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
             <label className="block text-sm font-semibold text-gray-800 mb-3">
-              Kategori *
+              {t('category')} *
             </label>
             <div className="grid grid-cols-2 gap-2">
               {categories.map(category => (
@@ -1238,7 +1238,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
           {/* Location/City */}
           <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
             <label htmlFor="city-select" className="block text-sm font-semibold text-gray-800 mb-2">
-              📍 Ürünün Bulunduğu Şehir *
+              📍 {t('city')} *
             </label>
             <select
               id="city-select"
@@ -1248,7 +1248,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
               required
               className="w-full px-4 py-3 border-2 border-gray-300 bg-white rounded-lg text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             >
-              <option value="">Şehir seçin</option>
+              <option value="">{t('selectCity')}</option>
               {cities.map(city => (
                 <option key={city} value={city}>{city}</option>
               ))}
@@ -1258,10 +1258,10 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
 
           {/* Seeking Preferences */}
           <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <h3 className="font-bold text-gray-900 mb-3">🎯 Ne Arıyorsun?</h3>
+            <h3 className="font-bold text-gray-900 mb-3">🎯 {t('seekingHelp')}</h3>
 
             <div className="mb-4">
-              <div className="text-sm font-semibold text-gray-800 mb-2">Kategoriler (çoklu seçim)</div>
+              <div className="text-sm font-semibold text-gray-800 mb-2">{t('seekCategories')}</div>
               <div className="grid grid-cols-2 gap-2">
                 {categories.map(category => (
                   <button
@@ -1311,7 +1311,7 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
                 onChange={(e) => setSeekCity(e.target.value)}
                 className="w-full px-3 py-2 border-2 border-gray-300 bg-white rounded-lg text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               >
-                <option value="">Şehir seçin</option>
+                <option value="">{t('selectCity')}</option>
                 {cities.map(city => (
                   <option key={city} value={city}>{city}</option>
                 ))}
@@ -1363,19 +1363,19 @@ Stack: ${err?.stack?.substring(0, 200) || 'N/A'}
             {isUploading ? (
               <>
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Yükleniyor...
+                {t('submitting')}
               </>
             ) : (
               <>
                 <Upload className="w-5 h-5" />
-                Ürünü Yükle
+                {t('submit')}
               </>
             )}
           </button>
           
           {images.length === 0 && (
             <p className="text-center text-sm text-gray-500 -mt-2">
-              Ürün yüklemek için en az 1 fotoğraf eklemelisiniz
+              {t('errorSelectPhotos')}
             </p>
           )}
           

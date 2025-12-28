@@ -60,4 +60,27 @@
     "fair": "Acceptabel",
     "poor": "Dårlig"
   }
+  "photosHeader": "Billeder (maks 5)",
+  "firstPhotoCover": "Det første foto bliver cover-billedet",
+  "tips": {
+    "title": "Tips til en succesfuld bytte",
+    "photosTitle": "Klarere billeder",
+    "photosDesc": "Tag godt belyste, klare billeder. 3–5 billeder fra forskellige vinkler er ideelle.",
+    "descriptionTitle": "Detaljeret beskrivelse",
+    "descriptionDesc": "Angiv tydeligt varens stand, fejl og funktioner.",
+    "categoryTitle": "Korrekt kategori",
+    "categoryDesc": "Valg af korrekt kategori hjælper dit produkt med at nå de rigtige personer.",
+    "preferencesTitle": "Angiv præferencer",
+    "preferencesDesc": "Angiv hvad du vil bytte for, så du matcher hurtigere."
+  }
+  ,
+  "optimized": "Optimeret",
+  "multipleCategoriesHelp": "Du kan vælge flere kategorier",
+  "cancel": "Annuller"
+  ,
+  "galleryOpening": "Galleriet åbnes...",
+  "cameraErrorFallback": "Fejl ved åbning af kamera",
+  "cameraErrorLabel": "📸 Kamera fejl:",
+  "galleryErrorFallback": "Fejl ved åbning af galleriet",
+  "galleryErrorLabel": "🖼️ Galleri fejl:"
 }
