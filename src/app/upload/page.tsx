@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Camera, X, Upload, ArrowLeft, Check, Info, Package, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -92,6 +92,7 @@ export default function UploadPage() {
   const [isOptimizing, setIsOptimizing] = useState(false)
   const [optimizationProgress, setOptimizationProgress] = useState<string>('')
   const [showCameraOptions, setShowCameraOptions] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
   
   // Product filter hook
   const { checkProduct, lastResult, clearResult } = useProductFilter()
@@ -1025,24 +1026,39 @@ export default function UploadPage() {
               ))}
               
               {images.length < 5 && !showCameraOptions && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    trackUserAction('ADD_PHOTO_BUTTON_CLICKED', 'UploadPage')
-                    if (Capacitor.isNativePlatform()) {
-                      setShowCameraOptions(true)
-                    }
-                  }}
-                  disabled={isOptimizing}
-                  className={`aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-purple-500 transition-colors ${
-                    isOptimizing ? 'opacity-50 cursor-not-allowed' : ''
-                  }`}
+                <div
+                  className={`aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center ${
+                    isOptimizing ? 'opacity-50' : 'cursor-pointer hover:border-purple-500'
+                  } transition-colors`}
                 >
-                  <Camera className="w-8 h-8 text-gray-400 mb-1" />
-                  <span className="text-xs text-gray-500">{t('addMore')}</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      trackUserAction('ADD_PHOTO_BUTTON_CLICKED', 'UploadPage')
+                      if (Capacitor.isNativePlatform()) {
+                        setShowCameraOptions(true)
+                        return
+                      }
+
+                      // Web fallback: trigger hidden file input
+                      try {
+                        fileInputRef.current?.click()
+                      } catch (err) {
+                        // Fallback: show camera options (shouldn't happen on web)
+                        setShowCameraOptions(true)
+                      }
+                    }}
+                    disabled={isOptimizing}
+                    className="w-full h-full flex flex-col items-center justify-center"
+                  >
+                    <Camera className="w-8 h-8 text-gray-400 mb-1" />
+                    <span className="text-xs text-gray-500">{t('addMore')}</span>
+                  </button>
+
                   {/* Hidden file input for web fallback */}
                   {!Capacitor.isNativePlatform() && (
                     <input
+                      ref={(el) => (fileInputRef.current = el)}
                       type="file"
                       accept="image/*"
                       multiple
@@ -1050,14 +1066,9 @@ export default function UploadPage() {
                       disabled={isOptimizing}
                       className="hidden"
                       aria-label="Resim dosyası seç"
-                      onClick={(e) => {
-                        // Allow file input on web
-                        const target = e.target as HTMLInputElement
-                        target.click = () => {}
-                      }}
                     />
                   )}
-                </button>
+                </div>
               )}
               
               {/* Camera Options Modal (Native only) */}

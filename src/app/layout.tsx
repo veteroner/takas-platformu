@@ -128,8 +128,9 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  // Allow user zoom for accessibility on mobile browsers
+  maximumScale: 5,
+  userScalable: true,
   viewportFit: 'cover',
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#EC4899' },
@@ -216,7 +217,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://takazone.com" crossOrigin="" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased text-base`}
       >
         <I18nProvider>
           <NetworkProvider>
