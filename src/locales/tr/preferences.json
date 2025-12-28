@@ -23,5 +23,28 @@
   "savePreferences": "Tercihleri Kaydet",
   "saving": "Kaydediliyor...",
   "saveSuccess": "✓ Tercihler kaydedildi!",
-  "loading": "Yükleniyor..."
+  "loading": "Yükleniyor...",
+  "categories": {
+    "clothing": "👕 Giyim",
+    "toys": "🧸 Oyuncak",
+    "electronics": "📱 Elektronik",
+    "books": "📚 Kitap",
+    "sports": "⚽ Spor",
+    "home": "🏠 Ev Eşyası"
+  },
+  "cities": [
+    "İstanbul", "Ankara", "İzmir", "Bursa", "Antalya", "Adana", "Konya", "Gaziantep",
+    "Mersin", "Diyarbakır", "Kayseri", "Eskişehir", "Samsun", "Denizli", "Şanlıurfa"
+  ],
+  "sizeOptions": {
+    "onlyExact": "Sadece tam",
+    "plus1": "±1 beden",
+    "plus2": "±2 beden"
+  },
+  "childGender": {
+    "boy": "👦 Erkek",
+    "girl": "👧 Kız"
+  },
+  "all": "Tümü",
+  "perfectCondition": "Sadece mükemmel"
 }

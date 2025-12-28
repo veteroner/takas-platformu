@@ -11,24 +11,22 @@ import { useDeviceType } from '@/hooks/useDeviceType'
 import type { ClothingSizeText, DbCategory, ChildInfo } from '@/types/matching'
 
 const sizes: ClothingSizeText[] = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
-const categories: { value: DbCategory; label: string }[] = [
-  { value: 'clothing', label: '👕 Giyim' },
-  { value: 'toys', label: '🧸 Oyuncak' },
-  { value: 'electronics', label: '📱 Elektronik' },
-  { value: 'books', label: '📚 Kitap' },
-  { value: 'sports', label: '⚽ Spor' },
-  { value: 'home', label: '🏠 Ev Eşyası' },
-]
-
-const cities = [
-  'İstanbul', 'Ankara', 'İzmir', 'Bursa', 'Antalya', 'Adana', 'Konya', 'Gaziantep',
-  'Mersin', 'Diyarbakır', 'Kayseri', 'Eskişehir', 'Samsun', 'Denizli', 'Şanlıurfa'
-]
+// categories and cities are provided by translations inside the component
 
 export default function MatchingPreferencesPage() {
   const { t } = useTranslation('preferences')
   const router = useRouter()
   const { isMobile } = useDeviceType()
+  const categories: { value: DbCategory; label: string }[] = [
+    { value: 'clothing', label: t('categories.clothing') },
+    { value: 'toys', label: t('categories.toys') },
+    { value: 'electronics', label: t('categories.electronics') },
+    { value: 'books', label: t('categories.books') },
+    { value: 'sports', label: t('categories.sports') },
+    { value: 'home', label: t('categories.home') },
+  ]
+
+  const cities = (t('cities', { returnObjects: true }) || []) as string[]
   const [userId, setUserId] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -151,7 +149,7 @@ export default function MatchingPreferencesPage() {
     <div className="space-y-6">
       {/* Başlık */}
       <div className="bg-linear-to-r from-pink-500 to-purple-600 rounded-2xl p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">🎯 Akıllı Eşleştirme</h1>
+        <h1 className="text-2xl font-bold mb-2">🎯 {t('title')}</h1>
         <p className="text-white/80">{t('subtitle')}</p>
       </div>
 
@@ -184,9 +182,9 @@ export default function MatchingPreferencesPage() {
           </div>
           
           <div>
-            <label className="block text-sm text-gray-600 mb-2">Cinsiyet</label>
+            <label className="block text-sm text-gray-600 mb-2">{t('gender')}</label>
             <div className="flex gap-2">
-              <button
+                <button
                 type="button"
                 onClick={() => setPreferences(prev => ({ ...prev, myGender: 'female' }))}
                 className={`px-4 py-2 rounded-lg font-medium transition-all ${
@@ -195,7 +193,7 @@ export default function MatchingPreferencesPage() {
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                👩 Kadın
+                👩 {t('female')}
               </button>
               <button
                 type="button"
@@ -206,7 +204,7 @@ export default function MatchingPreferencesPage() {
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                👨 Erkek
+                👨 {t('male')}
               </button>
             </div>
           </div>
@@ -214,7 +212,7 @@ export default function MatchingPreferencesPage() {
         
         <div className="mt-4">
           <label className="block text-sm text-gray-600 mb-2">
-            Beden Toleransı: ±{preferences.sizeTolerance} beden kabul
+            {t('sizeTolerance', { count: preferences.sizeTolerance })}
           </label>
           <input
             type="range"
@@ -225,9 +223,9 @@ export default function MatchingPreferencesPage() {
             className="w-full accent-pink-500"
           />
           <div className="flex justify-between text-xs text-gray-500">
-            <span>Sadece tam</span>
-            <span>±1 beden</span>
-            <span>±2 beden</span>
+            <span>{t('sizeOptions.onlyExact')}</span>
+            <span>{t('sizeOptions.plus1')}</span>
+            <span>{t('sizeOptions.plus2')}</span>
           </div>
         </div>
       </div>
@@ -259,7 +257,7 @@ export default function MatchingPreferencesPage() {
                   className="px-3 py-2 rounded-lg border border-purple-200 bg-white"
                 >
                   {Array.from({ length: 18 }, (_, i) => (
-                    <option key={i} value={i}>{i} yaş</option>
+                    <option key={i} value={i}>{t('childAge', { age: i })}</option>
                   ))}
                 </select>
                 <select
@@ -267,8 +265,8 @@ export default function MatchingPreferencesPage() {
                   onChange={(e) => updateChild(index, 'gender', e.target.value)}
                   className="px-3 py-2 rounded-lg border border-purple-200 bg-white"
                 >
-                  <option value="boy">👦 Erkek</option>
-                  <option value="girl">👧 Kız</option>
+                  <option value="boy">{t('childGender.boy')}</option>
+                  <option value="girl">{t('childGender.girl')}</option>
                 </select>
                 <button
                   type="button"
@@ -320,7 +318,7 @@ export default function MatchingPreferencesPage() {
           {t('locationPreference')}
         </h2>
         
-        <div className="space-y-4">
+          <div className="space-y-4">
           <div>
             <label className="block text-sm text-gray-600 mb-2">{t('preferredCity')}</label>
             <select
@@ -328,7 +326,7 @@ export default function MatchingPreferencesPage() {
               onChange={(e) => setPreferences(prev => ({ ...prev, preferredCity: e.target.value }))}
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-pink-500"
             >
-              <option value="">Tümü</option>
+              <option value="">{t('all')}</option>
               {cities.map(city => (
                 <option key={city} value={city}>{city}</option>
               ))}
@@ -361,9 +359,9 @@ export default function MatchingPreferencesPage() {
           className="w-full accent-pink-500"
         />
         <div className="flex justify-between text-sm text-gray-600 mt-2">
-          <span>Her durum</span>
+          <span>{t('anyCondition')}</span>
           <span className="font-bold text-pink-600">{preferences.minConditionScore}/10</span>
-          <span>Sadece mükemmel</span>
+          <span>{t('perfectCondition')}</span>
         </div>
       </div>
 
@@ -377,17 +375,17 @@ export default function MatchingPreferencesPage() {
             : 'bg-linear-to-r from-pink-500 to-purple-600 hover:opacity-90'
         }`}
       >
-        {saving ? (
+            {saving ? (
           <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
         ) : saved ? (
           <>
             <Check className="w-5 h-5" />
-            Kaydedildi!
+            {t('saveSuccess')}
           </>
         ) : (
           <>
             <Save className="w-5 h-5" />
-            Tercihleri Kaydet
+            {t('savePreferences')}
           </>
         )}
       </button>
