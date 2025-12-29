@@ -407,6 +407,92 @@ export async function checkForMatch(userId: string, itemId: string): Promise<Rec
   }
 }
 
+// Create a match between two users
+export async function createMatch(user1Id: string, user2Id: string, item1Id: string, item2Id: string): Promise<Record<string, unknown> | null> {
+  try {
+    // Insert new match
+    const { data, error } = await supabase
+      .from('matches')
+      .insert([{
+        user1_id: user1Id,
+        user2_id: user2Id,
+        item1_id: item1Id,
+        item2_id: item2Id,
+        status: 'pending'
+      }])
+      .select(`
+        *,
+        user1:users!matches_user1_id_fkey(id, name, avatar),
+        user2:users!matches_user2_id_fkey(id, name, avatar),
+        item1:items!matches_item1_id_fkey(id, title, images),
+        item2:items!matches_item2_id_fkey(id, title, images)
+      `)
+      .single()
+
+    if (error) {
+      console.error('Error creating match:', error)
+      return null
+    }
+
+    return data
+  } catch (error) {
+    console.error('Error creating match:', error)
+    return null
+  }
+}
+
+// Enhanced checkForMatch that creates match if mutual like exists
+export async function checkAndCreateMatch(userId: string, itemId: string): Promise<Record<string, unknown> | null> {
+  try {
+    // Get the item owner
+    const { data: item } = await supabase
+      .from('items')
+      .select('owner_id')
+      .eq('id', itemId)
+      .single()
+
+    if (!item) return null
+
+    const ownerId = item.owner_id
+
+    // First check if match already exists
+    const existingMatch = await checkForMatch(userId, itemId)
+    if (existingMatch) {
+      return existingMatch
+    }
+
+    // Check if owner has liked any of current user's items
+    const { data: ownerLikes } = await supabase
+      .from('user_swipes')
+      .select('item_id')
+      .eq('user_id', ownerId)
+      .eq('action', 'like')
+
+    if (!ownerLikes || ownerLikes.length === 0) {
+      return null // No mutual like
+    }
+
+    // Get current user's items that owner liked
+    const { data: userItems } = await supabase
+      .from('items')
+      .select('id')
+      .eq('owner_id', userId)
+      .eq('status', 'active')
+      .in('id', ownerLikes.map(like => like.item_id))
+
+    if (!userItems || userItems.length === 0) {
+      return null // No mutual like on active items
+    }
+
+    // Create match with the first mutual item
+    const matchedItemId = userItems[0].id
+    return await createMatch(userId, ownerId, matchedItemId, itemId)
+  } catch (error) {
+    console.error('Error checking and creating match:', error)
+    return null
+  }
+}
+
 // Get user matches
 export async function getUserMatches(userId: string) {
   try {

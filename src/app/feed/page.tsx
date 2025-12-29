@@ -13,7 +13,7 @@ import { Heart, MessageCircle, User, Settings, LogIn, Plus, Package, Shirt, Game
 import { UnreadBadge } from '@/components/UnreadBadge'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getFeedItems, recordSwipe, checkForMatch, getUserLikedItems, getUserPassedItems } from '@/lib/api'
+import { getFeedItems, recordSwipe, checkAndCreateMatch, getUserLikedItems, getUserPassedItems } from '@/lib/api'
 import { getCurrentUser } from '@/lib/auth'
 import { useTranslation } from 'react-i18next'
 
@@ -249,7 +249,7 @@ export default function HomePage() {
           setLikedItems(prev => [...prev, item])
           
           // Check if this created a match
-          const match = await checkForMatch(user.id, item.id) as MatchData | null
+          const match = await checkAndCreateMatch(user.id, item.id) as MatchData | null
           
           if (match) {
             const otherUser = match.user1_id === user.id ? match.user2 : match.user1
