@@ -523,6 +523,7 @@ export default function ChatPage() {
             <UserInfoSidebar
               otherUser={otherUser}
               matchStatus={matchStatus}
+              isOtherOnline={isOtherOnline}
               messageCount={messages.length}
               isBlocked={isBlocked}
               userHasRated={userHasRated}

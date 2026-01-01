@@ -11,6 +11,7 @@ import { MATCH_STATUS, STATUS_BADGE_CLASSES } from '@/constants/chat'
 export function UserInfoSidebar({
   otherUser,
   matchStatus,
+  isOtherOnline,
   messageCount,
   isBlocked,
   userHasRated,
@@ -40,6 +41,14 @@ export function UserInfoSidebar({
         </div>
         <h3 className="text-xl font-bold text-gray-800">{otherUser?.name || t('you')}</h3>
         <p className="text-sm text-gray-500">{otherUser?.email}</p>
+        {matchStatus !== MATCH_STATUS.COMPLETED && (
+          <p className="text-xs mt-1">
+            <span className={`inline-flex items-center gap-1 ${isOtherOnline ? 'text-green-600' : 'text-gray-400'}`}>
+              <span className={`w-2 h-2 rounded-full ${isOtherOnline ? 'bg-green-500' : 'bg-gray-400'}`} />
+              {isOtherOnline ? t('online') : t('offline')}
+            </span>
+          </p>
+        )}
       </div>
 
       {/* Match Status */}

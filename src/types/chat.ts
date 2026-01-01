@@ -67,6 +67,7 @@ export interface MessageBubbleProps {
 export interface UserInfoSidebarProps {
   otherUser: ChatUser
   matchStatus: MatchStatusType
+  isOtherOnline?: boolean
   messageCount: number
   isBlocked: boolean
   userHasRated: boolean
