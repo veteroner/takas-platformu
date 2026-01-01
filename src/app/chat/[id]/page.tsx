@@ -1,21 +1,22 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { ArrowLeft, Send, MoreVertical, CheckCircle, MessageCircle, Package, User } from 'lucide-react'
-import Link from 'next/link'
-import Image from 'next/image'
 import { getCurrentUser } from '@/lib/auth'
 import { getMatchMessages, sendMessage, confirmMatchCompletion, rateUser, hasUserRatedMatch } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
 import { useMessageFilter } from '@/hooks/useMessageFilter'
-import { MessageFilterWarning, BanStatusBanner } from '@/components/MessageFilterWarning'
+import { BanStatusBanner } from '@/components/MessageFilterWarning'
 import { BlockReportModal, BlockedUserNotice } from '@/components/BlockReportModal'
 import { useBlockUser } from '@/hooks/useBlockAndReport'
 import { useMarkAsRead } from '@/hooks/useUnreadMessages'
 import RatingModal from '@/components/RatingModal'
 import DesktopLayout from '@/components/DesktopLayout'
 import { useDeviceType } from '@/hooks/useDeviceType'
+import { MessageInput } from '@/components/chat/MessageInput'
+import { MessageBubble } from '@/components/chat/MessageBubble'
+import { UserInfoSidebar } from '@/components/chat/UserInfoSidebar'
+import { ChatHeader } from '@/components/chat/ChatHeader'
 
 // Dynamic route - no static generation
 export const dynamic = 'force-dynamic'
@@ -292,7 +293,7 @@ export default function ChatPage() {
     }
   }
 
-  const handleSend = async () => {
+  const handleSend = useCallback(async () => {
     if (!newMessage.trim() || !user || !otherUser || isSending) return
 
     // Ban kontrolü
@@ -356,7 +357,7 @@ export default function ChatPage() {
         setNewMessage(messageText)
         setFilterWarning('Mesaj gönderilemedi, tekrar deneyin')
       }
-      // ✅ Başarılı - Real-time subscription otomatik ekleyecek, bir şey yapmaya gerek yok!
+      // ✅ Başarılı - Real-time subscription otomatik ekleyecek
     } catch (error) {
       console.error('Error sending message:', error)
       setNewMessage(messageText)
@@ -364,168 +365,7 @@ export default function ChatPage() {
     } finally {
       setIsSending(false)
     }
-  }
-
-  // Shared Message Bubble Component
-  const MessageBubble = ({ msg }: { msg: any }) => {
-    const isMine = msg.sender_id === user?.id
-    
-    const getMessageStatus = () => {
-      if (!isMine) return null
-      if (msg.read_at) return <span className="ml-1" title="Görüldü">✓✓</span>
-      else if (msg.read) return <span className="ml-1" title="İletildi">✓✓</span>
-      else return <span className="ml-1" title="Gönderildi">✓</span>
-    }
-    
-    return (
-      <div className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
-        <div className={`max-w-[70%] rounded-2xl px-4 py-2.5 shadow-sm ${
-          isMine 
-            ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white' 
-            : 'bg-white border border-gray-200 text-gray-900'
-        }`}>
-          <p className="text-sm leading-relaxed">{msg.content}</p>
-          <div className={`flex items-center justify-end gap-1 text-xs mt-1 ${isMine ? 'text-white/80' : 'text-gray-500'}`}>
-            <span>{new Date(msg.created_at).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</span>
-            {getMessageStatus()}
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // Shared Input Component
-  const MessageInput = () => (
-    <div className="bg-white border-t border-gray-200 p-4">
-      {filterWarning && (
-        <div className="mb-3">
-          <MessageFilterWarning
-            reason={filterWarning}
-            severity="high"
-            onClose={() => setFilterWarning(null)}
-          />
-        </div>
-      )}
-      
-      <div className="flex items-center gap-2">
-        <input
-          type="text"
-          value={newMessage}
-          onChange={(e) => {
-            setNewMessage(e.target.value)
-            if (filterWarning) setFilterWarning(null)
-          }}
-          onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-          placeholder={isBlocked ? "Kullanıcı engellenmiş" : isBanned ? "Mesaj gönderemezsiniz" : "Mesajınızı yazın..."}
-          disabled={isBanned || isSending || isBlocked}
-          className="flex-1 bg-gray-100 border-2 border-gray-300 rounded-full px-4 py-3 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-purple-500 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
-        />
-        <button
-          onClick={handleSend}
-          disabled={!newMessage.trim() || isBanned || isSending || isBlocked}
-          className="bg-gradient-to-r from-pink-500 to-purple-600 text-white p-3 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isSending ? (
-            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-          ) : (
-            <Send className="w-5 h-5" />
-          )}
-        </button>
-      </div>
-    </div>
-  )
-
-  // User Info Sidebar for Desktop
-  const UserInfoSidebar = () => (
-    <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-6 sticky top-24">
-      {/* User Profile */}
-      <div className="text-center mb-6">
-        <div className="w-24 h-24 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
-          {otherUser?.avatar_url ? (
-            <Image src={otherUser.avatar_url} alt="" width={96} height={96} className="w-full h-full object-cover" />
-          ) : (
-            <User className="w-12 h-12 text-white" />
-          )}
-        </div>
-        <h3 className="text-xl font-bold text-gray-800">{otherUser?.name || 'Kullanıcı'}</h3>
-        <p className="text-sm text-gray-500">{otherUser?.email}</p>
-      </div>
-
-      {/* Match Status */}
-      <div className="space-y-3 mb-6">
-        <div className={`w-full rounded-xl py-3 px-4 text-sm text-center font-medium ${
-          matchStatus === 'completed' 
-            ? 'bg-green-100 text-green-800 border border-green-200'
-            : matchStatus === 'pending_completion'
-            ? 'bg-yellow-100 text-yellow-800 border border-yellow-200'
-            : 'bg-blue-100 text-blue-800 border border-blue-200'
-        }`}>
-          {matchStatus === 'completed' && '✅ Takas Tamamlandı'}
-          {matchStatus === 'pending_completion' && '⏳ Onay Bekleniyor'}
-          {matchStatus === 'active' && '💬 Aktif Sohbet'}
-        </div>
-      </div>
-
-      {/* Actions */}
-      <div className="space-y-3">
-        {!isBlocked && matchStatus === 'active' && (
-          <button
-            onClick={handleCompleteMatch}
-            disabled={isCompletingMatch}
-            className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 px-4 rounded-xl font-medium text-sm hover:from-pink-600 hover:to-purple-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-          >
-            {isCompletingMatch ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                İşleniyor...
-              </>
-            ) : (
-              <>
-                <CheckCircle className="w-4 h-4" />
-                Takası Tamamla
-              </>
-            )}
-          </button>
-        )}
-
-        {matchStatus === 'completed' && !userHasRated && (
-          <button
-            onClick={() => setShowRatingModal(true)}
-            className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 px-4 rounded-xl font-medium text-sm hover:from-yellow-600 hover:to-orange-600 transition-all flex items-center justify-center gap-2"
-          >
-            ⭐ Puanla
-          </button>
-        )}
-
-        {!isBlocked && (
-          <button
-            onClick={() => setShowBlockReportModal(true)}
-            className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-medium text-sm hover:bg-gray-200 transition-all"
-          >
-            Engelle / Şikayet Et
-          </button>
-        )}
-
-        <Link 
-          href="/messages"
-          className="w-full block text-center bg-white border border-gray-200 text-gray-700 py-3 px-4 rounded-xl font-medium text-sm hover:bg-gray-50 transition-all"
-        >
-          ← Tüm Mesajlar
-        </Link>
-      </div>
-
-      {/* Info Section */}
-      <div className="mt-6 pt-6 border-t border-gray-100">
-        <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-          <MessageCircle className="w-4 h-4" />
-          <span>{messages.length} mesaj</span>
-        </div>
-        <p className="text-xs text-gray-400">
-          Takaslarınızı güvenle tamamlayın. Şüpheli durumları bildirin.
-        </p>
-      </div>
-    </div>
-  )
+  }, [newMessage, user, otherUser, isSending, isBanned, matchId, isMessageClean, getWarningMessage])
 
   if (isLoading) {
     return (
@@ -546,21 +386,16 @@ export default function ChatPage() {
           {/* Chat Area - 3 columns */}
           <div className="col-span-3 bg-white/70 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg flex flex-col overflow-hidden">
             {/* Chat Header */}
-            <div className="bg-white border-b border-gray-200 p-4 flex items-center gap-4">
-              <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center overflow-hidden">
-                {otherUser?.avatar_url ? (
-                  <Image src={otherUser.avatar_url} alt="" width={48} height={48} className="w-full h-full object-cover" />
-                ) : (
-                  <User className="w-6 h-6 text-white" />
-                )}
-              </div>
-              <div className="flex-1">
-                <h2 className="font-bold text-gray-800">{otherUser?.name || 'Kullanıcı'}</h2>
-                <p className="text-xs text-gray-500">
-                  {matchStatus === 'completed' ? '✅ Takas Tamamlandı' : 'Çevrimiçi'}
-                </p>
-              </div>
-            </div>
+            <ChatHeader
+              otherUser={otherUser}
+              matchStatus={matchStatus}
+              userHasRated={userHasRated}
+              isCompletingMatch={isCompletingMatch}
+              isBlocked={isBlocked}
+              onCompleteMatch={handleCompleteMatch}
+              onShowBlockReportModal={() => setShowBlockReportModal(true)}
+              isMobile={false}
+            />
 
             {/* Ban Banner */}
             {isBanned && banDetails && (
@@ -581,18 +416,46 @@ export default function ChatPage() {
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
               {messages.map((msg) => (
-                <MessageBubble key={msg.id} msg={msg} />
+                <MessageBubble 
+                  key={msg.id}
+                  content={msg.content}
+                  senderId={msg.sender_id}
+                  currentUserId={user?.id}
+                  createdAt={msg.created_at}
+                  read={msg.read}
+                  readAt={msg.read_at}
+                />
               ))}
               <div ref={messagesEndRef} />
             </div>
 
             {/* Input */}
-            <MessageInput />
+            <MessageInput
+              value={newMessage}
+              onChange={setNewMessage}
+              onSend={handleSend}
+              disabled={isBanned || isSending || isBlocked}
+              isSending={isSending}
+              filterWarning={filterWarning}
+              onClearWarning={() => setFilterWarning(null)}
+              isBlocked={isBlocked}
+              isBanned={isBanned}
+            />
           </div>
 
           {/* Sidebar - 1 column */}
           <div className="col-span-1">
-            <UserInfoSidebar />
+            <UserInfoSidebar
+              otherUser={otherUser}
+              matchStatus={matchStatus}
+              messageCount={messages.length}
+              isBlocked={isBlocked}
+              userHasRated={userHasRated}
+              isCompletingMatch={isCompletingMatch}
+              onCompleteMatch={handleCompleteMatch}
+              onShowRatingModal={() => setShowRatingModal(true)}
+              onShowBlockReportModal={() => setShowBlockReportModal(true)}
+            />
           </div>
         </div>
 
@@ -637,69 +500,16 @@ export default function ChatPage() {
       )}
       
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200 pt-safe">
-        <div className="px-4 py-4 pt-12 md:pt-4">
-          <div className="flex items-center gap-3 mb-3">
-            <Link href="/messages" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-              <ArrowLeft className="w-6 h-6 text-gray-600" />
-            </Link>
-            <div className="flex-1">
-              <h1 className="text-lg font-bold text-gray-900">{otherUser?.name || 'Kullanıcı'}</h1>
-              <p className="text-xs text-gray-500">
-                {matchStatus === 'completed' ? '✅ Takas Tamamlandı' : otherUser?.email}
-              </p>
-            </div>
-            {!isBlocked && (
-              <button
-                onClick={() => setShowBlockReportModal(true)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                aria-label="Seçenekler"
-              >
-                <MoreVertical className="w-6 h-6 text-gray-600" />
-              </button>
-            )}
-          </div>
-
-          {/* Takası Tamamla Button */}
-          {!isBlocked && matchStatus === 'active' && (
-            <button
-              onClick={handleCompleteMatch}
-              disabled={isCompletingMatch}
-              className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-2.5 px-4 rounded-xl font-medium text-sm hover:from-pink-600 hover:to-purple-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-            >
-              {isCompletingMatch ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  İşleniyor...
-                </>
-              ) : (
-                <>
-                  <CheckCircle className="w-4 h-4" />
-                  Takası Tamamla
-                </>
-              )}
-            </button>
-          )}
-
-          {matchStatus === 'pending_completion' && (
-            <div className="w-full bg-yellow-100 border border-yellow-300 rounded-xl py-2.5 px-4 text-sm text-center text-yellow-800">
-              ⏳ Diğer tarafın onayı bekleniyor...
-            </div>
-          )}
-
-          {matchStatus === 'completed' && !userHasRated && (
-            <div className="w-full bg-green-100 border border-green-300 rounded-xl py-2.5 px-4 text-sm text-center text-green-800">
-              ✅ Takas tamamlandı! Lütfen puanlayın.
-            </div>
-          )}
-
-          {matchStatus === 'completed' && userHasRated && (
-            <div className="w-full bg-green-100 border border-green-300 rounded-xl py-2.5 px-4 text-sm text-center text-green-800">
-              🌟 Takas tamamlandı ve puanlandı!
-            </div>
-          )}
-        </div>
-      </header>
+      <ChatHeader
+        otherUser={otherUser}
+        matchStatus={matchStatus}
+        userHasRated={userHasRated}
+        isCompletingMatch={isCompletingMatch}
+        isBlocked={isBlocked}
+        onCompleteMatch={handleCompleteMatch}
+        onShowBlockReportModal={() => setShowBlockReportModal(true)}
+        isMobile={true}
+      />
 
       {/* Blocked User Notice */}
       {isBlocked && (
@@ -718,7 +528,7 @@ export default function ChatPage() {
           currentUserId={user.id}
           onSuccess={() => {
             setIsBlocked(true)
-            loadData() // Reload to update UI
+            loadData()
           }}
         />
       )}
@@ -726,14 +536,32 @@ export default function ChatPage() {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((msg) => (
-          <MessageBubble key={msg.id} msg={msg} />
+          <MessageBubble 
+            key={msg.id}
+            content={msg.content}
+            senderId={msg.sender_id}
+            currentUserId={user?.id}
+            createdAt={msg.created_at}
+            read={msg.read}
+            readAt={msg.read_at}
+          />
         ))}
         <div ref={messagesEndRef} />
       </div>
 
       {/* Input */}
       <div className="pb-safe">
-        <MessageInput />
+        <MessageInput
+          value={newMessage}
+          onChange={setNewMessage}
+          onSend={handleSend}
+          disabled={isBanned || isSending || isBlocked}
+          isSending={isSending}
+          filterWarning={filterWarning}
+          onClearWarning={() => setFilterWarning(null)}
+          isBlocked={isBlocked}
+          isBanned={isBanned}
+        />
       </div>
 
       {/* Rating Modal */}
