@@ -297,11 +297,20 @@ export default function HomePage() {
     await handleSwipe('left', item)
   }, [handleSwipe])
 
-  const handleRetry = useCallback(() => {
-    // Re-fetch items and reset passed items to show previously viewed items again (desktop retry behavior)
-    loadInitialItems()
+  const handleRetry = useCallback(async () => {
+    // Desktop retry behavior: Reset everything and fetch fresh items
+    console.log('🔄 Retry: Resetting passed items and reloading feed...')
+    
+    // Reset states
     setPassedItems([])
-  }, [loadInitialItems])
+    setLikedItems([])
+    setIsLoading(true)
+    
+    // Re-fetch items fresh from database
+    await loadInitialItems()
+    
+    console.log('✅ Feed reloaded successfully')
+  }, [loadInitialItems, setPassedItems, setLikedItems])
 
   return (
     <div className="min-h-svh bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 flex flex-col">
