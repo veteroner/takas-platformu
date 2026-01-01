@@ -248,6 +248,10 @@ export default function HomePage() {
         if (direction === 'right') {
           setLikedItems(prev => [...prev, item])
           
+          // Wait a bit for the database trigger to process the match
+          // The trigger check_for_match_user_swipes() runs automatically
+          await new Promise(resolve => setTimeout(resolve, 500))
+          
           // Check if this created a match
           const match = await checkAndCreateMatch(user.id, item.id) as MatchData | null
           

@@ -444,51 +444,18 @@ export async function createMatch(user1Id: string, user2Id: string, item1Id: str
 // Enhanced checkForMatch that creates match if mutual like exists
 export async function checkAndCreateMatch(userId: string, itemId: string): Promise<Record<string, unknown> | null> {
   try {
-    // Get the item owner
-    const { data: item } = await supabase
-      .from('items')
-      .select('owner_id')
-      .eq('id', itemId)
-      .single()
-
-    if (!item) return null
-
-    const ownerId = item.owner_id
-
-    // First check if match already exists
+    // Check if match already exists between these two users
+    // Note: The trigger check_for_match_user_swipes() automatically creates matches
+    // when there's a mutual like, so we just need to check if a match exists
     const existingMatch = await checkForMatch(userId, itemId)
     if (existingMatch) {
       return existingMatch
     }
 
-    // Check if owner has liked any of current user's items
-    const { data: ownerLikes } = await supabase
-      .from('user_swipes')
-      .select('item_id')
-      .eq('user_id', ownerId)
-      .eq('action', 'like')
-
-    if (!ownerLikes || ownerLikes.length === 0) {
-      return null // No mutual like
-    }
-
-    // Get current user's items that owner liked
-    const { data: userItems } = await supabase
-      .from('items')
-      .select('id')
-      .eq('owner_id', userId)
-      .eq('status', 'active')
-      .in('id', ownerLikes.map(like => like.item_id))
-
-    if (!userItems || userItems.length === 0) {
-      return null // No mutual like on active items
-    }
-
-    // Create match with the first mutual item
-    const matchedItemId = userItems[0].id
-    return await createMatch(userId, ownerId, matchedItemId, itemId)
+    // No match found yet - trigger will create it automatically if there's a mutual like
+    return null
   } catch (error) {
-    console.error('Error checking and creating match:', error)
+    console.error('Error checking for match:', error)
     return null
   }
 }
