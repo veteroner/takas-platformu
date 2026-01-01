@@ -11,6 +11,7 @@ import { MATCH_STATUS } from '@/constants/chat'
 export function ChatHeader({
   otherUser,
   matchStatus,
+  isOtherOnline,
   userHasRated,
   isCompletingMatch,
   isBlocked,
@@ -107,7 +108,7 @@ export function ChatHeader({
       <div className="flex-1">
         <h2 className="font-bold text-gray-800">{otherUser?.name || t('you')}</h2>
         <p className="text-xs text-gray-500">
-          {matchStatus === MATCH_STATUS.COMPLETED ? `✅ ${t('statusCompleted')}` : t('online')}
+          {matchStatus === MATCH_STATUS.COMPLETED ? `✅ ${t('statusCompleted')}` : (isOtherOnline ? t('online') : t('offline'))}
         </p>
       </div>
     </div>

@@ -37,6 +37,7 @@ export default function ChatPage() {
   const [newMessage, setNewMessage] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [otherUser, setOtherUser] = useState<ChatUser | null>(null)
+  const [isOtherOnline, setIsOtherOnline] = useState(false)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
   const messageIdsRef = useRef(new Set<string>())
   const hasInitialScrolledRef = useRef(false)
@@ -86,14 +87,15 @@ export default function ChatPage() {
         },
         (payload) => {
           console.log('📨 Yeni mesaj geldi:', payload.new)
+          const newMsg = payload.new as ChatMessage
           setMessages(prev => {
             // O(1) duplicate check with Set
-            if (messageIdsRef.current.has(payload.new.id)) {
-              console.log('⚠️ Duplicate mesaj engellendi:', payload.new.id)
+            if (messageIdsRef.current.has(newMsg.id)) {
+              console.log('⚠️ Duplicate mesaj engellendi:', newMsg.id)
               return prev
             }
-            messageIdsRef.current.add(payload.new.id)
-            return [...prev, payload.new]
+            messageIdsRef.current.add(newMsg.id)
+            return [...prev, newMsg]
           })
           // Scroll removed here - useEffect handles it
         }
@@ -108,8 +110,9 @@ export default function ChatPage() {
         },
         (payload) => {
           console.log('✏️ Mesaj güncellendi:', payload.new)
+          const updatedMsg = payload.new as ChatMessage
           setMessages(prev => 
-            prev.map(m => m.id === payload.new.id ? payload.new : m)
+            prev.map(m => m.id === updatedMsg.id ? updatedMsg : m)
           )
         }
       )
@@ -125,6 +128,43 @@ export default function ChatPage() {
       supabase.removeChannel(channel)
     }
   }, [matchId])
+
+  // Live online status via Supabase Realtime Presence (per-match channel)
+  useEffect(() => {
+    if (!matchId || !user?.id || !otherUser?.id) return
+
+    const presenceChannelName = `presence:${matchId}`
+    const channel = supabase.channel(presenceChannelName, {
+      config: {
+        presence: {
+          key: user.id
+        }
+      }
+    })
+
+    const updateOnlineState = () => {
+      const state = channel.presenceState()
+      const online = Object.prototype.hasOwnProperty.call(state, otherUser.id)
+      setIsOtherOnline(online)
+    }
+
+    channel
+      .on('presence', { event: 'sync' }, updateOnlineState)
+      .on('presence', { event: 'join' }, updateOnlineState)
+      .on('presence', { event: 'leave' }, updateOnlineState)
+      .subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          // Track minimal payload; key is the user id
+          await channel.track({ online_at: new Date().toISOString() })
+          updateOnlineState()
+        }
+      })
+
+    return () => {
+      supabase.removeChannel(channel)
+      setIsOtherOnline(false)
+    }
+  }, [matchId, user?.id, otherUser?.id])
 
   const scrollToBottom = useCallback((instant = false) => {
     const el = messagesContainerRef.current
@@ -373,10 +413,11 @@ export default function ChatPage() {
         setNewMessage(messageText)
         setFilterWarning(t('errorSendingMessage'))
       } else {
-        // ✅ Başarılı - Real-time subscription gerçek mesajı ekleyecek
-        // Optimistic mesajı kaldır (gerçek mesajla değişecek)
-        setMessages(prev => prev.filter(m => m.id !== tempId))
+        // ✅ Başarılı - gerçek mesajı backend'den aldık
+        // Optimistic mesajı gerçek mesajla değiştir
+        setMessages(prev => prev.map(m => m.id === tempId ? sent : m))
         messageIdsRef.current.delete(tempId)
+        messageIdsRef.current.add(sent.id)
       }
     } catch (error) {
       console.error('Error sending message:', error)
@@ -401,6 +442,17 @@ export default function ChatPage() {
     )
   }
 
+  if (!user || !otherUser) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Yükleniyor...</p>
+        </div>
+      </div>
+    )
+  }
+
   // Desktop Layout
   if (!isMobile) {
     return (
@@ -412,6 +464,7 @@ export default function ChatPage() {
             <ChatHeader
               otherUser={otherUser}
               matchStatus={matchStatus}
+              isOtherOnline={isOtherOnline}
               userHasRated={userHasRated}
               isCompletingMatch={isCompletingMatch}
               isBlocked={isBlocked}
@@ -421,7 +474,7 @@ export default function ChatPage() {
             />
 
             {/* Ban Banner */}
-            {isBanned && banDetails && (
+            {isBanned && banDetails?.bannedUntil && (
               <BanStatusBanner
                 bannedUntil={banDetails.bannedUntil}
                 reason={banDetails.reason}
@@ -443,7 +496,7 @@ export default function ChatPage() {
                   key={msg.id}
                   content={msg.content}
                   senderId={msg.sender_id}
-                  currentUserId={user?.id}
+                  currentUserId={user.id}
                   createdAt={msg.created_at}
                   read={msg.read}
                   readAt={msg.read_at}
@@ -513,7 +566,7 @@ export default function ChatPage() {
   return (
     <div className="h-screen bg-gray-50 flex flex-col">
       {/* Ban Banner */}
-      {isBanned && banDetails && (
+      {isBanned && banDetails?.bannedUntil && (
         <BanStatusBanner
           bannedUntil={banDetails.bannedUntil}
           reason={banDetails.reason}
@@ -525,6 +578,7 @@ export default function ChatPage() {
       <ChatHeader
         otherUser={otherUser}
         matchStatus={matchStatus}
+        isOtherOnline={isOtherOnline}
         userHasRated={userHasRated}
         isCompletingMatch={isCompletingMatch}
         isBlocked={isBlocked}
@@ -562,7 +616,7 @@ export default function ChatPage() {
             key={msg.id}
             content={msg.content}
             senderId={msg.sender_id}
-            currentUserId={user?.id}
+            currentUserId={user.id}
             createdAt={msg.created_at}
             read={msg.read}
             readAt={msg.read_at}

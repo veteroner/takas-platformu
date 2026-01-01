@@ -79,6 +79,7 @@ export interface UserInfoSidebarProps {
 export interface ChatHeaderProps {
   otherUser: ChatUser
   matchStatus: MatchStatusType
+  isOtherOnline?: boolean
   userHasRated: boolean
   isCompletingMatch: boolean
   isBlocked: boolean
