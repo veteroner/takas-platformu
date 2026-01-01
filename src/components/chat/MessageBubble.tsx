@@ -2,6 +2,7 @@
 
 import { useTranslation } from 'react-i18next'
 import type { MessageBubbleProps } from '@/types/chat'
+import { MESSAGE_BUBBLE_MAX_WIDTH_PERCENT } from '@/constants/chat'
 
 export function MessageBubble({
   content,
@@ -30,11 +31,14 @@ export function MessageBubble({
   
   return (
     <div className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
-      <div className={`max-w-[70%] rounded-2xl px-4 py-2.5 shadow-sm ${
-        isMine 
-          ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white' 
-          : 'bg-white border border-gray-200 text-gray-900'
-      }`}>
+      <div 
+        className={`rounded-2xl px-4 py-2.5 shadow-sm ${
+          isMine 
+            ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white' 
+            : 'bg-white border border-gray-200 text-gray-900'
+        }`}
+        style={{ maxWidth: MESSAGE_BUBBLE_MAX_WIDTH_PERCENT }}
+      >
         <p className="text-sm leading-relaxed break-words whitespace-pre-wrap">{content}</p>
         <div className={`flex items-center justify-end gap-1 text-xs mt-1 ${
           isMine ? 'text-white/80' : 'text-gray-500'

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { getCurrentUser } from '@/lib/auth'
@@ -52,6 +52,9 @@ export default function ChatPage() {
   const { isUserBlocked } = useBlockUser()
   const { markMatchAsRead } = useMarkAsRead()
   
+  // Memoized computed values
+  const messageCount = useMemo(() => messages.length, [messages.length])
+  
   // Rating system states
   const [showRatingModal, setShowRatingModal] = useState(false)
   const [matchStatus, setMatchStatus] = useState<MatchStatusType>(MATCH_STATUS.ACTIVE)
@@ -64,11 +67,9 @@ export default function ChatPage() {
     loadMatchStatus()
   }, [matchId])
 
-  // Real-time subscription'ı ayrı useEffect'te yap
   useEffect(() => {
     if (!matchId) return
     
-    // Sadece matchId ile channel name oluştur
     const channelName = `${SUBSCRIPTION_CHANNEL_PREFIX}${matchId}`
     
     const channel = supabase
@@ -123,16 +124,15 @@ export default function ChatPage() {
     }
   }, [matchId])
 
+  const scrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [])
+
   useEffect(() => {
     scrollToBottom()
-  }, [messages])
+  }, [messages, scrollToBottom])
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
-
-  // Load match status for rating system
-  const loadMatchStatus = async () => {
+  const loadMatchStatus = useCallback(async () => {
     if (!matchId || !user) return
     
     try {
@@ -172,10 +172,9 @@ export default function ChatPage() {
     } catch (error) {
       console.error('Error loading match status:', error)
     }
-  }
+  }, [matchId, user])
 
-  // Handle "Takası Tamamla" button
-  const handleCompleteMatch = async () => {
+  const handleCompleteMatch = useCallback(async () => {
     if (!user) return
     
     setIsCompletingMatch(true)
@@ -188,22 +187,21 @@ export default function ChatPage() {
           setShowRatingModal(true)
         } else {
           setMatchStatus('pending_completion')
-          alert(result.message)
+          alert(t('alertMatchPending'))
         }
-        loadMatchStatus() // Reload status
+        loadMatchStatus()
       } else {
-        alert(result.message)
+        alert(t('errorCompletingMatch'))
       }
     } catch (error) {
       console.error('Error completing match:', error)
-      alert('Bir hata oluştu, lütfen tekrar deneyin')
+      alert(t('errorGeneric') || 'Bir hata oluştu, lütfen tekrar deneyin')
     } finally {
       setIsCompletingMatch(false)
     }
-  }
+  }, [matchId, user, t, loadMatchStatus])
 
-  // Handle rating submission
-  const handleSubmitRating = async (rating: number, comment?: string) => {
+  const handleSubmitRating = useCallback(async (rating: number, comment?: string) => {
     if (!user || !otherUser) return
     
     try {
@@ -218,17 +216,18 @@ export default function ChatPage() {
       if (success) {
         setUserHasRated(true)
         setShowRatingModal(false)
-        alert('Teşekkürler! Puanınız kaydedildi. 🌟')
+        alert(t('successRatingSubmitted'))
       } else {
         throw new Error('Rating failed')
       }
     } catch (error) {
       console.error('Error rating user:', error)
+      alert(t('errorRatingUser'))
       throw error
     }
-  }
+  }, [user, otherUser, matchId, t])
 
-  const checkBanStatus = async () => {
+  const checkBanStatus = useCallback(async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session?.access_token) return
@@ -249,9 +248,9 @@ export default function ChatPage() {
     } catch (error) {
       console.error('Ban status check error:', error)
     }
-  }
+  }, [])
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setIsLoading(true)
       const currentUser = await getCurrentUser()
@@ -296,7 +295,7 @@ export default function ChatPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [matchId, router])
 
   const handleSend = useCallback(async () => {
     if (!newMessage.trim() || !user || !otherUser || isSending) return

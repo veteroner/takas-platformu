@@ -50,5 +50,13 @@
   "readBy": "read by",
   "unread": "Unread",
   "justNow": "Just now",
-  "messagesCount": "messages"
+  "messagesCount": "messages",
+  "errorGeneric": "An error occurred, please try again",
+  "errorLoadingMessages": "Error loading messages",
+  "errorSendingMessage": "Error sending message",
+  "errorCompletingMatch": "Error completing exchange",
+  "errorRatingUser": "Error rating user",
+  "successRatingSubmitted": "Thank you! Your rating has been saved. 🌟",
+  "alertMatchPending": "Your confirmation has been saved. Waiting for other party's confirmation.",
+  "alertMatchCompleted": "Exchange completed! Please rate the other party."
 }

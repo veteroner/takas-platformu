@@ -1,5 +1,9 @@
 // Chat UI Constants
 export const MESSAGE_BUBBLE_MAX_WIDTH = 384 // max-w-96 = 24rem = 384px
+export const MESSAGE_BUBBLE_MAX_WIDTH_PERCENT = '70%' // max-w-[70%]
+export const MESSAGE_BUBBLE_BORDER_RADIUS = 'rounded-2xl'
+export const MESSAGE_BUBBLE_PADDING_X = 'px-4'
+export const MESSAGE_BUBBLE_PADDING_Y = 'py-2.5'
 export const AVATAR_SIZE = 32 // w-8 h-8 = 32px
 export const SIDEBAR_WIDTH = 384 // w-96 = 384px
 

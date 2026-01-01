@@ -50,5 +50,13 @@
   "readBy": "tarafından okundu",
   "unread": "Okunmadı",
   "justNow": "Az önce",
-  "messagesCount": "mesaj"
+  "messagesCount": "mesaj",
+  "errorGeneric": "Bir hata oluştu, lütfen tekrar deneyin",
+  "errorLoadingMessages": "Mesajlar yüklenirken hata oluştu",
+  "errorSendingMessage": "Mesaj gönderilirken hata oluştu",
+  "errorCompletingMatch": "Takas tamamlanırken hata oluştu",
+  "errorRatingUser": "Kullanıcı değerlendirilirken hata oluştu",
+  "successRatingSubmitted": "Teşekkürler! Puanınız kaydedildi. 🌟",
+  "alertMatchPending": "Onaylanız kaydedildi. Diğer tarafın onayı bekleniyor.",
+  "alertMatchCompleted": "Takas tamamlandı! Lütfen karşı tarafı değerlendirin."
 }
