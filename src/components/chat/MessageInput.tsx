@@ -1,34 +1,25 @@
 'use client'
 
 import { useRef, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Send } from 'lucide-react'
 import { MessageFilterWarning } from '@/components/MessageFilterWarning'
-
-interface MessageInputProps {
-  value: string
-  onChange: (value: string) => void
-  onSend: () => void
-  disabled?: boolean
-  placeholder?: string
-  isSending?: boolean
-  filterWarning?: string | null
-  onClearWarning?: () => void
-  isBlocked?: boolean
-  isBanned?: boolean
-}
+import LoadingSpinner from '@/components/LoadingSpinner'
+import type { MessageInputProps } from '@/types/chat'
 
 export function MessageInput({
   value,
   onChange,
   onSend,
   disabled = false,
-  placeholder = 'Mesajınızı yazın...',
+  placeholder,
   isSending = false,
   filterWarning,
   onClearWarning,
   isBlocked = false,
   isBanned = false
 }: MessageInputProps) {
+  const { t } = useTranslation('messages')
   const inputRef = useRef<HTMLInputElement>(null)
 
   // Auto-focus input when component mounts
@@ -55,9 +46,9 @@ export function MessageInput({
   }
 
   const getPlaceholder = () => {
-    if (isBlocked) return 'Kullanıcı engellenmiş'
-    if (isBanned) return 'Mesaj gönderemezsiniz'
-    return placeholder
+    if (isBlocked) return t('cannotSendBlocked')
+    if (isBanned) return t('cannotSendBanned')
+    return placeholder || t('messageInputPlaceholder')
   }
 
   return (
@@ -88,10 +79,10 @@ export function MessageInput({
           onClick={onSend}
           disabled={!value.trim() || isBanned || isSending || isBlocked}
           className="bg-gradient-to-r from-pink-500 to-purple-600 text-white p-3 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-          aria-label="Mesaj gönder"
+          aria-label={t('send')}
         >
           {isSending ? (
-            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+            <LoadingSpinner size={20} strokeWidth={2} />
           ) : (
             <Send className="w-5 h-5" />
           )}

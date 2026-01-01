@@ -2,24 +2,11 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 import { User, MessageCircle, CheckCircle } from 'lucide-react'
-
-interface UserInfoSidebarProps {
-  otherUser: {
-    id: string
-    name: string
-    email: string
-    avatar_url?: string
-  }
-  matchStatus: 'active' | 'pending_completion' | 'completed'
-  messageCount: number
-  isBlocked: boolean
-  userHasRated: boolean
-  isCompletingMatch: boolean
-  onCompleteMatch: () => void
-  onShowRatingModal: () => void
-  onShowBlockReportModal: () => void
-}
+import LoadingSpinner from '@/components/LoadingSpinner'
+import type { UserInfoSidebarProps } from '@/types/chat'
+import { MATCH_STATUS, STATUS_BADGE_CLASSES } from '@/constants/chat'
 
 export function UserInfoSidebar({
   otherUser,
@@ -32,6 +19,8 @@ export function UserInfoSidebar({
   onShowRatingModal,
   onShowBlockReportModal
 }: UserInfoSidebarProps) {
+  const { t } = useTranslation('messages')
+  
   return (
     <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-6 sticky top-24">
       {/* User Profile */}
@@ -49,28 +38,28 @@ export function UserInfoSidebar({
             <User className="w-12 h-12 text-white" />
           )}
         </div>
-        <h3 className="text-xl font-bold text-gray-800">{otherUser?.name || 'Kullanıcı'}</h3>
+        <h3 className="text-xl font-bold text-gray-800">{otherUser?.name || t('you')}</h3>
         <p className="text-sm text-gray-500">{otherUser?.email}</p>
       </div>
 
       {/* Match Status */}
       <div className="space-y-3 mb-6">
         <div className={`w-full rounded-xl py-3 px-4 text-sm text-center font-medium ${
-          matchStatus === 'completed' 
-            ? 'bg-green-100 text-green-800 border border-green-200'
-            : matchStatus === 'pending_completion'
-            ? 'bg-yellow-100 text-yellow-800 border border-yellow-200'
-            : 'bg-blue-100 text-blue-800 border border-blue-200'
+          matchStatus === MATCH_STATUS.COMPLETED 
+            ? STATUS_BADGE_CLASSES.completed
+            : matchStatus === MATCH_STATUS.PENDING_COMPLETION
+            ? STATUS_BADGE_CLASSES.pending_completion
+            : STATUS_BADGE_CLASSES.active
         }`}>
-          {matchStatus === 'completed' && '✅ Takas Tamamlandı'}
-          {matchStatus === 'pending_completion' && '⏳ Onay Bekleniyor'}
-          {matchStatus === 'active' && '💬 Aktif Sohbet'}
+          {matchStatus === MATCH_STATUS.COMPLETED && `✅ ${t('statusCompleted')}`}
+          {matchStatus === MATCH_STATUS.PENDING_COMPLETION && `⏳ ${t('statusPending')}`}
+          {matchStatus === MATCH_STATUS.ACTIVE && `💬 ${t('statusActive')}`}
         </div>
       </div>
 
       {/* Actions */}
       <div className="space-y-3">
-        {!isBlocked && matchStatus === 'active' && (
+        {!isBlocked && matchStatus === MATCH_STATUS.ACTIVE && (
           <button
             onClick={onCompleteMatch}
             disabled={isCompletingMatch}
@@ -78,24 +67,24 @@ export function UserInfoSidebar({
           >
             {isCompletingMatch ? (
               <>
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                İşleniyor...
+                <LoadingSpinner size={16} strokeWidth={2} />
+                {t('completing')}
               </>
             ) : (
               <>
                 <CheckCircle className="w-4 h-4" />
-                Takası Tamamla
+                {t('completeExchange')}
               </>
             )}
           </button>
         )}
 
-        {matchStatus === 'completed' && !userHasRated && (
+        {matchStatus === MATCH_STATUS.COMPLETED && !userHasRated && (
           <button
             onClick={onShowRatingModal}
             className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 px-4 rounded-xl font-medium text-sm hover:from-yellow-600 hover:to-orange-600 transition-all flex items-center justify-center gap-2"
           >
-            ⭐ Puanla
+            ⭐ {t('rateUser')}
           </button>
         )}
 
@@ -104,7 +93,7 @@ export function UserInfoSidebar({
             onClick={onShowBlockReportModal}
             className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-medium text-sm hover:bg-gray-200 transition-all"
           >
-            Engelle / Şikayet Et
+            {t('blockAndReport')}
           </button>
         )}
 
@@ -112,7 +101,7 @@ export function UserInfoSidebar({
           href="/messages"
           className="w-full block text-center bg-white border border-gray-200 text-gray-700 py-3 px-4 rounded-xl font-medium text-sm hover:bg-gray-50 transition-all"
         >
-          ← Tüm Mesajlar
+          ← {t('title')}
         </Link>
       </div>
 
@@ -120,11 +109,8 @@ export function UserInfoSidebar({
       <div className="mt-6 pt-6 border-t border-gray-100">
         <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
           <MessageCircle className="w-4 h-4" />
-          <span>{messageCount} mesaj</span>
+          <span>{messageCount} {t('messagesCount')}</span>
         </div>
-        <p className="text-xs text-gray-400">
-          Takaslarınızı güvenle tamamlayın. Şüpheli durumları bildirin.
-        </p>
       </div>
     </div>
   )

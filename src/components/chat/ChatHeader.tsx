@@ -2,23 +2,11 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 import { ArrowLeft, MoreVertical, User, CheckCircle } from 'lucide-react'
-
-interface ChatHeaderProps {
-  otherUser: {
-    id: string
-    name: string
-    email: string
-    avatar_url?: string
-  }
-  matchStatus: 'active' | 'pending_completion' | 'completed'
-  userHasRated: boolean
-  isCompletingMatch: boolean
-  isBlocked: boolean
-  onCompleteMatch: () => void
-  onShowBlockReportModal: () => void
-  isMobile?: boolean
-}
+import LoadingSpinner from '@/components/LoadingSpinner'
+import type { ChatHeaderProps } from '@/types/chat'
+import { MATCH_STATUS } from '@/constants/chat'
 
 export function ChatHeader({
   otherUser,
@@ -30,6 +18,8 @@ export function ChatHeader({
   onShowBlockReportModal,
   isMobile = false
 }: ChatHeaderProps) {
+  const { t } = useTranslation('messages')
+  
   if (isMobile) {
     return (
       <header className="bg-white shadow-sm border-b border-gray-200 pt-safe">
@@ -39,16 +29,16 @@ export function ChatHeader({
               <ArrowLeft className="w-6 h-6 text-gray-600" />
             </Link>
             <div className="flex-1">
-              <h1 className="text-lg font-bold text-gray-900">{otherUser?.name || 'Kullanıcı'}</h1>
+              <h1 className="text-lg font-bold text-gray-900">{otherUser?.name || t('you')}</h1>
               <p className="text-xs text-gray-500">
-                {matchStatus === 'completed' ? '✅ Takas Tamamlandı' : otherUser?.email}
+                {matchStatus === MATCH_STATUS.COMPLETED ? `✅ ${t('statusCompleted')}` : otherUser?.email}
               </p>
             </div>
             {!isBlocked && (
               <button
                 onClick={onShowBlockReportModal}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                aria-label="Seçenekler"
+                aria-label={t('blockAndReport')}
               >
                 <MoreVertical className="w-6 h-6 text-gray-600" />
               </button>
@@ -56,7 +46,7 @@ export function ChatHeader({
           </div>
 
           {/* Takası Tamamla Button */}
-          {!isBlocked && matchStatus === 'active' && (
+          {!isBlocked && matchStatus === MATCH_STATUS.ACTIVE && (
             <button
               onClick={onCompleteMatch}
               disabled={isCompletingMatch}
@@ -64,33 +54,33 @@ export function ChatHeader({
             >
               {isCompletingMatch ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  İşleniyor...
+                  <LoadingSpinner size={16} strokeWidth={2} />
+                  {t('completing')}
                 </>
               ) : (
                 <>
                   <CheckCircle className="w-4 h-4" />
-                  Takası Tamamla
+                  {t('completeExchange')}
                 </>
               )}
             </button>
           )}
 
-          {matchStatus === 'pending_completion' && (
+          {matchStatus === MATCH_STATUS.PENDING_COMPLETION && (
             <div className="w-full bg-yellow-100 border border-yellow-300 rounded-xl py-2.5 px-4 text-sm text-center text-yellow-800">
-              ⏳ Diğer tarafın onayı bekleniyor...
+              ⏳ {t('statusPending')}
             </div>
           )}
 
-          {matchStatus === 'completed' && !userHasRated && (
+          {matchStatus === MATCH_STATUS.COMPLETED && !userHasRated && (
             <div className="w-full bg-green-100 border border-green-300 rounded-xl py-2.5 px-4 text-sm text-center text-green-800">
-              ✅ Takas tamamlandı! Lütfen puanlayın.
+              ✅ {t('statusCompleted')}! {t('rateUser')}.
             </div>
           )}
 
-          {matchStatus === 'completed' && userHasRated && (
+          {matchStatus === MATCH_STATUS.COMPLETED && userHasRated && (
             <div className="w-full bg-green-100 border border-green-300 rounded-xl py-2.5 px-4 text-sm text-center text-green-800">
-              🌟 Takas tamamlandı ve puanlandı!
+              🌟 {t('statusCompleted')}!
             </div>
           )}
         </div>
@@ -115,9 +105,9 @@ export function ChatHeader({
         )}
       </div>
       <div className="flex-1">
-        <h2 className="font-bold text-gray-800">{otherUser?.name || 'Kullanıcı'}</h2>
+        <h2 className="font-bold text-gray-800">{otherUser?.name || t('you')}</h2>
         <p className="text-xs text-gray-500">
-          {matchStatus === 'completed' ? '✅ Takas Tamamlandı' : 'Çevrimiçi'}
+          {matchStatus === MATCH_STATUS.COMPLETED ? `✅ ${t('statusCompleted')}` : t('online')}
         </p>
       </div>
     </div>

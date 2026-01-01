@@ -1,17 +1,7 @@
 'use client'
 
-import Image from 'next/image'
-
-interface MessageBubbleProps {
-  content: string
-  senderId: string
-  currentUserId: string
-  createdAt: string
-  read?: boolean
-  readAt?: string
-  senderAvatar?: string
-  senderName?: string
-}
+import { useTranslation } from 'react-i18next'
+import type { MessageBubbleProps } from '@/types/chat'
 
 export function MessageBubble({
   content,
@@ -21,13 +11,14 @@ export function MessageBubble({
   read = false,
   readAt,
 }: MessageBubbleProps) {
+  const { t } = useTranslation('messages')
   const isMine = senderId === currentUserId
   
   const getMessageStatus = () => {
     if (!isMine) return null
-    if (readAt) return <span className="ml-1" title="Görüldü">✓✓</span>
-    if (read) return <span className="ml-1" title="İletildi">✓✓</span>
-    return <span className="ml-1" title="Gönderildi">✓</span>
+    if (readAt) return <span className="ml-1" title={t('seen')}>✓✓</span>
+    if (read) return <span className="ml-1" title={t('delivered')}>✓✓</span>
+    return <span className="ml-1" title={t('sent')}>✓</span>
   }
   
   const formatTime = (timestamp: string) => {

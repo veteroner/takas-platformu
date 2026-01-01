@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import { useTranslation } from 'react-i18next'
 import { getCurrentUser } from '@/lib/auth'
 import { getMatchMessages, sendMessage, confirmMatchCompletion, rateUser, hasUserRatedMatch } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
@@ -13,10 +14,13 @@ import { useMarkAsRead } from '@/hooks/useUnreadMessages'
 import RatingModal from '@/components/RatingModal'
 import DesktopLayout from '@/components/DesktopLayout'
 import { useDeviceType } from '@/hooks/useDeviceType'
+import LoadingSpinner from '@/components/LoadingSpinner'
 import { MessageInput } from '@/components/chat/MessageInput'
 import { MessageBubble } from '@/components/chat/MessageBubble'
 import { UserInfoSidebar } from '@/components/chat/UserInfoSidebar'
 import { ChatHeader } from '@/components/chat/ChatHeader'
+import type { ChatMessage, ChatUser, BanDetails, MatchStatusType } from '@/types/chat'
+import { MATCH_STATUS, SUBSCRIPTION_CHANNEL_PREFIX, SUBSCRIPTION_EVENTS } from '@/constants/chat'
 
 // Dynamic route - no static generation
 export const dynamic = 'force-dynamic'
@@ -26,19 +30,20 @@ export default function ChatPage() {
   const router = useRouter()
   const matchId = params.id as string
   const { isMobile } = useDeviceType()
+  const { t } = useTranslation('messages')
   
-  const [user, setUser] = useState<any>(null)
-  const [messages, setMessages] = useState<any[]>([])
+  const [user, setUser] = useState<ChatUser | null>(null)
+  const [messages, setMessages] = useState<ChatMessage[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const [otherUser, setOtherUser] = useState<any>(null)
+  const [otherUser, setOtherUser] = useState<ChatUser | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   
   // Profanity filter states
   const { isMessageClean, getWarningMessage } = useMessageFilter()
   const [filterWarning, setFilterWarning] = useState<string | null>(null)
   const [isBanned, setIsBanned] = useState(false)
-  const [banDetails, setBanDetails] = useState<any>(null)
+  const [banDetails, setBanDetails] = useState<BanDetails | null>(null)
   const [isSending, setIsSending] = useState(false)
   
   // Block & Report states
@@ -49,7 +54,7 @@ export default function ChatPage() {
   
   // Rating system states
   const [showRatingModal, setShowRatingModal] = useState(false)
-  const [matchStatus, setMatchStatus] = useState<'active' | 'pending_completion' | 'completed'>('active')
+  const [matchStatus, setMatchStatus] = useState<MatchStatusType>(MATCH_STATUS.ACTIVE)
   const [userHasRated, setUserHasRated] = useState(false)
   const [isCompletingMatch, setIsCompletingMatch] = useState(false)
 
@@ -63,15 +68,15 @@ export default function ChatPage() {
   useEffect(() => {
     if (!matchId) return
     
-    // Sadece matchId ile channel name oluştur (unique olmak için Date.now() kullanma!)
-    const channelName = `chat-${matchId}`
+    // Sadece matchId ile channel name oluştur
+    const channelName = `${SUBSCRIPTION_CHANNEL_PREFIX}${matchId}`
     
     const channel = supabase
       .channel(channelName)
       .on(
         'postgres_changes',
         {
-          event: 'INSERT',
+          event: SUBSCRIPTION_EVENTS.INSERT,
           schema: 'public',
           table: 'messages',
           filter: `match_id=eq.${matchId}`
@@ -409,7 +414,7 @@ export default function ChatPage() {
             {/* Blocked Notice */}
             {isBlocked && (
               <div className="p-4">
-                <BlockedUserNotice userName={otherUser?.name || 'Kullanıcı'} />
+                <BlockedUserNotice userName={otherUser?.name || t('you')} />
               </div>
             )}
 
@@ -514,7 +519,7 @@ export default function ChatPage() {
       {/* Blocked User Notice */}
       {isBlocked && (
         <div className="p-4">
-          <BlockedUserNotice userName={otherUser?.name || 'Kullanıcı'} />
+          <BlockedUserNotice userName={otherUser?.name || t('you')} />
         </div>
       )}
 
