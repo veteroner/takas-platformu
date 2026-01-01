@@ -38,6 +38,7 @@ export default function ChatPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [otherUser, setOtherUser] = useState<ChatUser | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messageIdsRef = useRef(new Set<string>())
   
   // Profanity filter states
   const { isMessageClean, getWarningMessage } = useMessageFilter()
@@ -85,15 +86,15 @@ export default function ChatPage() {
         (payload) => {
           console.log('📨 Yeni mesaj geldi:', payload.new)
           setMessages(prev => {
-            // Duplicate kontrolü - mesaj zaten varsa ekleme
-            const exists = prev.some(m => m.id === payload.new.id)
-            if (exists) {
+            // O(1) duplicate check with Set
+            if (messageIdsRef.current.has(payload.new.id)) {
               console.log('⚠️ Duplicate mesaj engellendi:', payload.new.id)
               return prev
             }
+            messageIdsRef.current.add(payload.new.id)
             return [...prev, payload.new]
           })
-          scrollToBottom()
+          // Scroll removed here - useEffect handles it
         }
       )
       .on(
@@ -124,13 +125,20 @@ export default function ChatPage() {
     }
   }, [matchId])
 
-  const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  const scrollToBottom = useCallback((instant = false) => {
+    messagesEndRef.current?.scrollIntoView({ behavior: instant ? 'auto' : 'smooth' })
   }, [])
 
   useEffect(() => {
-    scrollToBottom()
-  }, [messages, scrollToBottom])
+    // Only scroll if last message is from current user (avoid scroll jumping)
+    if (messages.length > 0 && user) {
+      const lastMessage = messages[messages.length - 1]
+      // Instant scroll for user's own messages
+      if (lastMessage.sender_id === user.id) {
+        scrollToBottom(true)
+      }
+    }
+  }, [messages.length, user, scrollToBottom])
 
   const loadMatchStatus = useCallback(async () => {
     if (!matchId || !user) return
@@ -290,6 +298,9 @@ export default function ChatPage() {
       // Load messages
       const msgs = await getMatchMessages(matchId)
       setMessages(msgs)
+      
+      // Initialize message IDs set for duplicate detection
+      messageIdsRef.current = new Set(msgs.map(m => m.id))
     } catch (error) {
       console.error('Error loading chat:', error)
     } finally {
@@ -319,53 +330,45 @@ export default function ChatPage() {
     setFilterWarning(null)
     setNewMessage('') // Input'u hemen temizle
 
+    // ⚡ OPTIMISTIC UI UPDATE - Mesajı anlık göster
+    const tempId = `temp-${Date.now()}`
+    const optimisticMessage: ChatMessage = {
+      id: tempId,
+      match_id: matchId,
+      sender_id: user.id,
+      receiver_id: otherUser.id,
+      content: messageText,
+      created_at: new Date().toISOString(),
+      read: false
+    }
+
+    // Mesajı hemen ekle (kullanıcı anlık görsün)
+    setMessages(prev => [...prev, optimisticMessage])
+    messageIdsRef.current.add(tempId)
+
     try {
-      // 🛡️ BACKEND KONTROLÜ (API filtreleme)
-      const { data: { session } } = await supabase.auth.getSession()
-      
-      const filterResponse = await fetch('/api/messages/filter', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session?.access_token}`
-        },
-        body: JSON.stringify({
-          message: messageText,
-          matchId,
-          receiverId: otherUser.id
-        })
-      })
-
-      const filterResult = await filterResponse.json()
-
-      // Mesaj engellendi
-      if (!filterResult.allowed) {
-        setFilterWarning(filterResult.reason || filterResult.message)
-        setNewMessage(messageText) // Mesajı geri koy
-        
-        // Ban durumunu güncelle
-        if (filterResult.bannedUntil) {
-          setIsBanned(true)
-          setBanDetails(filterResult)
-        }
-        
-        setIsSending(false)
-        return
-      }
-
-      // ✅ Mesaj temiz - gönder
+      // ✅ Mesaj gönder (backend kendi filtreleyecek)
       const sent = await sendMessage(matchId, user.id, otherUser.id, messageText)
       
       if (!sent) {
-        // ❌ Hata - mesajı geri koy
+        // ❌ Hata - optimistic mesajı kaldır ve input'a geri koy
+        setMessages(prev => prev.filter(m => m.id !== tempId))
+        messageIdsRef.current.delete(tempId)
         setNewMessage(messageText)
-        setFilterWarning('Mesaj gönderilemedi, tekrar deneyin')
+        setFilterWarning(t('errorSendingMessage'))
+      } else {
+        // ✅ Başarılı - Real-time subscription gerçek mesajı ekleyecek
+        // Optimistic mesajı kaldır (gerçek mesajla değişecek)
+        setMessages(prev => prev.filter(m => m.id !== tempId))
+        messageIdsRef.current.delete(tempId)
       }
-      // ✅ Başarılı - Real-time subscription otomatik ekleyecek
     } catch (error) {
       console.error('Error sending message:', error)
+      // Optimistic mesajı kaldır
+      setMessages(prev => prev.filter(m => m.id !== tempId))
+      messageIdsRef.current.delete(tempId)
       setNewMessage(messageText)
-      setFilterWarning('Mesaj gönderilemedi')
+      setFilterWarning(t('errorSendingMessage'))
     } finally {
       setIsSending(false)
     }
