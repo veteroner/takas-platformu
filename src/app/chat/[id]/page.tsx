@@ -37,8 +37,9 @@ export default function ChatPage() {
   const [newMessage, setNewMessage] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [otherUser, setOtherUser] = useState<ChatUser | null>(null)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messagesContainerRef = useRef<HTMLDivElement>(null)
   const messageIdsRef = useRef(new Set<string>())
+  const hasInitialScrolledRef = useRef(false)
   
   // Profanity filter states
   const { isMessageClean, getWarningMessage } = useMessageFilter()
@@ -126,19 +127,34 @@ export default function ChatPage() {
   }, [matchId])
 
   const scrollToBottom = useCallback((instant = false) => {
-    messagesEndRef.current?.scrollIntoView({ behavior: instant ? 'auto' : 'smooth' })
+    const el = messagesContainerRef.current
+    if (!el) return
+
+    const top = el.scrollHeight
+    if (instant) {
+      el.scrollTop = top
+      return
+    }
+
+    el.scrollTo({ top, behavior: 'smooth' })
   }, [])
 
   useEffect(() => {
-    // Only scroll if last message is from current user (avoid scroll jumping)
+    // Initial: always scroll the *container* to latest message once.
+    if (!hasInitialScrolledRef.current && !isLoading && messages.length > 0) {
+      hasInitialScrolledRef.current = true
+      scrollToBottom(true)
+      return
+    }
+
+    // After initial load: only scroll when the current user sends (prevents page jump while reading).
     if (messages.length > 0 && user) {
       const lastMessage = messages[messages.length - 1]
-      // Instant scroll for user's own messages
       if (lastMessage.sender_id === user.id) {
         scrollToBottom(true)
       }
     }
-  }, [messages.length, user, scrollToBottom])
+  }, [isLoading, messages.length, user, scrollToBottom])
 
   const loadMatchStatus = useCallback(async () => {
     if (!matchId || !user) return
@@ -421,7 +437,7 @@ export default function ChatPage() {
             )}
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
+            <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
               {messages.map((msg) => (
                 <MessageBubble 
                   key={msg.id}
@@ -433,7 +449,6 @@ export default function ChatPage() {
                   readAt={msg.read_at}
                 />
               ))}
-              <div ref={messagesEndRef} />
             </div>
 
             {/* Input */}
@@ -541,7 +556,7 @@ export default function ChatPage() {
       )}
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((msg) => (
           <MessageBubble 
             key={msg.id}
@@ -553,7 +568,6 @@ export default function ChatPage() {
             readAt={msg.read_at}
           />
         ))}
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Input */}
