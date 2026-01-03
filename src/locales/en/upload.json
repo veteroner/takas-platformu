@@ -44,6 +44,12 @@
   "uploadError": "An error occurred during upload",
   "maxPhotos": "You can add maximum 10 photos",
   "photoLimitReached": "Photo limit reached",
+  "minPhotosRequired": "Please upload at least 1 photo",
+  "fillRequired": "Please fill in all required fields",
+  "uploadSuccess": "Product uploaded successfully!",
+  "uploadingPhotos": "Uploading photos...",
+  "addDescription": "Add description...",
+  "photoLimit": "Minimum 1, maximum 5 photos",
   "categories": {
     "clothing": "👕 Clothing",
     "toys": "🧸 Toys",

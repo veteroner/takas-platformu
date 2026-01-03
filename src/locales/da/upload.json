@@ -44,6 +44,12 @@
   "uploadError": "Der opstod en fejl under upload",
   "maxPhotos": "Du kan tilføje maksimalt 10 billeder",
   "photoLimitReached": "Billedgrænse nået",
+  "minPhotosRequired": "Upload venligst mindst 1 billede",
+  "fillRequired": "Udfyld venligst alle påkrævede felter",
+  "uploadSuccess": "Produkt uploadet succesfuldt!",
+  "uploadingPhotos": "Uploader billeder...",
+  "addDescription": "Tilføj beskrivelse...",
+  "photoLimit": "Minimum 1, maksimum 5 billeder",
   "categories": {
     "clothing": "👕 Tøj",
     "toys": "🧸 Legetøj",

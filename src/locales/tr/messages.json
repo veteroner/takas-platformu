@@ -58,5 +58,6 @@
   "errorRatingUser": "Kullanıcı değerlendirilirken hata oluştu",
   "successRatingSubmitted": "Teşekkürler! Puanınız kaydedildi. 🌟",
   "alertMatchPending": "Onaylanız kaydedildi. Diğer tarafın onayı bekleniyor.",
-  "alertMatchCompleted": "Takas tamamlandı! Lütfen karşı tarafı değerlendirin."
+  "alertMatchCompleted": "Takas tamamlandı! Lütfen karşı tarafı değerlendirin.",
+  "sendingSuspended": "Mesaj gönderme yetkiniz askıya alındı."
 }

@@ -17,5 +17,6 @@
   "blockUser": "Benutzer Blockieren",
   "reportUser": "Benutzer Melden",
   "deleteChat": "Chat Löschen",
-  "confirmDelete": "Möchten Sie diesen Chat wirklich löschen?"
+  "confirmDelete": "Möchten Sie diesen Chat wirklich löschen?",
+  "sendingSuspended": "Ihre Berechtigung zum Senden von Nachrichten wurde ausgesetzt."
 }

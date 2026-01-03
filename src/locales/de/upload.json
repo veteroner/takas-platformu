@@ -44,6 +44,12 @@
   "uploadError": "Beim Hochladen ist ein Fehler aufgetreten",
   "maxPhotos": "Sie können maximal 10 Fotos hinzufügen",
   "photoLimitReached": "Fotolimit erreicht",
+  "minPhotosRequired": "Bitte laden Sie mindestens 1 Foto hoch",
+  "fillRequired": "Bitte füllen Sie alle erforderlichen Felder aus",
+  "uploadSuccess": "Produkt erfolgreich hochgeladen!",
+  "uploadingPhotos": "Fotos werden hochgeladen...",
+  "addDescription": "Beschreibung hinzufügen...",
+  "photoLimit": "Mindestens 1, maximal 5 Fotos",
   "categories": {
     "clothing": "👕 Kleidung",
     "toys": "🧸 Spielzeug",

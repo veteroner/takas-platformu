@@ -23,7 +23,7 @@ export default function ForgotPasswordPage() {
       setSuccess(true)
     } catch (err: unknown) {
       console.error('Reset password error:', err)
-      const errorMessage = err instanceof Error ? err.message : 'Bir hata oluştu. Lütfen tekrar deneyin.'
+      const errorMessage = err instanceof Error ? err.message : t('errorGeneric')
       setError(errorMessage)
     } finally {
       setIsLoading(false)
@@ -96,7 +96,7 @@ export default function ForgotPasswordPage() {
                 <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60" size={20} />
                 <input
                   type="email"
-                  placeholder="E-posta adresiniz"
+                  placeholder={t('emailPlaceholder')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -113,10 +113,10 @@ export default function ForgotPasswordPage() {
                 {isLoading ? (
                   <>
                     <div className="w-5 h-5 border-2 border-purple-600/30 border-t-purple-600 rounded-full animate-spin" />
-                    Gönderiliyor...
+                    {t('sending')}
                   </>
                 ) : (
-                  'Sıfırlama Linki Gönder'
+                  t('sendResetLink')
                 )}
               </button>
 

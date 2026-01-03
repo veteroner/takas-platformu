@@ -44,6 +44,12 @@
   "uploadError": "حدث خطأ أثناء الرفع",
   "maxPhotos": "يمكنك إضافة 10 صور كحد أقصى",
   "photoLimitReached": "تم الوصول إلى حد الصور",
+  "minPhotosRequired": "يرجى تحميل صورة واحدة على الأقل",
+  "fillRequired": "يرجى ملء جميع الحقول المطلوبة",
+  "uploadSuccess": "تم تحميل المنتج بنجاح!",
+  "uploadingPhotos": "جاري تحميل الصور...",
+  "addDescription": "إضافة وصف...",
+  "photoLimit": "صورة واحدة على الأقل، 5 صور كحد أقصى",
   "categories": {
     "clothing": "👕 ملابس",
     "toys": "🧸 ألعاب",

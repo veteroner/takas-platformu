@@ -17,5 +17,6 @@
   "blockUser": "Bloker Bruger",
   "reportUser": "Rapporter Bruger",
   "deleteChat": "Slet Chat",
-  "confirmDelete": "Er du sikker på, at du vil slette denne chat?"
+  "confirmDelete": "Er du sikker på, at du vil slette denne chat?",
+  "sendingSuspended": "Din besked-afsendelsesprivilegium er blevet suspenderet."
 }

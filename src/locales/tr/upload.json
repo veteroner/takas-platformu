@@ -45,6 +45,12 @@
   "uploadError": "Yükleme sırasında bir hata oluştu",
   "maxPhotos": "Maksimum 10 fotoğraf ekleyebilirsiniz",
   "photoLimitReached": "Fotoğraf limiti doldu",
+  "minPhotosRequired": "Lütfen en az 1 fotoğraf yükleyin",
+  "fillRequired": "Lütfen tüm zorunlu alanları doldurun",
+  "uploadSuccess": "Ürün başarıyla yüklendi!",
+  "uploadingPhotos": "Fotoğraflar yükleniyor...",
+  "addDescription": "Açıklama ekle...",
+  "photoLimit": "En az 1, en fazla 5 fotoğraf",
   "categories": {
     "clothing": "👕 Giyim",
     "toys": "🧸 Oyuncak",

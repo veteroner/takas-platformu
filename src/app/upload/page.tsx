@@ -608,7 +608,7 @@ export default function UploadPage() {
         message: error?.message,
         stack: error?.stack
       })
-      setError(error.message || 'Bir hata oluştu')
+      setError(error.message || t('uploadError'))
       setIsUploading(false)
     }
   }
@@ -877,7 +877,7 @@ export default function UploadPage() {
                 <div className="bg-linear-to-r from-pink-50 to-purple-50 rounded-xl p-6">
                   <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
                     <Sparkles className="w-5 h-5 text-purple-500" />
-                    Ne ile takas etmek istersiniz?
+                    {t('seekingHelp')}
                   </h3>
                   <div className="grid grid-cols-4 gap-3">
                     {(['clothing', 'toys', 'electronics', 'books', 'sports', 'home', 'other'] as const).map(cat => {
@@ -886,8 +886,13 @@ export default function UploadPage() {
                         sports: '⚽', home: '🏠', other: '📦'
                       }
                       const labels: Record<string, string> = {
-                        clothing: 'Giyim', toys: 'Oyuncak', electronics: 'Elektronik',
-                        books: 'Kitap', sports: 'Spor', home: 'Ev', other: 'Diğer'
+                        clothing: t('categories.clothing').replace('👕 ', ''),
+                        toys: t('categories.toys').replace('🧸 ', ''),
+                        electronics: t('categories.electronics').replace('📱 ', ''),
+                        books: t('categories.books').replace('📚 ', ''),
+                        sports: t('categories.sports').replace('⚽ ', ''),
+                        home: t('categories.home').replace('🏠 ', ''),
+                        other: t('categories.other').replace('🔧 ', '')
                       }
                       return (
                         <button
@@ -1198,7 +1203,7 @@ export default function UploadPage() {
           {/* Condition */}
           <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
             <label className="block text-sm font-semibold text-gray-800 mb-3">
-              Durumu *
+              {t('condition')} *
             </label>
             <div className="grid grid-cols-3 gap-2">
               {conditions.map(condition => (
@@ -1221,14 +1226,14 @@ export default function UploadPage() {
           {/* Estimated Value */}
           <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
             <label className="block text-sm font-semibold text-gray-800 mb-2">
-              Tahmini Değer (₺)
+              {t('estimatedValue')}
             </label>
             <input
               type="number"
               name="estimatedValue"
               value={formData.estimatedValue}
               onChange={handleInputChange}
-              placeholder="Örn: 500"
+              placeholder={t('valuePlaceholder')}
               className="w-full px-4 py-3 border-2 border-gray-300 bg-white rounded-lg text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             />
             <p className="text-xs text-gray-600 mt-2">{t('estimatedValueHint')}</p>
@@ -1281,29 +1286,29 @@ export default function UploadPage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-1">Min Değer (₺)</label>
+                <label className="block text-sm font-semibold text-gray-800 mb-1">{t('minValue')} (₺)</label>
                 <input
                   type="number"
                   value={seekValueMin}
                   onChange={(e) => setSeekValueMin(e.target.value)}
                   className="w-full px-3 py-2 border-2 border-gray-300 bg-white rounded-lg text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                  placeholder="Örn: 300"
+                  placeholder={t('valuePlaceholder')}
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-1">Max Değer (₺)</label>
+                <label className="block text-sm font-semibold text-gray-800 mb-1">{t('maxValue')} (₺)</label>
                 <input
                   type="number"
                   value={seekValueMax}
                   onChange={(e) => setSeekValueMax(e.target.value)}
                   className="w-full px-3 py-2 border-2 border-gray-300 bg-white rounded-lg text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                  placeholder="Örn: 1500"
+                  placeholder={t('valuePlaceholder')}
                 />
               </div>
             </div>
 
             <div className="mt-3">
-              <label htmlFor="seek-city-select" className="block text-sm font-semibold text-gray-800 mb-1">Şehir</label>
+              <label htmlFor="seek-city-select" className="block text-sm font-semibold text-gray-800 mb-1">{t('seekCity')}</label>
               <select
                 id="seek-city-select"
                 value={seekCity}
@@ -1345,7 +1350,7 @@ export default function UploadPage() {
                     value={seekClothingColor}
                     onChange={(e) => setSeekClothingColor(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    placeholder="Kırmızı, Siyah"
+                    placeholder={t('colorPlaceholder')}
                   />
                 </div>
               </div>

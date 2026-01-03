@@ -58,5 +58,6 @@
   "errorRatingUser": "Error rating user",
   "successRatingSubmitted": "Thank you! Your rating has been saved. 🌟",
   "alertMatchPending": "Your confirmation has been saved. Waiting for other party's confirmation.",
-  "alertMatchCompleted": "Exchange completed! Please rate the other party."
+  "alertMatchCompleted": "Exchange completed! Please rate the other party.",
+  "sendingSuspended": "Your message sending privilege has been suspended."
 }
