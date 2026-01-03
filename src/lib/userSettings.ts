@@ -41,6 +41,51 @@ export async function getUserSettings(userId: string): Promise<UserSettings | nu
 }
 
 /**
+ * İlk kez giriş yapan kullanıcı için default ayarlar oluştur
+ * localStorage'daki dil tercihini kullanır (kullanıcının giriş öncesi seçtiği dil)
+ */
+export async function createDefaultUserSettings(userId: string): Promise<UserSettings | null> {
+  try {
+    // localStorage'dan dil tercihini al (kullanıcı giriş öncesi seçmiş olabilir)
+    let preferredLanguage: 'tr' | 'en' | 'de' | 'ar' | 'da' = 'tr'
+    
+    if (typeof window !== 'undefined') {
+      const storedLang = localStorage.getItem('i18nextLng')
+      if (storedLang && ['tr', 'en', 'de', 'ar', 'da'].includes(storedLang)) {
+        preferredLanguage = storedLang as 'tr' | 'en' | 'de' | 'ar' | 'da'
+      } else {
+        // localStorage yoksa browser language kullan
+        const browserLang = navigator.language.toLowerCase().split('-')[0]
+        if (['tr', 'en', 'de', 'ar', 'da'].includes(browserLang)) {
+          preferredLanguage = browserLang as 'tr' | 'en' | 'de' | 'ar' | 'da'
+        }
+      }
+    }
+
+    const defaultSettings: UserSettings = {
+      user_id: userId,
+      language: preferredLanguage,
+      theme: 'system',
+      notifications_enabled: true,
+    }
+
+    const { data, error } = await supabase
+      .from('user_settings')
+      .insert(defaultSettings)
+      .select()
+      .single()
+
+    if (error) throw error
+    
+    console.log('✅ Default user settings created:', defaultSettings)
+    return data
+  } catch (error) {
+    console.error('Error creating default user settings:', error)
+    return null
+  }
+}
+
+/**
  * Kullanıcı ayarlarını kaydet/güncelle
  */
 export async function saveUserSettings(settings: UserSettings): Promise<boolean> {

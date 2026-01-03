@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { 
   getUserSettings, 
   saveUserSettings, 
+  createDefaultUserSettings,
   getProfileVisibility, 
   updateProfileVisibility,
   updateNotificationPrefs
@@ -44,6 +45,9 @@ export default function SettingsPage() {
 
       setUser(currentUser)
       
+      // 🔥 FIX: localStorage'dan mevcut dil tercihini al (kullanıcı giriş öncesi seçmiş olabilir)
+      const localStorageLang = localStorage.getItem('i18nextLng') as 'tr' | 'en' | 'de' | 'ar' | 'da' | null
+      
       // Supabase'den ayarları yükle
       const [userSettings, visibility] = await Promise.all([
         getUserSettings(currentUser.id),
@@ -51,33 +55,68 @@ export default function SettingsPage() {
       ])
 
       if (userSettings) {
+        // 🔥 FIX: localStorage'daki dil Supabase'den farklıysa → localStorage kazanır
+        const finalLanguage = localStorageLang && localStorageLang !== userSettings.language 
+          ? localStorageLang 
+          : userSettings.language
+        
         const loadedSettings = {
           notifications: userSettings.notifications_enabled,
           privacy: visibility,
-          language: userSettings.language,
+          language: finalLanguage,
           theme: userSettings.theme
         }
         setSettings(loadedSettings)
         
         // i18n dilini ayarla
-        await i18n.changeLanguage(userSettings.language)
+        await i18n.changeLanguage(finalLanguage)
         
         // Temayı uygula
         applyTheme(userSettings.theme)
         
         // localStorage'a da kaydet (offline cache)
         localStorage.setItem('userPreferences', JSON.stringify(loadedSettings))
+        localStorage.setItem('i18nextLng', finalLanguage)
+        
+        // 🔥 FIX: Eğer localStorage farklıysa Supabase'i de güncelle (arka planda)
+        if (localStorageLang && localStorageLang !== userSettings.language) {
+          console.log(`🔄 Syncing language to Supabase: ${localStorageLang}`)
+          saveUserSettings({
+            user_id: currentUser.id,
+            language: localStorageLang,
+            theme: userSettings.theme,
+            notifications_enabled: userSettings.notifications_enabled
+          }).catch(err => console.error('Background sync failed:', err))
+        }
       } else {
-        // Ayarlar yoksa localStorage'dan dene
-        const savedPrefs = localStorage.getItem('userPreferences')
-        if (savedPrefs) {
-          try {
-            const prefs = JSON.parse(savedPrefs)
-            setSettings(prefs)
-            await i18n.changeLanguage(prefs.language)
-            applyTheme(prefs.theme)
-          } catch {
-            // Use default settings
+        // 🔥 FIX: Ayarlar yoksa yeni kullanıcı - createDefaultUserSettings kullan
+        console.log('📝 First time user - creating default settings')
+        const newSettings = await createDefaultUserSettings(currentUser.id)
+        
+        if (newSettings) {
+          const loadedSettings = {
+            notifications: newSettings.notifications_enabled,
+            privacy: visibility,
+            language: newSettings.language,
+            theme: newSettings.theme
+          }
+          setSettings(loadedSettings)
+          await i18n.changeLanguage(newSettings.language)
+          applyTheme(newSettings.theme)
+          localStorage.setItem('userPreferences', JSON.stringify(loadedSettings))
+          localStorage.setItem('i18nextLng', newSettings.language)
+        } else {
+          // Fallback: localStorage'dan dene
+          const savedPrefs = localStorage.getItem('userPreferences')
+          if (savedPrefs) {
+            try {
+              const prefs = JSON.parse(savedPrefs)
+              setSettings(prefs)
+              await i18n.changeLanguage(prefs.language)
+              applyTheme(prefs.theme)
+            } catch {
+              // Use default settings
+            }
           }
         }
       }
@@ -232,6 +271,16 @@ export default function SettingsPage() {
                 setSettings({...settings, language: newLang})
                 await i18n.changeLanguage(newLang)
                 localStorage.setItem('i18nextLng', newLang)
+                
+                // 🔥 FIX: Supabase'i de hemen güncelle ("Kaydet" butonuna gerek yok)
+                if (user) {
+                  saveUserSettings({
+                    user_id: user.id,
+                    language: newLang,
+                    theme: settings.theme,
+                    notifications_enabled: settings.notifications
+                  }).catch(err => console.error('Failed to save language:', err))
+                }
               }}
               className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white/50"
             >
