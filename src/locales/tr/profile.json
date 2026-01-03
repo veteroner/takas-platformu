@@ -22,7 +22,8 @@
   "updateSuccess": "✓ Profil başarıyla güncellendi!",
   "updateError": "Profil güncellenirken hata oluştu"
   ,
-  "quickActions": "Hızlı Eylemler"
+  "quickActions": "Hızlı Eylemler",
+  "addItem": "Yeni Ürün Ekle"
   ,
   "activitySummary": "Aktivite Özeti",
   "totalItems": "Toplam Ürün",

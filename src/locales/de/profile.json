@@ -22,7 +22,8 @@
   "updateSuccess": "✓ Profil erfolgreich aktualisiert!",
   "updateError": "Fehler beim Aktualisieren des Profils"
   ,
-  "quickActions": "Schnellaktionen"
+  "quickActions": "Schnellaktionen",
+  "addItem": "Neues Produkt Hinzufügen"
   ,
   "activitySummary": "Aktivitätsübersicht",
   "totalItems": "Gesamtanzahl Artikel",

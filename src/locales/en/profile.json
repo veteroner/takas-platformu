@@ -22,7 +22,8 @@
   "updateSuccess": "✓ Profile successfully updated!",
   "updateError": "Error updating profile"
   ,
-  "quickActions": "Quick Actions"
+  "quickActions": "Quick Actions",
+  "addItem": "Add New Item"
   ,
   "activitySummary": "Activity Summary",
   "totalItems": "Total Items",

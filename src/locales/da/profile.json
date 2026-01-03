@@ -22,7 +22,8 @@
   "updateSuccess": "✓ Profil opdateret med succes!",
   "updateError": "Fejl ved opdatering af profil"
   ,
-  "quickActions": "Hurtige handlinger"
+  "quickActions": "Hurtige handlinger",
+  "addItem": "Tilføj Nyt Produkt"
   ,
   "activitySummary": "Aktivitetsoversigt",
   "totalItems": "Samlede Emner",
