@@ -418,6 +418,9 @@ export default function ChatPage() {
         setMessages(prev => prev.map(m => m.id === tempId ? sent : m))
         messageIdsRef.current.delete(tempId)
         messageIdsRef.current.add(sent.id)
+        
+        // 🔥 Mobile fix: Scroll to bottom after sending message
+        setTimeout(() => scrollToBottom(true), 100)
       }
     } catch (error) {
       console.error('Error sending message:', error)
@@ -429,7 +432,7 @@ export default function ChatPage() {
     } finally {
       setIsSending(false)
     }
-  }, [newMessage, user, otherUser, isSending, isBanned, matchId, isMessageClean, getWarningMessage])
+  }, [newMessage, user, otherUser, isSending, isBanned, matchId, isMessageClean, getWarningMessage, scrollToBottom, t])
 
   if (isLoading) {
     return (
