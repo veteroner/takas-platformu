@@ -48,16 +48,7 @@ export default function OneSignalCapacitorInit() {
             console.warn('⚠️ OneSignal.initialize bulunamadı, plugin API versiyonu kontrol edin')
           }
 
-          // 2. Bildirim izni iste (Modern API)
-          if (OneSignal.Notifications?.requestPermission) {
-            OneSignal.Notifications.requestPermission(true).then((accepted: boolean) => {
-              console.log('📱 Push bildirim izni:', accepted ? '✅ Kabul edildi' : '❌ Reddedildi')
-            })
-          } else {
-            console.warn('⚠️ OneSignal.Notifications.requestPermission bulunamadı')
-          }
-
-          // 3. Notification lifecycle events (v5.x)
+          // 2. Notification lifecycle events (v5.x) - ÖNCE EVENT LİSTENERLARI!
           if (OneSignal.Notifications?.addEventListener) {
             // Foreground notification received
             OneSignal.Notifications.addEventListener('foregroundWillDisplay', (event: any) => {
@@ -75,27 +66,79 @@ export default function OneSignalCapacitorInit() {
             console.log('✅ Notification event listeners kuruldu')
           }
 
-          // 4. Set External User ID (Supabase user) - v5.x API
-          const { data: { session } } = await supabase.auth.getSession()
-          if (session?.user?.id && OneSignal.login) {
-            OneSignal.login(session.user.id)
-            console.log('✅ OneSignal.login() called with External User ID:', session.user.id)
-          } else if (session?.user?.id && OneSignal.User?.setExternalId) {
-            // Fallback for older v5.x API
-            OneSignal.User.setExternalId(session.user.id)
-            console.log('✅ External User ID set (User.setExternalId):', session.user.id)
+          // 3. Bildirim izni iste (Modern API) - SONRA İZİN İSTE!
+          if (OneSignal.Notifications?.requestPermission) {
+            const accepted = await OneSignal.Notifications.requestPermission(true)
+            console.log('📱 Push bildirim izni:', accepted ? '✅ Kabul edildi' : '❌ Reddedildi')
+            
+            // İzin alındıktan SONRA subscription token'ı kontrol et
+            if (accepted && OneSignal.User?.pushSubscription) {
+              // Subscription oluşmasını bekle (max 5 saniye)
+              await new Promise(resolve => setTimeout(resolve, 2000))
+              
+              const subscriptionId = OneSignal.User.pushSubscription.id
+              const token = OneSignal.User.pushSubscription.token
+              console.log('🔑 Push Subscription ID:', subscriptionId)
+              console.log('🔑 Push Token:', token)
+              
+              if (!token) {
+                console.warn('⚠️ Push token henüz oluşmadı, lütfen bekleyin...')
+              }
+            }
+          } else {
+            console.warn('⚠️ OneSignal.Notifications.requestPermission bulunamadı')
           }
 
-          // 5. Auth state listener
-          supabase.auth.onAuthStateChange((event, session) => {
+          // 4. Set External User ID (Supabase user) - EN SON!
+          const { data: { session } } = await supabase.auth.getSession()
+          if (session?.user?.id && OneSignal.login) {
+            // Subscription tamamen hazır olana kadar bekle
+            await new Promise(resolve => setTimeout(resolve, 1000))
+            
+            OneSignal.login(session.user.id)
+            console.log('✅ OneSignal.login() called with External User ID:', session.user.id)
+            
+            // Login sonrası subscription durumunu logla
+            if (OneSignal.User?.pushSubscription) {
+              setTimeout(() => {
+                const subscriptionState = {
+                  id: OneSignal.User.pushSubscription.id,
+                  token: OneSignal.User.pushSubscription.token,
+                  optedIn: OneSignal.User.pushSubscription.optedIn
+                }
+                console.log('📊 Login sonrası Subscription State:', subscriptionState)
+              }, 1000)
+            }
+          } else if (session?.user?.id && OneSignal.User?.setExternalId) {
+            // Fallback for older v5.x API
+            await new Promise(resolve => setTimeout(resolve, 1000))
+            OneSignal.User.setExternalId(session.user.id)
+            console.log('✅ External User ID set (User.setExternalId):', session.user.id)
+          } else {
+            console.warn('⚠️ Kullanıcı giriş yapmamış, External User ID atanamadı')
+          }
+
+          // 5. Auth state listener - Kullanıcı login/logout takibi
+          supabase.auth.onAuthStateChange(async (event, session) => {
             try {
               if (event === 'SIGNED_IN' && session?.user?.id) {
+                // Yeni login olduğunda, subscription hazır olana kadar bekle
+                await new Promise(resolve => setTimeout(resolve, 2000))
+                
                 if (OneSignal.login) {
                   OneSignal.login(session.user.id)
                   console.log('✅ OneSignal.login() on SIGNED_IN:', session.user.id)
                 } else if (OneSignal.User?.setExternalId) {
                   OneSignal.User.setExternalId(session.user.id)
                   console.log('✅ External User ID updated on login:', session.user.id)
+                }
+                
+                // Login sonrası subscription durumunu kontrol et
+                if (OneSignal.User?.pushSubscription) {
+                  setTimeout(() => {
+                    const token = OneSignal.User.pushSubscription.token
+                    console.log('🔍 SIGNED_IN sonrası Push Token:', token || 'Token henüz yok!')
+                  }, 1000)
                 }
               } else if (event === 'SIGNED_OUT') {
                 if (OneSignal.logout) {
