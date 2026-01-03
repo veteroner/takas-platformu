@@ -314,13 +314,13 @@ export default function HomePage() {
 
   return (
     <div className="min-h-svh bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 flex flex-col">
-      {/* Header - Desktop için genişletilmiş, Mobil için kompakt */}
-      <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe shrink-0 sticky top-0 z-50">
-        <div className="w-full px-4 py-3 flex items-center justify-between">
+      {/* Header - Sabit üst kısım */}
+      <header className="bg-white/95 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe shrink-0 sticky top-0 z-50">
+        <div className="w-full px-4 py-4 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <TakaIcon className="w-7 h-7 text-purple-600" />
-            <h1 className="text-lg font-bold bg-linear-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+            <TakaIcon className="w-8 h-8 text-purple-600" />
+            <h1 className="text-xl font-bold bg-linear-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
               TakaZone
             </h1>
           </div>
@@ -414,8 +414,8 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Kategori Filtreleri */}
-        <div className={`px-2 pb-3 overflow-x-auto scrollbar-hide ${isDesktop ? 'border-t border-gray-100 pt-3' : ''}`}>
+        {/* Kategori Filtreleri - Sabit */}
+        <div className={`px-2 pb-4 overflow-x-auto scrollbar-hide ${isDesktop ? 'border-t border-gray-100 pt-3' : ''}`}>
           <div className={`flex gap-2 ${isDesktop ? 'justify-center max-w-7xl mx-auto' : 'min-w-max px-2 justify-center mx-auto max-w-fit'}`}>
             {CATEGORIES.map((cat) => {
               const Icon = cat.icon
@@ -424,13 +424,13 @@ export default function HomePage() {
                 <button
                   key={cat.id || 'all'}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-medium transition-all duration-200 whitespace-nowrap ${
                     isSelected
-                      ? `bg-linear-to-r ${cat.color} text-white shadow-md scale-105`
-                      : 'bg-white/70 text-gray-700 hover:bg-white hover:shadow-sm border border-gray-100'
+                      ? `bg-linear-to-r ${cat.color} text-white shadow-lg scale-105`
+                      : 'bg-white/80 text-gray-700 hover:bg-white hover:shadow-md border border-gray-200'
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-5 h-5" />
                   <span>{cat.label}</span>
                 </button>
               )
@@ -474,7 +474,7 @@ export default function HomePage() {
         </main>
       ) : (
         /* ========== MOBILE SWIPE VIEW ========== */
-        <main className="flex-1 flex flex-col max-w-md mx-auto w-full px-3 py-3 pb-24 overflow-hidden">
+        <main className="flex-1 flex flex-col max-w-md mx-auto w-full px-3 py-3 pb-28 overflow-hidden">
           {/* Swipe Stack - Ana alan */}
           <div className="flex-1 relative">
             <SwipeStack
@@ -581,40 +581,40 @@ export default function HomePage() {
         </main>
       )}
 
-      {/* Bottom Navigation - Sadece Mobil */}
+      {/* Bottom Navigation - Sadece Mobil - Sabit ve Büyük */}
       {isMobile && (
-        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-200 px-2 py-1.5 pb-safe">
-          <div className="max-w-md mx-auto flex justify-around items-center pb-2">
-            <button className="flex flex-col items-center py-1 px-3 text-purple-600">
-              <Heart className="w-5 h-5 fill-current" />
-              <span className="text-[10px] mt-0.5 font-medium">{t('discover')}</span>
+        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
+          <div className="max-w-md mx-auto flex justify-around items-center px-2 py-3 pb-safe">
+            <button className="flex flex-col items-center gap-1.5 py-2 px-3 text-purple-600 min-w-[70px]">
+              <Heart className="w-7 h-7 fill-current" />
+              <span className="text-xs font-semibold">{t('discover')}</span>
             </button>
             {!!user ? (
               <>
-                <Link href="/my-items" className="flex flex-col items-center py-1 px-3 text-gray-400">
-                  <Package className="w-5 h-5" />
-                  <span className="text-[10px] mt-0.5">{t('myItems') || 'Ürünlerim'}</span>
+                <Link href="/my-items" className="flex flex-col items-center gap-1.5 py-2 px-3 text-gray-500 hover:text-gray-700 min-w-[70px]">
+                  <Package className="w-7 h-7" />
+                  <span className="text-xs font-medium">{t('myItems') || 'Ürünlerim'}</span>
                 </Link>
-                <Link href="/upload" className="flex flex-col items-center py-1 px-3 text-gray-400">
-                  <div className="bg-linear-to-r from-pink-500 to-purple-600 p-2 rounded-full -mt-4 shadow-lg">
-                    <Plus className="w-5 h-5 text-white" />
+                <Link href="/upload" className="flex flex-col items-center gap-1.5 py-2 px-3 text-gray-500 min-w-[70px]">
+                  <div className="bg-linear-to-r from-pink-500 to-purple-600 p-3 rounded-full -mt-6 shadow-xl">
+                    <Plus className="w-7 h-7 text-white" />
                   </div>
-                  <span className="text-[10px] mt-0.5">{t('addItem') || 'Yükle'}</span>
+                  <span className="text-xs font-medium mt-1">{t('addItem') || 'Ekle'}</span>
                 </Link>
-                <Link href="/messages" className="flex flex-col items-center py-1 px-3 text-gray-400 relative">
-                  <MessageCircle className="w-5 h-5" />
-                  <span className="text-[10px] mt-0.5">{t('messages') || 'Mesajlar'}</span>
+                <Link href="/messages" className="flex flex-col items-center gap-1.5 py-2 px-3 text-gray-500 hover:text-gray-700 relative min-w-[70px]">
+                  <MessageCircle className="w-7 h-7" />
+                  <span className="text-xs font-medium">{t('messages') || 'Mesajlar'}</span>
                   <UnreadBadge userId={user?.id || null} />
                 </Link>
-                <Link href="/profile" className="flex flex-col items-center py-1 px-3 text-gray-400">
-                  <User className="w-5 h-5" />
-                  <span className="text-[10px] mt-0.5">{t('profile') || 'Profil'}</span>
+                <Link href="/profile" className="flex flex-col items-center gap-1.5 py-2 px-3 text-gray-500 hover:text-gray-700 min-w-[70px]">
+                  <User className="w-7 h-7" />
+                  <span className="text-xs font-medium">{t('profile') || 'Profil'}</span>
                 </Link>
               </>
             ) : (
-              <Link href="/login" className="flex flex-col items-center py-1 px-3 text-gray-400">
-                <LogIn className="w-5 h-5" />
-                <span className="text-[10px] mt-0.5">Giriş</span>
+              <Link href="/login" className="flex flex-col items-center gap-1.5 py-2 px-3 text-gray-500 hover:text-gray-700 min-w-[70px]">
+                <LogIn className="w-7 h-7" />
+                <span className="text-xs font-medium">Giriş</span>
               </Link>
             )}
           </div>

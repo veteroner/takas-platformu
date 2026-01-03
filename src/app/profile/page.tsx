@@ -565,40 +565,40 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Bottom Navigation - Sadece Mobil */}
+      {/* Bottom Navigation - Sadece Mobil - Sabit ve Büyük */}
       {isMobile && (
-        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-200 px-2 py-1.5 pb-safe">
-          <div className="max-w-md mx-auto flex justify-around items-center pb-2">
-            <Link href="/feed" className="flex flex-col items-center py-1 px-3 text-gray-400">
-              <Heart className="w-5 h-5" />
-                  <span className="text-[10px] mt-0.5">{t('home:discover')}</span>
+        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
+          <div className="max-w-md mx-auto flex justify-around items-center px-2 py-3 pb-safe">
+            <Link href="/feed" className="flex flex-col items-center gap-1.5 py-2 px-3 text-gray-500 hover:text-gray-700 min-w-[70px]">
+              <Heart className="w-7 h-7" />
+              <span className="text-xs font-medium">{t('home:discover')}</span>
             </Link>
             {!!user ? (
               <>
-                <Link href="/my-items" className="flex flex-col items-center py-1 px-3 text-gray-400">
-                  <Package className="w-5 h-5" />
-                  <span className="text-[10px] mt-0.5">{t('home:myItems') || t('my-items:title')}</span>
+                <Link href="/my-items" className="flex flex-col items-center gap-1.5 py-2 px-3 text-gray-500 hover:text-gray-700 min-w-[70px]">
+                  <Package className="w-7 h-7" />
+                  <span className="text-xs font-medium">{t('home:myItems') || t('my-items:title')}</span>
                 </Link>
-                <Link href="/upload" className="flex flex-col items-center py-1 px-3 text-gray-400">
-                  <div className="bg-linear-to-r from-pink-500 to-purple-600 p-2 rounded-full -mt-4 shadow-lg">
-                    <Plus className="w-5 h-5 text-white" />
+                <Link href="/upload" className="flex flex-col items-center gap-1.5 py-2 px-3 text-gray-500 min-w-[70px]">
+                  <div className="bg-linear-to-r from-pink-500 to-purple-600 p-3 rounded-full -mt-6 shadow-xl">
+                    <Plus className="w-7 h-7 text-white" />
                   </div>
-                  <span className="text-[10px] mt-0.5">{t('upload:title') || t('home:addItem')}</span>
+                  <span className="text-xs font-medium mt-1">{t('upload:title') || t('home:addItem')}</span>
                 </Link>
-                <Link href="/messages" className="flex flex-col items-center py-1 px-3 text-gray-400 relative">
-                  <MessageCircle className="w-5 h-5" />
-                  <span className="text-[10px] mt-0.5">{t('home:messages')}</span>
+                <Link href="/messages" className="flex flex-col items-center gap-1.5 py-2 px-3 text-gray-500 hover:text-gray-700 relative min-w-[70px]">
+                  <MessageCircle className="w-7 h-7" />
+                  <span className="text-xs font-medium">{t('home:messages')}</span>
                   <UnreadBadge userId={user?.id || null} />
                 </Link>
-                <button className="flex flex-col items-center py-1 px-3 text-purple-600">
-                  <User className="w-5 h-5 fill-current" />
-                  <span className="text-[10px] mt-0.5 font-medium">{t('home:profile')}</span>
+                <button className="flex flex-col items-center gap-1.5 py-2 px-3 text-purple-600 min-w-[70px]">
+                  <User className="w-7 h-7 fill-current" />
+                  <span className="text-xs font-semibold">{t('home:profile')}</span>
                 </button>
               </>
             ) : (
-              <Link href="/login" className="flex flex-col items-center py-1 px-3 text-gray-400">
-                <LogIn className="w-5 h-5" />
-                <span className="text-[10px] mt-0.5">{t('home:login')}</span>
+              <Link href="/login" className="flex flex-col items-center gap-1.5 py-2 px-3 text-gray-500 hover:text-gray-700 min-w-[70px]">
+                <LogIn className="w-7 h-7" />
+                <span className="text-xs font-medium">{t('home:login')}</span>
               </Link>
             )}
           </div>
