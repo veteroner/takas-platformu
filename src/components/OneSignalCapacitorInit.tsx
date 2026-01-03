@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
-const ONESIGNAL_APP_ID = process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID || ''
+const ONESIGNAL_APP_ID = process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID || 'f26d64d9-c8c9-48ee-a472-f12cc5c8b629'
 
 // Extend Window interface for Cordova
 declare global {
@@ -18,111 +18,106 @@ export default function OneSignalCapacitorInit() {
       try {
         if (typeof window === 'undefined') return
         
-        // Wait for deviceready event
-        const waitForDevice = () => new Promise<void>((resolve) => {
+        // Wait for Cordova deviceready
+        const waitForCordova = () => new Promise<void>((resolve) => {
           if (window.cordova) {
             resolve()
           } else {
             document.addEventListener('deviceready', () => resolve(), { once: true })
-            setTimeout(resolve, 2000) // Fallback
+            setTimeout(resolve, 3000)
           }
         })
         
-        await waitForDevice()
+        await waitForCordova()
         
-        // Check OneSignal plugin - use unknown type for Cordova plugins
-        const windowWithPlugins = window as unknown as {
-          plugins?: {
-            OneSignal?: {
-              setAppId: (appId: string) => void
-              promptForPushNotificationsWithUserResponse: () => void
-              setExternalUserId: (userId: string) => void
-              removeExternalUserId: () => void
-            }
-          }
-        }
+        // Access OneSignal from window.plugins (Modern Cordova v5.x API)
+        const windowWithPlugins = window as any
         
         if (windowWithPlugins.plugins?.OneSignal) {
-          console.log('🔔 OneSignal Cordova başlatılıyor...')
+          console.log('🔔 OneSignal Cordova v5.x başlatılıyor...')
+          const OneSignal = windowWithPlugins.plugins.OneSignal
 
-          const OS = windowWithPlugins.plugins.OneSignal as any
+          // Debug: Log plugin structure
+          console.log('OneSignal plugin yapısı:', Object.keys(OneSignal))
 
-          // Debug: log plugin shape for diagnostics
-          try {
-            console.log('OneSignal plugin object:', Object.keys(OS || {}).length ? OS : OS)
-          } catch (e) {
-            console.log('OneSignal plugin present (unable to enumerate keys)')
-          }
-
-          // Initialize (env üzerinden) - try both common call signatures
-          if (ONESIGNAL_APP_ID) {
-            try {
-              if (typeof OS.setAppId === 'function') {
-                // Most plugins expect a string
-                OS.setAppId(ONESIGNAL_APP_ID)
-              } else if (typeof OS.setAppId === 'object') {
-                // Some wrappers accept { appId }
-                // @ts-ignore
-                OS.setAppId({ appId: ONESIGNAL_APP_ID })
-              } else {
-                console.warn('OneSignal.setAppId unknown type:', typeof OS.setAppId)
-              }
-              console.log('✅ OneSignal App ID set:', ONESIGNAL_APP_ID)
-            } catch (err) {
-              const safe = (() => {
-                try { return JSON.stringify(err) } catch { return String(err) }
-              })()
-              console.error('❌ OneSignal setAppId error:', err, safe)
-            }
+          // 1. MODERN API (v5.x): initialize() - NOT setAppId()!
+          if (typeof OneSignal.initialize === 'function') {
+            OneSignal.initialize(ONESIGNAL_APP_ID)
+            console.log('✅ OneSignal.initialize() çağrıldı:', ONESIGNAL_APP_ID)
           } else {
-            console.warn('⚠️ OneSignal App ID missing (NEXT_PUBLIC_ONESIGNAL_APP_ID)')
+            console.warn('⚠️ OneSignal.initialize bulunamadı, plugin API versiyonu kontrol edin')
           }
 
-          // Request permission (guarded)
-          try {
-            if (typeof OS.promptForPushNotificationsWithUserResponse === 'function') {
-              OS.promptForPushNotificationsWithUserResponse()
-              console.log('📱 OneSignal bildirim izni istendi')
-            } else {
-              console.warn('OneSignal.promptForPushNotificationsWithUserResponse not available')
-            }
-          } catch (err) {
-            console.error('❌ OneSignal prompt error:', err)
+          // 2. Bildirim izni iste (Modern API)
+          if (OneSignal.Notifications?.requestPermission) {
+            OneSignal.Notifications.requestPermission(true).then((accepted: boolean) => {
+              console.log('📱 Push bildirim izni:', accepted ? '✅ Kabul edildi' : '❌ Reddedildi')
+            })
+          } else {
+            console.warn('⚠️ OneSignal.Notifications.requestPermission bulunamadı')
           }
 
-          // Set external user ID
-          try {
-            const { data: { session } } = await supabase.auth.getSession()
-            if (session?.user?.id && typeof OS.setExternalUserId === 'function') {
-              OS.setExternalUserId(session.user.id)
-              console.log('✅ External User ID set:', session.user.id)
-            }
-          } catch (err) {
-            console.error('❌ Error setting external user id:', err)
+          // 3. Notification lifecycle events (v5.x)
+          if (OneSignal.Notifications?.addEventListener) {
+            // Foreground notification received
+            OneSignal.Notifications.addEventListener('foregroundWillDisplay', (event: any) => {
+              console.log('🔔 Bildirim alındı (foreground):', event)
+              event.preventDefault() // İsterseniz prevent edip custom UI gösterebilirsiniz
+              event.notification.display() // Veya direkt gösterin
+            })
+
+            // Notification clicked
+            OneSignal.Notifications.addEventListener('click', (event: any) => {
+              console.log('👆 Bildirime tıklandı:', event)
+              // TODO: Navigate based on notification.additionalData
+            })
+
+            console.log('✅ Notification event listeners kuruldu')
           }
 
-          // Auth state listener
+          // 4. Set External User ID (Supabase user) - v5.x API
+          const { data: { session } } = await supabase.auth.getSession()
+          if (session?.user?.id && OneSignal.login) {
+            OneSignal.login(session.user.id)
+            console.log('✅ OneSignal.login() called with External User ID:', session.user.id)
+          } else if (session?.user?.id && OneSignal.User?.setExternalId) {
+            // Fallback for older v5.x API
+            OneSignal.User.setExternalId(session.user.id)
+            console.log('✅ External User ID set (User.setExternalId):', session.user.id)
+          }
+
+          // 5. Auth state listener
           supabase.auth.onAuthStateChange((event, session) => {
             try {
-              if (event === 'SIGNED_IN' && session?.user?.id && typeof OS.setExternalUserId === 'function') {
-                OS.setExternalUserId(session.user.id)
-                console.log('✅ External User ID updated:', session.user.id)
-              } else if (event === 'SIGNED_OUT' && typeof OS.removeExternalUserId === 'function') {
-                OS.removeExternalUserId()
-                console.log('✅ External User ID removed')
+              if (event === 'SIGNED_IN' && session?.user?.id) {
+                if (OneSignal.login) {
+                  OneSignal.login(session.user.id)
+                  console.log('✅ OneSignal.login() on SIGNED_IN:', session.user.id)
+                } else if (OneSignal.User?.setExternalId) {
+                  OneSignal.User.setExternalId(session.user.id)
+                  console.log('✅ External User ID updated on login:', session.user.id)
+                }
+              } else if (event === 'SIGNED_OUT') {
+                if (OneSignal.logout) {
+                  OneSignal.logout()
+                  console.log('✅ OneSignal.logout() on SIGNED_OUT')
+                } else if (OneSignal.User?.removeExternalId) {
+                  OneSignal.User.removeExternalId()
+                  console.log('✅ External User ID removed on logout')
+                }
               }
             } catch (err) {
               console.error('❌ OneSignal auth state handler error:', err)
             }
           })
 
-          console.log('🎉 OneSignal init routine complete')
+          console.log('🎉 OneSignal v5.x kurulumu tamamlandı!')
+          
         } else {
-          // OneSignal plugin not available - log for diagnostics
-          console.warn('⚠️ OneSignal plugin bulunamadı - native plugin absent or not loaded')
+          console.warn('⚠️ OneSignal plugin bulunamadı - Lütfen "npx cap sync ios" çalıştırın')
         }
       } catch (error) {
-        console.error('❌ OneSignal hatası:', error)
+        console.error('❌ OneSignal başlatma hatası:', error)
       }
     }
     

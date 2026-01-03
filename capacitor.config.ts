@@ -4,9 +4,10 @@ const config: CapacitorConfig = {
   appId: 'com.teknova.takasapp',
   appName: 'TakaZone',
   webDir: 'out',
+  // PRODUCTION MODE: Canlı URL kullanılıyor (yeni kod deploy edilince otomatik güncellenir)
   server: {
     url: 'https://takazone.com',
-    cleartext: false // HTTP trafiği engelle
+    cleartext: false
   },
   ios: {
     contentInset: 'always',
