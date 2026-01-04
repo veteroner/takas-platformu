@@ -478,6 +478,7 @@ export default function HomePage() {
           {/* Swipe Stack - Ana alan */}
           <div className="flex-1 relative">
             <SwipeStack
+              key={`swipe-${items.length}-${selectedCategory}`}
               items={filteredItems}
               onSwipe={handleSwipe}
               onItemClick={handleItemClick}

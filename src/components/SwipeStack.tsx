@@ -30,12 +30,17 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
   const [stack, setStack] = useState<Item[]>([])
 
   // Initialize stack with first few items
+  // Reset currentIndex and stack whenever items change (e.g., page reload)
   useEffect(() => {
-    console.log('📦 SwipeStack items received:', items.length, items)
+    console.log('🔄 SwipeStack RESET - items received:', items.length)
+    
+    // Always reset currentIndex to 0 when items change
+    setCurrentIndex(0)
+    
     if (items.length > 0) {
-      setStack(items.slice(0, Math.min(3, items.length)))
-      setCurrentIndex(0) // Reset index when items change
-      console.log('📦 Stack initialized with:', items.slice(0, Math.min(3, items.length)).length, 'items')
+      const initialStack = items.slice(0, Math.min(3, items.length))
+      setStack(initialStack)
+      console.log('✅ Stack initialized with', initialStack.length, 'items, currentIndex reset to 0')
     } else {
       setStack([])
       console.log('📦 No items, stack cleared')
