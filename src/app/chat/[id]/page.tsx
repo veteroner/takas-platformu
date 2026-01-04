@@ -183,7 +183,8 @@ export default function ChatPage() {
     // Initial: always scroll the *container* to latest message once.
     if (!hasInitialScrolledRef.current && !isLoading && messages.length > 0) {
       hasInitialScrolledRef.current = true
-      scrollToBottom(true)
+      // Instant scroll on initial load
+      requestAnimationFrame(() => scrollToBottom(true))
       return
     }
 
@@ -191,7 +192,8 @@ export default function ChatPage() {
     if (messages.length > 0 && user) {
       const lastMessage = messages[messages.length - 1]
       if (lastMessage.sender_id === user.id) {
-        scrollToBottom(true)
+        // Instant scroll to prevent jarring movement
+        requestAnimationFrame(() => scrollToBottom(true))
       }
     }
   }, [isLoading, messages.length, user, scrollToBottom])
@@ -418,9 +420,6 @@ export default function ChatPage() {
         setMessages(prev => prev.map(m => m.id === tempId ? sent : m))
         messageIdsRef.current.delete(tempId)
         messageIdsRef.current.add(sent.id)
-        
-        // 🔥 Mobile fix: Scroll to bottom after sending message
-        setTimeout(() => scrollToBottom(true), 100)
       }
     } catch (error) {
       console.error('Error sending message:', error)
@@ -614,7 +613,7 @@ export default function ChatPage() {
       )}
 
       {/* Messages */}
-      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-4 space-y-4" style={{ minHeight: 0 }}>
         {messages.map((msg) => (
           <MessageBubble 
             key={msg.id}
