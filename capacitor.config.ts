@@ -7,7 +7,19 @@ const config: CapacitorConfig = {
   // PRODUCTION MODE: Canlı URL kullanılıyor (yeni kod deploy edilince otomatik güncellenir)
   server: {
     url: 'https://takazone.com',
-    cleartext: false
+    cleartext: false,
+    androidScheme: 'https',
+    iosScheme: 'https'
+  },
+  android: {
+    // Android-specific optimizations
+    allowMixedContent: false,
+    captureInput: true,
+    webContentsDebuggingEnabled: false,
+    // Timeout settings
+    loggingBehavior: 'production',
+    // Background mode için
+    backgroundColor: '#EC4899'
   },
   ios: {
     contentInset: 'always',

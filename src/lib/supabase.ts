@@ -10,9 +10,25 @@ let _supabase: SupabaseClient
 
 if (supabaseUrl && supabaseAnonKey) {
   _supabase = globalForSupabase.__supabaseClient ?? createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    },
     realtime: {
       params: {
         eventsPerSecond: 10
+      },
+      timeout: 30000, // 30 saniye timeout (Android için artırıldı)
+      heartbeatIntervalMs: 15000, // 15 saniye heartbeat
+      reconnectAfterMs: (tries: number) => {
+        // Exponential backoff: 1s, 2s, 4s, 8s, max 10s
+        return Math.min(1000 * Math.pow(2, tries), 10000)
+      }
+    },
+    global: {
+      headers: {
+        'X-Client-Info': 'takazone-mobile'
       }
     }
   })
