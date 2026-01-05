@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { Lock, Eye, EyeOff, X, Shield, Check, AlertCircle } from 'lucide-react'
 import { changePassword } from '@/lib/auth'
 import Turnstile from './Turnstile'
-import { useTranslation } from 'react-i18next'
 
 interface ChangePasswordModalProps {
   isOpen: boolean
@@ -12,7 +11,6 @@ interface ChangePasswordModalProps {
 }
 
 export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProps) {
-  const { t } = useTranslation(['settings', 'common'])
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
