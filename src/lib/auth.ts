@@ -49,11 +49,31 @@ export async function signUp(email: string, password: string, name: string) {
     options: {
       data: {
         name
-      }
+      },
+      emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : 'https://takazone.com'}/login`
     }
   })
 
   if (authError) throw authError
+
+  // Kullanıcı oluşturulduysa users tablosuna profil ekle
+  if (authData.user) {
+    const { error: profileError } = await supabase
+      .from('users')
+      .insert({
+        id: authData.user.id,
+        email: email,
+        name: name,
+        created_at: new Date().toISOString()
+      })
+
+    if (profileError) {
+      console.error('Profile creation error:', profileError)
+      // Profil oluşturulamazsa auth kaydını sil
+      await supabase.auth.admin.deleteUser(authData.user.id)
+      throw new Error('Kullanıcı profili oluşturulamadı. Lütfen tekrar deneyin.')
+    }
+  }
 
   return authData
 }
