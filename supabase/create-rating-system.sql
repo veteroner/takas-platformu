@@ -5,8 +5,8 @@
 -- 1️⃣ user_ratings tablosunu oluştur
 CREATE TABLE IF NOT EXISTS public.user_ratings (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  rater_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  rated_user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  rater_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  rated_user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   match_id UUID NOT NULL REFERENCES public.matches(id) ON DELETE CASCADE,
   rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
   comment TEXT,
@@ -217,6 +217,8 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS trigger_notify_match_completed ON public.matches;
 
 CREATE TRIGGER trigger_notify_match_completed
   AFTER UPDATE ON public.matches
