@@ -1,5 +1,6 @@
 import { supabase } from './supabase'
 import type { User } from './supabase'
+import { sendVerificationEmail, sendWelcomeEmail } from './email'
 
 /**
  * Clear all Supabase auth tokens to prevent refresh token errors
