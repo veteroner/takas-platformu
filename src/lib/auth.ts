@@ -35,21 +35,31 @@ export function clearAuthTokens(): void {
 export interface AuthUser {
   id: string
   email: string
-  name: string
+  firstName: string
+  lastName: string
+  displayName: string
   avatar?: string
   created_at: string
 }
 
 /**
  * Sign up with email and password
+ * @param email - Kullanıcı email adresi
+ * @param password - Şifre
+ * @param firstName - Kullanıcının adı (gösterilir)
+ * @param lastName - Kullanıcının soyadı (gizli tutulur)
  */
-export async function signUp(email: string, password: string, name: string) {
+export async function signUp(email: string, password: string, firstName: string, lastName: string) {
+  const displayName = firstName // Varsayılan olarak sadece adı göster
+  
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
     password,
     options: {
       data: {
-        name
+        firstName,
+        lastName,
+        displayName
       },
       emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : 'https://takazone.com'}/login`
     }
@@ -64,7 +74,10 @@ export async function signUp(email: string, password: string, name: string) {
       .insert({
         id: authData.user.id,
         email: email,
-        name: name,
+        first_name: firstName,
+        last_name: lastName,
+        display_name: displayName,
+        name: displayName, // Geriye uyumluluk için
         created_at: new Date().toISOString()
       })
 
@@ -126,7 +139,9 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
       return {
         id: user.id,
         email: user.email!,
-        name: user.user_metadata.name || 'User',
+        firstName: user.user_metadata.firstName || user.user_metadata.name || 'User',
+        lastName: user.user_metadata.lastName || '',
+        displayName: user.user_metadata.displayName || user.user_metadata.firstName || user.user_metadata.name || 'User',
         created_at: user.created_at
       }
     }
@@ -134,7 +149,9 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
     return {
       id: profile.id,
       email: profile.email,
-      name: profile.name,
+      firstName: profile.first_name || profile.name || 'User',
+      lastName: profile.last_name || '',
+      displayName: profile.display_name || profile.first_name || profile.name || 'User',
       avatar: profile.avatar_url,
       created_at: profile.created_at
     }

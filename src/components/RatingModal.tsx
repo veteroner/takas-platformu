@@ -91,6 +91,7 @@ export default function RatingModal({
                   )}
                   <h2 className="text-2xl font-bold mb-1">{otherUserName}</h2>
                   <p className="text-white/90 text-sm">Takas deneyiminizi puanlayın</p>
+                  <p className="text-white/70 text-xs mt-1">🔒 Sadece ad gösterilir, soyad gizlidir</p>
                 </div>
               </div>
 

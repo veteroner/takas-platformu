@@ -22,7 +22,8 @@ export default function LoginPage() {
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
 
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -77,7 +78,7 @@ export default function LoginPage() {
           return
         }
         
-        const auth = await signUp(formData.email, formData.password, formData.name)
+        const auth = await signUp(formData.email, formData.password, formData.firstName, formData.lastName)
         const userId = auth.user?.id
         if (userId) {
           const marketing = (document.querySelector('input[name="consent_marketing"]') as HTMLInputElement | null)?.checked
@@ -163,20 +164,44 @@ export default function LoginPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Name Field (Register only) */}
+            {/* First Name & Last Name Fields (Register only) */}
             {isRegister && (
-              <div className="relative">
-                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60" size={20} />
-                <input
-                  type="text"
-                  name="name"
-                  placeholder={t('name')}
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/90 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent backdrop-blur-sm"
-                />
-              </div>
+              <>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="relative">
+                    <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60" size={20} />
+                    <input
+                      type="text"
+                      name="firstName"
+                      placeholder="Adınız"
+                      value={formData.firstName}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/90 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent backdrop-blur-sm"
+                    />
+                  </div>
+                  <div className="relative">
+                    <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60" size={20} />
+                    <input
+                      type="text"
+                      name="lastName"
+                      placeholder="Soyadınız"
+                      value={formData.lastName}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/90 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent backdrop-blur-sm"
+                    />
+                  </div>
+                </div>
+                
+                {/* KVKK Aydınlatma Metni */}
+                <div className="bg-white/5 border border-white/10 rounded-xl p-3">
+                  <p className="text-xs text-white/70 leading-relaxed">
+                    🔒 <strong className="text-white/90">Gizliliğiniz için:</strong> Sadece <strong className="text-white">adınız</strong> diğer kullanıcılara gösterilecektir. 
+                    Soyadınız gizli kalacaktır.
+                  </p>
+                </div>
+              </>
             )}
 
             {/* Email Field */}
@@ -316,7 +341,8 @@ export default function LoginPage() {
                   setIsRegister(!isRegister)
                   setError('')
                   setFormData({
-                    name: '',
+                    firstName: '',
+                    lastName: '',
                     email: '',
                     password: '',
                     confirmPassword: ''

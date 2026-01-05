@@ -3,7 +3,10 @@
 export interface User {
   id: string
   email: string
-  name: string
+  name: string // DEPRECATED: Geriye uyumluluk için tutuldu, kullanmayın
+  firstName?: string // YENİ: Kullanıcının adı
+  lastName?: string // YENİ: Kullanıcının soyadı (özel, gösterilmez)
+  displayName?: string // YENİ: Gösterim adı (firstName veya kullanıcı tanımlı)
   avatar?: string
   location?: {
     city: string
@@ -23,6 +26,11 @@ export interface User {
       min: number
       max: number
     }
+  }
+  metadata?: {
+    bio?: string
+    location?: string
+    phone?: string
   }
 }
 

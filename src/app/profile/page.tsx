@@ -19,6 +19,9 @@ interface ProfileUser {
   id: string
   email: string
   name: string
+  firstName?: string
+  lastName?: string
+  displayName?: string
   avatar?: string
   created_at: string
   metadata?: {
@@ -38,6 +41,8 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false)
   const [editData, setEditData] = useState({
     name: '',
+    firstName: '',
+    lastName: '',
     bio: '',
     location: '',
     phone: ''
@@ -95,7 +100,10 @@ export default function ProfilePage() {
         return
       }
 
-      setUser(currentUser)
+      setUser({
+        ...currentUser,
+        name: currentUser.displayName || currentUser.firstName || 'User'
+      })
       
       // Load metadata from Supabase
       const { data: userData } = await supabase
@@ -107,7 +115,9 @@ export default function ProfilePage() {
       const metadata = userData?.metadata || {}
       
       setEditData({
-        name: currentUser.name || '',
+        name: currentUser.displayName || currentUser.firstName || 'User',
+        firstName: currentUser.firstName || '',
+        lastName: currentUser.lastName || '',
         bio: metadata.bio || '',
         location: metadata.location || '',
         phone: metadata.phone || ''
@@ -144,9 +154,12 @@ export default function ProfilePage() {
 
   const handleSave = async () => {
     try {
-      // 1. Name'i users tablosuna kaydet
+      // 1. firstName, lastName ve displayName'i users tablosuna kaydet
       const updates = {
-        name: editData.name
+        first_name: editData.firstName,
+        last_name: editData.lastName,
+        display_name: editData.firstName, // Varsayılan olarak ad göster
+        name: editData.firstName // Geriye uyumluluk için
       }
       await updateUserProfile(user.id, updates)
       
@@ -212,15 +225,30 @@ export default function ProfilePage() {
 
           {/* Name */}
           {isEditing ? (
-            <input
-              type="text"
-              name="name"
-              value={editData.name}
-              onChange={handleInputChange}
-              className="text-2xl font-bold text-white text-center bg-white/10 border border-white/20 rounded-xl px-4 py-2 mt-4 w-full max-w-xs mx-auto focus:outline-none focus:ring-2 focus:ring-white/50"
-            />
+            <div className="mt-4 space-y-2 max-w-xs mx-auto">
+              <input
+                type="text"
+                name="firstName"
+                value={editData.firstName}
+                onChange={handleInputChange}
+                placeholder="Adınız"
+                className="w-full text-lg font-bold text-white text-center bg-white/10 border border-white/20 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/50"
+              />
+              <input
+                type="text"
+                name="lastName"
+                value={editData.lastName}
+                onChange={handleInputChange}
+                placeholder="Soyadınız (gizli)"
+                className="w-full text-sm text-white text-center bg-white/10 border border-white/20 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/50"
+              />
+              <p className="text-xs text-white/60 text-center">🔒 Sadece adınız gösterilir</p>
+            </div>
           ) : (
-            <h1 className="text-2xl font-bold text-white mt-4">{user.name}</h1>
+            <>
+              <h1 className="text-2xl font-bold text-white mt-4">{user.displayName || user.firstName || user.name}</h1>
+              <p className="text-xs text-white/60 mt-1">🔒 Soyadınız gizlidir</p>
+            </>
           )}
 
           <p className="text-white/70 mt-1">{user.email}</p>

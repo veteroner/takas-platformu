@@ -267,10 +267,10 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
           <div className="flex items-center justify-between pt-2 border-t border-gray-100 mt-auto">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-full bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
-                {item.owner.name.charAt(0).toUpperCase()}
+                {(item.owner.displayName || item.owner.firstName || item.owner.name).charAt(0).toUpperCase()}
               </div>
               <span className="text-gray-700 text-sm font-medium truncate max-w-[100px]">
-                {item.owner.name}
+                {item.owner.displayName || item.owner.firstName || item.owner.name}
               </span>
             </div>
             <div className="flex items-center gap-1 text-yellow-500">
