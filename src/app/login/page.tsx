@@ -257,7 +257,7 @@ export default function LoginPage() {
                 <span>
                   <Link className="underline" href={policyRoutes.terms}>{t('termsLink')}</Link>,{' '}
                   <Link className="underline" href={policyRoutes.kvkk}>{t('kvkkLink')}</Link> ve{' '}
-                  <Link className="underline" href={policyRoutes.privacy}>{t('privacyLink')}</Link>'nı okudum, kabul ediyorum.
+                  <Link className="underline" href={policyRoutes.privacy}>{t('privacyLink')}</Link>&apos;nı okudum, kabul ediyorum.
                 </span>
               </label>
               <label className="flex items-start gap-3">
