@@ -113,9 +113,9 @@ export default function LoginPage() {
         await signIn(formData.email, formData.password)
         router.push('/')
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Auth error:', err)
-      setError(err.message || t('errors.genericError'))
+      setError(err instanceof Error ? err.message : t('errors.genericError'))
     } finally {
       setIsLoading(false)
     }
