@@ -37,3 +37,48 @@ export function formatRelativeTime(date: Date, locale?: string): string {
   if (Math.abs(hours) < 24) return rtf.format(hours, 'hour')
   return rtf.format(days, 'day')
 }
+
+export function formatPublicName(name: string, locale: string = 'tr-TR'): string {
+  const raw = (name || '').trim()
+  if (!raw) return ''
+
+  const parts = raw.split(/\s+/).filter(Boolean)
+  const first = parts[0]
+  const firstFormatted = first.charAt(0).toLocaleUpperCase(locale) + first.slice(1)
+  if (parts.length === 1) return firstFormatted
+
+  const lastInitial = parts[parts.length - 1].charAt(0).toLocaleUpperCase(locale)
+  return `${firstFormatted} ${lastInitial}.`
+}
+
+type NameLike = {
+  name?: string
+  displayName?: string
+  firstName?: string
+  lastName?: string
+  display_name?: string
+  first_name?: string
+  last_name?: string
+}
+
+export function getPublicUserName(user?: NameLike | null, locale: string = 'tr-TR'): string {
+  if (!user) return ''
+
+  const firstName = (user.firstName ?? user.first_name ?? '').trim()
+  const lastName = (user.lastName ?? user.last_name ?? '').trim()
+  const displayName = (user.displayName ?? user.display_name ?? '').trim()
+  const fallbackName = (user.name ?? '').trim()
+
+  if (firstName) {
+    const firstFormatted = firstName.charAt(0).toLocaleUpperCase(locale) + firstName.slice(1)
+    if (lastName) {
+      const lastInitial = lastName.charAt(0).toLocaleUpperCase(locale)
+      return `${firstFormatted} ${lastInitial}.`
+    }
+    return firstFormatted
+  }
+
+  if (displayName) return formatPublicName(displayName, locale)
+  if (fallbackName) return formatPublicName(fallbackName, locale)
+  return ''
+}

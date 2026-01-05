@@ -250,8 +250,6 @@ export default function ProfilePage() {
               <p className="text-xs text-white/60 mt-1">🔒 Soyadınız gizlidir</p>
             </>
           )}
-
-          <p className="text-white/70 mt-1">{user.email}</p>
         </div>
 
         {/* Bio */}

@@ -1,3 +1,4 @@
+import { getPublicUserName } from '@/lib/utils'
 /**
  * Ürün Detay Modal Component
  * Swipe kartlarından tıklandığında detay gösterir
@@ -117,10 +118,10 @@ export function ProductDetailModal({ item, open, onOpenChange, currentUserId }: 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center text-white text-lg font-bold">
-                  {item.owner.name.charAt(0).toUpperCase()}
+                        {(getPublicUserName(item.owner) || item.owner.name).charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900">{item.owner.name}</p>
+                        <p className="font-medium text-gray-900">{getPublicUserName(item.owner) || item.owner.name}</p>
                   <div className="flex items-center gap-1 text-sm text-gray-600">
                     <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     <span>{item.owner.rating.toFixed(1)}</span>

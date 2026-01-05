@@ -21,6 +21,7 @@ import { UserInfoSidebar } from '@/components/chat/UserInfoSidebar'
 import { ChatHeader } from '@/components/chat/ChatHeader'
 import type { ChatMessage, ChatUser, BanDetails, MatchStatusType } from '@/types/chat'
 import { MATCH_STATUS, SUBSCRIPTION_CHANNEL_PREFIX, SUBSCRIPTION_EVENTS } from '@/constants/chat'
+import { getPublicUserName } from '@/lib/utils'
 
 // Dynamic route - no static generation
 export const dynamic = 'force-dynamic'
@@ -326,15 +327,22 @@ export default function ChatPage() {
         return
       }
 
-      setUser(currentUser)
+      setUser({
+        id: currentUser.id,
+        name: currentUser.displayName || currentUser.firstName,
+        first_name: currentUser.firstName,
+        last_name: currentUser.lastName,
+        display_name: currentUser.displayName,
+        avatar_url: currentUser.avatar
+      })
 
       // Load match details
       const { data: matchData } = await supabase
         .from('matches')
         .select(`
           *,
-          user1:users!matches_user1_id_fkey(id, name, first_name, last_name, display_name, avatar_url),
-          user2:users!matches_user2_id_fkey(id, name, first_name, last_name, display_name, avatar_url)
+          user1:users!matches_user1_id_fkey(id, name, first_name, last_name, display_name),
+          user2:users!matches_user2_id_fkey(id, name, first_name, last_name, display_name)
         `)
         .eq('id', matchId)
         .single()
@@ -543,7 +551,7 @@ export default function ChatPage() {
             isOpen={showBlockReportModal}
             onClose={() => setShowBlockReportModal(false)}
             targetUserId={otherUser.id}
-            targetUserName={otherUser.name}
+            targetUserName={getPublicUserName(otherUser) || otherUser.name}
             currentUserId={user.id}
             onSuccess={() => {
               setIsBlocked(true)
@@ -557,7 +565,7 @@ export default function ChatPage() {
             isOpen={showRatingModal}
             onClose={() => setShowRatingModal(false)}
             onSubmit={handleSubmitRating}
-            otherUserName={otherUser.name}
+            otherUserName={getPublicUserName(otherUser) || otherUser.name}
             otherUserAvatar={otherUser.avatar_url}
           />
         )}
@@ -593,7 +601,7 @@ export default function ChatPage() {
       {/* Blocked User Notice */}
       {isBlocked && (
         <div className="p-4">
-          <BlockedUserNotice userName={otherUser?.name || t('you')} />
+          <BlockedUserNotice userName={(getPublicUserName(otherUser) || otherUser?.name || t('you'))} />
         </div>
       )}
 
@@ -603,7 +611,7 @@ export default function ChatPage() {
           isOpen={showBlockReportModal}
           onClose={() => setShowBlockReportModal(false)}
           targetUserId={otherUser.id}
-          targetUserName={otherUser.name}
+          targetUserName={getPublicUserName(otherUser) || otherUser.name}
           currentUserId={user.id}
           onSuccess={() => {
             setIsBlocked(true)
@@ -648,7 +656,7 @@ export default function ChatPage() {
           isOpen={showRatingModal}
           onClose={() => setShowRatingModal(false)}
           onSubmit={handleSubmitRating}
-          otherUserName={otherUser.name}
+          otherUserName={getPublicUserName(otherUser) || otherUser.name}
           otherUserAvatar={otherUser.avatar_url}
         />
       )}

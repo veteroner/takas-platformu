@@ -7,6 +7,7 @@ import { ArrowLeft, MoreVertical, User, CheckCircle } from 'lucide-react'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import type { ChatHeaderProps } from '@/types/chat'
 import { MATCH_STATUS } from '@/constants/chat'
+import { getPublicUserName } from '@/lib/utils'
 
 export function ChatHeader({
   otherUser,
@@ -20,6 +21,7 @@ export function ChatHeader({
   isMobile = false
 }: ChatHeaderProps) {
   const { t } = useTranslation('messages')
+  const publicName = getPublicUserName(otherUser) || t('you')
   
   if (isMobile) {
     return (
@@ -30,16 +32,11 @@ export function ChatHeader({
               <ArrowLeft className="w-6 h-6 text-gray-600" />
             </Link>
             <div className="flex-1">
-              <h1 className="text-lg font-bold text-gray-900">
-                {otherUser?.display_name || otherUser?.first_name || otherUser?.name || t('you')}
-              </h1>
+                <h1 className="text-lg font-bold text-gray-900">{publicName}</h1>
               <p className="text-xs text-gray-500">
-                {matchStatus === MATCH_STATUS.COMPLETED ? `✅ ${t('statusCompleted')}` : (
-                  <span className={`inline-flex items-center gap-1 ${isOtherOnline ? 'text-green-600' : 'text-gray-400'}`}>
-                    <span className={`w-1.5 h-1.5 rounded-full ${isOtherOnline ? 'bg-green-500' : 'bg-gray-400'}`} />
-                    {isOtherOnline ? t('online') : t('offline')}
-                  </span>
-                )}
+                  {matchStatus === MATCH_STATUS.COMPLETED
+                    ? `✅ ${t('statusCompleted')}`
+                    : (isOtherOnline ? t('online') : t('offline'))}
               </p>
             </div>
             {!isBlocked && (
@@ -103,7 +100,7 @@ export function ChatHeader({
         {otherUser?.avatar_url ? (
           <Image 
             src={otherUser.avatar_url} 
-            alt={otherUser.name} 
+            alt={publicName} 
             width={48} 
             height={48} 
             className="w-full h-full object-cover" 
@@ -113,9 +110,7 @@ export function ChatHeader({
         )}
       </div>
       <div className="flex-1">
-        <h2 className="font-bold text-gray-800">
-          {otherUser?.display_name || otherUser?.first_name || otherUser?.name || t('you')}
-        </h2>
+        <h2 className="font-bold text-gray-800">{publicName}</h2>
         <p className="text-xs text-gray-500">
           {matchStatus === MATCH_STATUS.COMPLETED ? `✅ ${t('statusCompleted')}` : (isOtherOnline ? t('online') : t('offline'))}
         </p>

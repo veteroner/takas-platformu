@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { sendMessageNotification } from '@/lib/notifications';
+import { getPublicUserName } from '@/lib/utils';
 
 interface SendMessageRequest {
   match_id: string;
@@ -47,11 +48,11 @@ export async function POST(request: NextRequest) {
     // Gönderen kullanıcının bilgilerini al
     const { data: sender } = await supabase
       .from('users')
-      .select('name')
+      .select('name, first_name, last_name, display_name')
       .eq('id', sender_id)
       .single();
 
-    const senderName = sender?.name || 'Bir kullanıcı';
+    const senderName = getPublicUserName(sender) || sender?.name || 'Bir kullanıcı';
 
     // Push bildirimi gönder
     const notificationSent = await sendMessageNotification(

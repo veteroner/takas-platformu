@@ -14,8 +14,9 @@ import { UnreadBadge } from '@/components/UnreadBadge'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getFeedItems, recordSwipe, checkAndCreateMatch, getUserLikedItems, getUserPassedItems } from '@/lib/api'
-import { getCurrentUser } from '@/lib/auth'
+import { getCurrentUser, type AuthUser } from '@/lib/auth'
 import { useTranslation } from 'react-i18next'
+import { getPublicUserName } from '@/lib/utils'
 
 type MatchData = {
   id: string
@@ -23,14 +24,6 @@ type MatchData = {
   user2_id: string
   user1: { id: string; name: string; avatar?: string }
   user2: { id: string; name: string; avatar?: string }
-}
-
-interface User {
-  id: string
-  name: string
-  email: string
-  avatar?: string
-  avatar_url?: string
 }
 
 export default function HomePage() {
@@ -48,7 +41,7 @@ export default function HomePage() {
     { id: 'home', label: t('categories.home'), icon: Home, color: 'from-violet-500 to-purple-500' },
   ], [t])
   
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<AuthUser | null>(null)
   const [items, setItems] = useState<Item[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [likedItems, setLikedItems] = useState<Item[]>([])
@@ -92,7 +85,7 @@ export default function HomePage() {
         owner: {
           id: (item.owner_id as string) || '',
           name: 'User',
-          email: 'user@example.com',
+          email: '',
           avatar: '/icons/icon-192.png',
           rating: 5,
           totalTrades: 0,
@@ -147,8 +140,11 @@ export default function HomePage() {
         ownerId: item.owner_id,
         owner: {
           id: item.owner?.id || item.owner_id,
-          name: item.owner?.name || 'Anonim Kullanıcı',
-          email: item.owner?.email || '',
+          name: item.owner?.display_name || item.owner?.first_name || item.owner?.name || 'Anonim Kullanıcı',
+          email: '',
+          firstName: item.owner?.first_name || undefined,
+          lastName: item.owner?.last_name || undefined,
+          displayName: item.owner?.display_name || undefined,
           avatar: item.owner?.avatar || '/icons/icon-192.png',
           rating: item.owner?.rating || 5,
           totalTrades: item.owner?.total_trades || 0,
@@ -260,7 +256,7 @@ export default function HomePage() {
             
             // 🎉 MATCH! Show toast and redirect directly to chat with that user
             setMatchedUser({
-              name: otherUser.name,
+              name: getPublicUserName(otherUser) || otherUser.name,
               avatar: otherUser.avatar,
               matchId: match.id
             })
@@ -380,7 +376,7 @@ export default function HomePage() {
                   {user?.avatar ? (
                     <Image
                       src={user.avatar}
-                      alt={user.name}
+                      alt={user.displayName || user.firstName || 'User'}
                       width={isDesktop ? 32 : 20}
                       height={isDesktop ? 32 : 20}
                       className={`${isDesktop ? 'w-8 h-8' : 'w-5 h-5'} rounded-full object-cover`}

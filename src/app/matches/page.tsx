@@ -79,7 +79,7 @@ export default function MatchesPage() {
           owner: {
             id: item.owner_id,
             name: 'User',
-            email: 'user@example.com',
+            email: '',
             avatar: '/icons/icon-192.png',
             rating: 5,
             totalTrades: 0,
@@ -108,7 +108,7 @@ export default function MatchesPage() {
             owner: {
               id: item.owner_id,
               name: 'Me',
-              email: 'me@example.com',
+              email: '',
               avatar: '/icons/icon-192.png',
               rating: 5,
               totalTrades: 0,

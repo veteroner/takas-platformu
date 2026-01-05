@@ -1,12 +1,12 @@
 // Chat Types
 export interface ChatUser {
   id: string
-  name: string // DEPRECATED: Geriye uyumluluk için
+  name: string
+  email?: string
   first_name?: string
   last_name?: string
   display_name?: string
   avatar_url?: string
-  // email alanı KALDIRILDI - KVKK uyumluluğu için
 }
 
 export interface ChatMessage {

@@ -12,12 +12,15 @@ import { MatchUnreadBadge } from "@/components/UnreadBadge";
 import { supabase } from "@/lib/supabase";
 import DesktopLayout from "@/components/DesktopLayout";
 import { useDeviceType } from "@/hooks/useDeviceType";
+import { getPublicUserName } from "@/lib/utils";
 
 // Match tipi tanımı
 interface MatchUser {
   id: string;
   name: string;
-  email?: string;
+  first_name?: string;
+  last_name?: string;
+  display_name?: string;
   avatar?: string;
 }
 
@@ -50,7 +53,7 @@ export default function ChatList() {
   const { t } = useTranslation('messages');
   const router = useRouter();
   const { isMobile, isDesktop } = useDeviceType();
-  const [user, setUser] = useState<{id: string; name: string; email: string; avatar?: string} | null>(null);
+  const [user, setUser] = useState<{id: string; name: string} | null>(null);
   const [matches, setMatches] = useState<Match[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -65,7 +68,10 @@ export default function ChatList() {
         return;
       }
 
-      setUser(currentUser);
+      setUser({
+        id: currentUser.id,
+        name: (currentUser.displayName || currentUser.firstName || 'User')
+      });
 
       // Load user's matches
       const userMatches = await getUserMatches(currentUser.id);
@@ -149,11 +155,12 @@ export default function ChatList() {
   const filteredMatches = matches.filter((match) => {
     if (!searchQuery) return true;
     const otherUser = match.user1_id === user?.id ? match.user2 : match.user1;
+    const otherUserPublicName = getPublicUserName(otherUser) || otherUser?.name || '';
     const myItem = match.user1_id === user?.id ? match.item1 : match.item2;
     const theirItem = match.user1_id === user?.id ? match.item2 : match.item1;
     const searchLower = searchQuery.toLowerCase();
     return (
-      otherUser?.name?.toLowerCase().includes(searchLower) ||
+      otherUserPublicName.toLowerCase().includes(searchLower) ||
       myItem?.title?.toLowerCase().includes(searchLower) ||
       theirItem?.title?.toLowerCase().includes(searchLower)
     );
@@ -162,6 +169,7 @@ export default function ChatList() {
   // Chat item component - tekrar kullanım için
   const ChatItem = ({ match }: { match: Match }) => {
     const otherUser = match.user1_id === user?.id ? match.user2 : match.user1;
+    const otherUserPublicName = getPublicUserName(otherUser) || otherUser?.name || 'Kullanıcı';
     const myItem = match.user1_id === user?.id ? match.item1 : match.item2;
     const theirItem = match.user1_id === user?.id ? match.item2 : match.item1;
     const lastMessage = match.messages?.[0];
@@ -177,7 +185,7 @@ export default function ChatList() {
         <div className="flex items-center gap-3">
           <div className="relative shrink-0">
             <div className="w-12 h-12 rounded-full bg-linear-to-r from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold">
-              {otherUser?.name?.charAt(0).toUpperCase() || '?'}
+              {otherUserPublicName.charAt(0).toUpperCase() || '?'}
             </div>
             <MatchUnreadBadge
               matchId={match.id}
@@ -188,7 +196,7 @@ export default function ChatList() {
           
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between gap-2 mb-1">
-              <h3 className="font-semibold text-gray-900 truncate">{otherUser?.name || 'Kullanıcı'}</h3>
+              <h3 className="font-semibold text-gray-900 truncate">{otherUserPublicName}</h3>
               <span className="text-xs text-gray-500 shrink-0">
                 {new Date(lastMessageTime).toLocaleDateString('tr-TR', { 
                   day: 'numeric', 
@@ -298,6 +306,7 @@ export default function ChatList() {
               {matches.map((match) => {
                 // Get the other user
                 const otherUser = match.user1_id === user?.id ? match.user2 : match.user1;
+                const otherUserPublicName = getPublicUserName(otherUser) || otherUser?.name || 'Kullanıcı';
                 const myItem = match.user1_id === user?.id ? match.item1 : match.item2;
                 const theirItem = match.user1_id === user?.id ? match.item2 : match.item1;
                 
@@ -316,7 +325,7 @@ export default function ChatList() {
                     <div className="flex items-center gap-3">
                       <div className="relative shrink-0">
                         <div className="w-12 h-12 rounded-full bg-linear-to-r from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold">
-                          {otherUser?.name?.charAt(0).toUpperCase() || '?'}
+                          {otherUserPublicName.charAt(0).toUpperCase() || '?'}
                         </div>
                         {/* Okunmamış mesaj badge'i */}
                         <MatchUnreadBadge
@@ -328,7 +337,7 @@ export default function ChatList() {
                       
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2 mb-1">
-                          <h3 className="font-semibold text-gray-900 truncate">{otherUser?.name || 'Kullanıcı'}</h3>
+                          <h3 className="font-semibold text-gray-900 truncate">{otherUserPublicName}</h3>
                           <span className="text-xs text-gray-500 shrink-0">
                             {new Date(lastMessageTime).toLocaleDateString('tr-TR', { 
                               day: 'numeric', 

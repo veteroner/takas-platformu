@@ -17,7 +17,9 @@ export async function getFeedItems(userId?: string, limit: number = 20): Promise
         owner:users!owner_id (
           id,
           name,
-          email,
+          first_name,
+          last_name,
+          display_name,
           avatar,
           rating,
           total_trades,
@@ -390,8 +392,8 @@ export async function checkForMatch(userId: string, itemId: string): Promise<Rec
       .from('matches')
       .select(`
         *,
-        user1:users!matches_user1_id_fkey(id, name, avatar),
-        user2:users!matches_user2_id_fkey(id, name, avatar),
+        user1:users!matches_user1_id_fkey(id, name, first_name, last_name, display_name, avatar),
+        user2:users!matches_user2_id_fkey(id, name, first_name, last_name, display_name, avatar),
         item1:items!matches_item1_id_fkey(id, title, images),
         item2:items!matches_item2_id_fkey(id, title, images)
       `)
@@ -422,8 +424,8 @@ export async function createMatch(user1Id: string, user2Id: string, item1Id: str
       }])
       .select(`
         *,
-        user1:users!matches_user1_id_fkey(id, name, avatar),
-        user2:users!matches_user2_id_fkey(id, name, avatar),
+        user1:users!matches_user1_id_fkey(id, name, first_name, last_name, display_name, avatar),
+        user2:users!matches_user2_id_fkey(id, name, first_name, last_name, display_name, avatar),
         item1:items!matches_item1_id_fkey(id, title, images),
         item2:items!matches_item2_id_fkey(id, title, images)
       `)
@@ -467,8 +469,8 @@ export async function getUserMatches(userId: string) {
       .from('matches')
       .select(`
         *,
-        user1:users!matches_user1_id_fkey(id, name, avatar),
-        user2:users!matches_user2_id_fkey(id, name, avatar),
+        user1:users!matches_user1_id_fkey(id, name, first_name, last_name, display_name, avatar),
+        user2:users!matches_user2_id_fkey(id, name, first_name, last_name, display_name, avatar),
         item1:items!matches_item1_id_fkey(*),
         item2:items!matches_item2_id_fkey(*),
         messages(

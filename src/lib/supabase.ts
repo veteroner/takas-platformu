@@ -71,8 +71,11 @@ export type Item = {
 
 export type User = {
   id: string
-  email: string
   name: string
+  email?: string
+  first_name?: string
+  last_name?: string
+  display_name?: string
   avatar?: string
   bio?: string
   location?: string

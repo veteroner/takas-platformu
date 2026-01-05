@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { Heart, X, MapPin } from 'lucide-react'
 import { SwipeCardProps } from '@/types'
 import { useTranslation } from 'react-i18next'
+import { getPublicUserName } from '@/lib/utils'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SpringValue = any
@@ -122,6 +123,8 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
   }
 
   if (isGone) return null
+
+  const ownerPublicName = getPublicUserName(item.owner) || item.owner.displayName || item.owner.firstName || item.owner.name
 
   // Kategori emojisi
   const getCategoryEmoji = (category: string) => {
@@ -267,10 +270,10 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
           <div className="flex items-center justify-between pt-2 border-t border-gray-100 mt-auto">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-full bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
-                {(item.owner.displayName || item.owner.firstName || item.owner.name).charAt(0).toUpperCase()}
+                {ownerPublicName.charAt(0).toUpperCase()}
               </div>
               <span className="text-gray-700 text-sm font-medium truncate max-w-[100px]">
-                {item.owner.displayName || item.owner.firstName || item.owner.name}
+                {ownerPublicName}
               </span>
             </div>
             <div className="flex items-center gap-1 text-yellow-500">

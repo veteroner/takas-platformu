@@ -7,6 +7,7 @@ import { User, MessageCircle, CheckCircle } from 'lucide-react'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import type { UserInfoSidebarProps } from '@/types/chat'
 import { MATCH_STATUS, STATUS_BADGE_CLASSES } from '@/constants/chat'
+import { getPublicUserName } from '@/lib/utils'
 
 export function UserInfoSidebar({
   otherUser,
@@ -21,6 +22,7 @@ export function UserInfoSidebar({
   onShowBlockReportModal
 }: UserInfoSidebarProps) {
   const { t } = useTranslation('messages')
+  const publicName = getPublicUserName(otherUser) || t('you')
   
   return (
     <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg p-6 sticky top-24">
@@ -30,7 +32,7 @@ export function UserInfoSidebar({
           {otherUser?.avatar_url ? (
             <Image 
               src={otherUser.avatar_url} 
-              alt={otherUser.name} 
+              alt={publicName} 
               width={96} 
               height={96} 
               className="w-full h-full object-cover" 
@@ -39,10 +41,7 @@ export function UserInfoSidebar({
             <User className="w-12 h-12 text-white" />
           )}
         </div>
-        <h3 className="text-xl font-bold text-gray-800">
-          {otherUser?.display_name || otherUser?.first_name || otherUser?.name || t('you')}
-        </h3>
-        {/* E-posta adresi GİZLENDİ - KVKK uyumluluğu */}
+        <h3 className="text-xl font-bold text-gray-800">{publicName}</h3>
         {matchStatus !== MATCH_STATUS.COMPLETED && (
           <p className="text-xs mt-1">
             <span className={`inline-flex items-center gap-1 ${isOtherOnline ? 'text-green-600' : 'text-gray-400'}`}>
