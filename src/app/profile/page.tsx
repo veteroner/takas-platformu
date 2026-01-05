@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { ArrowLeft, Edit3, MapPin, Phone, Calendar, Star, Package, Gift, Camera, Sparkles, Heart, MessageCircle, User, Plus, LogIn } from 'lucide-react'
+import { ArrowLeft, Edit3, MapPin, Phone, Calendar, Star, Package, Gift, Camera, Sparkles, Heart, MessageCircle, User, Plus, LogIn, Shield } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
@@ -13,6 +13,7 @@ import type { Item } from '@/lib/supabase'
 import DesktopLayout from '@/components/DesktopLayout'
 import { useDeviceType } from '@/hooks/useDeviceType'
 import { UnreadBadge } from '@/components/UnreadBadge'
+import ChangePasswordModal from '@/components/ChangePasswordModal'
 
 interface ProfileUser {
   id: string
@@ -46,6 +47,7 @@ export default function ProfilePage() {
     receivedItems: 0,
     rating: 0
   })
+  const [showPasswordModal, setShowPasswordModal] = useState(false)
 
   const loadUserStats = useCallback(async (userId: string) => {
     try {
@@ -295,6 +297,24 @@ export default function ProfilePage() {
             {t('save')}
           </button>
         )}
+      </div>
+
+      {/* Security Section - Şifre Değiştir */}
+      <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/20 mb-6">
+        <h3 className="text-white text-lg font-bold mb-4 flex items-center gap-2">
+          <Shield className="w-5 h-5" />
+          Güvenlik Ayarları
+        </h3>
+        <p className="text-white/70 text-sm mb-4">
+          Hesabını güvende tutmak için düzenli olarak şifreni değiştir.
+        </p>
+        <button
+          onClick={() => setShowPasswordModal(true)}
+          className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+        >
+          <Shield className="w-5 h-5" />
+          Şifremi Değiştir
+        </button>
       </div>
 
       {/* Stats Cards */}
@@ -604,6 +624,12 @@ export default function ProfilePage() {
           </div>
         </nav>
       )}
+
+      {/* Password Change Modal */}
+      <ChangePasswordModal 
+        isOpen={showPasswordModal} 
+        onClose={() => setShowPasswordModal(false)} 
+      />
     </div>
   )
 }

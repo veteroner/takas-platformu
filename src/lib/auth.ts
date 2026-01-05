@@ -219,6 +219,37 @@ export async function updatePassword(newPassword: string) {
 }
 
 /**
+ * Change password (requires current password verification)
+ */
+export async function changePassword(currentPassword: string, newPassword: string) {
+  // 1. Get current user
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  if (!user?.email) {
+    throw new Error('Kullanıcı oturumu bulunamadı')
+  }
+
+  // 2. Verify current password by attempting to sign in
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email: user.email,
+    password: currentPassword
+  })
+
+  if (signInError) {
+    throw new Error('Mevcut şifre yanlış')
+  }
+
+  // 3. Update password
+  const { error: updateError } = await supabase.auth.updateUser({
+    password: newPassword
+  })
+
+  if (updateError) throw updateError
+
+  return { success: true }
+}
+
+/**
  * Listen to auth state changes
  */
 export function onAuthStateChange(callback: (user: AuthUser | null) => void) {
