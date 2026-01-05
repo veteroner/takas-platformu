@@ -10,10 +10,18 @@ interface TurnstileProps {
   size?: 'normal' | 'compact'
 }
 
+interface TurnstileOptions {
+  sitekey: string
+  callback?: (token: string) => void
+  'error-callback'?: () => void
+  theme?: 'light' | 'dark' | 'auto'
+  size?: 'normal' | 'compact'
+}
+
 declare global {
   interface Window {
     turnstile?: {
-      render: (element: HTMLElement, options: any) => string
+      render: (element: HTMLElement, options: TurnstileOptions) => string
       reset: (widgetId: string) => void
       remove: (widgetId: string) => void
     }
