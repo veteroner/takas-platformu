@@ -341,6 +341,12 @@ export default function ProfilePage() {
           </div>
           <div className="text-2xl font-bold text-white">{stats.rating.toFixed(1)}</div>
           <div className="text-white/70 text-sm">{t('rating')}</div>
+          <Link 
+            href="/profile/ratings"
+            className="mt-3 inline-block text-white/80 hover:text-white text-xs underline transition-colors"
+          >
+            Tüm Değerlendirmeler →
+          </Link>
         </div>
       </div>
 
