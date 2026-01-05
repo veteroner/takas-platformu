@@ -151,7 +151,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {/* Current Password */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-gray-900 mb-2">
               Mevcut Şifre
             </label>
             <div className="relative">
@@ -177,7 +177,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
 
           {/* New Password */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-gray-900 mb-2">
               Yeni Şifre
             </label>
             <div className="relative">
@@ -199,12 +199,12 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
                 {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
-            <p className="text-xs text-gray-500 mt-1">Minimum 6 karakter</p>
+            <p className="text-xs text-gray-700 mt-1">Minimum 6 karakter</p>
           </div>
 
           {/* Confirm Password */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-gray-900 mb-2">
               Yeni Şifre (Tekrar)
             </label>
             <div className="relative">
@@ -243,7 +243,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
               type="button"
               onClick={handleClose}
               disabled={isLoading || success}
-              className="flex-1 px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-6 py-3 bg-gray-100 text-gray-900 rounded-xl font-semibold hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               İptal
             </button>
