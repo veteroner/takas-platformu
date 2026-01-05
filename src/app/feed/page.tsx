@@ -13,7 +13,7 @@ import { Heart, MessageCircle, User, Settings, LogIn, Plus, Package, Shirt, Game
 import { UnreadBadge } from '@/components/UnreadBadge'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getFeedItems, recordSwipe, checkAndCreateMatch, getUserLikedItems, getUserPassedItems } from '@/lib/api'
+import { getFeedItems, recordSwipe, checkAndCreateMatch } from '@/lib/api'
 import { getCurrentUser, type AuthUser } from '@/lib/auth'
 import { useTranslation } from 'react-i18next'
 import { getPublicUserName } from '@/lib/utils'
@@ -65,59 +65,6 @@ export default function HomePage() {
       console.error('Error loading user:', error)
     }
   }, [])
-
-  const loadUserSwipes = useCallback(async () => {
-    if (!user?.id) return
-    
-    try {
-      // Load liked items from database
-      const liked = await getUserLikedItems(user.id)
-      const likedConverted: Item[] = liked.map((item: Record<string, unknown>) => ({
-        id: item.id as string,
-        title: item.title as string,
-        description: (item.description as string) || '',
-        images: (item.images as string[]) || [],
-        category: item.category as Item['category'],
-        condition: item.condition as ItemCondition,
-        estimatedValue: (item.estimated_value as number) || 0,
-        color: ['#FF6B6B', '#FF8E53'],
-        ownerId: (item.owner_id as string) || '',
-        owner: {
-          id: (item.owner_id as string) || '',
-          name: 'User',
-          email: '',
-          avatar: '/icons/icon-192.png',
-          rating: 5,
-          totalTrades: 0,
-          joinedAt: new Date(),
-          preferences: {
-            categories: [],
-            maxDistance: 50,
-            ageRange: { min: 0, max: 100 }
-          },
-          location: {
-            city: (item.location as string) || 'İstanbul',
-            country: 'TR'
-          }
-        },
-        location: {
-          city: (item.location as string) || 'İstanbul',
-          country: 'TR'
-        },
-        createdAt: new Date((item.created_at as string | number) || Date.now()),
-        isActive: item.status === 'active',
-        tags: []
-      }))
-      setLikedItems(likedConverted)
-
-      // Load passed items (just IDs)
-      const passed = await getUserPassedItems(user.id)
-      // Convert to Item[] format for consistency (though we only need IDs)
-      setPassedItems(passed.map(id => ({ id } as Item)))
-    } catch (error) {
-      console.error('Error loading user swipes:', error)
-    }
-  }, [user?.id])
 
   const loadInitialItems = useCallback(async () => {
     try {
