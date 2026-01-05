@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { useNetwork, NetworkState } from '@/hooks/useNetwork';
 
 interface NetworkContextValue extends NetworkState {
@@ -25,21 +25,26 @@ export function NetworkProvider({
   showBanner = true,
 }: NetworkProviderProps) {
   const network = useNetwork();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <NetworkContext.Provider value={network}>
       {/* Offline Banner - shows when online but server unreachable */}
-      {showBanner && network.isOnline && !network.isServerReachable && !network.isChecking && (
+      {isMounted && showBanner && network.isOnline && !network.isServerReachable && !network.isChecking && (
         <OfflineBanner onRetry={network.retry} />
       )}
       
       {/* Full Offline Screen - shows when completely offline */}
-      {showOfflineScreen && !network.isOnline && !network.isChecking && (
+      {isMounted && showOfflineScreen && !network.isOnline && !network.isChecking && (
         <FullOfflineScreen onRetry={network.retry} />
       )}
       
-      {/* Always render children but may be hidden behind offline screen */}
-      <div className={!network.isOnline && showOfflineScreen ? 'hidden' : undefined}>
+      {/* Always render children */}
+      <div style={isMounted && !network.isOnline && showOfflineScreen ? { display: 'none' } : undefined}>
         {children}
       </div>
     </NetworkContext.Provider>
