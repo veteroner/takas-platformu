@@ -216,9 +216,11 @@ export default function HomePage() {
     if (user?.id) {
       console.log('👤 User loaded, reloading items for user:', user.id)
       loadInitialItems()
-      loadUserSwipes()
+      // Refresh/page load should behave like "Tekrar Dene":
+      // do not rehydrate swipe history (liked/passed) from DB,
+      // so users can re-see items after a page reload.
     }
-  }, [user?.id, loadInitialItems, loadUserSwipes])
+  }, [user?.id, loadInitialItems])
 
   // Filtrelenmiş ürünler - useMemo ile optimize
   const filteredItems = useMemo(() => {
