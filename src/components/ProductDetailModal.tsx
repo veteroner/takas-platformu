@@ -1,12 +1,12 @@
-import { getPublicUserName } from '@/lib/utils'
+'use client';
+
 /**
  * Ürün Detay Modal Component
  * Swipe kartlarından tıklandığında detay gösterir
  * ReportProductButton ile entegre
  */
 
-'use client';
-
+import { getPublicUserName } from '@/lib/utils'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Item } from '@/types';
 import Image from 'next/image';
