@@ -9,6 +9,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.view.View;
+import android.view.WindowManager;
+import android.os.Build;
+import android.view.Window;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
+
+import androidx.core.view.WindowCompat;
 
 import com.getcapacitor.BridgeActivity;
 
@@ -17,8 +25,25 @@ public class MainActivity extends BridgeActivity {
     private boolean hasLoadedOfflinePage = false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Splash screen için tam ekran modunu etkinleştir
+        enableImmersiveMode();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        enableImmersiveMode();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            enableImmersiveMode();
+        }
     }
 
     @Override
@@ -85,5 +110,33 @@ public class MainActivity extends BridgeActivity {
             return activeNetworkInfo != null && activeNetworkInfo.isConnected();
         }
         return false;
+    }
+
+    /**
+     * Splash screen için tam ekran (immersive) modunu etkinleştirir
+     * Status bar ve navigation bar'ı gizler
+     */
+    private void enableImmersiveMode() {
+        Window window = getWindow();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Android 11+ (API 30+): En güvenilir yöntem
+            WindowCompat.setDecorFitsSystemWindows(window, false);
+            WindowInsetsController controller = window.getInsetsController();
+            if (controller != null) {
+                controller.hide(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
+                controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+            }
+        } else {
+            // Android 10 ve altı
+            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN
+                          | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                          | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                          | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                          | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                          | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+            window.getDecorView().setSystemUiVisibility(uiOptions);
+            window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
     }
 }

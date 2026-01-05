@@ -7,6 +7,9 @@ import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { signIn, signUp } from '@/lib/auth'
 import { policyRoutes } from '@/lib/legal'
+import Turnstile from '@/components/Turnstile'
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'
 
 export default function LoginPage() {
   const { t } = useTranslation('login')
@@ -16,6 +19,7 @@ export default function LoginPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
 
   const [formData, setFormData] = useState({
     name: '',
@@ -31,6 +35,39 @@ export default function LoginPage() {
 
     try {
       if (isRegister) {
+        // Bot koruması kontrolü
+        if (!turnstileToken) {
+          setError('Lütfen robot olmadığınızı doğrulayın')
+          setIsLoading(false)
+          return
+        }
+
+        // Rate limiting kontrolü
+        const rateLimitCheck = await fetch('/api/check-rate-limit', {
+          method: 'POST'
+        })
+        const rateLimitData = await rateLimitCheck.json()
+
+        if (!rateLimitData.allowed) {
+          setError(rateLimitData.error)
+          setIsLoading(false)
+          return
+        }
+
+        // Turnstile doğrulama
+        const turnstileVerify = await fetch('/api/verify-turnstile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: turnstileToken })
+        })
+
+        if (!turnstileVerify.ok) {
+          setError('Güvenlik doğrulaması başarısız. Lütfen tekrar deneyin.')
+          setTurnstileToken(null)
+          setIsLoading(false)
+          return
+        }
+
         if (formData.password !== formData.confirmPassword) {
           setError(t('errors.passwordMismatch'))
           return
@@ -235,6 +272,16 @@ export default function LoginPage() {
                   Ticari elektronik ileti almayı kabul ediyorum (opsiyonel).
                 </span>
               </label>
+              
+              {/* Turnstile Bot Protection */}
+              <div className="flex justify-center pt-4">
+                <Turnstile
+                  siteKey={TURNSTILE_SITE_KEY}
+                  onVerify={(token) => setTurnstileToken(token)}
+                  onError={() => setTurnstileToken(null)}
+                  theme="light"
+                />
+              </div>
             </div>
           )}
 
