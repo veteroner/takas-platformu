@@ -30,9 +30,16 @@ export function ChatHeader({
               <ArrowLeft className="w-6 h-6 text-gray-600" />
             </Link>
             <div className="flex-1">
-              <h1 className="text-lg font-bold text-gray-900">{otherUser?.name || t('you')}</h1>
+              <h1 className="text-lg font-bold text-gray-900">
+                {otherUser?.display_name || otherUser?.first_name || otherUser?.name || t('you')}
+              </h1>
               <p className="text-xs text-gray-500">
-                {matchStatus === MATCH_STATUS.COMPLETED ? `✅ ${t('statusCompleted')}` : otherUser?.email}
+                {matchStatus === MATCH_STATUS.COMPLETED ? `✅ ${t('statusCompleted')}` : (
+                  <span className={`inline-flex items-center gap-1 ${isOtherOnline ? 'text-green-600' : 'text-gray-400'}`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${isOtherOnline ? 'bg-green-500' : 'bg-gray-400'}`} />
+                    {isOtherOnline ? t('online') : t('offline')}
+                  </span>
+                )}
               </p>
             </div>
             {!isBlocked && (
@@ -106,7 +113,9 @@ export function ChatHeader({
         )}
       </div>
       <div className="flex-1">
-        <h2 className="font-bold text-gray-800">{otherUser?.name || t('you')}</h2>
+        <h2 className="font-bold text-gray-800">
+          {otherUser?.display_name || otherUser?.first_name || otherUser?.name || t('you')}
+        </h2>
         <p className="text-xs text-gray-500">
           {matchStatus === MATCH_STATUS.COMPLETED ? `✅ ${t('statusCompleted')}` : (isOtherOnline ? t('online') : t('offline'))}
         </p>

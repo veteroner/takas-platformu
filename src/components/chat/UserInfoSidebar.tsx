@@ -39,8 +39,10 @@ export function UserInfoSidebar({
             <User className="w-12 h-12 text-white" />
           )}
         </div>
-        <h3 className="text-xl font-bold text-gray-800">{otherUser?.name || t('you')}</h3>
-        <p className="text-sm text-gray-500">{otherUser?.email}</p>
+        <h3 className="text-xl font-bold text-gray-800">
+          {otherUser?.display_name || otherUser?.first_name || otherUser?.name || t('you')}
+        </h3>
+        {/* E-posta adresi GİZLENDİ - KVKK uyumluluğu */}
         {matchStatus !== MATCH_STATUS.COMPLETED && (
           <p className="text-xs mt-1">
             <span className={`inline-flex items-center gap-1 ${isOtherOnline ? 'text-green-600' : 'text-gray-400'}`}>

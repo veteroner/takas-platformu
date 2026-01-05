@@ -333,8 +333,8 @@ export default function ChatPage() {
         .from('matches')
         .select(`
           *,
-          user1:users!matches_user1_id_fkey(id, name, email),
-          user2:users!matches_user2_id_fkey(id, name, email)
+          user1:users!matches_user1_id_fkey(id, name, first_name, last_name, display_name, avatar_url),
+          user2:users!matches_user2_id_fkey(id, name, first_name, last_name, display_name, avatar_url)
         `)
         .eq('id', matchId)
         .single()
