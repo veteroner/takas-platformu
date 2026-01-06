@@ -259,11 +259,9 @@ export default function HomePage() {
 
   return (
     <div className="h-svh bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 flex flex-col overflow-hidden">
-      {/* Scroll container: keep header + tab bar fixed */}
-      <div className="flex-1 overflow-y-auto overscroll-contain">
-        {/* Header - Sabit üst kısım */}
-        <header className="bg-white/95 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe shrink-0 sticky top-0 z-50">
-          <div className="w-full px-4 py-4 flex items-center justify-between">
+      {/* Header - Sabit üst kısım */}
+      <header className="bg-white/95 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe shrink-0 z-50">
+        <div className="w-full px-4 py-4 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2">
             <TakaIcon className="w-8 h-8 text-purple-600" />
@@ -384,8 +382,10 @@ export default function HomePage() {
             })}
           </div>
         </div>
-        </header>
+      </header>
 
+      {/* Scroll container: only content scrolls */}
+      <div className="flex-1 overflow-y-auto overscroll-contain">
         {/* 🎯 MAIN CONTENT - Desktop vs Mobile */}
         {isDesktop ? (
           /* ========== DESKTOP GRID VIEW ========== */
