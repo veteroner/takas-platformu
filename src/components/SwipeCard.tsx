@@ -217,7 +217,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
         onClick={() => onCardClick?.(item)}
       >
         {/* Image - Büyük alan */}
-        <div className="relative h-[65%] overflow-hidden bg-gray-100">
+        <div className="relative h-[70%] overflow-hidden bg-gray-100">
           <Image
             src={item.images[0] || '/placeholder-item.jpg'}
             alt={item.title}
@@ -259,15 +259,13 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
         </div>
 
         {/* Content - Kompakt */}
-        <div className="p-2.5 h-[35%] flex flex-col justify-between">
-          <div>
-            <p className="text-gray-600 text-xs line-clamp-1 leading-snug">
-              {item.description || t('noDescription')}
-            </p>
-          </div>
+        <div className="p-2.5 h-[30%] flex flex-col">
+          <p className="text-gray-600 text-sm line-clamp-1 leading-snug">
+            {item.description || t('noDescription')}
+          </p>
 
           {/* Owner Info */}
-          <div className="flex items-center justify-between pt-2 border-t border-gray-100 mt-auto">
+          <div className="flex items-center justify-between pt-1.5 border-t border-gray-100 mt-1.5">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-full bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
                 {ownerPublicName.charAt(0).toUpperCase()}

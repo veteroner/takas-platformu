@@ -1,7 +1,6 @@
 'use client'
 
 import { ArrowRight, Sparkles, Heart, Users, Loader2 } from 'lucide-react'
-import TakaIcon from '@/components/TakaIcon'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -58,15 +57,6 @@ export default function WelcomePage() {
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
-        <div className="mb-8 flex justify-center">
-          <div className="relative">
-            <div className="absolute inset-0 bg-white/20 rounded-full blur-2xl animate-pulse"></div>
-            <div className="relative bg-white/90 backdrop-blur-sm p-6 rounded-full shadow-2xl">
-              <TakaIcon className="w-16 h-16 text-purple-600" />
-            </div>
-          </div>
-        </div>
-
         <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 drop-shadow-lg">
           TakaZone
         </h1>
