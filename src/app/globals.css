@@ -42,6 +42,14 @@ body.native-app {
   overflow: hidden;
 }
 
+/* Native app'te swipe stack alanını %10 küçült */
+html.native-app .swipe-stack,
+body.native-app .swipe-stack {
+  height: calc(90svh - 280px) !important;
+  min-height: 360px !important;
+  max-height: 630px !important;
+}
+
 /*
  * Native app (iOS/Android WebView) swipe card layout:
  * WebView'da `svh` daha büyük olduğu için kart yüksekliği büyüyor;
