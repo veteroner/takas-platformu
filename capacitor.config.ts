@@ -6,7 +6,9 @@ const config: CapacitorConfig = {
   webDir: 'out',
   // PRODUCTION MODE: Canlı URL kullanılıyor (yeni kod deploy edilince otomatik güncellenir)
   server: {
-    url: 'https://takazone.com',
+    // NOTE: Native WebViews can keep aggressive caches for HTML/JS.
+    // Adding a version query param forces a fresh fetch after updates.
+    url: 'https://takazone.com/?v=28f3329',
     cleartext: false,
     androidScheme: 'https',
     iosScheme: 'https'
