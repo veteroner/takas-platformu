@@ -190,14 +190,14 @@ const SwipeStack: React.FC<SwipeStackProps> = ({
                   className="w-full h-full bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
                 >
                   <div 
-                    className="w-full h-[70%] bg-gray-200"
+                    className="swipe-card-media w-full h-[70%] bg-gray-200"
                     style={{
                       backgroundImage: `url(${item.images[0] || '/placeholder-item.jpg'})`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                     }}
                   />
-                  <div className="p-3 h-[30%] bg-white" />
+                  <div className="swipe-card-content p-3 h-[30%] bg-white" />
                 </div>
               )}
             </motion.div>

@@ -205,7 +205,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
       {/* Main Card */}
       <animated.div
         ref={cardRef}
-        className="w-full h-[calc(100%-70px)] bg-white rounded-2xl shadow-xl cursor-grab active:cursor-grabbing overflow-hidden border border-gray-100 select-none"
+        className="swipe-card w-full h-[calc(100%-70px)] bg-white rounded-2xl shadow-xl cursor-grab active:cursor-grabbing overflow-hidden border border-gray-100 select-none"
         {...bind()}
         style={{
           x,
@@ -217,7 +217,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
         onClick={() => onCardClick?.(item)}
       >
         {/* Image - Büyük alan */}
-        <div className="relative h-[70%] overflow-hidden bg-gray-100">
+        <div className="swipe-card-media relative h-[70%] overflow-hidden bg-gray-100">
           <Image
             src={item.images[0] || '/placeholder-item.jpg'}
             alt={item.title}
@@ -259,7 +259,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
         </div>
 
         {/* Content - Kompakt */}
-        <div className="p-2.5 h-[30%] flex flex-col">
+        <div className="swipe-card-content p-2.5 h-[30%] flex flex-col">
           <p className="text-gray-600 text-sm line-clamp-2 leading-snug">
             {item.description || t('noDescription')}
           </p>

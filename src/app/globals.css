@@ -42,6 +42,26 @@ body.native-app {
   overflow: hidden;
 }
 
+/*
+ * Native app (iOS/Android WebView) swipe card layout:
+ * WebView'da `svh` daha büyük olduğu için kart yüksekliği büyüyor;
+ * %70/%30 bölümü içerik kısa kalınca altta boşluk bırakıyor.
+ * Bu override sadece native-app sınıfı varken uygulanır (web mobil etkilenmez).
+ */
+html.native-app .swipe-card .swipe-card-media,
+body.native-app .swipe-card .swipe-card-media,
+html.native-app .swipe-card-media,
+body.native-app .swipe-card-media {
+  height: 76% !important;
+}
+
+html.native-app .swipe-card .swipe-card-content,
+body.native-app .swipe-card .swipe-card-content,
+html.native-app .swipe-card-content,
+body.native-app .swipe-card-content {
+  height: 24% !important;
+}
+
 /* Hide scrollbar for category chips */
 .scrollbar-hide {
   -ms-overflow-style: none;
