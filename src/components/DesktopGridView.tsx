@@ -304,8 +304,8 @@ export default function DesktopGridView({
                   <div className="w-12 h-12 rounded-full bg-linear-to-r from-pink-400 to-purple-400 flex items-center justify-center text-white text-lg font-bold">
                     {selectedItem.owner?.name?.[0]?.toUpperCase() || '?'}
                   </div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-gray-900">{selectedItem.owner?.name || 'Anonim'}</h4>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-semibold text-gray-900 truncate">{selectedItem.owner?.name || 'Anonim'}</h4>
                     <div className="flex items-center gap-2 text-sm text-gray-500">
                       {selectedItem.owner?.rating && (
                         <div className="flex items-center gap-1">

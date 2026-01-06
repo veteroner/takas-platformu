@@ -260,7 +260,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
 
         {/* Content - Kompakt */}
         <div className="p-2.5 h-[30%] flex flex-col">
-          <p className="text-gray-600 text-sm line-clamp-1 leading-snug">
+          <p className="text-gray-600 text-sm line-clamp-2 leading-snug">
             {item.description || t('noDescription')}
           </p>
 
