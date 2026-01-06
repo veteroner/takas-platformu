@@ -69,17 +69,6 @@ body.native-app {
   padding-right: env(safe-area-inset-right, 0);
 }
 
-/* Mobile-specific safe area adjustments */
-@media (max-width: 768px) {
-  .pt-safe {
-    padding-top: max(env(safe-area-inset-top, 0), 1rem);
-  }
-  
-  .pb-safe {
-    padding-bottom: max(env(safe-area-inset-bottom, 0), 0.5rem);
-  }
-}
-
 /* Tablet optimizations */
 @media (min-width: 768px) and (max-width: 1024px) {
   .swipe-card {
