@@ -12,6 +12,7 @@ import SplashScreenManager from "@/components/SplashScreenManager";
 import I18nProvider from "@/components/I18nProvider";
 import LanguageGuard from "@/components/LanguageGuard";
 import HtmlLangDir from "@/components/HtmlLangDir";
+import NativeScrollLock from "@/components/NativeScrollLock";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -222,6 +223,7 @@ export default function RootLayout({
         <I18nProvider>
           <NetworkProvider>
             <HtmlLangDir />
+            <NativeScrollLock />
             <SplashScreenManager />
             <ConsentGuard />
             <VersionGate />

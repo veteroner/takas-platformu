@@ -84,11 +84,11 @@ export default function UserRatingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 pb-20">
+    <div className="h-svh overflow-hidden bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex flex-col">
       {/* Header */}
-      <div className="bg-white/10 backdrop-blur-lg border-b border-white/20 sticky top-0 z-10">
-          <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-3">
-          <Link 
+      <header className="shrink-0 bg-white/10 backdrop-blur-lg border-b border-white/20 pt-safe">
+        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-3">
+          <Link
             href="/profile"
             className="p-2 hover:bg-white/20 rounded-full transition-colors"
           >
@@ -101,9 +101,10 @@ export default function UserRatingsPage() {
             </p>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="max-w-4xl mx-auto px-4 py-6 space-y-4">
+      <div className="flex-1 overflow-y-auto overscroll-contain">
+        <div className="max-w-4xl mx-auto px-4 py-6 space-y-4 pb-20">
         {/* Rating Summary Card */}
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
           <div className="flex items-center gap-6">
@@ -222,6 +223,7 @@ export default function UserRatingsPage() {
             ))}
           </div>
         )}
+        </div>
       </div>
     </div>
   )

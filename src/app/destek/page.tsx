@@ -27,17 +27,18 @@ export default function SupportPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400">
-      <div className="sticky top-0 z-10 bg-black/20 backdrop-blur-lg border-b border-white/10">
+    <div className="h-svh overflow-hidden bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex flex-col">
+      <header className="shrink-0 bg-black/20 backdrop-blur-lg border-b border-white/10 pt-safe">
         <div className="flex items-center gap-3 px-4 py-4">
           <button onClick={() => router.back()} className="p-2 hover:bg-white/10 rounded-full">
             <ArrowLeft className="w-6 h-6 text-white" />
           </button>
           <h1 className="text-xl font-bold text-white">Destek</h1>
         </div>
-      </div>
+      </header>
 
-      <div className="max-w-2xl mx-auto p-4 space-y-6">
+      <div className="flex-1 overflow-y-auto overscroll-contain">
+        <div className="max-w-2xl mx-auto p-4 space-y-6">
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 text-center border border-white/20">
           <HelpCircle className="w-16 h-16 text-white mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-white mb-2">Nasıl yardımcı olabiliriz?</h2>
@@ -104,6 +105,7 @@ export default function SupportPage() {
         </div>
 
         <p className="text-center text-white/50 text-sm py-4">© 2024 TEKNOVA TARIM HAYVANCILIK BİLİŞİM REKLAM LTD. ŞTİ.</p>
+        </div>
       </div>
     </div>
   )

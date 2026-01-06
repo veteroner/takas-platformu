@@ -417,18 +417,18 @@ export default function SettingsPage() {
   // Mobil görünüm
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <Link 
+    <div className="h-svh overflow-hidden bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex flex-col">
+      {/* Header */}
+      <header className="shrink-0 pt-safe bg-black/10 backdrop-blur-sm border-b border-white/10">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <Link
             href="/profile"
             className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors"
           >
             <ArrowLeft size={20} />
             {t('profile:title')}
           </Link>
-          
+
           <button
             onClick={handleSave}
             className="inline-flex items-center gap-2 bg-linear-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-4 py-2 rounded-xl transition-all duration-200 shadow-lg"
@@ -437,14 +437,19 @@ export default function SettingsPage() {
             {t('common:save')}
           </button>
         </div>
+      </header>
 
-        <div className="max-w-2xl mx-auto">
-          <h1 className="text-3xl font-bold text-white text-center mb-8">{t('settings:title')}</h1>
-          <SettingsContent />
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto overscroll-contain">
+        <div className="container mx-auto px-4 py-6 pb-24">
+          <div className="max-w-2xl mx-auto">
+            <h1 className="text-3xl font-bold text-white text-center mb-8">{t('settings:title')}</h1>
+            <SettingsContent />
+          </div>
         </div>
-
-        <DeleteModal />
       </div>
+
+      <DeleteModal />
     </div>
   )
 }

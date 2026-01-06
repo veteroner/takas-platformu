@@ -30,6 +30,18 @@ html, body {
   height: 100%;
 }
 
+/*
+ * Capacitor (iOS/Android) native WebView:
+ * Prevent the document/body from scrolling so headers/tab bars stay fixed.
+ * App pages should scroll via their internal `overflow-y-auto` containers.
+ */
+html.native-app,
+body.native-app {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 /* Hide scrollbar for category chips */
 .scrollbar-hide {
   -ms-overflow-style: none;

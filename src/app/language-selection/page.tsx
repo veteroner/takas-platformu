@@ -76,15 +76,17 @@ export default function LanguageSelectionPage() {
 
   if (!isFirstTime || isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-500 to-purple-600">
+      <div className="h-svh flex items-center justify-center bg-gradient-to-br from-pink-500 to-purple-600 overflow-hidden">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl w-full max-w-md p-8">
+    <div className="h-svh bg-gradient-to-br from-pink-500 to-purple-600 flex flex-col overflow-hidden">
+      <div className="flex-1 overflow-y-auto overscroll-contain p-4">
+        <div className="min-h-full flex items-center justify-center">
+          <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl w-full max-w-md p-8">
         {/* Icon */}
         <div className="flex justify-center mb-6">
           <div className="w-20 h-20 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
@@ -142,6 +144,9 @@ export default function LanguageSelectionPage() {
           >
             {t('skip')}
           </button>
+        </div>
+      </div>
+          </div>
         </div>
       </div>
     </div>

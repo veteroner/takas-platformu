@@ -36,7 +36,7 @@ export default function WelcomePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-linear-to-br from-pink-500 via-purple-500 to-indigo-600 flex items-center justify-center">
+      <div className="h-svh bg-linear-to-br from-pink-500 via-purple-500 to-indigo-600 flex items-center justify-center overflow-hidden">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-white animate-spin mx-auto mb-4" />
           <p className="text-white/80">{t('loading')}</p>
@@ -46,7 +46,7 @@ export default function WelcomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-pink-500 via-purple-500 to-indigo-600 flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <div className="h-svh bg-linear-to-br from-pink-500 via-purple-500 to-indigo-600 flex flex-col items-center justify-center p-6 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-pink-300/10 rounded-full blur-3xl animate-pulse delay-1000"></div>

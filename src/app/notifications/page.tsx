@@ -307,9 +307,9 @@ export default function NotificationsPage() {
 
   // Mobile Layout
   return (
-    <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400">
+    <div className="h-svh overflow-hidden bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex flex-col">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-black/20 backdrop-blur-lg border-b border-white/10">
+      <header className="shrink-0 bg-black/20 backdrop-blur-lg border-b border-white/10 pt-safe">
         <div className="flex items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
             <button
@@ -329,10 +329,10 @@ export default function NotificationsPage() {
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
       {/* Content */}
-      <div className="p-4">
+      <div className="flex-1 overflow-y-auto overscroll-contain p-4">
         <NotificationsContent />
       </div>
     </div>

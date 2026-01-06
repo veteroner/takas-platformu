@@ -70,8 +70,10 @@ function ResetPasswordContent() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="h-svh bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex flex-col overflow-hidden">
+      <div className="flex-1 overflow-y-auto overscroll-contain p-4">
+        <div className="min-h-full flex items-center justify-center">
+          <div className="w-full max-w-md">
         {/* Back Button */}
         <Link 
           href="/login"
@@ -226,6 +228,8 @@ function ResetPasswordContent() {
             </form>
           )}
         </div>
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -234,7 +238,7 @@ function ResetPasswordContent() {
 export default function ResetPasswordPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center">
+      <div className="h-svh bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center overflow-hidden">
         <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin" />
       </div>
     }>

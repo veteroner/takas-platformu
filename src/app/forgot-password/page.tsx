@@ -31,8 +31,10 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="h-svh bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex flex-col overflow-hidden">
+      <div className="flex-1 overflow-y-auto overscroll-contain p-4">
+        <div className="min-h-full flex items-center justify-center">
+          <div className="w-full max-w-md">
         {/* Back Button */}
         <Link 
           href="/login"
@@ -137,6 +139,8 @@ export default function ForgotPasswordPage() {
             Kayıt olun
           </Link>
         </p>
+          </div>
+        </div>
       </div>
     </div>
   )

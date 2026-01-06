@@ -591,29 +591,34 @@ export default function ProfilePage() {
   // Mobil görünüm
 
   return (
-    <div className="min-h-svh bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex flex-col">
-      <div className="container mx-auto px-4 py-8 pb-24">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-          <Link 
-          href="/"
-          className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors"
-        >
-          <ArrowLeft size={20} />
-          {t('home:discover')}
-        </Link>
-        
-        <button
-          onClick={() => setIsEditing(!isEditing)}
-          className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl transition-colors backdrop-blur-sm border border-white/20"
-        >
-          <Edit3 size={16} />
-          {isEditing ? t('cancel') : t('edit')}
-        </button>
-      </div>
+    <div className="h-svh overflow-hidden bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex flex-col">
+      {/* Header (fixed) */}
+      <header className="shrink-0 pt-safe bg-black/10 backdrop-blur-sm border-b border-white/10">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors"
+          >
+            <ArrowLeft size={20} />
+            {t('home:discover')}
+          </Link>
 
-        <div className="max-w-2xl mx-auto">
-          <ProfileContent />
+          <button
+            onClick={() => setIsEditing(!isEditing)}
+            className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl transition-colors backdrop-blur-sm border border-white/20"
+          >
+            <Edit3 size={16} />
+            {isEditing ? t('cancel') : t('edit')}
+          </button>
+        </div>
+      </header>
+
+      {/* Scroll area */}
+      <div className="flex-1 overflow-y-auto overscroll-contain">
+        <div className="container mx-auto px-4 py-6 pb-24">
+          <div className="max-w-2xl mx-auto">
+            <ProfileContent />
+          </div>
         </div>
       </div>
 

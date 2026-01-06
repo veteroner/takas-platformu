@@ -401,16 +401,18 @@ export default function MatchingPreferencesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="h-svh overflow-hidden bg-gray-50 flex flex-col">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3">
-        <button onClick={() => router.back()} className="p-2 hover:bg-gray-100 rounded-full">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <h1 className="text-lg font-semibold">{t('title')}</h1>
-      </div>
+      <header className="shrink-0 bg-white border-b border-gray-200 pt-safe">
+        <div className="px-4 py-3 flex items-center gap-3">
+          <button onClick={() => router.back()} className="p-2 hover:bg-gray-100 rounded-full">
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <h1 className="text-lg font-semibold">{t('title')}</h1>
+        </div>
+      </header>
 
-      <div className="p-4 pb-24">
+      <div className="flex-1 overflow-y-auto overscroll-contain p-4 pb-24">
         <Content />
       </div>
     </div>

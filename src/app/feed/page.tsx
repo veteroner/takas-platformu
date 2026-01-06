@@ -258,10 +258,12 @@ export default function HomePage() {
   }, [loadInitialItems, setPassedItems, setLikedItems])
 
   return (
-    <div className="min-h-svh bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 flex flex-col">
-      {/* Header - Sabit üst kısım */}
-      <header className="bg-white/95 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe shrink-0 sticky top-0 z-50">
-        <div className="w-full px-4 py-4 flex items-center justify-between">
+    <div className="h-svh bg-linear-to-br from-pink-50 via-purple-50 to-indigo-50 flex flex-col overflow-hidden">
+      {/* Scroll container: keep header + tab bar fixed */}
+      <div className="flex-1 overflow-y-auto overscroll-contain">
+        {/* Header - Sabit üst kısım */}
+        <header className="bg-white/95 backdrop-blur-md shadow-sm border-b border-white/20 pt-safe shrink-0 sticky top-0 z-50">
+          <div className="w-full px-4 py-4 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2">
             <TakaIcon className="w-8 h-8 text-purple-600" />
@@ -382,150 +384,151 @@ export default function HomePage() {
             })}
           </div>
         </div>
-      </header>
+        </header>
 
-      {/* 🎯 MAIN CONTENT - Desktop vs Mobile */}
-      {isDesktop ? (
-        /* ========== DESKTOP GRID VIEW ========== */
-        <main className="flex-1 overflow-auto">
-          <DesktopGridView
-            items={filteredItems}
-            likedItems={likedItems.map(i => i.id)}
-            passedItems={passedItems.map(i => i.id)}
-            onLike={handleDesktopLike}
-            onPass={handleDesktopPass}
-            onRetry={handleRetry}
-            isLoading={isLoading}
-          />
-          
-          {/* Login CTA for Desktop */}
-          {!user && (
-            <div className="max-w-7xl mx-auto px-6 py-8">
-              <div className="text-center bg-linear-to-r from-pink-50 to-purple-50 border border-purple-100 rounded-2xl p-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-3">{t('loginToSwap')} 🔄</h2>
-                <p className="text-gray-600 mb-6 max-w-md mx-auto">
-                  {t('loginToDiscover')}
-                </p>
+        {/* 🎯 MAIN CONTENT - Desktop vs Mobile */}
+        {isDesktop ? (
+          /* ========== DESKTOP GRID VIEW ========== */
+          <main className="flex-1">
+            <DesktopGridView
+              items={filteredItems}
+              likedItems={likedItems.map(i => i.id)}
+              passedItems={passedItems.map(i => i.id)}
+              onLike={handleDesktopLike}
+              onPass={handleDesktopPass}
+              onRetry={handleRetry}
+              isLoading={isLoading}
+            />
+            
+            {/* Login CTA for Desktop */}
+            {!user && (
+              <div className="max-w-7xl mx-auto px-6 py-8">
+                <div className="text-center bg-linear-to-r from-pink-50 to-purple-50 border border-purple-100 rounded-2xl p-8">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-3">{t('loginToSwap')} 🔄</h2>
+                  <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                    {t('loginToDiscover')}
+                  </p>
+                  <Link 
+                    href="/login"
+                    className="inline-flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-8 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg font-medium"
+                  >
+                    <LogIn size={20} />
+                    {t('login')}
+                  </Link>
+                </div>
+              </div>
+            )}
+          </main>
+        ) : (
+          /* ========== MOBILE SWIPE VIEW ========== */
+          <main className="flex-1 flex flex-col max-w-md mx-auto w-full px-3 py-3 pb-28 overflow-hidden">
+            {/* Swipe Stack - Ana alan */}
+            <div className="flex-1 relative">
+              <SwipeStack
+                key={`swipe-${items.length}-${selectedCategory}`}
+                items={filteredItems}
+                onSwipe={handleSwipe}
+                onItemClick={handleItemClick}
+                isLoading={isLoading}
+                className="w-full"
+              />
+            </div>
+
+            {/* Stats - Kompakt */}
+            <div className="flex gap-3 py-3 shrink-0">
+            <button 
+              onClick={() => setShowLikedItems(!showLikedItems)}
+              className="flex-1 bg-white/70 backdrop-blur-sm rounded-xl py-2.5 px-4 text-center border border-white/20 hover:bg-white/90 transition-all flex items-center justify-center gap-2"
+            >
+              <span className="text-lg font-bold text-green-600">{likedItems.length}</span>
+              <span className="text-xs text-gray-600">{t('liked')}</span>
+            </button>
+            <div className="flex-1 bg-white/70 backdrop-blur-sm rounded-xl py-2.5 px-4 text-center border border-white/20 flex items-center justify-center gap-2">
+              <span className="text-lg font-bold text-red-600">{passedItems.length}</span>
+              <span className="text-xs text-gray-600">{t('passed')}</span>
+            </div>
+            </div>
+
+            {/* Beğenilen Ürünler Grid */}
+            {showLikedItems && likedItems.length > 0 && (
+              <div className="mb-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold text-gray-800">{t('likedSectionTitle')}</h2>
+                  <button 
+                    onClick={() => setShowLikedItems(false)}
+                    className="text-sm text-gray-600 hover:text-gray-800"
+                  >
+                    {t('hide')}
+                  </button>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {likedItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all transform hover:scale-105"
+                    >
+                      <div className="relative aspect-square">
+                        <Image
+                          src={item.images[0] || '/placeholder.png'}
+                          alt={item.title}
+                          fill
+                          className="object-cover"
+                        />
+                        <div className="absolute top-2 right-2 bg-white rounded-full px-2 py-1 text-xs font-semibold shadow-sm">
+                          {(() => {
+                            const cat = String(item.category).toLowerCase()
+                            if (cat.includes('clothing')) return '👕'
+                            if (cat.includes('toys')) return '🧸'
+                            if (cat.includes('electronics')) return '📱'
+                            if (cat.includes('books')) return '📚'
+                            if (cat.includes('accessories')) return '👜'
+                            if (cat.includes('shoes')) return '👟'
+                            return '📦'
+                          })()}
+                        </div>
+                      </div>
+                      <div className="p-3">
+                        <h3 className="font-bold text-sm text-gray-900 truncate">{item.title}</h3>
+                        <p className="text-xs font-medium text-gray-700 mt-1">📍 {item.location?.city}</p>
+                        <p className="text-sm font-bold text-green-600 mt-1">≈₺{item.estimatedValue}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Beğenilen Ürün Yoksa */}
+            {showLikedItems && likedItems.length === 0 && (
+              <div className="mb-6 bg-white/70 backdrop-blur-sm rounded-xl p-8 text-center border border-white/20">
+                <Heart className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">{t('noLikes')}</h3>
+                <p className="text-sm text-gray-600">{t('noLikesDesc')}</p>
+                <button 
+                  onClick={() => setShowLikedItems(false)}
+                  className="mt-4 text-sm text-purple-600 hover:text-purple-800 font-medium"
+                >
+                  {t('close')}
+                </button>
+              </div>
+            )}
+
+            {/* Login CTA (sadece giriş yapmamış kullanıcılar için) */}
+            {!user && (
+              <div className="text-center bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 shrink-0">
+                <p className="text-gray-600 mb-3 text-sm">{t('loginToSwap')}</p>
                 <Link 
                   href="/login"
-                  className="inline-flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-8 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg font-medium"
+                  className="inline-flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-5 py-2 rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg text-sm"
                 >
-                  <LogIn size={20} />
+                  <LogIn size={16} />
                   {t('login')}
                 </Link>
               </div>
-            </div>
-          )}
-        </main>
-      ) : (
-        /* ========== MOBILE SWIPE VIEW ========== */
-        <main className="flex-1 flex flex-col max-w-md mx-auto w-full px-3 py-3 pb-28 overflow-hidden">
-          {/* Swipe Stack - Ana alan */}
-          <div className="flex-1 relative">
-            <SwipeStack
-              key={`swipe-${items.length}-${selectedCategory}`}
-              items={filteredItems}
-              onSwipe={handleSwipe}
-              onItemClick={handleItemClick}
-              isLoading={isLoading}
-              className="w-full"
-            />
-          </div>
-
-          {/* Stats - Kompakt */}
-          <div className="flex gap-3 py-3 shrink-0">
-          <button 
-            onClick={() => setShowLikedItems(!showLikedItems)}
-            className="flex-1 bg-white/70 backdrop-blur-sm rounded-xl py-2.5 px-4 text-center border border-white/20 hover:bg-white/90 transition-all flex items-center justify-center gap-2"
-          >
-            <span className="text-lg font-bold text-green-600">{likedItems.length}</span>
-            <span className="text-xs text-gray-600">{t('liked')}</span>
-          </button>
-          <div className="flex-1 bg-white/70 backdrop-blur-sm rounded-xl py-2.5 px-4 text-center border border-white/20 flex items-center justify-center gap-2">
-            <span className="text-lg font-bold text-red-600">{passedItems.length}</span>
-            <span className="text-xs text-gray-600">{t('passed')}</span>
-          </div>
-          </div>
-
-          {/* Beğenilen Ürünler Grid */}
-          {showLikedItems && likedItems.length > 0 && (
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-gray-800">{t('likedSectionTitle')}</h2>
-                <button 
-                  onClick={() => setShowLikedItems(false)}
-                  className="text-sm text-gray-600 hover:text-gray-800"
-                >
-                  {t('hide')}
-                </button>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                {likedItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all transform hover:scale-105"
-                  >
-                    <div className="relative aspect-square">
-                      <Image
-                        src={item.images[0] || '/placeholder.png'}
-                        alt={item.title}
-                        fill
-                        className="object-cover"
-                      />
-                      <div className="absolute top-2 right-2 bg-white rounded-full px-2 py-1 text-xs font-semibold shadow-sm">
-                        {(() => {
-                          const cat = String(item.category).toLowerCase()
-                          if (cat.includes('clothing')) return '👕'
-                          if (cat.includes('toys')) return '🧸'
-                          if (cat.includes('electronics')) return '📱'
-                          if (cat.includes('books')) return '📚'
-                          if (cat.includes('accessories')) return '👜'
-                          if (cat.includes('shoes')) return '👟'
-                          return '📦'
-                        })()}
-                      </div>
-                    </div>
-                    <div className="p-3">
-                      <h3 className="font-bold text-sm text-gray-900 truncate">{item.title}</h3>
-                      <p className="text-xs font-medium text-gray-700 mt-1">📍 {item.location?.city}</p>
-                      <p className="text-sm font-bold text-green-600 mt-1">≈₺{item.estimatedValue}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Beğenilen Ürün Yoksa */}
-          {showLikedItems && likedItems.length === 0 && (
-            <div className="mb-6 bg-white/70 backdrop-blur-sm rounded-xl p-8 text-center border border-white/20">
-              <Heart className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">{t('noLikes')}</h3>
-              <p className="text-sm text-gray-600">{t('noLikesDesc')}</p>
-              <button 
-                onClick={() => setShowLikedItems(false)}
-                className="mt-4 text-sm text-purple-600 hover:text-purple-800 font-medium"
-              >
-                {t('close')}
-              </button>
-            </div>
-          )}
-
-          {/* Login CTA (sadece giriş yapmamış kullanıcılar için) */}
-          {!user && (
-            <div className="text-center bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 shrink-0">
-              <p className="text-gray-600 mb-3 text-sm">{t('loginToSwap')}</p>
-              <Link 
-                href="/login"
-                className="inline-flex items-center gap-2 bg-linear-to-r from-pink-500 to-purple-600 text-white px-5 py-2 rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all duration-200 shadow-lg text-sm"
-              >
-                <LogIn size={16} />
-                {t('login')}
-              </Link>
-            </div>
-          )}
-        </main>
-      )}
+            )}
+          </main>
+        )}
+      </div>
 
       {/* Bottom Navigation - Sadece Mobil - Sabit ve Büyük */}
       {isMobile && (

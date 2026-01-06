@@ -105,8 +105,9 @@ export default function DataPrivacyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500 p-4">
-      <div className="max-w-2xl mx-auto pt-8">
+    <div className="h-svh bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500 flex flex-col overflow-hidden">
+      <div className="flex-1 overflow-y-auto overscroll-contain p-4">
+        <div className="max-w-2xl mx-auto pt-8">
         {/* Header */}
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 p-6 mb-6">
           <div className="flex items-center gap-3 mb-4">
@@ -183,6 +184,7 @@ export default function DataPrivacyPage() {
           >
             Hesabımı Kalıcı Olarak Sil
           </button>
+        </div>
         </div>
       </div>
 
