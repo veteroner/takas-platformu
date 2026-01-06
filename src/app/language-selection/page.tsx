@@ -146,7 +146,6 @@ export default function LanguageSelectionPage() {
           </button>
         </div>
       </div>
-          </div>
         </div>
       </div>
     </div>
