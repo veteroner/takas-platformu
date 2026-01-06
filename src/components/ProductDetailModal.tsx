@@ -49,7 +49,7 @@ export function ProductDetailModal({ item, open, onOpenChange, currentUserId }: 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white text-gray-900 border border-gray-200 dark:bg-neutral-950 dark:text-neutral-50 dark:border-neutral-800">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between pr-8">
             <span className="line-clamp-1">{item.title}</span>
@@ -81,15 +81,15 @@ export function ProductDetailModal({ item, open, onOpenChange, currentUserId }: 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-2xl font-bold text-green-600">₺{item.estimatedValue}</span>
-              <span className="text-sm text-gray-500">tahmini değer</span>
+              <span className="text-sm text-gray-500 dark:text-gray-400">tahmini değer</span>
             </div>
-            <div className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
+            <div className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium dark:bg-blue-950/40 dark:text-blue-200">
               {getConditionLabel(item.condition)}
             </div>
           </div>
 
           {/* Kategori ve Konum */}
-          <div className="flex items-center gap-4 text-sm text-gray-600">
+          <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300">
             <div className="flex items-center gap-1">
               <Package className="w-4 h-4" />
               <span>{getCategoryLabel(item.category)}</span>
@@ -106,15 +106,15 @@ export function ProductDetailModal({ item, open, onOpenChange, currentUserId }: 
 
           {/* Açıklama */}
           <div className="space-y-2">
-            <h3 className="font-semibold text-gray-900">Açıklama</h3>
-            <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-wrap">
+            <h3 className="font-semibold text-gray-900 dark:text-neutral-50">Açıklama</h3>
+            <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">
               {item.description || 'Bu ürün için açıklama bulunmuyor.'}
             </p>
           </div>
 
           {/* Sahibi Bilgileri */}
           <div className="border-t pt-4">
-            <h3 className="font-semibold text-gray-900 mb-3">Ürün Sahibi</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-neutral-50 mb-3">Ürün Sahibi</h3>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center text-white text-lg font-bold">
@@ -122,7 +122,7 @@ export function ProductDetailModal({ item, open, onOpenChange, currentUserId }: 
                 </div>
                 <div className="min-w-0">
                         <p className="font-medium text-gray-900 truncate">{getPublicUserName(item.owner) || item.owner.name}</p>
-                  <div className="flex items-center gap-1 text-sm text-gray-600">
+                  <div className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-300">
                     <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     <span>{item.owner.rating.toFixed(1)}</span>
                     <span className="mx-1">•</span>
