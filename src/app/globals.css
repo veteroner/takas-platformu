@@ -60,14 +60,14 @@ html.native-app .swipe-card .swipe-card-media,
 body.native-app .swipe-card .swipe-card-media,
 html.native-app .swipe-card-media,
 body.native-app .swipe-card-media {
-  height: 90% !important;
+  height: 80% !important;
 }
 
 html.native-app .swipe-card .swipe-card-content,
 body.native-app .swipe-card .swipe-card-content,
 html.native-app .swipe-card-content,
 body.native-app .swipe-card-content {
-  height: 10% !important;
+  height: 20% !important;
 }
 
 /* Hide scrollbar for category chips */
