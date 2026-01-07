@@ -53,8 +53,8 @@ export default function OneSignalCapacitorInit() {
             // Foreground notification received
             OneSignal.Notifications.addEventListener('foregroundWillDisplay', (event: any) => {
               console.log('🔔 Bildirim alındı (foreground):', event)
-              event.preventDefault() // İsterseniz prevent edip custom UI gösterebilirsiniz
-              event.notification.display() // Veya direkt gösterin
+              // Bildirimi otomatik göster - preventDefault() ÇAĞIRMA!
+              // OneSignal varsayılan olarak bildirimi gösterecektir
             })
 
             // Notification clicked
@@ -76,8 +76,8 @@ export default function OneSignalCapacitorInit() {
               // Subscription oluşmasını bekle (max 5 saniye)
               await new Promise(resolve => setTimeout(resolve, 2000))
               
-              const subscriptionId = OneSignal.User.pushSubscription.id
-              const token = OneSignal.User.pushSubscription.token
+              const subscriptionId = await OneSignal.User.pushSubscription.getIdAsync()
+              const token = await OneSignal.User.pushSubscription.getTokenAsync()
               console.log('🔑 Push Subscription ID:', subscriptionId)
               console.log('🔑 Push Token:', token)
               
@@ -100,11 +100,11 @@ export default function OneSignalCapacitorInit() {
             
             // Login sonrası subscription durumunu logla
             if (OneSignal.User?.pushSubscription) {
-              setTimeout(() => {
+              setTimeout(async () => {
                 const subscriptionState = {
-                  id: OneSignal.User.pushSubscription.id,
-                  token: OneSignal.User.pushSubscription.token,
-                  optedIn: OneSignal.User.pushSubscription.optedIn
+                  id: await OneSignal.User.pushSubscription.getIdAsync(),
+                  token: await OneSignal.User.pushSubscription.getTokenAsync(),
+                  optedIn: await OneSignal.User.pushSubscription.getOptedInAsync()
                 }
                 console.log('📊 Login sonrası Subscription State:', subscriptionState)
               }, 1000)
@@ -135,8 +135,8 @@ export default function OneSignalCapacitorInit() {
                 
                 // Login sonrası subscription durumunu kontrol et
                 if (OneSignal.User?.pushSubscription) {
-                  setTimeout(() => {
-                    const token = OneSignal.User.pushSubscription.token
+                  setTimeout(async () => {
+                    const token = await OneSignal.User.pushSubscription.getTokenAsync()
                     console.log('🔍 SIGNED_IN sonrası Push Token:', token || 'Token henüz yok!')
                   }, 1000)
                 }
