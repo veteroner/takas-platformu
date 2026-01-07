@@ -1012,7 +1012,7 @@ export default function UploadPage() {
                 <div key={index} className="relative aspect-square rounded-lg overflow-hidden group">
                   <Image
                     src={image}
-                    alt={`Upload ${index + 1}`}
+                    alt={t('photoAlt', { index: index + 1 })}
                     fill
                     className="object-cover"
                   />
@@ -1020,7 +1020,7 @@ export default function UploadPage() {
                     type="button"
                     onClick={() => removeImage(index)}
                     className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                    aria-label={`Resim ${index + 1}'i kaldır`}
+                    aria-label={t('removePhotoAriaLabel', { index: index + 1 })}
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -1071,7 +1071,7 @@ export default function UploadPage() {
                       onChange={handleImageUpload}
                       disabled={isOptimizing}
                       className="hidden"
-                      aria-label="Resim dosyası seç"
+                      aria-label={t('chooseImageFileAriaLabel')}
                     />
                   )}
                 </div>

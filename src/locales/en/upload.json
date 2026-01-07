@@ -1,4 +1,7 @@
 {
+  "removePhotoAriaLabel": "Remove image {{index}}",
+  "chooseImageFileAriaLabel": "Choose image file",
+  "photoAlt": "Upload {{index}}",
   "title": "Add Item",
   "selectPhotos": "Select Photos",
   "takePhoto": "Take Photo",

@@ -231,7 +231,7 @@ export default function ProfilePage() {
                 name="firstName"
                 value={editData.firstName}
                 onChange={handleInputChange}
-                placeholder="Adınız"
+                placeholder={t('firstNamePlaceholder')}
                 className="w-full text-lg font-bold text-white text-center bg-white/10 border border-white/20 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/50"
               />
               <input
@@ -239,15 +239,15 @@ export default function ProfilePage() {
                 name="lastName"
                 value={editData.lastName}
                 onChange={handleInputChange}
-                placeholder="Soyadınız (gizli)"
+                placeholder={t('lastNamePlaceholderPrivate')}
                 className="w-full text-sm text-white text-center bg-white/10 border border-white/20 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/50"
               />
-              <p className="text-xs text-white/60 text-center">🔒 Sadece adınız gösterilir</p>
+              <p className="text-xs text-white/60 text-center">{t('privacy.firstNameOnly')}</p>
             </div>
           ) : (
             <>
               <h1 className="text-2xl font-bold text-white mt-4">{user.displayName || user.firstName || user.name}</h1>
-              <p className="text-xs text-white/60 mt-1">🔒 Soyadınız gizlidir</p>
+              <p className="text-xs text-white/60 mt-1">{t('privacy.lastNameHidden')}</p>
             </>
           )}
         </div>
@@ -329,17 +329,17 @@ export default function ProfilePage() {
       <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/20 mb-6">
         <h3 className="text-white text-lg font-bold mb-4 flex items-center gap-2">
           <Shield className="w-5 h-5" />
-          Güvenlik Ayarları
+          {t('security.title')}
         </h3>
         <p className="text-white/70 text-sm mb-4">
-          Hesabını güvende tutmak için düzenli olarak şifreni değiştir.
+          {t('security.description')}
         </p>
         <button
           onClick={() => setShowPasswordModal(true)}
           className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
         >
           <Shield className="w-5 h-5" />
-          Şifremi Değiştir
+          {t('changePassword.openButton')}
         </button>
       </div>
 
@@ -371,7 +371,7 @@ export default function ProfilePage() {
             href="/profile/ratings"
             className="mt-3 inline-block text-white/80 hover:text-white text-xs underline transition-colors"
           >
-            Tüm Değerlendirmeler →
+            {t('viewAllRatings')} →
           </Link>
         </div>
       </div>

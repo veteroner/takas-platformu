@@ -58,7 +58,7 @@ export function MessageFilterWarning({
     const interval = setInterval(updateTimeRemaining, 60000) // Her dakika güncelle
 
     return () => clearInterval(interval)
-  }, [bannedUntil])
+  }, [bannedUntil, t])
 
   const getIcon = () => {
     if (bannedUntil) return <Ban className="w-5 h-5" />
@@ -139,6 +139,7 @@ export function BanStatusBanner({
   reason, 
   totalViolations 
 }: BanStatusBannerProps) {
+  const { t } = useTranslation('common')
   const [timeRemaining, setTimeRemaining] = useState<string>('')
 
   useEffect(() => {
@@ -157,11 +158,11 @@ export function BanStatusBanner({
       
       if (hours > 24) {
         const days = Math.floor(hours / 24)
-        setTimeRemaining(`${days} gün ${hours % 24} saat`)
+        setTimeRemaining(`${days} ${t('messageFilter.days')} ${hours % 24} ${t('messageFilter.hours')}`)
       } else if (hours > 0) {
-        setTimeRemaining(`${hours} saat ${minutes} dakika`)
+        setTimeRemaining(`${hours} ${t('messageFilter.hours')} ${minutes} ${t('messageFilter.minutes')}`)
       } else {
-        setTimeRemaining(`${minutes} dakika`)
+        setTimeRemaining(`${minutes} ${t('messageFilter.minutes')}`)
       }
     }
 
@@ -169,7 +170,7 @@ export function BanStatusBanner({
     const interval = setInterval(updateTimeRemaining, 60000)
 
     return () => clearInterval(interval)
-  }, [bannedUntil])
+  }, [bannedUntil, t])
 
   return (
     <div className="bg-red-600 text-white px-4 py-3 shadow-lg">
@@ -186,7 +187,7 @@ export function BanStatusBanner({
         </div>
         {totalViolations && totalViolations > 0 && (
           <div className="text-right">
-            <p className="text-xs opacity-70">İhlal Sayısı</p>
+            <p className="text-xs opacity-70">{t('messageFilter.violationCount')}</p>
             <p className="text-lg font-bold">{totalViolations}</p>
           </div>
         )}

@@ -1,4 +1,7 @@
 {
+  "removePhotoAriaLabel": "Fjern billede {{index}}",
+  "chooseImageFileAriaLabel": "Vælg billedfil",
+  "photoAlt": "Upload {{index}}",
   "title": "Tilføj Ting",
   "selectPhotos": "Vælg Billeder",
   "takePhoto": "Tag Billede",

@@ -1,4 +1,19 @@
 {
+  "versionGate": {
+    "title": "Güncelleme gerekli",
+    "description": "Uygulamanız eski bir sürüm ({{current}}). Devam etmek için en az {{min}} sürümüne güncelleyin.",
+    "updateInStore": "Mağazada güncelle"
+  },
+  "notFound": {
+    "title": "Sayfa bulunamadı",
+    "description": "Aradığınız sayfa taşınmış veya hiç var olmamış olabilir.",
+    "backHome": "Anasayfaya dön"
+  },
+  "globalError": {
+    "title": "Bir şeyler ters gitti",
+    "description": "Beklenmeyen bir hata oluştu. İstersen tekrar deneyebilirsin.",
+    "retry": "Tekrar dene"
+  },
   "save": "Kaydet",
   "cancel": "İptal",
   "delete": "Sil",
@@ -96,12 +111,113 @@
     "pleaseSelect": "Lütfen bir puan seçin",
     "submitError": "Bir hata oluştu, lütfen tekrar deneyin",
     "prompt": "Takas deneyiminiz nasıldı?",
+    "headerSubtitle": "Takas deneyiminizi puanlayın",
+    "privacyNote": "🔒 Sadece ad gösterilir, soyad gizlidir",
     "labels": { "5": "🌟 Mükemmel!", "4": "😊 Çok İyi!", "3": "👍 İyi", "2": "😐 Orta", "1": "😞 Kötü" },
     "commentLabel": "Yorum Ekle (İsteğe Bağlı)",
     "placeholder": "Deneyiminizi paylaşın...",
     "submitting": "Gönderiliyor...",
     "submitButton": "Puanı Gönder",
     "shareNote": "Puanınız karşı tarafla paylaşılacak ve profilinizde görünecektir"
+  },
+  "cookieBanner": {
+    "textPrefix": "Bu site deneyiminizi iyileştirmek için çerezler kullanır. Daha fazla bilgi için",
+    "textSuffix": "sayfasını inceleyin.",
+    "necessaryOnly": "Sadece zorunlu",
+    "acceptAll": "Tümünü kabul et"
+  },
+  "productDetail": {
+    "estimatedValueLabel": "tahmini değer",
+    "descriptionTitle": "Açıklama",
+    "ownerTitle": "Ürün Sahibi",
+    "trades": "{{count}} takas"
+  },
+  "blockReport": {
+    "alerts": {
+      "blocked": "{{name}} engellendi.",
+      "descriptionRequired": "Lütfen açıklama girin.",
+      "reported": "Şikayetiniz alındı. Teşekkürler."
+    },
+    "titleChoose": "Seçim Yap",
+    "titleBlock": "Kullanıcıyı Engelle",
+    "titleReport": "Kullanıcıyı Şikayet Et",
+    "prompt": "{{name}} ile ilgili ne yapmak istiyorsunuz?",
+    "actions": {
+      "blockTitle": "Engelle",
+      "blockDesc": "Bu kullanıcı ile artık mesajlaşamazsınız",
+      "reportTitle": "Şikayet Et",
+      "reportDesc": "Uygunsuz davranışı bize bildirin"
+    },
+    "blockConsequencesTitle": "Engellediğinizde:",
+    "blockConsequences": {
+      "noMessages": "Birbirinize mesaj gönderemezsiniz",
+      "matchesRemoved": "Eşleşmeleriniz kaldırılır",
+      "cannotSeeItems": "Birbirinizin ürünlerini göremezsiniz"
+    },
+    "blockReasonLabel": "Engelleme nedeni (isteğe bağlı)",
+    "blockReasonPlaceholder": "Neden engellediğinizi yazabilirsiniz...",
+    "blocking": "Engelleniyor...",
+    "blockButton": "Engelle",
+    "reportNotice": "Şikayetiniz gizli tutulur ve moderasyon ekibimiz tarafından incelenir.",
+    "reportTypeLabel": "Şikayet türü",
+    "descriptionLabel": "Açıklama",
+    "descriptionPlaceholder": "Lütfen detaylı bilgi verin...",
+    "minChars": "En az {{count}} karakter",
+    "submitting": "Gönderiliyor...",
+    "reportButton": "Şikayet Et",
+    "blockedNoticeTitle": "Bu kullanıcı engellendi",
+    "blockedNoticeBody": "{{name}} ile mesajlaşamazsınız."
+  },
+  "reportTypes": {
+    "harassment": { "label": "Taciz", "description": "Rahatsız edici veya istenmeyen davranışlar" },
+    "threat": { "label": "Tehdit", "description": "Fiziksel veya psikolojik tehdit içeriği" },
+    "spam": { "label": "Spam", "description": "İstenmeyen reklam veya spam içerik" },
+    "inappropriate": { "label": "Uygunsuz İçerik", "description": "Müstehcen, şiddet içeren veya uygunsuz içerik" },
+    "scam": { "label": "Dolandırıcılık", "description": "Dolandırıcılık girişimi veya sahte profil" },
+    "other": { "label": "Diğer", "description": "Yukarıdakilerden farklı bir sebep" }
+  },
+  "productReport": {
+    "selectTypeError": "Lütfen şikayet türü seçin",
+    "successDescription": "İnceleme süreci başlatıldı. Teşekkür ederiz.",
+    "genericError": "Bir hata oluştu",
+    "sendFailed": "Şikayet gönderilemedi. Lütfen tekrar deneyin.",
+    "trigger": "Ürünü Raporla",
+    "title": "Ürünü Raporla",
+    "subtitle": "Uygunsuz veya yasadışı içerik gördüyseniz bize bildirin",
+    "infoTitle": "Şikayetiniz gizli tutulacaktır",
+    "infoBody": "Otomatik inceleme sistemi şikayetinizi değerlendirecektir. Çoklu şikayet durumunda ürün otomatik olarak kaldırılır.",
+    "typeLabel": "Şikayet Türü *",
+    "descriptionLabel": "Açıklama",
+    "optional": "Opsiyonel",
+    "descriptionPlaceholder": "Detaylı açıklama ekleyebilirsiniz...",
+    "sending": "Gönderiliyor...",
+    "submit": "Şikayeti Gönder"
+  },
+  "productReportTypes": {
+    "inappropriate_content": {
+      "label": "Uygunsuz İçerik",
+      "description": "Müstehcen, şiddet içeren veya uygunsuz içerik"
+    },
+    "illegal_item": {
+      "label": "Yasadışı Ürün",
+      "description": "Yasal olmayan ürün veya hizmet"
+    },
+    "scam": {
+      "label": "Dolandırıcılık",
+      "description": "Dolandırıcılık girişimi veya sahte ürün"
+    },
+    "fake_item": {
+      "label": "Sahte/Taklit Ürün",
+      "description": "Taklit, replika veya sahte marka ürünü"
+    },
+    "spam": {
+      "label": "Spam",
+      "description": "İstenmeyen reklam veya spam içerik"
+    },
+    "other": {
+      "label": "Diğer",
+      "description": "Yukarıdakilerden farklı bir sebep"
+    }
   },
   "messageFilter": {
     "defaultReason": "Mesajınız uygunsuz içerik nedeniyle gönderilemedi",

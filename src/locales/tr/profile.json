@@ -1,4 +1,10 @@
 {
+  "firstNamePlaceholder": "Adınız",
+  "lastNamePlaceholderPrivate": "Soyadınız (gizli)",
+  "privacy": {
+    "firstNameOnly": "🔒 Sadece adınız gösterilir",
+    "lastNameHidden": "🔒 Soyadınız gizlidir"
+  },
   "title": "Profil",
   "loading": "Yükleniyor...",
   "edit": "Düzenle",
@@ -39,5 +45,38 @@
   }
   ,
   "noRatingsTitle": "Henüz Değerlendirme Yok",
-  "noRatingsDesc": "İlk takasınızı tamamlayın ve değerlendirme almaya başlayın!"
+  "noRatingsDesc": "İlk takasınızı tamamlayın ve değerlendirme almaya başlayın!",
+  "ratingCountLabel": "{{count}} değerlendirme",
+  "security": {
+    "title": "Güvenlik Ayarları",
+    "description": "Hesabını güvende tutmak için düzenli olarak şifreni değiştir."
+  },
+  "changePassword": {
+    "openButton": "Şifremi Değiştir",
+    "modalTitle": "Şifreni Değiştir",
+    "modalSubtitle": "Hesabını güvende tut",
+    "successTitle": "Şifre başarıyla değiştirildi!",
+    "successDesc": "Yeni şifrenle giriş yapabilirsin.",
+    "currentPasswordLabel": "Mevcut Şifre",
+    "currentPasswordPlaceholder": "Mevcut şifreni gir",
+    "newPasswordLabel": "Yeni Şifre",
+    "newPasswordPlaceholder": "En az {{min}} karakter",
+    "newPasswordHint": "Minimum {{min}} karakter",
+    "confirmPasswordLabel": "Yeni Şifre (Tekrar)",
+    "confirmPasswordPlaceholder": "Yeni şifreni tekrar gir",
+    "submitLoading": "Değiştiriliyor...",
+    "submitSuccess": "✓ Değiştirildi",
+    "submitIdle": "Şifremi Değiştir",
+    "securityTipTitle": "💡 Güvenlik İpucu:",
+    "securityTipBody": "Güçlü bir şifre oluşturmak için harf, rakam ve özel karakterler kullan.",
+    "errors": {
+      "currentPasswordRequired": "Mevcut şifrenizi girin",
+      "newPasswordMinLength": "Yeni şifre en az {{min}} karakter olmalı",
+      "newPasswordMustDiffer": "Yeni şifre eski şifreden farklı olmalı",
+      "passwordsDontMatch": "Yeni şifreler eşleşmiyor",
+      "botVerificationRequired": "Bot doğrulaması gerekli",
+      "botVerificationFailed": "Bot doğrulaması başarısız",
+      "passwordChangeFailed": "Şifre değiştirme başarısız"
+    }
+  }
 }

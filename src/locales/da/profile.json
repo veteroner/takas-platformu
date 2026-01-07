@@ -1,4 +1,10 @@
 {
+  "firstNamePlaceholder": "Fornavn",
+  "lastNamePlaceholderPrivate": "Efternavn (skjult)",
+  "privacy": {
+    "firstNameOnly": "🔒 Kun dit fornavn vises",
+    "lastNameHidden": "🔒 Dit efternavn er skjult"
+  },
   "title": "Profil",
   "loading": "Indlæser...",
   "edit": "Rediger",
@@ -39,5 +45,38 @@
   }
   ,
   "noRatingsTitle": "Ingen vurderinger endnu",
-  "noRatingsDesc": "Fuldfør din første handel for at modtage vurderinger!"
+  "noRatingsDesc": "Fuldfør din første handel for at modtage vurderinger!",
+  "ratingCountLabel": "{{count}} vurderinger",
+  "security": {
+    "title": "Sikkerhedsindstillinger",
+    "description": "Skift din adgangskode regelmæssigt for at holde din konto sikker."
+  },
+  "changePassword": {
+    "openButton": "Skift adgangskode",
+    "modalTitle": "Skift din adgangskode",
+    "modalSubtitle": "Hold din konto sikker",
+    "successTitle": "Adgangskode ændret!",
+    "successDesc": "Du kan nu logge ind med din nye adgangskode.",
+    "currentPasswordLabel": "Nuværende adgangskode",
+    "currentPasswordPlaceholder": "Indtast din nuværende adgangskode",
+    "newPasswordLabel": "Ny adgangskode",
+    "newPasswordPlaceholder": "Mindst {{min}} tegn",
+    "newPasswordHint": "Minimum {{min}} tegn",
+    "confirmPasswordLabel": "Bekræft ny adgangskode",
+    "confirmPasswordPlaceholder": "Indtast din nye adgangskode igen",
+    "submitLoading": "Ændrer...",
+    "submitSuccess": "✓ Ændret",
+    "submitIdle": "Skift adgangskode",
+    "securityTipTitle": "💡 Sikkerhedstip:",
+    "securityTipBody": "Brug bogstaver, tal og specialtegn for en stærk adgangskode.",
+    "errors": {
+      "currentPasswordRequired": "Indtast din nuværende adgangskode",
+      "newPasswordMinLength": "Den nye adgangskode skal være mindst {{min}} tegn",
+      "newPasswordMustDiffer": "Den nye adgangskode skal være forskellig fra den nuværende",
+      "passwordsDontMatch": "De nye adgangskoder matcher ikke",
+      "botVerificationRequired": "Bot-bekræftelse er påkrævet",
+      "botVerificationFailed": "Bot-bekræftelse mislykkedes",
+      "passwordChangeFailed": "Ændring af adgangskode mislykkedes"
+    }
+  }
 }

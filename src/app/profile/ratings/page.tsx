@@ -125,7 +125,7 @@ export default function UserRatingsPage() {
                 ))}
               </div>
               <div className="text-white/70 text-sm">
-                {totalRatings} değerlendirme
+                {t('ratingCountLabel', { count: totalRatings })}
               </div>
             </div>
 

@@ -1,4 +1,19 @@
 {
+  "versionGate": {
+    "title": "Update required",
+    "description": "Your app is on an older version ({{current}}). Please update to at least version {{min}} to continue.",
+    "updateInStore": "Update in the store"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you’re looking for may have been moved or never existed.",
+    "backHome": "Back to home"
+  },
+  "globalError": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. You can try again.",
+    "retry": "Try again"
+  },
   "save": "Save",
   "cancel": "Cancel",
   "delete": "Delete",
@@ -96,12 +111,114 @@
     "pleaseSelect": "Please select a rating",
     "submitError": "An error occurred, please try again",
     "prompt": "How was your swap experience?",
+    "headerSubtitle": "Rate your swap experience",
+    "privacyNote": "🔒 Only your first name is shown; your last name is hidden",
     "labels": { "5": "🌟 Excellent!", "4": "😊 Very Good!", "3": "👍 Good", "2": "😐 Okay", "1": "😞 Bad" },
     "commentLabel": "Add a comment (optional)",
     "placeholder": "Share your experience...",
     "submitting": "Submitting...",
     "submitButton": "Submit Rating",
     "shareNote": "Your rating will be shared with the other party and appear on your profile"
+  },
+  "cookieBanner": {
+    "textPrefix": "This site uses cookies to improve your experience. For more info, see the",
+    "textSuffix": "page.",
+    "necessaryOnly": "Necessary only",
+    "acceptAll": "Accept all"
+  },
+  "productDetail": {
+    "estimatedValueLabel": "estimated value",
+    "descriptionTitle": "Description",
+    "ownerTitle": "Owner",
+    "trades_one": "{{count}} swap",
+    "trades_other": "{{count}} swaps"
+  },
+  "blockReport": {
+    "alerts": {
+      "blocked": "{{name}} has been blocked.",
+      "descriptionRequired": "Please enter a description.",
+      "reported": "Your report has been submitted. Thank you."
+    },
+    "titleChoose": "Choose an action",
+    "titleBlock": "Block user",
+    "titleReport": "Report user",
+    "prompt": "What would you like to do about {{name}}?",
+    "actions": {
+      "blockTitle": "Block",
+      "blockDesc": "You won’t be able to message this user",
+      "reportTitle": "Report",
+      "reportDesc": "Report inappropriate behavior to us"
+    },
+    "blockConsequencesTitle": "When you block someone:",
+    "blockConsequences": {
+      "noMessages": "You can’t message each other",
+      "matchesRemoved": "Your matches are removed",
+      "cannotSeeItems": "You can’t see each other’s items"
+    },
+    "blockReasonLabel": "Reason (optional)",
+    "blockReasonPlaceholder": "You can add a reason...",
+    "blocking": "Blocking...",
+    "blockButton": "Block",
+    "reportNotice": "Your report is confidential and will be reviewed by our moderation team.",
+    "reportTypeLabel": "Report type",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Please provide details...",
+    "minChars": "At least {{count}} characters",
+    "submitting": "Submitting...",
+    "reportButton": "Submit report",
+    "blockedNoticeTitle": "User blocked",
+    "blockedNoticeBody": "You can’t message {{name}}."
+  },
+  "reportTypes": {
+    "harassment": { "label": "Harassment", "description": "Annoying or unwanted behavior" },
+    "threat": { "label": "Threats", "description": "Physical or psychological threats" },
+    "spam": { "label": "Spam", "description": "Unwanted ads or spam content" },
+    "inappropriate": { "label": "Inappropriate content", "description": "Explicit, violent, or otherwise inappropriate content" },
+    "scam": { "label": "Scam", "description": "Scam attempt or fake profile" },
+    "other": { "label": "Other", "description": "A different reason" }
+  },
+  "productReport": {
+    "selectTypeError": "Please select a report type",
+    "successDescription": "Review has started. Thank you.",
+    "genericError": "Something went wrong",
+    "sendFailed": "Could not submit report. Please try again.",
+    "trigger": "Report item",
+    "title": "Report item",
+    "subtitle": "Let us know if you see inappropriate or illegal content",
+    "infoTitle": "Your report will be kept confidential",
+    "infoBody": "An automated review system will evaluate your report. With multiple reports, the item may be removed automatically.",
+    "typeLabel": "Report type *",
+    "descriptionLabel": "Description",
+    "optional": "Optional",
+    "descriptionPlaceholder": "You can add more details...",
+    "sending": "Submitting...",
+    "submit": "Submit report"
+  },
+  "productReportTypes": {
+    "inappropriate_content": {
+      "label": "Inappropriate content",
+      "description": "Explicit, violent, or otherwise inappropriate content"
+    },
+    "illegal_item": {
+      "label": "Illegal item",
+      "description": "Illegal product or service"
+    },
+    "scam": {
+      "label": "Scam",
+      "description": "Scam attempt or fake item"
+    },
+    "fake_item": {
+      "label": "Counterfeit item",
+      "description": "Counterfeit, replica, or fake branded item"
+    },
+    "spam": {
+      "label": "Spam",
+      "description": "Unwanted ads or spam content"
+    },
+    "other": {
+      "label": "Other",
+      "description": "A different reason"
+    }
   },
   "messageFilter": {
     "defaultReason": "Your message could not be sent due to inappropriate content",

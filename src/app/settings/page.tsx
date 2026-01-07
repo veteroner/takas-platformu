@@ -193,7 +193,7 @@ export default function SettingsPage() {
 
   const handleDeleteAccount = () => {
     // In a real app, this would call an API to delete the account
-    alert('Hesap silme işlemi gerçek uygulamada API çağrısı yapacak')
+    alert(t('settings:deleteAccount.notImplemented'))
     setShowDeleteConfirm(false)
   }
 

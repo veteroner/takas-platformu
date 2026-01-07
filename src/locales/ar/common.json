@@ -1,4 +1,19 @@
 {
+  "versionGate": {
+    "title": "مطلوب تحديث",
+    "description": "تطبيقك يعمل بإصدار أقدم ({{current}}). يرجى التحديث إلى الإصدار {{min}} على الأقل للمتابعة.",
+    "updateInStore": "التحديث من المتجر"
+  },
+  "notFound": {
+    "title": "الصفحة غير موجودة",
+    "description": "قد تكون الصفحة التي تبحث عنها نُقلت أو أنها لم تكن موجودة من الأساس.",
+    "backHome": "العودة إلى الصفحة الرئيسية"
+  },
+  "globalError": {
+    "title": "حدث خطأ ما",
+    "description": "حدث خطأ غير متوقع. يمكنك المحاولة مرة أخرى.",
+    "retry": "حاول مرة أخرى"
+  },
   "save": "حفظ",
   "cancel": "إلغاء",
   "delete": "حذف",
@@ -96,12 +111,113 @@
     "pleaseSelect": "يرجى اختيار تقييم",
     "submitError": "حدث خطأ، يرجى المحاولة مرة أخرى",
     "prompt": "كيف كانت تجربتك في المقايضة؟",
+    "headerSubtitle": "قيّم تجربة المقايضة الخاصة بك",
+    "privacyNote": "🔒 يتم عرض الاسم الأول فقط، واسم العائلة مخفي",
     "labels": { "5": "🌟 ممتاز!", "4": "😊 جيد جداً!", "3": "👍 جيد", "2": "😐 مقبول", "1": "😞 سيئ" },
     "commentLabel": "أضف تعليق (اختياري)",
     "placeholder": "شارك تجربتك...",
     "submitting": "جاري الإرسال...",
     "submitButton": "إرسال التقييم",
     "shareNote": "سيتم مشاركة تقييمك مع الطرف الآخر وسيظهر في ملفك الشخصي"
+  },
+  "cookieBanner": {
+    "textPrefix": "يستخدم هذا الموقع ملفات تعريف الارتباط لتحسين تجربتك. لمزيد من المعلومات، راجع",
+    "textSuffix": ".",
+    "necessaryOnly": "الضرورية فقط",
+    "acceptAll": "قبول الكل"
+  },
+  "productDetail": {
+    "estimatedValueLabel": "قيمة تقديرية",
+    "descriptionTitle": "الوصف",
+    "ownerTitle": "المالك",
+    "trades_other": "{{count}} تبادل"
+  },
+  "blockReport": {
+    "alerts": {
+      "blocked": "تم حظر {{name}}.",
+      "descriptionRequired": "يرجى إدخال وصف.",
+      "reported": "تم إرسال بلاغك. شكرًا لك."
+    },
+    "titleChoose": "اختر إجراءً",
+    "titleBlock": "حظر المستخدم",
+    "titleReport": "الإبلاغ عن المستخدم",
+    "prompt": "ماذا تريد أن تفعل بخصوص {{name}}؟",
+    "actions": {
+      "blockTitle": "حظر",
+      "blockDesc": "لن تتمكن من مراسلة هذا المستخدم",
+      "reportTitle": "إبلاغ",
+      "reportDesc": "أبلغنا عن سلوك غير لائق"
+    },
+    "blockConsequencesTitle": "عند الحظر:",
+    "blockConsequences": {
+      "noMessages": "لن تتمكنا من إرسال رسائل لبعضكما",
+      "matchesRemoved": "سيتم حذف المطابقات بينكما",
+      "cannotSeeItems": "لن تتمكنا من رؤية عناصر بعضكما"
+    },
+    "blockReasonLabel": "سبب الحظر (اختياري)",
+    "blockReasonPlaceholder": "يمكنك إضافة سبب...",
+    "blocking": "جارٍ الحظر...",
+    "blockButton": "حظر",
+    "reportNotice": "سيبقى بلاغك سريًا وسيتم مراجعته من قبل فريق الإشراف.",
+    "reportTypeLabel": "نوع البلاغ",
+    "descriptionLabel": "الوصف",
+    "descriptionPlaceholder": "يرجى تقديم تفاصيل...",
+    "minChars": "على الأقل {{count}} حرفًا",
+    "submitting": "جارٍ الإرسال...",
+    "reportButton": "إرسال البلاغ",
+    "blockedNoticeTitle": "تم حظر المستخدم",
+    "blockedNoticeBody": "لا يمكنك مراسلة {{name}}."
+  },
+  "reportTypes": {
+    "harassment": { "label": "مضايقة", "description": "سلوك مزعج أو غير مرغوب فيه" },
+    "threat": { "label": "تهديد", "description": "تهديدات جسدية أو نفسية" },
+    "spam": { "label": "رسائل مزعجة", "description": "إعلانات غير مرغوب فيها أو محتوى مزعج" },
+    "inappropriate": { "label": "محتوى غير لائق", "description": "محتوى فاضح أو عنيف أو غير لائق" },
+    "scam": { "label": "احتيال", "description": "محاولة احتيال أو ملف شخصي مزيف" },
+    "other": { "label": "أخرى", "description": "سبب مختلف" }
+  },
+  "productReport": {
+    "selectTypeError": "يرجى اختيار نوع البلاغ",
+    "successDescription": "بدأت المراجعة. شكرًا لك.",
+    "genericError": "حدث خطأ ما",
+    "sendFailed": "تعذر إرسال البلاغ. يرجى المحاولة مرة أخرى.",
+    "trigger": "الإبلاغ عن العنصر",
+    "title": "الإبلاغ عن العنصر",
+    "subtitle": "أبلغنا إذا رأيت محتوى غير لائق أو غير قانوني",
+    "infoTitle": "سيتم الحفاظ على سرية بلاغك",
+    "infoBody": "سيقيّم نظام مراجعة تلقائي بلاغك. في حال تعدد البلاغات، قد تتم إزالة العنصر تلقائيًا.",
+    "typeLabel": "نوع البلاغ *",
+    "descriptionLabel": "الوصف",
+    "optional": "اختياري",
+    "descriptionPlaceholder": "يمكنك إضافة المزيد من التفاصيل...",
+    "sending": "جارٍ الإرسال...",
+    "submit": "إرسال البلاغ"
+  },
+  "productReportTypes": {
+    "inappropriate_content": {
+      "label": "محتوى غير لائق",
+      "description": "محتوى فاضح أو عنيف أو غير لائق"
+    },
+    "illegal_item": {
+      "label": "عنصر غير قانوني",
+      "description": "منتج أو خدمة غير قانونية"
+    },
+    "scam": {
+      "label": "احتيال",
+      "description": "محاولة احتيال أو عنصر مزيف"
+    },
+    "fake_item": {
+      "label": "عنصر مقلّد/مزيف",
+      "description": "مقلّد أو نسخة أو علامة تجارية مزيفة"
+    },
+    "spam": {
+      "label": "رسائل مزعجة",
+      "description": "إعلانات غير مرغوب فيها أو محتوى مزعج"
+    },
+    "other": {
+      "label": "أخرى",
+      "description": "سبب مختلف"
+    }
   },
   "messageFilter": {
     "defaultReason": "لم يتم إرسال رسالتك بسبب محتوى غير مناسب",

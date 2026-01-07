@@ -1,4 +1,19 @@
 {
+  "versionGate": {
+    "title": "Update erforderlich",
+    "description": "Deine App hat eine ältere Version ({{current}}). Bitte aktualisiere auf mindestens Version {{min}}, um fortzufahren.",
+    "updateInStore": "Im Store aktualisieren"
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "description": "Die gesuchte Seite wurde möglicherweise verschoben oder existierte nie.",
+    "backHome": "Zur Startseite"
+  },
+  "globalError": {
+    "title": "Etwas ist schiefgelaufen",
+    "description": "Ein unerwarteter Fehler ist aufgetreten. Du kannst es erneut versuchen.",
+    "retry": "Erneut versuchen"
+  },
   "save": "Speichern",
   "cancel": "Abbrechen",
   "delete": "Löschen",
@@ -96,12 +111,114 @@
     "pleaseSelect": "Bitte wählen Sie eine Bewertung",
     "submitError": "Beim Absenden ist ein Fehler aufgetreten, bitte versuchen Sie es erneut",
     "prompt": "Wie war Ihr Tausch-Erlebnis?",
+    "headerSubtitle": "Bewerten Sie Ihr Tausch-Erlebnis",
+    "privacyNote": "🔒 Nur der Vorname wird angezeigt, der Nachname bleibt verborgen",
     "labels": { "5": "🌟 Ausgezeichnet!", "4": "😊 Sehr Gut!", "3": "👍 Gut", "2": "😐 Ok", "1": "😞 Schlecht" },
     "commentLabel": "Kommentar hinzufügen (optional)",
     "placeholder": "Teilen Sie Ihre Erfahrungen...",
     "submitting": "Wird gesendet...",
     "submitButton": "Bewertung absenden",
     "shareNote": "Ihre Bewertung wird mit der anderen Partei geteilt und in Ihrem Profil angezeigt"
+  },
+  "cookieBanner": {
+    "textPrefix": "Diese Website verwendet Cookies, um dein Erlebnis zu verbessern. Weitere Informationen findest du in der",
+    "textSuffix": "Seite.",
+    "necessaryOnly": "Nur notwendige",
+    "acceptAll": "Alle akzeptieren"
+  },
+  "productDetail": {
+    "estimatedValueLabel": "geschätzter Wert",
+    "descriptionTitle": "Beschreibung",
+    "ownerTitle": "Besitzer",
+    "trades_one": "{{count}} Tauschvorgang",
+    "trades_other": "{{count}} Tauschvorgänge"
+  },
+  "blockReport": {
+    "alerts": {
+      "blocked": "{{name}} wurde blockiert.",
+      "descriptionRequired": "Bitte gib eine Beschreibung ein.",
+      "reported": "Deine Meldung wurde gesendet. Danke."
+    },
+    "titleChoose": "Aktion wählen",
+    "titleBlock": "Nutzer blockieren",
+    "titleReport": "Nutzer melden",
+    "prompt": "Was möchtest du in Bezug auf {{name}} tun?",
+    "actions": {
+      "blockTitle": "Blockieren",
+      "blockDesc": "Du kannst diesem Nutzer keine Nachrichten mehr senden",
+      "reportTitle": "Melden",
+      "reportDesc": "Unangemessenes Verhalten melden"
+    },
+    "blockConsequencesTitle": "Wenn du blockierst:",
+    "blockConsequences": {
+      "noMessages": "Ihr könnt euch keine Nachrichten schicken",
+      "matchesRemoved": "Eure Matches werden entfernt",
+      "cannotSeeItems": "Ihr seht die Artikel des anderen nicht mehr"
+    },
+    "blockReasonLabel": "Grund (optional)",
+    "blockReasonPlaceholder": "Du kannst einen Grund angeben...",
+    "blocking": "Wird blockiert...",
+    "blockButton": "Blockieren",
+    "reportNotice": "Deine Meldung bleibt vertraulich und wird von unserem Moderationsteam geprüft.",
+    "reportTypeLabel": "Meldegrund",
+    "descriptionLabel": "Beschreibung",
+    "descriptionPlaceholder": "Bitte gib Details an...",
+    "minChars": "Mindestens {{count}} Zeichen",
+    "submitting": "Wird gesendet...",
+    "reportButton": "Meldung senden",
+    "blockedNoticeTitle": "Nutzer blockiert",
+    "blockedNoticeBody": "Du kannst {{name}} keine Nachrichten senden."
+  },
+  "reportTypes": {
+    "harassment": { "label": "Belästigung", "description": "Störendes oder unerwünschtes Verhalten" },
+    "threat": { "label": "Drohungen", "description": "Physische oder psychische Drohungen" },
+    "spam": { "label": "Spam", "description": "Unerwünschte Werbung oder Spam-Inhalte" },
+    "inappropriate": { "label": "Unangemessene Inhalte", "description": "Explizite, gewalttätige oder sonst unangemessene Inhalte" },
+    "scam": { "label": "Betrug", "description": "Betrugsversuch oder Fake-Profil" },
+    "other": { "label": "Sonstiges", "description": "Ein anderer Grund" }
+  },
+  "productReport": {
+    "selectTypeError": "Bitte wähle einen Meldegrund",
+    "successDescription": "Die Überprüfung wurde gestartet. Danke.",
+    "genericError": "Ein Fehler ist aufgetreten",
+    "sendFailed": "Meldung konnte nicht gesendet werden. Bitte versuche es erneut.",
+    "trigger": "Artikel melden",
+    "title": "Artikel melden",
+    "subtitle": "Melde uns unangemessene oder illegale Inhalte",
+    "infoTitle": "Deine Meldung bleibt vertraulich",
+    "infoBody": "Ein automatisches System prüft deine Meldung. Bei mehreren Meldungen kann der Artikel automatisch entfernt werden.",
+    "typeLabel": "Meldegrund *",
+    "descriptionLabel": "Beschreibung",
+    "optional": "Optional",
+    "descriptionPlaceholder": "Du kannst weitere Details angeben...",
+    "sending": "Wird gesendet...",
+    "submit": "Meldung senden"
+  },
+  "productReportTypes": {
+    "inappropriate_content": {
+      "label": "Unangemessene Inhalte",
+      "description": "Explizite, gewalttätige oder sonst unangemessene Inhalte"
+    },
+    "illegal_item": {
+      "label": "Illegales Produkt",
+      "description": "Illegales Produkt oder Dienstleistung"
+    },
+    "scam": {
+      "label": "Betrug",
+      "description": "Betrugsversuch oder Fake-Produkt"
+    },
+    "fake_item": {
+      "label": "Fälschung/Plagiat",
+      "description": "Fälschung, Replika oder gefälschte Markenware"
+    },
+    "spam": {
+      "label": "Spam",
+      "description": "Unerwünschte Werbung oder Spam-Inhalte"
+    },
+    "other": {
+      "label": "Sonstiges",
+      "description": "Ein anderer Grund"
+    }
   },
   "messageFilter": {
     "defaultReason": "Ihre Nachricht konnte aufgrund unangemessener Inhalte nicht gesendet werden",

@@ -336,7 +336,7 @@ export default function HomePage() {
                 </Link>
                 
                 {!isDesktop && (
-                  <Link href="/preferences" className="p-2 hover:bg-gray-100 rounded-full transition-colors" title="Eşleştirme Tercihlerim">
+                  <Link href="/preferences" className="p-2 hover:bg-gray-100 rounded-full transition-colors" title={t('title', { ns: 'preferences' })}>
                     <Sparkles className="w-5 h-5 text-yellow-500" />
                   </Link>
                 )}
@@ -542,22 +542,22 @@ export default function HomePage() {
               <>
                 <Link href="/my-items" className="flex flex-col items-center gap-1.5 py-2 px-3 text-gray-500 hover:text-gray-700 min-w-[70px]">
                   <Package className="w-7 h-7" />
-                  <span className="text-xs font-medium">{t('myItems') || 'Ürünlerim'}</span>
+                  <span className="text-xs font-medium">{t('myItems')}</span>
                 </Link>
                 <Link href="/upload" className="flex flex-col items-center gap-1.5 py-2 px-3 text-gray-500 min-w-[70px]">
                   <div className="bg-linear-to-r from-pink-500 to-purple-600 p-3 rounded-full -mt-6 shadow-xl">
                     <Plus className="w-7 h-7 text-white" />
                   </div>
-                  <span className="text-xs font-medium mt-1">{t('addItem') || 'Ekle'}</span>
+                  <span className="text-xs font-medium mt-1">{t('addItem')}</span>
                 </Link>
                 <Link href="/messages" className="flex flex-col items-center gap-1.5 py-2 px-3 text-gray-500 hover:text-gray-700 relative min-w-[70px]">
                   <MessageCircle className="w-7 h-7" />
-                  <span className="text-xs font-medium">{t('messages') || 'Mesajlar'}</span>
+                  <span className="text-xs font-medium">{t('messages')}</span>
                   <UnreadBadge userId={user?.id || null} />
                 </Link>
                 <Link href="/profile" className="flex flex-col items-center gap-1.5 py-2 px-3 text-gray-500 hover:text-gray-700 min-w-[70px]">
                   <User className="w-7 h-7" />
-                  <span className="text-xs font-medium">{t('profile') || 'Profil'}</span>
+                  <span className="text-xs font-medium">{t('profile')}</span>
                 </Link>
               </>
             ) : (

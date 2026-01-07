@@ -1,4 +1,10 @@
 {
+  "firstNamePlaceholder": "First name",
+  "lastNamePlaceholderPrivate": "Last name (hidden)",
+  "privacy": {
+    "firstNameOnly": "🔒 Only your first name is shown",
+    "lastNameHidden": "🔒 Your last name is hidden"
+  },
   "title": "Profile",
   "loading": "Loading...",
   "edit": "Edit",
@@ -39,5 +45,38 @@
   }
   ,
   "noRatingsTitle": "No Ratings Yet",
-  "noRatingsDesc": "Complete your first trade to receive ratings!"
+  "noRatingsDesc": "Complete your first trade to receive ratings!",
+  "ratingCountLabel": "{{count}} reviews",
+  "security": {
+    "title": "Security Settings",
+    "description": "Change your password regularly to keep your account safe."
+  },
+  "changePassword": {
+    "openButton": "Change Password",
+    "modalTitle": "Change Your Password",
+    "modalSubtitle": "Keep your account secure",
+    "successTitle": "Password changed successfully!",
+    "successDesc": "You can now sign in with your new password.",
+    "currentPasswordLabel": "Current Password",
+    "currentPasswordPlaceholder": "Enter your current password",
+    "newPasswordLabel": "New Password",
+    "newPasswordPlaceholder": "At least {{min}} characters",
+    "newPasswordHint": "Minimum {{min}} characters",
+    "confirmPasswordLabel": "Confirm New Password",
+    "confirmPasswordPlaceholder": "Re-enter your new password",
+    "submitLoading": "Changing...",
+    "submitSuccess": "✓ Changed",
+    "submitIdle": "Change Password",
+    "securityTipTitle": "💡 Security Tip:",
+    "securityTipBody": "Use letters, numbers, and special characters to create a strong password.",
+    "errors": {
+      "currentPasswordRequired": "Please enter your current password",
+      "newPasswordMinLength": "New password must be at least {{min}} characters",
+      "newPasswordMustDiffer": "New password must be different from your current password",
+      "passwordsDontMatch": "New passwords do not match",
+      "botVerificationRequired": "Bot verification is required",
+      "botVerificationFailed": "Bot verification failed",
+      "passwordChangeFailed": "Password change failed"
+    }
+  }
 }

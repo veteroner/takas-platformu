@@ -1,4 +1,7 @@
 {
+  "deleteAccount": {
+    "notImplemented": "Hesap silme işlemi gerçek uygulamada API çağrısı yapacak"
+  },
   "title": "Ayarlar",
   "notifications": {
     "title": "Bildirimler",

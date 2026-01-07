@@ -1,4 +1,10 @@
 {
+  "firstNamePlaceholder": "الاسم الأول",
+  "lastNamePlaceholderPrivate": "اسم العائلة (مخفي)",
+  "privacy": {
+    "firstNameOnly": "🔒 يتم عرض الاسم الأول فقط",
+    "lastNameHidden": "🔒 اسم العائلة مخفي"
+  },
   "title": "الملف الشخصي",
   "loading": "جارٍ التحميل...",
   "edit": "تحرير",
@@ -38,6 +44,39 @@
   }
   ,
   "noRatingsTitle": "لا توجد تقييمات بعد",
-  "noRatingsDesc": "أكمل أول عملية تبادل لك لتبدأ في تلقي التقييمات!"
+  "noRatingsDesc": "أكمل أول عملية تبادل لك لتبدأ في تلقي التقييمات!",
+  "ratingCountLabel": "{{count}} تقييم",
+  "security": {
+    "title": "إعدادات الأمان",
+    "description": "غيّر كلمة المرور بانتظام للحفاظ على أمان حسابك."
+  },
+  "changePassword": {
+    "openButton": "تغيير كلمة المرور",
+    "modalTitle": "غيّر كلمة المرور",
+    "modalSubtitle": "حافظ على أمان حسابك",
+    "successTitle": "تم تغيير كلمة المرور بنجاح!",
+    "successDesc": "يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة.",
+    "currentPasswordLabel": "كلمة المرور الحالية",
+    "currentPasswordPlaceholder": "أدخل كلمة المرور الحالية",
+    "newPasswordLabel": "كلمة المرور الجديدة",
+    "newPasswordPlaceholder": "على الأقل {{min}} أحرف",
+    "newPasswordHint": "الحد الأدنى {{min}} أحرف",
+    "confirmPasswordLabel": "تأكيد كلمة المرور الجديدة",
+    "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور الجديدة",
+    "submitLoading": "جارٍ التغيير...",
+    "submitSuccess": "✓ تم التغيير",
+    "submitIdle": "تغيير كلمة المرور",
+    "securityTipTitle": "💡 نصيحة أمان:",
+    "securityTipBody": "استخدم حروفًا وأرقامًا ورموزًا خاصة لإنشاء كلمة مرور قوية.",
+    "errors": {
+      "currentPasswordRequired": "يرجى إدخال كلمة المرور الحالية",
+      "newPasswordMinLength": "يجب أن تكون كلمة المرور الجديدة {{min}} أحرف على الأقل",
+      "newPasswordMustDiffer": "يجب أن تختلف كلمة المرور الجديدة عن الحالية",
+      "passwordsDontMatch": "كلمتا المرور الجديدتان غير متطابقتين",
+      "botVerificationRequired": "مطلوب التحقق من الروبوت",
+      "botVerificationFailed": "فشل التحقق من الروبوت",
+      "passwordChangeFailed": "فشل تغيير كلمة المرور"
+    }
+  }
 }
 

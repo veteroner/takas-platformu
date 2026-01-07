@@ -1,4 +1,7 @@
 {
+  "deleteAccount": {
+    "notImplemented": "Sletning af konto vil kalde et API i den rigtige app"
+  },
   "title": "Indstillinger",
   "notifications": {
     "title": "Notifikationer",

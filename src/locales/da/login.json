@@ -1,4 +1,15 @@
 {
+  "infoTitle": "💡 Info:",
+  "firstNamePlaceholder": "Fornavn",
+  "lastNamePlaceholder": "Efternavn",
+  "privacyNotice": "🔒 For din privatliv: Kun dit fornavn vises til andre brugere. Dit efternavn forbliver skjult.",
+  "consents": {
+    "acceptText": " — jeg har læst og accepterer.",
+    "marketingPrefix": "Jeg giver",
+    "explicitConsentLink": "udtrykkeligt samtykke",
+    "marketingSuffix": "til behandling til marketing/personalisering (valgfrit)."
+  },
+  "emailConsent": "Jeg accepterer at modtage kommercielle elektroniske beskeder (valgfrit).",
   "title": "Log ind",
   "createAccount": "Opret konto",
   "loginSubtitle": "Log ind på din konto",
@@ -16,7 +27,6 @@
   "kvkkLink": "GDPR-tekst",
   "privacyLink": "Privatlivs- og cookiepolitik",
   "marketingConsent": "Jeg vil gerne informeres om kampagner og tilbud (valgfrit).",
-  "emailConsent": "Jeg accepterer at modtage kommercielle elektroniske meddelelser (valgfrit).",
   "loginButton": "Log ind",
   "registerButton": "Opret konto",
   "loggingIn": "Logger ind...",
@@ -24,6 +34,8 @@
   "haveAccount": "Har du allerede en konto? Log ind",
   "noAccount": "Har du ikke en konto? Opret en",
   "errors": {
+    "turnstileRequired": "Bekræft venligst, at du ikke er en robot",
+    "securityVerificationFailed": "Sikkerhedsverifikation mislykkedes. Prøv venligst igen.",
     "passwordMismatch": "Adgangskoderne matcher ikke",
     "passwordTooShort": "Adgangskoden skal være mindst 6 tegn",
     "genericError": "Der opstod en fejl",

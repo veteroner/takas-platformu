@@ -1,4 +1,15 @@
 {
+  "infoTitle": "💡 معلومة:",
+  "firstNamePlaceholder": "الاسم الأول",
+  "lastNamePlaceholder": "اسم العائلة",
+  "privacyNotice": "🔒 لحماية خصوصيتك: سيظهر اسمك الأول فقط للمستخدمين الآخرين. سيبقى اسم العائلة مخفيًا.",
+  "consents": {
+    "acceptText": "، لقد قرأت وأوافق.",
+    "marketingPrefix": "أمنح",
+    "explicitConsentLink": "موافقة صريحة",
+    "marketingSuffix": "لمعالجة البيانات لأغراض التسويق/التخصيص (اختياري)."
+  },
+  "emailConsent": "أوافق على تلقي رسائل إلكترونية تجارية (اختياري).",
   "title": "تسجيل الدخول",
   "createAccount": "إنشاء حساب",
   "loginSubtitle": "تسجيل الدخول إلى حسابك",
@@ -18,7 +29,6 @@
   "kvkkLink": "نص GDPR",
   "privacyLink": "سياسة الخصوصية وملفات تعريف الارتباط",
   "marketingConsent": "أريد أن أكون على علم بالحملات والعروض (اختياري).",
-  "emailConsent": "أوافق على تلقي الرسائل الإلكترونية التجارية (اختياري).",
   "loginButton": "تسجيل الدخول",
   "registerButton": "إنشاء حساب",
   "loggingIn": "جاري تسجيل الدخول...",
@@ -26,6 +36,8 @@
   "haveAccount": "هل لديك حساب بالفعل؟ تسجيل الدخول",
   "noAccount": "ليس لديك حساب؟ إنشاء واحد",
   "errors": {
+    "turnstileRequired": "يرجى التحقق من أنك لست روبوتًا",
+    "securityVerificationFailed": "فشل التحقق الأمني. يرجى المحاولة مرة أخرى.",
     "passwordMismatch": "كلمات المرور غير متطابقة",
     "passwordTooShort": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
     "genericError": "حدث خطأ",

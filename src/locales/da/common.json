@@ -1,4 +1,19 @@
 {
+  "versionGate": {
+    "title": "Opdatering påkrævet",
+    "description": "Din app er på en ældre version ({{current}}). Opdater venligst til mindst version {{min}} for at fortsætte.",
+    "updateInStore": "Opdater i butikken"
+  },
+  "notFound": {
+    "title": "Siden blev ikke fundet",
+    "description": "Siden, du leder efter, kan være flyttet eller har aldrig eksisteret.",
+    "backHome": "Tilbage til forsiden"
+  },
+  "globalError": {
+    "title": "Noget gik galt",
+    "description": "Der opstod en uventet fejl. Du kan prøve igen.",
+    "retry": "Prøv igen"
+  },
   "save": "Gem",
   "cancel": "Annuller",
   "delete": "Slet",
@@ -96,12 +111,114 @@
     "pleaseSelect": "Vælg venligst en vurdering",
     "submitError": "Der opstod en fejl, prøv igen",
     "prompt": "Hvordan var din bytteoplevelse?",
+    "headerSubtitle": "Vurder din bytteoplevelse",
+    "privacyNote": "🔒 Kun fornavn vises, efternavn er skjult",
     "labels": { "5": "🌟 Fremragende!", "4": "😊 Meget Godt!", "3": "👍 Godt", "2": "😐 Okay", "1": "😞 Dårligt" },
     "commentLabel": "Tilføj en kommentar (valgfrit)",
     "placeholder": "Del din oplevelse...",
     "submitting": "Sender...",
     "submitButton": "Send bedømmelse",
     "shareNote": "Din vurdering deles med den anden part og vises på din profil"
+  },
+  "cookieBanner": {
+    "textPrefix": "Denne side bruger cookies for at forbedre din oplevelse. Læs mere i",
+    "textSuffix": "siden.",
+    "necessaryOnly": "Kun nødvendige",
+    "acceptAll": "Accepter alle"
+  },
+  "productDetail": {
+    "estimatedValueLabel": "anslået værdi",
+    "descriptionTitle": "Beskrivelse",
+    "ownerTitle": "Ejer",
+    "trades_one": "{{count}} bytte",
+    "trades_other": "{{count}} bytter"
+  },
+  "blockReport": {
+    "alerts": {
+      "blocked": "{{name}} er blevet blokeret.",
+      "descriptionRequired": "Indtast venligst en beskrivelse.",
+      "reported": "Din anmeldelse er sendt. Tak."
+    },
+    "titleChoose": "Vælg handling",
+    "titleBlock": "Bloker bruger",
+    "titleReport": "Anmeld bruger",
+    "prompt": "Hvad vil du gøre ved {{name}}?",
+    "actions": {
+      "blockTitle": "Bloker",
+      "blockDesc": "Du kan ikke længere sende beskeder til denne bruger",
+      "reportTitle": "Anmeld",
+      "reportDesc": "Anmeld upassende adfærd"
+    },
+    "blockConsequencesTitle": "Når du blokerer:",
+    "blockConsequences": {
+      "noMessages": "I kan ikke sende beskeder til hinanden",
+      "matchesRemoved": "Jeres matches fjernes",
+      "cannotSeeItems": "I kan ikke se hinandens varer"
+    },
+    "blockReasonLabel": "Årsag (valgfri)",
+    "blockReasonPlaceholder": "Du kan tilføje en årsag...",
+    "blocking": "Blokerer...",
+    "blockButton": "Bloker",
+    "reportNotice": "Din anmeldelse er fortrolig og vil blive gennemgået af vores moderationsteam.",
+    "reportTypeLabel": "Anmeldelsestype",
+    "descriptionLabel": "Beskrivelse",
+    "descriptionPlaceholder": "Angiv venligst detaljer...",
+    "minChars": "Mindst {{count}} tegn",
+    "submitting": "Sender...",
+    "reportButton": "Send anmeldelse",
+    "blockedNoticeTitle": "Bruger blokeret",
+    "blockedNoticeBody": "Du kan ikke sende beskeder til {{name}}."
+  },
+  "reportTypes": {
+    "harassment": { "label": "Chikane", "description": "Generende eller uønsket adfærd" },
+    "threat": { "label": "Trusler", "description": "Fysiske eller psykiske trusler" },
+    "spam": { "label": "Spam", "description": "Uønskede reklamer eller spamindhold" },
+    "inappropriate": { "label": "Upassende indhold", "description": "Eksplicit, voldeligt eller på anden måde upassende indhold" },
+    "scam": { "label": "Svindel", "description": "Svindelforsøg eller falsk profil" },
+    "other": { "label": "Andet", "description": "En anden grund" }
+  },
+  "productReport": {
+    "selectTypeError": "Vælg venligst en anmeldelsestype",
+    "successDescription": "Gennemgang er startet. Tak.",
+    "genericError": "Der opstod en fejl",
+    "sendFailed": "Kunne ikke sende anmeldelse. Prøv igen.",
+    "trigger": "Anmeld vare",
+    "title": "Anmeld vare",
+    "subtitle": "Giv os besked, hvis du ser upassende eller ulovligt indhold",
+    "infoTitle": "Din anmeldelse holdes fortrolig",
+    "infoBody": "Et automatisk system vil vurdere din anmeldelse. Ved flere anmeldelser kan varen blive fjernet automatisk.",
+    "typeLabel": "Anmeldelsestype *",
+    "descriptionLabel": "Beskrivelse",
+    "optional": "Valgfri",
+    "descriptionPlaceholder": "Du kan tilføje flere detaljer...",
+    "sending": "Sender...",
+    "submit": "Send anmeldelse"
+  },
+  "productReportTypes": {
+    "inappropriate_content": {
+      "label": "Upassende indhold",
+      "description": "Eksplicit, voldeligt eller på anden måde upassende indhold"
+    },
+    "illegal_item": {
+      "label": "Ulovlig vare",
+      "description": "Ulovligt produkt eller service"
+    },
+    "scam": {
+      "label": "Svindel",
+      "description": "Svindelforsøg eller falsk vare"
+    },
+    "fake_item": {
+      "label": "Kopi/falsk vare",
+      "description": "Kopi, replika eller falsk mærkevare"
+    },
+    "spam": {
+      "label": "Spam",
+      "description": "Uønskede reklamer eller spamindhold"
+    },
+    "other": {
+      "label": "Andet",
+      "description": "En anden grund"
+    }
   },
   "messageFilter": {
     "defaultReason": "Din besked kunne ikke sendes på grund af upassende indhold",

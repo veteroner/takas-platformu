@@ -1,4 +1,7 @@
 {
+  "deleteAccount": {
+    "notImplemented": "Account deletion will call an API in the real app"
+  },
   "title": "Settings",
   "notifications": {
     "title": "Notifications",

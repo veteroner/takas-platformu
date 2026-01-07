@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Lock, Eye, EyeOff, X, Shield, Check, AlertCircle } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { changePassword } from '@/lib/auth'
 import Turnstile from './Turnstile'
 
@@ -11,6 +12,7 @@ interface ChangePasswordModalProps {
 }
 
 export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProps) {
+  const { t } = useTranslation(['profile', 'common'])
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -24,23 +26,23 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
 
   const validatePassword = () => {
     if (!currentPassword) {
-      setError('Mevcut şifrenizi girin')
+      setError(t('changePassword.errors.currentPasswordRequired'))
       return false
     }
     if (newPassword.length < 6) {
-      setError('Yeni şifre en az 6 karakter olmalı')
+      setError(t('changePassword.errors.newPasswordMinLength', { min: 6 }))
       return false
     }
     if (newPassword === currentPassword) {
-      setError('Yeni şifre eski şifreden farklı olmalı')
+      setError(t('changePassword.errors.newPasswordMustDiffer'))
       return false
     }
     if (newPassword !== confirmPassword) {
-      setError('Yeni şifreler eşleşmiyor')
+      setError(t('changePassword.errors.passwordsDontMatch'))
       return false
     }
     if (!turnstileToken) {
-      setError('Bot doğrulaması gerekli')
+      setError(t('changePassword.errors.botVerificationRequired'))
       return false
     }
     return true
@@ -63,7 +65,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
       })
 
       if (!turnstileResponse.ok) {
-        throw new Error('Bot doğrulaması başarısız')
+        throw new Error(t('changePassword.errors.botVerificationFailed'))
       }
 
       // Change password
@@ -82,7 +84,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
       if (err instanceof Error) {
         setError(err.message)
       } else {
-        setError('Şifre değiştirme başarısız')
+        setError(t('changePassword.errors.passwordChangeFailed'))
       }
     } finally {
       setIsLoading(false)
@@ -118,8 +120,8 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
           <div className="flex items-center gap-3">
             <Shield className="w-8 h-8" />
             <div>
-              <h2 className="text-2xl font-bold">Şifreni Değiştir</h2>
-              <p className="text-purple-100 text-sm">Hesabını güvende tut</p>
+              <h2 className="text-2xl font-bold">{t('changePassword.modalTitle')}</h2>
+              <p className="text-purple-100 text-sm">{t('changePassword.modalSubtitle')}</p>
             </div>
           </div>
         </div>
@@ -130,8 +132,8 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
             <div className="flex items-center gap-3">
               <Check className="w-6 h-6 text-green-600" />
               <div>
-                <p className="text-green-800 font-semibold">Şifre başarıyla değiştirildi!</p>
-                <p className="text-green-600 text-sm">Yeni şifrenle giriş yapabilirsin.</p>
+                <p className="text-green-800 font-semibold">{t('changePassword.successTitle')}</p>
+                <p className="text-green-600 text-sm">{t('changePassword.successDesc')}</p>
               </div>
             </div>
           </div>
@@ -152,7 +154,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
           {/* Current Password */}
           <div>
             <label className="block text-sm font-semibold text-gray-900 mb-2">
-              Mevcut Şifre
+              {t('changePassword.currentPasswordLabel')}
             </label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -161,7 +163,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 className="w-full pl-11 pr-11 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all text-gray-900 placeholder:text-gray-500"
-                placeholder="Mevcut şifreni gir"
+                placeholder={t('changePassword.currentPasswordPlaceholder')}
                 disabled={isLoading || success}
               />
               <button
@@ -178,7 +180,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
           {/* New Password */}
           <div>
             <label className="block text-sm font-semibold text-gray-900 mb-2">
-              Yeni Şifre
+              {t('changePassword.newPasswordLabel')}
             </label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -187,7 +189,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="w-full pl-11 pr-11 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all text-gray-900 placeholder:text-gray-500"
-                placeholder="En az 6 karakter"
+                placeholder={t('changePassword.newPasswordPlaceholder', { min: 6 })}
                 disabled={isLoading || success}
               />
               <button
@@ -199,13 +201,13 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
                 {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
-            <p className="text-xs text-gray-700 mt-1">Minimum 6 karakter</p>
+            <p className="text-xs text-gray-700 mt-1">{t('changePassword.newPasswordHint', { min: 6 })}</p>
           </div>
 
           {/* Confirm Password */}
           <div>
             <label className="block text-sm font-semibold text-gray-900 mb-2">
-              Yeni Şifre (Tekrar)
+              {t('changePassword.confirmPasswordLabel')}
             </label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -214,7 +216,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full pl-11 pr-11 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all text-gray-900 placeholder:text-gray-500"
-                placeholder="Yeni şifreni tekrar gir"
+                placeholder={t('changePassword.confirmPasswordPlaceholder')}
                 disabled={isLoading || success}
               />
               <button
@@ -233,7 +235,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
             <Turnstile
               siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ''}
               onVerify={setTurnstileToken}
-              onError={() => setError('Bot doğrulaması başarısız')}
+              onError={() => setError(t('changePassword.errors.botVerificationFailed'))}
             />
           </div>
 
@@ -245,21 +247,25 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
               disabled={isLoading || success}
               className="flex-1 px-6 py-3 bg-gray-100 text-gray-900 rounded-xl font-semibold hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              İptal
+              {t('cancel')}
             </button>
             <button
               type="submit"
               disabled={isLoading || success || !turnstileToken}
               className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Değiştiriliyor...' : success ? '✓ Değiştirildi' : 'Şifremi Değiştir'}
+              {isLoading
+                ? t('changePassword.submitLoading')
+                : success
+                  ? t('changePassword.submitSuccess')
+                  : t('changePassword.submitIdle')}
             </button>
           </div>
 
           {/* Security Info */}
           <div className="bg-blue-50 rounded-lg p-4 mt-4">
             <p className="text-xs text-blue-800">
-              <strong>💡 Güvenlik İpucu:</strong> Güçlü bir şifre oluşturmak için harf, rakam ve özel karakterler kullan.
+              <strong>{t('changePassword.securityTipTitle')}</strong> {t('changePassword.securityTipBody')}
             </p>
           </div>
         </form>

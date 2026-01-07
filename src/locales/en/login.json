@@ -1,4 +1,23 @@
 {
+  "errors": {
+    "turnstileRequired": "Please verify that you are not a robot",
+    "securityVerificationFailed": "Security verification failed. Please try again.",
+    "passwordMismatch": "Passwords do not match",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "genericError": "An error occurred",
+    "termsRequired": "You must accept the terms of service"
+  },
+  "infoTitle": "💡 Info:",
+  "firstNamePlaceholder": "First name",
+  "lastNamePlaceholder": "Last name",
+  "privacyNotice": "🔒 For your privacy: Only your first name will be shown to other users. Your last name will remain hidden.",
+  "consents": {
+    "acceptText": " — I have read and accept.",
+    "marketingPrefix": "I give",
+    "explicitConsentLink": "explicit consent",
+    "marketingSuffix": "for processing for marketing/personalization purposes (optional)."
+  },
+  "emailConsent": "I agree to receive commercial electronic messages (optional).",
   "title": "Login",
   "createAccount": "Create Account",
   "loginSubtitle": "Login to your account",
@@ -18,18 +37,11 @@
   "kvkkLink": "GDPR Text",
   "privacyLink": "Privacy & Cookie Policy",
   "marketingConsent": "I want to be informed about campaigns and offers (optional).",
-  "emailConsent": "I accept to receive commercial electronic messages (optional).",
   "loginButton": "Login",
   "registerButton": "Create Account",
   "loggingIn": "Logging in...",
   "creatingAccount": "Creating account...",
   "haveAccount": "Already have an account? Login",
   "noAccount": "Don't have an account? Create one",
-  "errors": {
-    "passwordMismatch": "Passwords do not match",
-    "passwordTooShort": "Password must be at least 6 characters",
-    "genericError": "An error occurred",
-    "termsRequired": "You must accept the terms of service"
-  },
   "registerSuccess": "Registration successful! Check your email."
 }

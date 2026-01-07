@@ -1,4 +1,10 @@
 {
+  "firstNamePlaceholder": "Vorname",
+  "lastNamePlaceholderPrivate": "Nachname (versteckt)",
+  "privacy": {
+    "firstNameOnly": "🔒 Nur dein Vorname wird angezeigt",
+    "lastNameHidden": "🔒 Dein Nachname ist verborgen"
+  },
   "title": "Profil",
   "loading": "Wird geladen...",
   "edit": "Bearbeiten",
@@ -39,5 +45,38 @@
   }
   ,
   "noRatingsTitle": "Noch keine Bewertungen",
-  "noRatingsDesc": "Schließe deinen ersten Tausch ab, um Bewertungen zu erhalten!"
+  "noRatingsDesc": "Schließe deinen ersten Tausch ab, um Bewertungen zu erhalten!",
+  "ratingCountLabel": "{{count}} Bewertungen",
+  "security": {
+    "title": "Sicherheitseinstellungen",
+    "description": "Ändere dein Passwort regelmäßig, um dein Konto zu schützen."
+  },
+  "changePassword": {
+    "openButton": "Passwort ändern",
+    "modalTitle": "Passwort ändern",
+    "modalSubtitle": "Halte dein Konto sicher",
+    "successTitle": "Passwort erfolgreich geändert!",
+    "successDesc": "Du kannst dich jetzt mit deinem neuen Passwort anmelden.",
+    "currentPasswordLabel": "Aktuelles Passwort",
+    "currentPasswordPlaceholder": "Gib dein aktuelles Passwort ein",
+    "newPasswordLabel": "Neues Passwort",
+    "newPasswordPlaceholder": "Mindestens {{min}} Zeichen",
+    "newPasswordHint": "Minimum {{min}} Zeichen",
+    "confirmPasswordLabel": "Neues Passwort bestätigen",
+    "confirmPasswordPlaceholder": "Gib dein neues Passwort erneut ein",
+    "submitLoading": "Wird geändert...",
+    "submitSuccess": "✓ Geändert",
+    "submitIdle": "Passwort ändern",
+    "securityTipTitle": "💡 Sicherheitstipp:",
+    "securityTipBody": "Verwende Buchstaben, Zahlen und Sonderzeichen für ein starkes Passwort.",
+    "errors": {
+      "currentPasswordRequired": "Bitte gib dein aktuelles Passwort ein",
+      "newPasswordMinLength": "Das neue Passwort muss mindestens {{min}} Zeichen lang sein",
+      "newPasswordMustDiffer": "Das neue Passwort muss sich vom aktuellen Passwort unterscheiden",
+      "passwordsDontMatch": "Die neuen Passwörter stimmen nicht überein",
+      "botVerificationRequired": "Bot-Verifizierung erforderlich",
+      "botVerificationFailed": "Bot-Verifizierung fehlgeschlagen",
+      "passwordChangeFailed": "Passwortänderung fehlgeschlagen"
+    }
+  }
 }

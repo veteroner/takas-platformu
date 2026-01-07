@@ -1,4 +1,14 @@
 {
+  "infoTitle": "💡 Info:",
+  "firstNamePlaceholder": "Vorname",
+  "lastNamePlaceholder": "Nachname",
+  "privacyNotice": "🔒 Zum Schutz deiner Privatsphäre: Nur dein Vorname wird anderen Nutzern angezeigt. Dein Nachname bleibt verborgen.",
+  "consents": {
+    "acceptText": " — ich habe gelesen und akzeptiere.",
+    "marketingPrefix": "Ich erteile",
+    "explicitConsentLink": "ausdrückliche Einwilligung",
+    "marketingSuffix": "zur Verarbeitung zu Marketing-/Personalisierungszwecken (optional)."
+  },
   "title": "Anmelden",
   "createAccount": "Konto erstellen",
   "loginSubtitle": "Melden Sie sich bei Ihrem Konto an",
@@ -18,7 +28,7 @@
   "kvkkLink": "DSGVO-Text",
   "privacyLink": "Datenschutz- und Cookie-Richtlinie",
   "marketingConsent": "Ich möchte über Kampagnen und Angebote informiert werden (optional).",
-  "emailConsent": "Ich akzeptiere den Erhalt kommerzieller elektronischer Nachrichten (optional).",
+  "emailConsent": "Ich stimme dem Erhalt kommerzieller elektronischer Nachrichten zu (optional).",
   "loginButton": "Anmelden",
   "registerButton": "Konto erstellen",
   "loggingIn": "Wird angemeldet...",
@@ -26,10 +36,12 @@
   "haveAccount": "Haben Sie bereits ein Konto? Anmelden",
   "noAccount": "Haben Sie kein Konto? Erstellen Sie eines",
   "errors": {
+    "turnstileRequired": "Bitte bestätige, dass du kein Roboter bist",
+    "securityVerificationFailed": "Sicherheitsüberprüfung fehlgeschlagen. Bitte versuche es erneut.",
     "passwordMismatch": "Passwörter stimmen nicht überein",
-    "passwordTooShort": "Passwort muss mindestens 6 Zeichen lang sein",
+    "passwordTooShort": "Das Passwort muss mindestens 6 Zeichen lang sein",
     "genericError": "Ein Fehler ist aufgetreten",
-    "termsRequired": "Sie müssen die Nutzungsbedingungen akzeptieren"
+    "termsRequired": "Du musst die Nutzungsbedingungen akzeptieren"
   },
   "registerSuccess": "Registrierung erfolgreich! Überprüfen Sie Ihre E-Mail."
 }

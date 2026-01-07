@@ -38,7 +38,7 @@ export default function LoginPage() {
       if (isRegister) {
         // Bot koruması kontrolü
         if (!turnstileToken) {
-          setError('Lütfen robot olmadığınızı doğrulayın')
+          setError(t('errors.turnstileRequired'))
           setIsLoading(false)
           return
         }
@@ -63,7 +63,7 @@ export default function LoginPage() {
         })
 
         if (!turnstileVerify.ok) {
-          setError('Güvenlik doğrulaması başarısız. Lütfen tekrar deneyin.')
+          setError(t('errors.securityVerificationFailed'))
           setTurnstileToken(null)
           setIsLoading(false)
           return
@@ -160,7 +160,7 @@ export default function LoginPage() {
           {/* Demo Credentials - Removed for real auth */}
           {!isRegister && (
             <div className="bg-white/10 rounded-xl p-4 mb-6 border border-white/20">
-              <h3 className="text-white font-medium mb-2">💡 Bilgi:</h3>
+              <h3 className="text-white font-medium mb-2">{t('infoTitle')}</h3>
               <p className="text-white/80 text-sm">{t('loginInfo')}</p>
             </div>
           )}
@@ -175,7 +175,7 @@ export default function LoginPage() {
                     <input
                       type="text"
                       name="firstName"
-                      placeholder="Adınız"
+                      placeholder={t('firstNamePlaceholder')}
                       value={formData.firstName}
                       onChange={handleInputChange}
                       required
@@ -187,7 +187,7 @@ export default function LoginPage() {
                     <input
                       type="text"
                       name="lastName"
-                      placeholder="Soyadınız"
+                      placeholder={t('lastNamePlaceholder')}
                       value={formData.lastName}
                       onChange={handleInputChange}
                       required
@@ -199,8 +199,7 @@ export default function LoginPage() {
                 {/* KVKK Aydınlatma Metni */}
                 <div className="bg-white/5 border border-white/10 rounded-xl p-3">
                   <p className="text-xs text-white/70 leading-relaxed">
-                    🔒 <strong className="text-white/90">Gizliliğiniz için:</strong> Sadece <strong className="text-white">adınız</strong> diğer kullanıcılara gösterilecektir. 
-                    Soyadınız gizli kalacaktır.
+                    {t('privacyNotice')}
                   </p>
                 </div>
               </>
@@ -284,19 +283,21 @@ export default function LoginPage() {
                 <span>
                   <Link className="underline" href={policyRoutes.terms}>{t('termsLink')}</Link>,{' '}
                   <Link className="underline" href={policyRoutes.kvkk}>{t('kvkkLink')}</Link> ve{' '}
-                  <Link className="underline" href={policyRoutes.privacy}>{t('privacyLink')}</Link>&apos;nı okudum, kabul ediyorum.
+                  <Link className="underline" href={policyRoutes.privacy}>{t('privacyLink')}</Link>{t('consents.acceptText')}
                 </span>
               </label>
               <label className="flex items-start gap-3">
                 <input name="consent_marketing" type="checkbox" className="mt-1" />
                 <span>
-                  Pazarlama/kişiselleştirme amaçlı işlenmesine <Link className="underline" href={policyRoutes.consent}>açık rıza</Link> veriyorum (opsiyonel).
+                  {t('consents.marketingPrefix')}{' '}
+                  <Link className="underline" href={policyRoutes.consent}>{t('consents.explicitConsentLink')}</Link>{' '}
+                  {t('consents.marketingSuffix')}
                 </span>
               </label>
               <label className="flex items-start gap-3">
                 <input name="consent_email" type="checkbox" className="mt-1" />
                 <span>
-                  Ticari elektronik ileti almayı kabul ediyorum (opsiyonel).
+                  {t('emailConsent')}
                 </span>
               </label>
               

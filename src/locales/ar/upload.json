@@ -1,4 +1,7 @@
 {
+  "removePhotoAriaLabel": "إزالة الصورة {{index}}",
+  "chooseImageFileAriaLabel": "اختر ملف صورة",
+  "photoAlt": "رفع {{index}}",
   "title": "إضافة غرض",
   "selectPhotos": "اختر الصور",
   "takePhoto": "التقط صورة",

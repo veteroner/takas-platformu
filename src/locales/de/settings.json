@@ -1,4 +1,7 @@
 {
+  "deleteAccount": {
+    "notImplemented": "Das Löschen des Kontos würde in der echten App einen API-Aufruf auslösen"
+  },
   "title": "Einstellungen",
   "notifications": {
     "title": "Benachrichtigungen",

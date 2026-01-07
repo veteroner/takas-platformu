@@ -1,4 +1,23 @@
 {
+  "errors": {
+    "turnstileRequired": "Lütfen robot olmadığınızı doğrulayın",
+    "securityVerificationFailed": "Güvenlik doğrulaması başarısız. Lütfen tekrar deneyin.",
+    "passwordMismatch": "Şifreler eşleşmiyor",
+    "passwordTooShort": "Şifre en az 6 karakter olmalıdır",
+    "genericError": "Bir hata oluştu",
+    "termsRequired": "Kullanım şartlarını kabul etmelisiniz"
+  },
+  "infoTitle": "💡 Bilgi:",
+  "firstNamePlaceholder": "Adınız",
+  "lastNamePlaceholder": "Soyadınız",
+  "privacyNotice": "🔒 Gizliliğiniz için: Sadece adınız diğer kullanıcılara gösterilecektir. Soyadınız gizli kalacaktır.",
+  "consents": {
+    "acceptText": "'nı okudum, kabul ediyorum.",
+    "marketingPrefix": "Pazarlama/kişiselleştirme amaçlı işlenmesine",
+    "explicitConsentLink": "açık rıza",
+    "marketingSuffix": "veriyorum (opsiyonel)."
+  },
+  "emailConsent": "Ticari elektronik ileti almayı kabul ediyorum (opsiyonel).",
   "title": "Giriş Yap",
   "createAccount": "Hesap Oluştur",
   "loginSubtitle": "Hesabına giriş yap",
@@ -18,18 +37,11 @@
   "kvkkLink": "KVKK Metni",
   "privacyLink": "Gizlilik & Çerez Politikası",
   "marketingConsent": "Kampanya ve tekliflerden haberdar olmak istiyorum (opsiyonel).",
-  "emailConsent": "Ticari elektronik ileti almayı kabul ediyorum (opsiyonel).",
   "loginButton": "Giriş Yap",
   "registerButton": "Hesap Oluştur",
   "loggingIn": "Giriş Yapılıyor...",
   "creatingAccount": "Hesap Oluşturuluyor...",
   "haveAccount": "Zaten hesabın var mı? Giriş yap",
   "noAccount": "Hesabın yok mu? Hesap oluştur",
-  "errors": {
-    "passwordMismatch": "Şifreler eşleşmiyor",
-    "passwordTooShort": "Şifre en az 6 karakter olmalıdır",
-    "genericError": "Bir hata oluştu",
-    "termsRequired": "Kullanım şartlarını kabul etmelisiniz"
-  },
   "registerSuccess": "Kayıt başarılı! Email adresinizi kontrol edin."
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Capacitor } from '@capacitor/core'
+import { useTranslation } from 'react-i18next'
 
 function compareVersions(a: string, b: string): number {
   const toNums = (v: string) => v.split('.').map((x) => parseInt(x, 10) || 0)
@@ -13,6 +14,7 @@ function compareVersions(a: string, b: string): number {
 }
 
 export default function VersionGate() {
+  const { t } = useTranslation('common')
   const [outdated, setOutdated] = useState<null | { platform: 'ios' | 'android'; min: string; current: string }>(null)
 
   useEffect(() => {
@@ -49,12 +51,12 @@ export default function VersionGate() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6">
       <div className="w-full max-w-md rounded-2xl bg-white text-gray-900 p-6 shadow-xl">
-        <h3 className="text-xl font-semibold mb-2">Güncelleme gerekli</h3>
+        <h3 className="text-xl font-semibold mb-2">{t('versionGate.title')}</h3>
         <p className="text-sm text-gray-600 mb-4">
-          Uygulamanız eski bir sürüm ({outdated.current}). Devam etmek için en az {outdated.min} sürümüne güncelleyin.
+          {t('versionGate.description', { current: outdated.current, min: outdated.min })}
         </p>
         <a href={storeUrl} target="_blank" className="block w-full text-center px-4 py-2 rounded-lg bg-pink-600 text-white font-medium hover:bg-pink-500 transition">
-          Mağazada güncelle
+          {t('versionGate.updateInStore')}
         </a>
       </div>
     </div>

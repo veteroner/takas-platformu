@@ -1,4 +1,7 @@
 {
+  "removePhotoAriaLabel": "Resim {{index}}'i kaldır",
+  "chooseImageFileAriaLabel": "Resim dosyası seç",
+  "photoAlt": "Upload {{index}}",
   "title": "Ürün Ekle",
   "uploadProduct": "Ürün Ekle",
   "selectPhotos": "Fotoğraf Seç",
