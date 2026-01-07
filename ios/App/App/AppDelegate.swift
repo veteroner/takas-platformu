@@ -1,14 +1,37 @@
 import UIKit
 import Capacitor
+import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        // Foreground'da push bildirimleri göstermek için delegate ayarla
+        UNUserNotificationCenter.current().delegate = self
         return true
+    }
+    
+    // MARK: - UNUserNotificationCenterDelegate
+    // Bu method foreground'da bildirim geldiğinde banner gösterilmesini sağlar
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        // Foreground'da banner, ses ve badge göster
+        if #available(iOS 14.0, *) {
+            completionHandler([.banner, .sound, .badge, .list])
+        } else {
+            completionHandler([.alert, .sound, .badge])
+        }
+    }
+    
+    // Bildirime tıklandığında çağrılır
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        // OneSignal bu eventi otomatik handle eder
+        completionHandler()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

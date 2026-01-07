@@ -8,7 +8,7 @@ const config: CapacitorConfig = {
   server: {
     // NOTE: Native WebViews can keep aggressive caches for HTML/JS.
     // Adding a version query param forces a fresh fetch after updates.
-    url: 'https://takazone.com/?v=28f3329',
+    url: 'https://takazone.com/?v=4d440bf',
     cleartext: false,
     androidScheme: 'https',
     iosScheme: 'https'
