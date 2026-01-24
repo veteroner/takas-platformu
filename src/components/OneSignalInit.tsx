@@ -80,19 +80,12 @@ export default function OneSignalInit() {
 
       // OneSignal'ı başlat - try common signatures
       try {
-        const setAppIdFn = window.plugins.OneSignal.setAppId
-        if (typeof setAppIdFn === 'function') {
-          await setAppIdFn.call(window.plugins.OneSignal, ONESIGNAL_APP_ID)
-        } else if (typeof setAppIdFn === 'object') {
-          // some wrappers expect { appId }
-          // @ts-ignore
-          await window.plugins.OneSignal.setAppId({ appId: ONESIGNAL_APP_ID })
-        } else {
-          console.warn('OneSignal.setAppId unexpected type:', typeof setAppIdFn)
-        }
+        // Modern typings expect an options object
+        await window.plugins.OneSignal.setAppId({ appId: ONESIGNAL_APP_ID })
         console.log('✅ OneSignal App ID set (native):', ONESIGNAL_APP_ID)
       } catch (err) {
-        console.error('❌ setAppId failed (native):', err, (err && err.stack) ? err.stack : String(err))
+        const e = err as any
+        console.error('❌ setAppId failed (native):', e, e?.stack ? e.stack : String(e))
       }
 
       // Push notification izni iste (guarded)

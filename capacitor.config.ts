@@ -26,9 +26,7 @@ const config: CapacitorConfig = {
   ios: {
     // Prevent double safe-area padding in native iOS.
     // We handle safe areas via CSS env(safe-area-inset-*) utilities.
-    contentInset: 'never',
-    // iOS 10+ uyumluluk için minimum SDK
-    minVersion: '13.0'
+    contentInset: 'never'
   },
   plugins: {
     SplashScreen: {

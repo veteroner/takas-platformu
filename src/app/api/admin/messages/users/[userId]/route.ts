@@ -3,7 +3,7 @@ import { getSupabaseAdmin, verifyAdminRequest } from '@/lib/admin'
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { userId: string } }
+  context: { params: Promise<{ userId: string }> }
 ) {
   const verified = await verifyAdminRequest(req)
   if (!verified) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -12,7 +12,7 @@ export async function GET(
   const supabase = getSupabaseAdmin()
   if (!supabase) return NextResponse.json({ error: 'Database not configured' }, { status: 503 })
 
-  const { userId } = params
+  const { userId } = await context.params
 
   try {
     // Get user info from profiles

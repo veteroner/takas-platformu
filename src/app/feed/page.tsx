@@ -17,6 +17,7 @@ import { getFeedItems, recordSwipe, checkAndCreateMatch } from '@/lib/api'
 import { getCurrentUser, type AuthUser } from '@/lib/auth'
 import { useTranslation } from 'react-i18next'
 import { getPublicUserName } from '@/lib/utils'
+import { supabase } from '@/lib/supabase'
 
 type MatchData = {
   id: string
@@ -202,14 +203,18 @@ export default function HomePage() {
           
           if (match) {
             const otherUser = match.user1_id === user.id ? match.user2 : match.user1
+            const currentUserName = user.displayName || user.firstName || 'Bir kullanıcı'
+            const otherUserName = getPublicUserName(otherUser) || otherUser.name
             
             // 🎉 MATCH! Show toast and redirect directly to chat with that user
             setMatchedUser({
-              name: getPublicUserName(otherUser) || otherUser.name,
+              name: otherUserName,
               avatar: otherUser.avatar,
               matchId: match.id
             })
             setShowMatchToast(true)
+            
+            // Eşleşme bildirimi artık /api/swipes üzerinden otomatik gönderiliyor.
             
             // Redirect directly to chat with matched user
             setTimeout(() => {

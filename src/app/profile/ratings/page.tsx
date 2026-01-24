@@ -53,7 +53,7 @@ export default function UserRatingsPage() {
         getUserRatingCount(currentUser.id)
       ])
 
-      setRatings(ratingsData)
+      setRatings((ratingsData as unknown as Rating[]) || [])
       setAverageRating(avgRating)
       setTotalRatings(ratingCount)
     } catch (error) {

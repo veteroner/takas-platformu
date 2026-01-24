@@ -245,62 +245,31 @@ export async function recordSwipe(
   direction: 'left' | 'right' | 'up'
 ): Promise<boolean> {
   try {
-    // Map direction to action
-    const action = direction === 'right' ? 'like' : direction === 'up' ? 'super_like' : 'pass'
-    
-    // First, check if already swiped (to avoid duplicate errors)
-    const { data: existing } = await supabase
-      .from('user_swipes')
-      .select('id, action')
-      .eq('user_id', userId)
-      .eq('item_id', itemId)
-      .maybeSingle()
-    
-    // If already swiped with same action, silently succeed
-    if (existing && existing.action === action) {
-      return true
-    }
-    
-    // If swiped with different action, update it
-    if (existing) {
-      const { error } = await supabase
-        .from('user_swipes')
-        .update({ action })
-        .eq('id', existing.id)
-      
-      if (error) {
-        console.error('Error updating swipe:', error)
-        return false
-      }
-      return true
-    }
-    
-    // New swipe - insert
-    const { error } = await supabase
-      .from('user_swipes')
-      .insert([{ 
-        user_id: userId, 
-        item_id: itemId, 
-        action 
-      }])
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session?.access_token) return false
 
-    if (error) {
-      // Ignore duplicate entry errors (23505 = unique violation)
-      if (error.code === '23505') {
-        return true
-      }
-      
-      console.error('Error recording swipe:', error)
+    const response = await fetch('/api/swipes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        item_id: itemId,
+        direction
+      })
+    })
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}))
+      console.error('Swipe API error:', err)
       return false
     }
-    
+
     return true
   } catch (error: unknown) {
     const err = error as { code?: string; message?: string }
-    // Silently ignore duplicate swipes
-    if (err?.code === '23505' || (err?.message && err.message.includes('duplicate'))) {
-      return true
-    }
     console.error('Error recording swipe:', err)
     return false
   }
@@ -524,7 +493,7 @@ export async function getMatchMessages(matchId: string) {
   }
 }
 
-// Send message
+// Send message - Uses API endpoint to trigger push notifications
 export async function sendMessage(
   matchId: string,
   senderId: string,
@@ -532,19 +501,36 @@ export async function sendMessage(
   content: string
 ) {
   try {
-    const { data, error } = await supabase
-      .from('messages')
-      .insert([{
+    // Use API endpoint instead of direct DB insert to trigger push notifications
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session?.access_token) {
+      console.error('No session token for sending message')
+      return null
+    }
+
+    const response = await fetch('/api/messages/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`
+      },
+      body: JSON.stringify({
         match_id: matchId,
         sender_id: senderId,
         receiver_id: receiverId,
         content
-      }])
-      .select()
-      .single()
+      })
+    })
 
-    if (error) throw error
-    return data
+    if (!response.ok) {
+      const error = await response.json()
+      console.error('Error from message API:', error)
+      return null
+    }
+
+    const result = await response.json()
+    console.log('📨 Mesaj gönderildi, bildirim durumu:', result.notification_sent ? '✅' : '❌')
+    return result.message
   } catch (error) {
     console.error('Error sending message:', error)
     return null
