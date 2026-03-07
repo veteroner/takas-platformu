@@ -5,7 +5,7 @@ import type { SeekingPreferences, DbCategory } from '@/types'
 
 // Get items for feed (excluding user's own items)
 // NOT excluding swiped items - user can see them again
-export async function getFeedItems(userId?: string, limit: number = 20): Promise<Item[]> {
+export async function getFeedItems(userId?: string, limit: number = 500): Promise<Item[]> {
   try {
     // Validate UUID (to avoid passing non-uuid like 'guest' to neq filter)
     const isValidUuid = (v?: string) => !!v && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(v)
