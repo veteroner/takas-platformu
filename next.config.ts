@@ -4,6 +4,12 @@ import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
   // output: 'export', // API routes olduğu için export kullanılamaz
+  outputFileTracingExcludes: {
+    '*': [
+      'android/app/google-services.json',
+      'android/**'
+    ]
+  },
   images: {
     unoptimized: true,
     remotePatterns: [

@@ -5,7 +5,7 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_FLAGS = "--legacy-peer-deps"
-  SECRETS_SCAN_OMIT_PATHS = "android/app/google-services.json"
+  SECRETS_SCAN_OMIT_PATHS = "android/app/google-services.json,.netlify/.next/standalone/android/app/google-services.json,.netlify/functions-internal/___netlify-server-handler/android/app/google-services.json"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
